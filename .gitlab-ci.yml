@@ -56,13 +56,13 @@ windows-nsis:
   image: schnouki/pyinstaller-windows-ci:python3
   type: deploy
   script:
+  - apt-get update -qy
+  - apt-get install -y nsis unzip openssh-client sshpass
   - wine pip3 install -r requirements.txt
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
   - unzip ffmpeg-latest-win64-static.zip
   #- ls -R "/wine/dosdevices/c:/"
   - wine pyinstaller subtitld_win.spec
-  - apt-get update -qy
-  - apt-get install -y nsis openssh-client sshpass
   - makensis subtitld_win.nsi
   - export SSHPASS=$USER_PASS
   - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
