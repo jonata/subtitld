@@ -3,3 +3,4 @@ python-mpv
 pyopengl
 pysrt
 PyInstaller
+numpy

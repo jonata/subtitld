@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os, sys, numpy, subprocess, librosa
+import os
+import sys
+import numpy
+import subprocess
 import json
 
 from modules.paths import *
