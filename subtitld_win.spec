@@ -7,7 +7,7 @@ a = Analysis(['subtitld.py'],
         ( 'graphics/*.png', 'graphics' ),
         ( 'ffmpeg-latest-win64-static/bin/ffmpeg.exe', '.'),
     ],
-    hiddenimports=['PyQt5.sip','numpy.core._dtype_ctypes', 'scipy._lib.messagestream', 'resampy', 'sklearn.neighbors.typedefs', 'sklearn.neighbors.quad_tree', 'sklearn.tree', 'sklearn.tree._utils'],
+    hiddenimports=[],
     hookspath=[],
     runtime_hooks=[] )
 
