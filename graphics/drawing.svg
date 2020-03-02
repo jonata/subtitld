@@ -84,18 +84,6 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient9264">
-      <stop
-         style="stop-color:#55d43f;stop-opacity:1;"
-         offset="0"
-         id="stop9266" />
-      <stop
-         style="stop-color:#67ff4d;stop-opacity:1"
-         offset="1"
-         id="stop9268" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
        id="linearGradient5860">
       <stop
          style="stop-color:#000000;stop-opacity:1;"
@@ -484,7 +472,7 @@
        xlink:href="#linearGradient5433"
        id="linearGradient9078"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.0666667,0,0,2.0666667,-1723.1908,-1241.1155)"
+       gradientTransform="matrix(2.0666667,0,0,2.0666667,-1190.8407,-1522.8075)"
        x1="416.23242"
        y1="744.57812"
        x2="416.23242"
@@ -494,31 +482,12 @@
        xlink:href="#linearGradient5329"
        id="radialGradient9080"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.3484501e-5,4.0206753,-6.7006578,4.146923e-6,1878.8103,-4501.8692)"
+       gradientTransform="matrix(2.3484501e-5,4.0206753,-6.7006578,4.146923e-6,2411.1604,-4783.5612)"
        cx="1194.538"
        cy="412.95334"
        fx="1194.538"
        fy="412.95334"
        r="13" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient5329"
-       id="linearGradient6648-9"
-       x1="2195.1882"
-       y1="175.02919"
-       x2="2224.7407"
-       y2="267.04034"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.85088769,0,0,0.85088836,-2135.844,143.04677)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient9264"
-       id="linearGradient9270"
-       x1="-264.3143"
-       y1="335.55511"
-       x2="-264.3143"
-       y2="318.27771"
-       gradientUnits="userSpaceOnUse" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath9284">
@@ -2015,6 +1984,19 @@
        y1="1013.3201"
        x2="186.10231"
        y2="1010.1776" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter7289"
+       x="-0.028046856"
+       width="1.0560937"
+       y="-0.020973721"
+       height="1.0419474">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.3546484"
+         id="feGaussianBlur7291" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2023,11 +2005,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1848203"
-     inkscape:cx="429.55835"
-     inkscape:cy="262.79745"
+     inkscape:zoom="0.14810254"
+     inkscape:cx="1095.8751"
+     inkscape:cy="-815.4032"
      inkscape:document-units="px"
-     inkscape:current-layer="g2069"
+     inkscape:current-layer="layer1"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -2058,7 +2040,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -2653,83 +2635,6 @@
          id="path9005"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ssscccss" />
-    </g>
-    <path
-       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:0.2;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       d="m -887.77716,295.61263 c -3.39905,0 -6.2,2.80098 -6.2,6.2 v 49.6 c 0,3.39909 2.80095,6.2 6.2,6.2 h 49.6 c 3.39904,0 6.2,-2.80091 6.2,-6.2 v -49.6 c 0,-3.39902 -2.80096,-6.19998 -6.2,-6.2 z m 0,2.06667 h 49.6 c 2.28986,0 4.13333,1.84349 4.13333,4.13333 v 49.6 c 0,2.28987 -1.84347,4.13334 -4.13333,4.13334 h -49.6 c -2.28987,0 -4.13334,-1.84347 -4.13334,-4.13334 v -49.6 c 0,-2.28984 1.84347,-4.13333 4.13334,-4.13333 z"
-       id="path9068"
-       inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
-       inkscape:export-xdpi="743.22998"
-       inkscape:export-ydpi="743.22998" />
-    <rect
-       ry="4.1333332"
-       rx="4.1333332"
-       y="297.6799"
-       x="-891.91174"
-       height="57.866669"
-       width="57.866669"
-       id="rect9070"
-       style="opacity:1;fill:url(#linearGradient9078);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.5"
-       inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
-       inkscape:export-xdpi="743.22998"
-       inkscape:export-ydpi="743.22998" />
-    <g
-       inkscape:groupmode="maskhelper"
-       id="g9281"
-       clip-path="url(#clipPath9284)"
-       inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
-       inkscape:export-xdpi="743.22998"
-       inkscape:export-ydpi="743.22998"
-       transform="translate(-611)">
-      <path
-         inkscape:connector-curvature="0"
-         id="path4237-0-8-4"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:medium;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Medium';text-align:start;letter-spacing:-24px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.2;fill:url(#linearGradient6648-9);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="m -256.01489,328.25766 q 2.18239,-2.05307 4.64802,-4.3628 2.47472,-2.39525 4.85484,-4.70497 2.38929,-2.39527 4.49518,-4.53389 2.20004,-2.2242 3.73889,-3.84954 h 12.23289 q -4.77832,4.79054 -10.10574,9.92325 -5.24189,5.1327 -10.54254,10.00878 2.3427,2.13862 4.84356,5.21824 2.50971,2.99411 4.80375,6.41591 2.29403,3.4218 4.24581,6.84361 1.95188,3.4218 3.18721,6.33033 h -11.97614 q -1.26246,-2.65189 -3.01138,-5.56043 -1.66313,-2.90854 -3.68672,-5.64598 -2.02343,-2.73743 -4.16815,-5.1327 -2.1357,-2.48081 -4.26644,-4.19173 l -2.1476,20.53084 h -10.35096 l 6.76497,-64.67216 10.52975,-1.71088 z" />
-    </g>
-    <path
-       style="opacity:1;fill:#000000;fill-opacity:0.5;stroke:none;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.5"
-       d="m -887.77716,297.6793 c -2.28987,0 -4.13334,1.84349 -4.13334,4.13333 v 49.6 c 0,2.28987 1.84347,4.13334 4.13334,4.13334 h 49.6 c 2.28986,0 4.13333,-1.84347 4.13333,-4.13334 v -49.6 c 0,-2.28984 -1.84347,-4.13333 -4.13333,-4.13333 z m 0,2.06667 h 49.6 c 1.18068,0 2.06666,0.88602 2.06666,2.06666 v 49.6 c 0,1.18069 -0.88598,2.06669 -2.06666,2.06667 h -49.6 c -1.18069,0 -2.06667,-0.88596 -2.06667,-2.06667 v -49.6 c 0,-1.18064 0.88598,-2.06666 2.06667,-2.06666 z"
-       id="path9074"
-       inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
-       inkscape:export-xdpi="743.22998"
-       inkscape:export-ydpi="743.22998" />
-    <path
-       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient9080);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       d="m -887.77716,299.74597 c -1.18069,0 -2.06667,0.88602 -2.06667,2.06666 v 49.6 c 0,1.18073 0.88598,2.06667 2.06667,2.06667 v -51.66667 h 51.66666 c 0,-1.18064 -0.88598,-2.06666 -2.06666,-2.06666 z"
-       id="path9076"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ssscccss"
-       inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
-       inkscape:export-xdpi="743.22998"
-       inkscape:export-ydpi="743.22998" />
-    <path
-       style="opacity:1;fill:#ffffff;fill-opacity:0.05;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.5"
-       d="m -887.77734,299.74609 c -1.18069,0 -2.06641,0.88577 -2.06641,2.06641 v 24.80078 h 7.93303 v -15 l 23.57031,15 h 22.22908 V 301.8125 c 0,-1.18064 -0.88572,-2.06641 -2.0664,-2.06641 z"
-       id="path9072"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="sscccccsss"
-       inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
-       inkscape:export-xdpi="743.22998"
-       inkscape:export-ydpi="743.22998" />
-    <g
-       id="g9290"
-       transform="translate(-612.54034)"
-       inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
-       inkscape:export-xdpi="743.22998"
-       inkscape:export-ydpi="743.22998">
-      <path
-         id="path5527-1-6"
-         d="m -269.3714,311.61263 v 30 l 23.57143,-15 z"
-         inkscape:connector-curvature="0"
-         style="fill:url(#linearGradient9270);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1" />
-      <path
-         inkscape:connector-curvature="0"
-         style="opacity:0.2;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1"
-         d="m -269.37109,311.61328 v 2 l 21.99804,14 1.57227,-1 z"
-         id="path9249" />
     </g>
     <g
        transform="translate(-2340.2918,76.24361)"
@@ -7060,5 +6965,72 @@
        inkscape:export-filename="/home/jonata/Projetos/kihvim/graphics/background_options_box.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <g
+       id="g7301"
+       inkscape:export-xdpi="396.39001"
+       inkscape:export-ydpi="396.39001">
+      <path
+         inkscape:export-ydpi="743.22998"
+         inkscape:export-xdpi="743.22998"
+         inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
+         inkscape:connector-curvature="0"
+         id="path9068"
+         d="m -355.42702,13.92063 c -3.39905,0 -6.2,2.80098 -6.2,6.2 v 49.6 c 0,3.39909 2.80095,6.2 6.2,6.2 h 49.6 c 3.39904,0 6.2,-2.80091 6.2,-6.2 v -49.6 c 0,-3.39902 -2.80096,-6.19998 -6.2,-6.2 z m 0,2.06667 h 49.6 c 2.28986,0 4.13333,1.84349 4.13333,4.13333 v 49.6 c 0,2.28987 -1.84347,4.13334 -4.13333,4.13334 h -49.6 c -2.28987,0 -4.13334,-1.84347 -4.13334,-4.13334 v -49.6 c 0,-2.28984 1.84347,-4.13333 4.13334,-4.13333 z"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:0.2;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <rect
+         inkscape:export-ydpi="743.22998"
+         inkscape:export-xdpi="743.22998"
+         inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
+         style="opacity:1;fill:url(#linearGradient9078);fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.5"
+         id="rect9070"
+         width="57.866669"
+         height="57.866669"
+         x="-359.56161"
+         y="15.987901"
+         rx="4.1333332"
+         ry="4.1333332" />
+      <path
+         inkscape:export-ydpi="743.22998"
+         inkscape:export-xdpi="743.22998"
+         inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
+         inkscape:connector-curvature="0"
+         id="path9074"
+         d="m -355.42702,15.9873 c -2.28987,0 -4.13334,1.84349 -4.13334,4.13333 v 49.6 c 0,2.28987 1.84347,4.13334 4.13334,4.13334 h 49.6 c 2.28986,0 4.13333,-1.84347 4.13333,-4.13334 v -49.6 c 0,-2.28984 -1.84347,-4.13333 -4.13333,-4.13333 z m 0,2.06667 h 49.6 c 1.18068,0 2.06666,0.88602 2.06666,2.06666 v 49.6 c 0,1.18069 -0.88598,2.06669 -2.06666,2.06667 h -49.6 c -1.18069,0 -2.06667,-0.88596 -2.06667,-2.06667 v -49.6 c 0,-1.18064 0.88598,-2.06666 2.06667,-2.06666 z"
+         style="opacity:1;fill:#000000;fill-opacity:0.5;stroke:none;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.5" />
+      <path
+         inkscape:export-ydpi="743.22998"
+         inkscape:export-xdpi="743.22998"
+         inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
+         sodipodi:nodetypes="ssscccss"
+         inkscape:connector-curvature="0"
+         id="path9076"
+         d="m -355.42702,18.05397 c -1.18069,0 -2.06667,0.88602 -2.06667,2.06666 v 49.6 c 0,1.18073 0.88598,2.06667 2.06667,2.06667 V 20.12063 h 51.66666 c 0,-1.18064 -0.88598,-2.06666 -2.06666,-2.06666 z"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient9080);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:41.20776367px;line-height:0%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#e1eaf2;fill-opacity:1;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="-348.02567"
+         y="65.804123"
+         id="text9352-3"><tspan
+           sodipodi:role="line"
+           id="tspan9354-6"
+           x="-348.02567"
+           y="65.804123"
+           style="font-weight:bold;font-size:60.09465027px;line-height:1.25;fill:#e1eaf2;fill-opacity:1;stroke-width:0.99999994px">S</tspan></text>
+      <path
+         inkscape:export-ydpi="743.22998"
+         inkscape:export-xdpi="743.22998"
+         inkscape:export-filename="/home/jonata/Dropbox/Projetos/kihvim/graphics/kihvim.png"
+         sodipodi:nodetypes="ssccsss"
+         inkscape:connector-curvature="0"
+         id="path9072"
+         d="m -355.4272,18.05409 c -1.18069,0 -2.06641,0.88577 -2.06641,2.06641 v 24.80078 h 53.73242 V 20.1205 c 0,-1.18064 -0.88572,-2.06641 -2.0664,-2.06641 z"
+         style="opacity:1;fill:#ffffff;fill-opacity:0.05;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.5" />
+      <path
+         inkscape:connector-curvature="0"
+         id="text7278"
+         d="m -329.75781,22.619274 c -2.36373,0 -4.48618,0.29944 -6.36914,0.90039 -1.88297,0.56088 -3.48456,1.38314 -4.80664,2.46484 -1.32209,1.0817 -2.34527,2.40434 -3.06641,3.9668 -0.72114,1.52239 -1.08008,3.24494 -1.08008,5.16797 0,0.35432 0.0238,0.68815 0.0469,1.02343 0.10346,-1.53167 0.43727,-2.93332 1.0332,-4.1914 0.72114,-1.56246 1.74432,-2.8851 3.06641,-3.9668 1.32208,-1.0817 2.92367,-1.90396 4.80664,-2.46484 1.88296,-0.60095 4.00541,-0.90039 6.36914,-0.90039 2.80441,0 5.22826,0.29944 7.27148,0.90039 1.74465,0.51313 3.21082,1.07501 4.42969,1.67578 l 0.61914,-1.69141 c -1.32208,-0.72113 -3.00561,-1.38343 -5.04883,-1.98437 -2.04322,-0.60095 -4.46707,-0.90039 -7.27148,-0.90039 z m -5.58594,12.76562 c -0.0786,0.31087 -0.12305,0.64517 -0.12305,1.01172 0,0.7612 0.18045,1.40301 0.54102,1.92383 0.36057,0.52082 0.8629,1.00266 1.5039,1.44336 0.68108,0.40063 1.44188,0.78005 2.28321,1.14062 0.88139,0.32051 1.84312,0.66092 2.88476,1.02149 2.16341,0.80126 4.04592,1.60303 5.64844,2.40429 1.60253,0.7612 2.92516,1.66344 3.9668,2.70508 1.0817,1.04164 1.88152,2.26186 2.40234,3.66406 0.4189,1.12782 0.66022,2.45999 0.74219,3.97657 0.016,-0.28741 0.0391,-0.56969 0.0391,-0.86719 0,-2.00316 -0.26043,-3.70717 -0.78125,-5.10938 -0.52082,-1.4022 -1.32064,-2.62242 -2.40234,-3.66406 -1.04164,-1.04164 -2.36427,-1.94388 -3.9668,-2.70508 -1.60252,-0.80126 -3.48503,-1.60303 -5.64844,-2.40429 -1.04164,-0.36057 -2.00337,-0.70098 -2.88476,-1.02149 -0.84133,-0.36057 -1.60213,-0.73999 -2.28321,-1.14062 -0.641,-0.4407 -1.14333,-0.92254 -1.5039,-1.44336 -0.19184,-0.2771 -0.3282,-0.59041 -0.41797,-0.93555 z m 10.09961,19.41992 c -0.0486,0.2367 -0.10246,0.46953 -0.18555,0.68555 -0.20031,0.52082 -0.56121,0.98218 -1.08203,1.38281 -0.52082,0.36057 -1.22213,0.66001 -2.10351,0.90039 -0.84133,0.20032 -1.92206,0.30078 -3.24415,0.30078 -2.64416,0 -4.88756,-0.26043 -6.73046,-0.78125 -1.80284,-0.56088 -3.32641,-1.1822 -4.56836,-1.86328 l -2.64453,7.45313 c 0.17992,0.10281 0.393,0.21142 0.59765,0.31836 l 2.04688,-5.77149 c 1.24195,0.68108 2.76552,1.3024 4.56836,1.86328 1.8429,0.52082 4.0863,0.78125 6.73046,0.78125 1.32209,0 2.40282,-0.10046 3.24415,-0.30078 0.88138,-0.24038 1.58269,-0.53982 2.10351,-0.90039 0.52082,-0.40063 0.88172,-0.86199 1.08203,-1.38281 0.20032,-0.52082 0.30078,-1.10118 0.30078,-1.74219 0,-0.3287 -0.0406,-0.64265 -0.11523,-0.94336 z"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:41.20776367px;line-height:0%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#111d27;fill-opacity:0.17647059;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7289)" />
+    </g>
   </g>
 </svg>
