@@ -1,46 +1,72 @@
-ubuntu-64bit-snap:
-  image: ubuntu:18.04
-  type: deploy
-  script:
-  - apt-get update -qy
-  - apt-get install -y snapcraft
-  - snapcraft
-  - echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage > snapcraft.login
-  - snapcraft login --with snapcraft.login
-  - snapcraft push *.snap --release edge
-  only:
-  - master
-
-ubuntu-32bit-snap:
+staging:amd64:
   image:
-    name: i386/ubuntu:18.04
+    name: ubuntu:16.04
   type: deploy
   script:
   - apt-get update -qy
-  - apt-get install -y snapcraft
+  - apt-get install -y software-properties-common wget
+  - add-apt-repository -y ppa:deadsnakes/ppa
+  - apt-get update -qy
+  - apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript
+  - wget https://bootstrap.pypa.io/get-pip.py
+  - python3.7 get-pip.py
+  - python3.7 -m pip install requirements.txt
+  - python3.7 -m PyInstaller subtitld_linux.spec
+  - mv dist .dist
+  - mv snap .snap
+  - mv snapcraft.yaml .snapcraft.yaml
+  - mv * /tmp/
+  - mv .dist dist
+  - mv .snap snap
+  - mv .snapcraft.yaml snapcraft.yaml
   - snapcraft
   - echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage > snapcraft.login
   - snapcraft login --with snapcraft.login
-  - snapcraft push *.snap --release edge
+  - snapcraft push *.snap --release beta
   only:
   - master
 
-windows-64bit-nsis:
+
+
+#
+# staging:i386:
+#   image:
+#     name: i386/ubuntu:19.04
+#   type: deploy
+#   script:
+#   - apt-get update -qy
+#   - apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript wget
+#   - wget https://bootstrap.pypa.io/get-pip.py
+#   - python3.7 get-pip.py
+#   - python3.7 -m pip install google-api-python-client oauth2client requests pyinstaller beautifulsoup4
+#   - python3.7 -m PyInstaller subtitld_linux.spec
+#   - mv dist .dist
+#   - mv snapcraft.yaml .snapcraft.yaml
+#   - mv * /tmp/
+#   - mv .dist dist
+#   - mv .snapcraft.yaml snapcraft.yaml
+#   - snapcraft
+#   - echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage > snapcraft.login
+#   - snapcraft login --with snapcraft.login
+#   - snapcraft push *.snap --release beta
+#   only:
+#   - master
+
+windows-nsis:
   image: schnouki/pyinstaller-windows-ci:python3
   type: deploy
   script:
-  - apt-get update -qy
-  - apt-get install -y nsis unzip openssh-client sshpass
-  - wine pip3 install mutagen librosa numpy sounddevice PyQt5 pyqt5-tools sip resampy
-  - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
-  - unzip ffmpeg-latest-win64-static.zip
+  - wine pip3 install requirements.txt
+  #- ls -R "/wine/dosdevices/c:/"
   - wine pyinstaller subtitld_win.spec
+  - apt-get update -qy
+  - apt-get install -y nsis openssh-client sshpass
   - makensis subtitld_win.nsi
   - export SSHPASS=$USER_PASS
   - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
   artifacts:
     paths:
-    - Open*Installer.exe
+    - Subtitld*Installer.exe
     expire_in: 1 week
   only:
   - master
