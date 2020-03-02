@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Subtitld
+Exec=subtitld
+Icon=${SNAP}/meta/gui/icon.png
+Info=Subtitld
+Categories=Application;Multimedia
+Comment=Create and edit subtitles
+Terminal=false
+Type=Application
+StartupNotify=true
+Name[pt_BR]=Subtitld
+Comment[pt_BR]=Crie e edite legendas
