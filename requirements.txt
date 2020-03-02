@@ -1,5 +1,5 @@
 PyQt5
-pympv
+python-mpv
 pyopengl
 pysrt
 PyInstaller
