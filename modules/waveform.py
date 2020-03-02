@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os, sys, numpy, subprocess, librosa
-import numpy as np
-import sounddevice
 import json
 
 from modules.paths import *
@@ -95,45 +93,7 @@ def generate_waveform_zoom(zoom, duration, waveform):
     #chunk = int(44100/bps)
     chunk = 4096
 
-
-    '''while parser < len(waveform):
-        #fft = fft[:int(len(fft)/2)] # keep only first half
-        #freq = np.fft.fftfreq(CHUNK,1.0/RATE)
-        #freq = freq[:int(len(freq)/2)] # keep only first half
-        #freqPeak = freq[np.where(fft==np.max(fft))[0][0]]+1
-        #print("peak frequency: %d Hz"%freqPeak)
-
-        signal = waveform[parser:parser+chunk]
-        #signal = signal * numpy.hanning(len(signal))
-        spectrum = numpy.fft.fft(signal)
-        spectrum = spectrum[:int(len(spectrum)/2)]
-        freq = numpy.fft.fftfreq(chunk,1.0/44100)
-        freqpeak = freq[numpy.where(spectrum==numpy.max(spectrum))[0][0]]
-        #freqpeak = numpy.fft.fftfreq(spectrum)
-        #print(freqpeak)
-        average.append(freqpeak)
-        parser += int(len(waveform)/(duration*zoom))'''
-
-
-
-    #    #average_waveform = waveform[parser:parser+int(len(waveform)/(duration*zoom))] * numpy.hanning(len(waveform[parser:parser+int(len(waveform)/(duration*zoom))]))
-    #    #average_waveform = waveform[parser:parser+4096]# * numpy.hanning(len(waveform[parser:parser+int(len(waveform)/(duration*zoom))]))
-    #    #fft = abs(numpy.fft.fft(average_waveform).real)
-    #    #print(len(fft))
-    #    #fft = fft[:int(len(fft)/2)]
-    #    #freq = numpy.fft.fftfreq(4096,1.0/44100)
-    #    #freq = freq[:int(len(freq)/2)]
-    #    #freqpeak = freq[numpy.where(fft==numpy.max(fft))[0][0]]
-    #    #average.append(freqpeak*.01)
-    #    #print(freqpeak)
-    #    average.append(freqpeak)
-    #    #average.append(numpy.argmax(waveform[parser:parser+int(len(waveform)/(duration*zoom))])/len(waveform[parser:parser+int(len(waveform)/(duration*zoom))]))
-    #    parser += int(len(waveform)/(duration*zoom))
-
-    #return [positive_values, negative_values], average
     return positive_values, negative_values, average
-
-    #self.project_options.markingsubtitling_panel_editor_panel_player_timeline.update()
 
 class waveform_qpixmap_widget(QWidget):
     view_mode = 'waveform'

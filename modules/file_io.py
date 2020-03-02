@@ -6,7 +6,7 @@ import sys
 import pysrt
 import timecode
 #from moviepy.editor import VideoFileClip
-from pymediainfo import MediaInfo
+#from pymediainfo import MediaInfo
 
 from modules import waveform
 
@@ -40,7 +40,7 @@ def process_video_metadata(mp4_file):
     video_metadata['width'] =  int(json_result.get('streams', [])[0].get('width', '640'))
     video_metadata['height'] =  int(json_result.get('streams', [])[0].get('height', '640'))
     video_metadata['filepath'] = mp4_file
-    
+
     return video_metadata
 
 def save_file(final_file, subtitles_list):

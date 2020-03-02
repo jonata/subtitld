@@ -6,8 +6,6 @@ from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QLineEdit
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QThread, pyqtSignal, QSize
 from PyQt5.QtGui import QIcon
 
-import sounddevice, numpy, librosa
-
 from modules import waveform
 
 def load(self, PATH_SUBTITLD_GRAPHICS):
