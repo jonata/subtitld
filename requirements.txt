@@ -5,4 +5,3 @@ pysrt
 PyInstaller
 numpy
 timecode
-cython

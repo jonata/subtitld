@@ -4,7 +4,7 @@ staging:amd64:
   type: deploy
   script:
   - apt-get update -qy
-  - apt-get install -y software-properties-common wget
+  - apt-get install -y software-properties-common wget build-essential
   - add-apt-repository -y ppa:deadsnakes/ppa
   - apt-get update -qy
   - apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript
@@ -32,6 +32,9 @@ windows-nsis:
   script:
   - apt-get update -qy
   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full
+  - wget 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks'
+  - chmod +x ~/winetricks
+  - ./winetricks -q dotnet46
   - wget https://aka.ms/vs/15/release/vs_buildtools.exe
   - wine vs_buildtools.exe --quiet --wait --norestart --nocache
   - wine pip3 install -r requirements.txt
