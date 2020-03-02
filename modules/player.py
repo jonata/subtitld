@@ -32,6 +32,11 @@ def load(self):
     class MpvWidget(QOpenGLWidget):
         def __init__(self, parent=None):
             super().__init__(parent=parent)
+            if sys.platform == 'win32':
+                try:
+                    self.option('gpu-context', 'angle')
+                except mpv.MPVError:
+                    self.option('opengl-backend', 'angle')
             self.mpv = MPV(vo='opengl-cb', ytdl=True)
             self.mpv.osd = False
             self.mpv.autosub = False
