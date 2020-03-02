@@ -32,11 +32,11 @@ windows-nsis:
   script:
   - apt-get update -qy
   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full
-  - wget 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks'
-  - chmod +x winetricks
-  - ./winetricks -q dotnet46
-  - wget https://aka.ms/vs/15/release/vs_buildtools.exe
-  - wine vs_buildtools.exe --quiet --wait --norestart --nocache
+  #- wget 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks'
+  #- chmod +x winetricks
+  #- ./winetricks -q dotnet46
+  #- wget https://aka.ms/vs/15/release/vs_buildtools.exe
+  #- wine vs_buildtools.exe --quiet --wait --norestart --nocache
   - wine pip3 install -r requirements.txt
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
   - unzip ffmpeg-latest-win64-static.zip
