@@ -1,0 +1,49 @@
+name: subtitld
+version: "18.11"
+version-script: date +%y.%m.%d.%H%M
+summary: Subtitld
+description: |
+ Software to create and edit subtitle files. Visit http://subtitld.jonata.org/ for more information.
+icon: graphics/subtitld.png
+confinement: strict
+grade: stable
+base: core18
+
+apps:
+  subtitld:
+    environment:
+      LC_ALL: C.UTF-8
+    command: desktop-launch snapcraft-preload $SNAP/share/subtitld/subtitld.py
+    plugs:
+      - unity7
+      - home
+      - network
+      - network-bind
+      - desktop
+      - desktop-legacy
+      - x11
+      - wayland
+      - mount-observe
+      - gsettings
+parts:
+  subtitld:
+    plugin: python
+    python-packages:
+      #- PyQt5
+      - mutagen
+      - librosa
+      - numpy
+      - sounddevice
+    stage-packages:
+      - python3-pyqt5
+      - ffmpeg
+      - libportaudio2
+    after:
+      - desktop-qt5
+
+  snapcraft-preload:
+    source: https://github.com/diddledan/snapcraft-preload.git
+    plugin: cmake
+    build-packages:
+      - gcc-multilib
+      - g++-multilib

@@ -1,0 +1,46 @@
+ubuntu-64bit-snap:
+  image: ubuntu:18.04
+  type: deploy
+  script:
+  - apt-get update -qy
+  - apt-get install -y snapcraft
+  - snapcraft
+  - echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage > snapcraft.login
+  - snapcraft login --with snapcraft.login
+  - snapcraft push *.snap --release edge
+  only:
+  - master
+
+ubuntu-32bit-snap:
+  image:
+    name: i386/ubuntu:18.04
+  type: deploy
+  script:
+  - apt-get update -qy
+  - apt-get install -y snapcraft
+  - snapcraft
+  - echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage > snapcraft.login
+  - snapcraft login --with snapcraft.login
+  - snapcraft push *.snap --release edge
+  only:
+  - master
+
+windows-64bit-nsis:
+  image: schnouki/pyinstaller-windows-ci:python3
+  type: deploy
+  script:
+  - apt-get update -qy
+  - apt-get install -y nsis unzip openssh-client sshpass
+  - wine pip3 install mutagen librosa numpy sounddevice PyQt5 pyqt5-tools sip resampy
+  - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
+  - unzip ffmpeg-latest-win64-static.zip
+  - wine pyinstaller subtitld_win.spec
+  - makensis subtitld_win.nsi
+  - export SSHPASS=$USER_PASS
+  - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
+  artifacts:
+    paths:
+    - Open*Installer.exe
+    expire_in: 1 week
+  only:
+  - master
