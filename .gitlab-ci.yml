@@ -26,32 +26,6 @@ staging:amd64:
   only:
   - master
 
-
-
-#
-# staging:i386:
-#   image:
-#     name: i386/ubuntu:19.04
-#   type: deploy
-#   script:
-#   - apt-get update -qy
-#   - apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript wget
-#   - wget https://bootstrap.pypa.io/get-pip.py
-#   - python3.7 get-pip.py
-#   - python3.7 -m pip install google-api-python-client oauth2client requests pyinstaller beautifulsoup4
-#   - python3.7 -m PyInstaller subtitld_linux.spec
-#   - mv dist .dist
-#   - mv snapcraft.yaml .snapcraft.yaml
-#   - mv * /tmp/
-#   - mv .dist dist
-#   - mv .snapcraft.yaml snapcraft.yaml
-#   - snapcraft
-#   - echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage > snapcraft.login
-#   - snapcraft login --with snapcraft.login
-#   - snapcraft push *.snap --release beta
-#   only:
-#   - master
-
 windows-nsis:
   image: schnouki/pyinstaller-windows-ci:python3
   type: deploy
