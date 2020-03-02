@@ -4,3 +4,4 @@ pyopengl
 pysrt
 PyInstaller
 numpy
+timecode
