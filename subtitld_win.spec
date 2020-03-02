@@ -8,6 +8,7 @@ a = Analysis(['subtitld.py'],
     datas=[
         ( 'graphics/*.png', 'graphics' ),
         ( 'ffmpeg-latest-win64-static/bin/ffmpeg.exe', '.'),
+        ( 'ffmpeg-latest-win64-static/bin/ffprobe.exe', '.'),
     ],
     hiddenimports=[],
     hookspath=[],

@@ -52,12 +52,10 @@ def open_button_clicked(self):
     file_to_open = QFileDialog.getOpenFileName(self, "Select the subtitle or video file", os.path.expanduser("~"), "SRT file (*.srt);;MP4 file (*.mp4)")[0]
     if file_to_open and os.path.isfile(file_to_open):
         self.subtitles_list, self.video_metadata = file_io.open_file(file_to_open)
-
         if not self.video_metadata:
             file_to_open = QFileDialog.getOpenFileName(self, "Select the video file", os.path.expanduser("~"), "MP4 file (*.mp4)")[0]
             if file_to_open and os.path.isfile(file_to_open):
                 self.video_metadata = file_io.process_video_metadata(file_to_open)
-
 
 
         if self.video_metadata:

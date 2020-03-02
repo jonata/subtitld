@@ -12,7 +12,6 @@ from modules import waveform
 
 def open_file(filepath):
     final_subtitles = []
-
     if filepath:
         if filepath.lower().endswith('.srt'):
             with open(filepath) as srtfile:
@@ -21,26 +20,21 @@ def open_file(filepath):
                     start = (timecode.Timecode('ms', str(sub.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
                     duration = (timecode.Timecode('ms', str(sub.duration).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
                     final_subtitles.append([start, duration, str(sub.text)])
-
     video_metadata = {}
-
     mp4_file = os.path.join(os.path.dirname(filepath), os.path.basename(filepath).rsplit('.',1)[0] + '.mp4')
     if os.path.isfile(mp4_file):
         video_metadata = process_video_metadata(mp4_file)
-
     return final_subtitles, video_metadata
 
 def process_video_metadata(mp4_file):
     video_metadata = {}
     audio_np = waveform.ffmpeg_load_audio(mp4_file)
     json_result = waveform.ffmpeg_load_metadata(mp4_file)
-
     video_metadata['waveform'] = {0: audio_np}
     video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
     video_metadata['width'] =  int(json_result.get('streams', [])[0].get('width', '640'))
     video_metadata['height'] =  int(json_result.get('streams', [])[0].get('height', '640'))
     video_metadata['filepath'] = mp4_file
-
     return video_metadata
 
 def save_file(final_file, subtitles_list):

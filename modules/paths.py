@@ -22,12 +22,8 @@ if sys.platform == 'darwin':
     FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe')
 elif sys.platform == 'win32' or os.name == 'nt':
     PATH_SUBTITLD_USER_CONFIG = os.path.join(os.getenv('LOCALAPPDATA'), 'subtitld')
-    if getattr(sys, 'frozen', False):
-        FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
-        FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')
-    else:
-        FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
-        FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')
+    FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
+    FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')
 else:
     REAL_PATH_HOME = subprocess.Popen(['getent','passwd',str(os.getuid())], stdout=subprocess.PIPE).stdout.read().decode().split(':')[5]
     if not os.path.isdir(os.path.join(PATH_HOME, '.config')):

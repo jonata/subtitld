@@ -32,25 +32,15 @@ def load(self):
     class MpvWidget(QOpenGLWidget):
         def __init__(self, parent=None):
             super().__init__(parent=parent)
-            print('blah 1')
             self.mpv = MPV(vo='opengl-cb', ytdl=True)
-            print('blah 2')
             self.mpv.osd = False
-            print('blah 3')
             self.mpv.autosub = False
-            print('blah 4')
             self.mpv_gl = _mpv_get_sub_api(self.mpv.handle, MpvSubApi.MPV_SUB_API_OPENGL_CB)
-            print('blah 5')
             self.on_update_c = OpenGlCbUpdateFn(self.on_update)
-            print('blah 6')
             self.on_update_fake_c = OpenGlCbUpdateFn(self.on_update_fake)
-            print('blah 7')
             self.get_proc_addr_c = OpenGlCbGetProcAddrFn(get_proc_addr)
-            print('blah 8')
             _mpv_opengl_cb_set_update_callback(self.mpv_gl, self.on_update_c, None)
-            print('blah 9')
             self.frameSwapped.connect(self.swapped, Qt.DirectConnection)
-            print('blah 10')
 
         def initializeGL(self):
             _mpv_opengl_cb_init_gl(self.mpv_gl, None, self.get_proc_addr_c, None)

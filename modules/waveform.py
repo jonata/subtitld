@@ -31,7 +31,7 @@ def ffmpeg_load_audio(filename, sr=44100, mono=True, normalize=True, in_type=num
         '-ar', str(sr),
         '-ac', str(channels),
         '-']
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=open(os.devnull,'w'), bufsize=4096)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW, bufsize=4096)
     bytes_per_sample = numpy.dtype(in_type).itemsize
     frame_size = bytes_per_sample * channels
     chunk_size = frame_size * sr # read in 1-second chunks
@@ -55,7 +55,6 @@ def ffmpeg_load_audio(filename, sr=44100, mono=True, normalize=True, in_type=num
                 audio /= peak
         elif issubclass(in_type, numpy.integer):
             audio /= numpy.iinfo(in_type).max
-
     return audio
 
 def ffmpeg_load_metadata(filename):
@@ -85,7 +84,6 @@ def generate_waveform_zoom(zoom, duration, waveform):
         negative_values.append(numpy.amin(waveform[parser:parser+int(len(waveform)/(duration*zoom))]))
         parser += int(len(waveform)/(duration*zoom))
 
-    #print('vou calcular')
     #fft_waveform = numpy.fft.fft(waveform)
     #print(len(fft_waveform))
     #average = []
