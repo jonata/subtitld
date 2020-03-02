@@ -57,11 +57,12 @@ windows-nsis:
   type: deploy
   script:
   - apt-get update -qy
-  - apt-get install -y nsis unzip openssh-client sshpass
+  - apt-get install -y nsis unzip openssh-client sshpass p7zip
   - wine pip3 install -r requirements.txt
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
   - unzip ffmpeg-latest-win64-static.zip
-  #- ls -R "/wine/dosdevices/c:/"
+  - wget https://mpv.srsfckn.biz/mpv-dev-latest.7z
+  - 7z x -ompv mpv-dev-latest.7z
   - wine pyinstaller subtitld_win.spec
   - makensis subtitld_win.nsi
   - export SSHPASS=$USER_PASS

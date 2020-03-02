@@ -2,7 +2,9 @@
 
 a = Analysis(['subtitld.py'],
     pathex=['/Users/admin/Documents/subtitld', 'C:\Python36\Lib\site-packages\scipy\extra-dll'],
-    binaries=[],
+    binaries=[
+        ( 'mpv/i686/mpv-1.dll', '.')
+    ],
     datas=[
         ( 'graphics/*.png', 'graphics' ),
         ( 'ffmpeg-latest-win64-static/bin/ffmpeg.exe', '.'),
