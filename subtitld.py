@@ -33,8 +33,12 @@ class subtitld(QWidget):
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')
 
+        self.background_watermark_label = QLabel(self)
+        self.background_watermark_label.setObjectName('background_watermark_label')
+
         self.setStyleSheet('''
                                 #background_label                           { border-left:0; border-top:0; border-right:0; border-bottom:0; border-image: url("''' + get_graphics_path('background.png') + '''") 0 0 0 0 stretch stretch; }
+                                #background_watermark_label                 { image: url("''' + get_graphics_path('background_watermark.png') + '''"); }
                                 #subtitles_list_widget                      { border-top: 0; border-right: 2px; border-bottom: 0; border-left: 0; border-image: url("''' + get_graphics_path('subtitle_list_widget_background.png') + '''") 0 2 0 0 stretch stretch; }
                                 #properties_widget                          { border-top: 0; border-right: 0; border-bottom: 0; border-left: 2px; border-image: url("''' + get_graphics_path('properties_widget_background.png') + '''") 0 0 0 2 stretch stretch; }
                                 #playercontrols_widget_central              { border-top: 90px; border-right: 28px; border-bottom: 0; border-left: 28px; border-image: url("''' + get_graphics_path('timeline_top_controls_background.png') + '''") 90 28 0 28 stretch stretch; }
@@ -122,6 +126,7 @@ class subtitld(QWidget):
 
     def resizeEvent(self, event):
         self.background_label.setGeometry(0,0,self.width(),self.height())
+        self.background_watermark_label.setGeometry((self.width()*.5)-129,(self.height()*.5)-129,258,258)
 
         self.subtitleslist.resized(self)
         self.playercontrols.resized(self)

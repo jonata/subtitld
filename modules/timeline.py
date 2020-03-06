@@ -212,7 +212,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.zoomout_button.clicked.connect(lambda:zoomout_button_clicked(self))
 
 def resized(self):
-    self.timeline_scroll.setGeometry(0,100,self.playercontrols_widget.width(),self.playercontrols_widget.height()-100)
+    self.timeline_scroll.setGeometry(0,100,self.playercontrols_widget.width(),100)
     update_timeline(self)
     #self.timeline_widget.setGeometry(0,0,self.timeline_scroll.width(),self.timeline_scroll.height())
     #self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)

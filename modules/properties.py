@@ -17,7 +17,7 @@ def load(self, path_catptilr_graphics):
     self.properties_widget_alert.setObjectName('subtitles_list_widget_alert')
 
 def resized(self):
-    self.properties_widget.setGeometry((self.width()*.8)+15,0,(self.width()*.2)-15,self.height()*.75)
+    self.properties_widget.setGeometry((self.width()*.8)+15,0,(self.width()*.2)-15,self.height()-185)
     self.properties_widget_alert.setGeometry(2,0,self.subtitles_list_widget.width()-2, self.subtitles_list_widget.height())
 
 def save_button_clicked(self):

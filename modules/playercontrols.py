@@ -42,7 +42,7 @@ def playercontrols_playpause_button_clicked(self):
     self.player_widget.mpv.pause = not self.player_widget.mpv.pause
 
 def resized(self):
-    self.playercontrols_widget.setGeometry(0,(self.height()*.75)-20,self.width(),(self.height()*.25)+20)
+    self.playercontrols_widget.setGeometry(0,self.height()-200,self.width(),(self.height()*.25)+20)
     pc_width = 400
     self.playercontrols_widget_central.setGeometry((self.playercontrols_widget.width()*.5)-(pc_width*.5),0,pc_width,self.playercontrols_widget.height())
     self.playercontrols_widget_right.setGeometry((self.playercontrols_widget.width()*.5)+(pc_width*.5),0,(self.playercontrols_widget.width()*.5)-(pc_width*.5),self.playercontrols_widget.height())

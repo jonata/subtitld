@@ -36,7 +36,7 @@ def load(self, path_catptilr_graphics):
 
 
 def resized(self):
-    self.subtitles_list_widget.setGeometry(0,0,(self.width()*.2)-15,self.height()*.75)
+    self.subtitles_list_widget.setGeometry(0,0,(self.width()*.2)-15,self.height()-185)
     self.open_button.setGeometry(20,20,100,30)
     self.save_button.setGeometry(120,20,100,30)
     self.subtitles_list_widget_alert.setGeometry(0,0,self.subtitles_list_widget.width()-2, self.subtitles_list_widget.height())
