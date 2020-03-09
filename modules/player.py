@@ -3,7 +3,7 @@
 
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QMetaObject, pyqtSlot
-from PyQt5.QtWidgets import QOpenGLWidget, QApplication, QLabel
+from PyQt5.QtWidgets import QOpenGLWidget, QApplication, QLabel, QTextEdit, QWidget
 from PyQt5.QtOpenGL import QGLContext
 
 from OpenGL import GL  # noqa
@@ -20,14 +20,22 @@ def get_proc_addr(_, name):
     return addr
 
 def load(self):
-    self.player_widget_area = QLabel(self)
+    class player_widget_area(QWidget):
+        def enterEvent(widget, event):
+            if self.selected_subtitle and not self.player_subtitle_textedit.isVisible() and self.player_subtitle_layer.text():
+                self.player_subtitle_textedit.setPlainText(self.selected_subtitle[2])
+                self.player_subtitle_layer.setVisible(False)
+                self.player_subtitle_textedit.setVisible(True)
+        def leaveEvent(widget, event):
+            if self.selected_subtitle:
+                self.player_subtitle_layer.setVisible(True)
+                self.player_subtitle_textedit.setVisible(False)
 
-    self.player_border = QLabel(self)
+    self.player_widget_area = player_widget_area(self)
+
+    self.player_border = QLabel(self.player_widget_area)
+    #self.player_border.setAttribute(Qt.WA_TransparentForMouseEvents)
     self.player_border.setObjectName('player_border')
-
-    self.player_alert = QLabel('There is no video to show. Please open a file.', parent=self)
-    self.player_alert.setWordWrap(True)
-    self.player_alert.setObjectName('subtitles_list_widget_alert')
 
     class MpvWidget(QOpenGLWidget):
         def __init__(self, parent=None):
@@ -83,19 +91,37 @@ def load(self):
             self.mpv.terminate()
 
     self.player_widget = MpvWidget(parent=self.player_widget_area)
+    #self.player_widget.setAttribute(Qt.WA_TransparentForMouseEvents)
+
     self.player_subtitle_layer = QLabel(parent=self.player_widget_area)
     self.player_subtitle_layer.setWordWrap(True)
     self.player_subtitle_layer.setObjectName('player_subtitle_layer')
 
+    self.player_subtitle_textedit = QTextEdit(parent=self.player_widget_area)
+    #self.player_subtitle_textedit.setAttribute(Qt.WA_AlwaysStackOnTop)
+    self.player_subtitle_textedit.setVisible(False)
+    #self.player_subtitle_textedit.setWordWrap(True)
+    self.player_subtitle_textedit.setObjectName('player_subtitle_textedit')
+    self.player_subtitle_textedit.textChanged.connect(lambda:player_subtitle_textedit_changed(self))
+
+
 def update(self):
     self.player_widget_area.setVisible(bool(self.video_metadata))
     self.player_border.setVisible(bool(self.video_metadata))
-    self.player_alert.setVisible(not bool(self.video_metadata))
 
 def resized(self):
-    self.player_widget_area.setGeometry(self.width()*.2,0,self.width()*.6,self.height()*.75)
-    self.player_alert.setGeometry(self.player_widget_area.x(),self.player_widget_area.y(),self.player_widget_area.width(),self.player_widget_area.height())
+    self.player_widget_area.setGeometry(self.width()*.2,0,self.width()*.6,self.height()-self.playercontrols_widget.height())
     resize_player_widget(self)
+
+def player_subtitle_textedit_changed(self):
+    old_selected_subtitle = self.selected_subtitle
+    counter = self.subtitles_list.index(old_selected_subtitle)
+    self.subtitles_list[counter][2] = self.player_subtitle_textedit.toPlainText()
+    update_subtitle_layer(self)
+
+def playpause(self):
+    self.player_widget.mpv.pause = not self.player_widget.mpv.pause
+    self.mediaplayer_is_playing = not self.player_widget.mpv.pause
 
 def update_subtitle_layer(self):
     text = ''
@@ -105,9 +131,11 @@ def update_subtitle_layer(self):
             break
 
     self.player_subtitle_layer.setText(text)
+    #self.player_subtitle_textedit.setPlainText(text)
 
 def resize_player_widget(self):
-    heigth_proportion = self.player_widget_area.width() / self.video_metadata.get('width', 1)
-    self.player_widget.setGeometry(0,(self.player_widget_area.height()*.5)-((heigth_proportion*self.video_metadata.get('height', 1))*.5),self.player_widget_area.width(),self.video_metadata.get('height', 1)*heigth_proportion)
-    self.player_border.setGeometry(self.player_widget_area.x() + self.player_widget.x()-3, self.player_widget_area.y() + self.player_widget.y()-3, self.player_widget.width()+6, self.player_widget.height()+6)
+    heigth_proportion = (self.player_widget_area.width()-6) / self.video_metadata.get('width', 1)
+    self.player_widget.setGeometry(3,(self.player_widget_area.height()*.5)-((heigth_proportion*self.video_metadata.get('height', 1))*.5),self.player_widget_area.width()-6,self.video_metadata.get('height', 1)*heigth_proportion)
+    self.player_border.setGeometry(self.player_widget.x()-3, self.player_widget.y()-3, self.player_widget.width()+6, self.player_widget.height()+6)
     self.player_subtitle_layer.setGeometry(self.player_widget.x(),self.player_widget.y(), self.player_widget.width(), self.player_widget.height())
+    self.player_subtitle_textedit.setGeometry(self.player_widget.x()+(self.player_widget.width()*.1),self.player_widget.y()+(self.player_widget.height()*.5), self.player_widget.width()*.8, self.player_widget.height()*.4)

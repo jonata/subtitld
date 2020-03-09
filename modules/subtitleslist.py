@@ -3,6 +3,8 @@
 
 import os
 import threading
+import multiprocessing
+import datetime
 
 from modules import file_io
 from modules import waveform
@@ -13,6 +15,8 @@ from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 def load(self, path_catptilr_graphics):
     self.subtitles_list_widget = QLabel(parent=self)
     self.subtitles_list_widget.setObjectName('subtitles_list_widget')
+    self.subtitles_list_widget_animation = QPropertyAnimation(self.subtitles_list_widget, b'geometry')
+    self.subtitles_list_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
     self.subtitles_list_widget_alert = QLabel('There is no subtitle to show. Please open a file or create a new one.', parent=self.subtitles_list_widget)
     self.subtitles_list_widget_alert.setWordWrap(True)
@@ -36,11 +40,14 @@ def load(self, path_catptilr_graphics):
 
 
 def resized(self):
-    self.subtitles_list_widget.setGeometry(0,0,(self.width()*.2)-15,self.height()-185)
+    if self.subtitles_list:
+        self.subtitles_list_widget.setGeometry(0,0,(self.width()*.2)-15,self.height())
+    else:
+        self.subtitles_list_widget.setGeometry(-((self.width()*.2)-15),0,(self.width()*.2)-15,self.height())
     self.open_button.setGeometry(20,20,100,30)
     self.save_button.setGeometry(120,20,100,30)
     self.subtitles_list_widget_alert.setGeometry(0,0,self.subtitles_list_widget.width()-2, self.subtitles_list_widget.height())
-    self.subtitles_list_qlistwidget.setGeometry(20,60,self.subtitles_list_widget.width()-40,self.subtitles_list_widget.height()-80)
+    self.subtitles_list_qlistwidget.setGeometry(20,60,self.subtitles_list_widget.width()-40,self.subtitles_list_widget.height()-80-self.playercontrols_widget.height())
 
 def save_button_clicked(self):
     if not self.actual_subtitle_file:
@@ -51,24 +58,7 @@ def save_button_clicked(self):
 def open_button_clicked(self):
     file_to_open = QFileDialog.getOpenFileName(self, "Select the subtitle or video file", os.path.expanduser("~"), "SRT file (*.srt);;MP4 file (*.mp4)")[0]
     if file_to_open and os.path.isfile(file_to_open):
-        self.subtitles_list, self.video_metadata = file_io.open_file(file_to_open)
-        if not self.video_metadata:
-            file_to_open = QFileDialog.getOpenFileName(self, "Select the video file", os.path.expanduser("~"), "MP4 file (*.mp4)")[0]
-            if file_to_open and os.path.isfile(file_to_open):
-                self.video_metadata = file_io.process_video_metadata(file_to_open)
-
-
-        if self.video_metadata:
-            threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30)).start()
-            self.player.update(self)
-            self.player_widget.mpv.play(self.video_metadata['filepath'])
-            self.player_widget.mpv.wait_for_property('seekable')
-            self.player_widget.mpv.pause = True
-            self.player.resize_player_widget(self)
-
-        update_subtitles_list_widget(self)
-        self.playercontrols.update_playercontrols_widget(self)
-        self.timeline.update_timeline(self)
+        file_io.open_filepath(self, file_to_open)
 
 
 def update_subtitles_list_widget(self):
@@ -89,3 +79,6 @@ def subtitles_list_qlistwidget_item_clicked(self):
         sub_index = int(self.subtitles_list_qlistwidget.currentItem().text().split(' - ')[0]) - 1
         self.selected_subtitle = self.subtitles_list[sub_index]
     self.properties.update_properties_widget(self)
+
+def show(self):
+    self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(),self.subtitles_list_widget.y(),self.subtitles_list_widget.width(),self.subtitles_list_widget.height()], [0, self.subtitles_list_widget.y(), self.subtitles_list_widget.width(),self.subtitles_list_widget.height()])

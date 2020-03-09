@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 
 import os, sys, threading
-from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect
 from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, QRect, QPropertyAnimation, QEasingCurve
 
 from modules.paths import *
 #from modules import file_io
 from modules import waveform
+from modules import config
 
 import numpy
 
@@ -17,7 +18,8 @@ class subtitld(QWidget):
         self.setWindowTitle('Subtitld')
         self.setWindowIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'subtitld.png')))
 
-        self.update_accuracy = 200
+        # Setting some default values
+        self.update_accuracy = 100
         self.subtitles_list = []
         self.video_metadata = {}
         self.actual_subtitle_file = False
@@ -29,54 +31,36 @@ class subtitld(QWidget):
         self.mediaplayer_current_position = 0.0
         self.mediaplayer_is_playing = False
         self.mediaplayer_view_mode = 'verticalform'
+        self.mediaplayer_is_playing = False
+        self.current_timeline_position = 0.0
 
+        self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
+
+        # Setting the gradient background
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')
 
+        self.background_label2 = QLabel(self)
+        self.background_label2.setObjectName('background_label2')
+        self.background_label2_transparency = QGraphicsOpacityEffect()
+        self.background_label2.setGraphicsEffect(self.background_label2_transparency)
+        self.background_label2_transparency_animation = QPropertyAnimation(self.background_label2_transparency, b'opacity')
+
+        # Setting the gorgeous watermarked background logo
         self.background_watermark_label = QLabel(self)
         self.background_watermark_label.setObjectName('background_watermark_label')
 
-        self.setStyleSheet('''
-                                #background_label                           { border-left:0; border-top:0; border-right:0; border-bottom:0; border-image: url("''' + get_graphics_path('background.png') + '''") 0 0 0 0 stretch stretch; }
-                                #background_watermark_label                 { image: url("''' + get_graphics_path('background_watermark.png') + '''"); }
-                                #subtitles_list_widget                      { border-top: 0; border-right: 2px; border-bottom: 0; border-left: 0; border-image: url("''' + get_graphics_path('subtitle_list_widget_background.png') + '''") 0 2 0 0 stretch stretch; }
-                                #properties_widget                          { border-top: 0; border-right: 0; border-bottom: 0; border-left: 2px; border-image: url("''' + get_graphics_path('properties_widget_background.png') + '''") 0 0 0 2 stretch stretch; }
-                                #playercontrols_widget_central              { border-top: 90px; border-right: 28px; border-bottom: 0; border-left: 28px; border-image: url("''' + get_graphics_path('timeline_top_controls_background.png') + '''") 90 28 0 28 stretch stretch; }
-                                #playercontrols_widget_right                { border-top: 90px; border-right: 0; border-bottom: 0; border-left: 0; border-image: url("''' + get_graphics_path('timeline_top_controls_background.png') + '''") 90 0 0 58 stretch stretch; }
-                                #playercontrols_widget_left                 { border-top: 90px; border-right: 0; border-bottom: 0; border-left: 0; border-image: url("''' + get_graphics_path('timeline_top_controls_background.png') + '''") 90 58 0 0 stretch stretch; }
-                                #player_border                              { border-top: 5px; border-right: 5px; border-bottom: 5px; border-left: 5px; border-image: url("''' + get_graphics_path('video_border.png') + '''") 5 5 5 5 stretch stretch; }
+        # I have placed all the stylesheet properties into a separate file, so importing it here
+        from modules import stylesheet
+        stylesheet.set_stylesheet(self)
 
-                                #timeline_scroll                            { padding-top:-30px; border-top: 30px; border-right: 0; border-bottom: 0; border-left: 0; border-image: url("''' + get_graphics_path('timeline_background.png') + '''") 30 5 5 5 stretch stretch; background-color:transparent; }
-                                #timeline_widget                            { background-color:transparent; }
+        # The start screen
+        from modules import startscreen
+        self.startscreen = startscreen
+        self.startscreen.load(self)
+        self.startscreen.show(self)
 
-                                QPushButton                                 { font-size:10px; color:white; }
-                                #subtitles_list_widget_alert                { font-size:20px; color: rgba(200, 200, 200, 100); qproperty-alignment: "AlignCenter"; padding: 40px; }
-
-                                #player_subtitle_layer                      { font-size:40px; color: rgb(255, 255, 255); qproperty-alignment: "AlignCenter | AlignBottom"; padding: 40px; }
-
-                                #button_dark_no_right                       { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                                #button_dark_no_right:hover:pressed         { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                                #button_dark_no_right:hover                 { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                                #button_dark_no_right:disabled              { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-
-                                #button_dark_no_left                        { border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                                #button_dark_no_left:hover:pressed          { border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                                #button_dark_no_left:hover                  { border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                                #button_dark_no_left:disabled               { border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-
-                                #button_no_right                            { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                                #button_no_right:hover:pressed              { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                                #button_no_right:hover                      { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                                #button_no_right:disabled                   { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-
-                                #button_no_left                             { border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                                #button_no_left:hover:pressed               { border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                                #button_no_left:hover                       { border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                                #button_no_left:disabled                    { border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-
-                                QListWidget                                 { outline: none; font-size:20px; color:black; } QListWidget::item:selected { background:#EEEEEE; color:gray; }
-        ''')
-
+        # The mpv video player
         from modules import player
         self.player = player
         self.player.load(self)
@@ -97,11 +81,9 @@ class subtitld(QWidget):
         self.timeline = timeline
         self.timeline.load(self, PATH_SUBTITLD_GRAPHICS)
 
-
         #from modules import document_edit
         #self.document_edit = document_edit
         #self.document_edit.load(self, PATH_SUBTITLD_GRAPHICS)
-
 
         #from modules import top_bar
         #self.top_bar = top_bar
@@ -111,12 +93,10 @@ class subtitld(QWidget):
         #self.importer = importer
         #self.importer.load(self, PATH_SUBTITLD_GRAPHICS)
 
-
         self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
 
         self.subtitleslist.update_subtitles_list_widget(self)
         self.properties.update_properties_widget(self)
-        self.playercontrols.update_playercontrols_widget(self)
         self.player.update(self)
 
         self.timer = QTimer(self)
@@ -126,20 +106,26 @@ class subtitld(QWidget):
 
     def resizeEvent(self, event):
         self.background_label.setGeometry(0,0,self.width(),self.height())
-        self.background_watermark_label.setGeometry((self.width()*.5)-129,(self.height()*.5)-129,258,258)
+        self.background_label2.setGeometry(0,0,self.width(),self.height())
+
+        self.startscreen.resized(self)
 
         self.subtitleslist.resized(self)
         self.playercontrols.resized(self)
+
+        self.background_watermark_label.setGeometry(int((self.width()*.5)-129),int(((self.height()-self.playercontrols_widget.height())*.5)-129),258,258)
+
         self.properties.resized(self)
         self.player.resized(self)
         self.timeline.resized(self)
 
     def closeEvent(self, _):
+        config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)
         self.player_widget.close()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space:
-            self.player_widget.mpv.pause = not self.player_widget.mpv.pause
+            self.player.playpause(self)
 
         if event.key() == Qt.Key_Slash:
             self.player_controls.play_button_selection.setChecked(not self.player_controls.play_button_selection.isChecked())
@@ -293,6 +279,17 @@ class subtitld(QWidget):
     def live_recording_note_thread_updated(self, result):
         self.recording_note = result
 
+    def generate_effect(self, widget, effect_type, duration, startValue, endValue):
+        widget.setDuration(duration)
+        if effect_type == 'geometry':
+            widget.setStartValue(QRect(startValue[0],startValue[1],startValue[2],startValue[3]))
+            widget.setEndValue(QRect(endValue[0],endValue[1],endValue[2],endValue[3]))
+        elif effect_type == 'opacity':
+            widget.setStartValue(startValue)
+            widget.setEndValue(endValue)
+        widget.start()
+
+
 def update_things(self):
     # if self.mediaplayer_is_playing:
     #     self.mediaplayer_current_position += ((self.update_accuracy*.001)/self.music_length)#(event.pos().x() / widget.width()) * len(self.music_waveform['full'])
@@ -303,7 +300,8 @@ def update_things(self):
     #             self.player_controls.play_button_selection.setVisible(True)
     #             self.mediaplayer_is_playing = False
     #             self.mediaplayer_current_position = float((int(self.lyrics_metadata['gap'] * ( len(self.music_waveform['full']) / (self.music_length * 1000))) + int(((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[0]))) / len(self.music_waveform['full']))
-    self.timeline_widget.update()
+    if self.mediaplayer_is_playing:
+        self.timeline.update(self)
     self.player.update_subtitle_layer(self)
 
 def edit_syllable_returnpressed(self):
@@ -312,15 +310,15 @@ def edit_syllable_returnpressed(self):
 
 def zoomin_button_clicked(self):
     self.mediaplayer_zoom += 5.0
-    if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
-        threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30)).start()
+    #if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
+    #    threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True).start()
     self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
     #self.timeline_widget.update()
 
 def zoomout_button_clicked(self):
     self.mediaplayer_zoom -= 5.0
-    if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
-        threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30)).start()
+    #if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
+    #    threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True).start()
     self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
     #self.timeline_widget.update()
 
@@ -343,16 +341,6 @@ def show_importer_pannel_button_clicked(self):
     else:
         generate_effect(self.importer.widget_animation, 'geometry', 500, [self.importer.widget.x(),self.importer.widget.y(),self.importer.widget.width(),self.importer.widget.height()], [self.width(),self.importer.widget.y(),self.importer.widget.width(),self.importer.widget.height()])
         generate_effect(self.show_importer_panel_button_animation, 'geometry', 500, [self.show_importer_panel_button.x(),self.show_importer_panel_button.y(),self.show_importer_panel_button.width(),self.show_importer_panel_button.height()], [self.width()-25,self.show_importer_panel_button.y(),self.show_importer_panel_button.width(),self.show_importer_panel_button.height()])
-
-def generate_effect(widget, effect_type, duration, startValue, endValue):
-    widget.setDuration(duration)
-    if effect_type == 'geometry':
-        widget.setStartValue(QRect(startValue[0],startValue[1],startValue[2],startValue[3]))
-        widget.setEndValue(QRect(endValue[0],endValue[1],endValue[2],endValue[3]))
-    elif effect_type == 'opacity':
-        widget.setStartValue(startValue)
-        widget.setEndValue(endValue)
-    widget.start()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

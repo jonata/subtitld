@@ -56,7 +56,7 @@ parts:
       #'subtitld/PySide2/plugins/platformthemes/libqgtk3.so' : '/usr/lib/x86_64-linux-gnu/qt5/plugins/platformthemes/libqgtk3.so'
     stage-packages:
       - ffmpeg
-      #- libgtk-3-0
+      - libmpv1
       #- unity-gtk3-module
       #- language-selector-common
       #-ghostscript

@@ -12,7 +12,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
         subtitle_start_is_clicked = False
         subtitle_end_is_clicked = False
         width_proportion =  self.width()/self.video_metadata.get('duration', 0.01)
-        subtitle_height = self.height()-60
+        subtitle_height = 80#height()-20
+        subtitle_y = 35
         offset = 0.0
         show_limiters = False
         is_cursor_pressing = False
@@ -20,6 +21,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             painter = QPainter(widget)
             scroll_position = self.timeline_scroll.horizontalScrollBar().value()
             scroll_width = widget.width()
+
             painter.setRenderHint(QPainter.Antialiasing)
             if self.subtitles_list:
                 if self.mediaplayer_view_mode and self.video_metadata.get('waveform', {}):
@@ -52,7 +54,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                             painter.setPen(QColor.fromRgb(255,255,255,alpha=255))
 
                         subtitle_rect = QRect(  subtitle[0] * widget.width_proportion ,
-                                            40,
+                                            widget.subtitle_y,
                                             subtitle[1] * widget.width_proportion,
                                             widget.subtitle_height
                                         )
@@ -64,7 +66,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                         if widget.show_limiters:
                             painter.setPen(Qt.NoPen)
                             lim_rect = QRect(  (subtitle[0] * widget.width_proportion) + 2 ,
-                                                42,
+                                                widget.subtitle_y + 2,
                                                 18,
                                                 widget.subtitle_height - 4
                                             )
@@ -75,7 +77,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
                             painter.setPen(Qt.NoPen)
                             lim_rect = QRect(  (subtitle[0] * widget.width_proportion) + (subtitle[1] * widget.width_proportion) - 20,
-                                                42,
+                                                widget.subtitle_y + 2,
                                                 18,
                                                 widget.subtitle_height - 4
                                             )
@@ -85,9 +87,11 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                             painter.drawText(lim_rect,Qt.AlignCenter, '❯')
                 painter.setOpacity(1)
 
+
             painter.setPen(QPen(QColor.fromRgb(255,0,0,200), 4, Qt.SolidLine))
-            if self.player_widget.mpv.time_pos:
-                painter.drawLine(self.player_widget.mpv.time_pos * widget.width_proportion, 3, self.player_widget.mpv.time_pos * widget.width_proportion, widget.height())
+
+            cursor_pos = self.current_timeline_position * widget.width_proportion
+            painter.drawLine(cursor_pos, 3, cursor_pos, widget.height())
 
             painter.end()
 
@@ -111,7 +115,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                             widget.subtitle_is_clicked = True
                     break
             if not (widget.subtitle_end_is_clicked or widget.subtitle_start_is_clicked or widget.subtitle_is_clicked):
-                self.player_widget.mpv.seek((event.pos().x() / widget.width())*self.video_metadata['duration'], reference='absolute', precision='exact')
+                self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
+                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute', precision='exact')
 
 
             widget.update()
@@ -140,7 +145,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             else:
                 widget.show_limiters = False
             if widget.is_cursor_pressing and not (widget.subtitle_start_is_clicked or widget.subtitle_end_is_clicked or widget.subtitle_is_clicked):
-                self.player_widget.mpv.seek((event.pos().x() / widget.width())*self.video_metadata['duration'], reference='absolute', precision='exact')
+                self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
+                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute', precision='exact')
             widget.update()
 
         def mouseDoubleClickEvent(widget, event):
@@ -149,7 +155,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
         def resizeEvent(widget, event):
             widget.width_proportion =  widget.width()/self.video_metadata.get('duration', 0.01)
-            widget.subtitle_height = widget.height()-60
+            widget.subtitle_height = widget.height()-40
+            #widget.subtitle_height = widget.height()-20
 
     self.timeline_widget = timeline(self)
     self.timeline_widget.setObjectName('timeline_widget')
@@ -162,6 +169,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
         def leaveEvent(widget, event):
             if self.video_metadata.get('waveform', {}):
                 self.zoom_widgets.setVisible(False)
+        def wheelEvent(widget, event):
+            self.timeline_scroll.horizontalScrollBar().setValue(self.timeline_scroll.horizontalScrollBar().value() + event.angleDelta().y())
 
     self.timeline_scroll = timeline_scroll(parent=self.playercontrols_widget)
     self.timeline_scroll.setObjectName('timeline_scroll')
@@ -191,7 +200,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                                              QPushButton:hover { border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_hover.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } ')
     self.viewnotesout_button.clicked.connect(lambda:viewnotesout_button_clicked(self))
 
-    self.zoomin_button = QPushButton(parent=self.zoom_widgets)
+    self.zoomin_button = QPushButton('+', parent=self.zoom_widgets)
     self.zoomin_button.setIconSize(QSize(16,17))
     self.zoomin_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'view_zoomin.png')))
     self.zoomin_button.setStyleSheet('  QPushButton { color:white; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_normal.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
@@ -212,7 +221,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.zoomout_button.clicked.connect(lambda:zoomout_button_clicked(self))
 
 def resized(self):
-    self.timeline_scroll.setGeometry(0,100,self.playercontrols_widget.width(),100)
+
+    self.timeline_scroll.setGeometry(0,100,self.playercontrols_widget.width(),self.playercontrols_widget.height()-100)
     update_timeline(self)
     #self.timeline_widget.setGeometry(0,0,self.timeline_scroll.width(),self.timeline_scroll.height())
     #self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)
@@ -230,3 +240,10 @@ def resized(self):
 
 def update_timeline(self):
     self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)
+
+def update(self):
+    if self.player_widget.mpv.time_pos and self.mediaplayer_is_playing:
+        self.current_timeline_position = self.player_widget.mpv.time_pos
+        if (self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
+            self.timeline_scroll.horizontalScrollBar().setValue(self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01)))
+    self.timeline_widget.update()

@@ -5,10 +5,51 @@ import os
 import sys
 import pysrt
 import timecode
+import datetime
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
 
 from modules import waveform
+
+def open_filepath(self, file_to_open):
+    self.subtitles_list, self.video_metadata = open_file(file_to_open)
+    if not self.video_metadata:
+        file_to_open = QFileDialog.getOpenFileName(self, "Select the video file", os.path.expanduser("~"), "MP4 file (*.mp4)")[0]
+        if file_to_open and os.path.isfile(file_to_open):
+            self.video_metadata = process_video_metadata(file_to_open)
+
+
+    if self.video_metadata:
+        #waveform.ffmpeg_load_audio(self, self.video_metadata['filepath'])
+        #waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30)
+        #t = threading.Thread(target=waveform.get_waveform_zoom, args=(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True)
+        #t = multiprocessing.Process(target=waveform.get_waveform_zoom, args=(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True)
+        # qth = waveform.generate_test(self)
+        # qth.zoom = self.mediaplayer_zoom
+        # qth.duration = self.video_metadata['duration']
+        # qth.full_waveform = self.video_metadata['waveform'][0]
+        # qth.widget_width = self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom
+        #qth.widget_height = self.timeline_widget.height()-30
+
+        #qth.qwidget.connect(self.update_things())
+        #qth.start()
+        #t.start()
+        #print("imediato")
+        self.player.update(self)
+        self.player_widget.mpv.play(self.video_metadata['filepath'])
+        self.player_widget.mpv.wait_for_property('seekable')
+        self.player_widget.mpv.pause = True
+        self.player.resize_player_widget(self)
+
+    self.subtitleslist.update_subtitles_list_widget(self)
+    self.timeline.update_timeline(self)
+    self.actual_subtitle_file = file_to_open
+    self.startscreen.hide(self)
+    self.playercontrols.show(self)
+    self.properties.show(self)
+    self.subtitleslist.show(self)
+
+    self.settings['recent_files'][datetime.datetime.now().strftime("%Y%m%d")] = file_to_open
 
 def open_file(filepath):
     final_subtitles = []
@@ -28,9 +69,8 @@ def open_file(filepath):
 
 def process_video_metadata(mp4_file):
     video_metadata = {}
-    audio_np = waveform.ffmpeg_load_audio(mp4_file)
     json_result = waveform.ffmpeg_load_metadata(mp4_file)
-    video_metadata['waveform'] = {0: audio_np}
+    video_metadata['waveform'] = {0: []}
     video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
     video_metadata['width'] =  int(json_result.get('streams', [])[0].get('width', '640'))
     video_metadata['height'] =  int(json_result.get('streams', [])[0].get('height', '640'))

@@ -11,14 +11,14 @@ from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 def load(self, path_catptilr_graphics):
     self.properties_widget = QLabel(parent=self)
     self.properties_widget.setObjectName('properties_widget')
-
-    self.properties_widget_alert = QLabel('There is no subtitle to show. Please select a subtitle.', parent=self.properties_widget)
-    self.properties_widget_alert.setWordWrap(True)
-    self.properties_widget_alert.setObjectName('subtitles_list_widget_alert')
+    self.properties_widget_animation = QPropertyAnimation(self.properties_widget, b'geometry')
+    self.properties_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
 def resized(self):
-    self.properties_widget.setGeometry((self.width()*.8)+15,0,(self.width()*.2)-15,self.height()-185)
-    self.properties_widget_alert.setGeometry(2,0,self.subtitles_list_widget.width()-2, self.subtitles_list_widget.height())
+    if self.subtitles_list:
+        self.properties_widget.setGeometry((self.width()*.8)+15,0,(self.width()*.2)-15,self.height())
+    else:
+        self.properties_widget.setGeometry(self.width(),0,(self.width()*.2)-15,self.height())
 
 def save_button_clicked(self):
     if not self.actual_subtitle_file:
@@ -33,4 +33,7 @@ def open_button_clicked(self):
         update_properties_widget(self)
 
 def update_properties_widget(self):
-    self.properties_widget_alert.setVisible(not bool(self.selected_subtitle))
+    None
+
+def show(self):
+    self.generate_effect(self.properties_widget_animation, 'geometry', 700, [self.properties_widget.x(),self.properties_widget.y(),self.properties_widget.width(),self.properties_widget.height()], [int((self.width()*.8)+15), self.properties_widget.y(), self.properties_widget.width(),self.properties_widget.height()])
