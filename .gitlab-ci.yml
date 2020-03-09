@@ -1,10 +1,10 @@
 staging:amd64:
   image:
-    name: ubuntu:16.04
+    name: ubuntu:18.04
   type: deploy
   script:
   - apt-get update -qy
-  - apt-get install -y software-properties-common wget build-essential
+  - apt-get install -y software-properties-common wget build-essential libmpv1
   - add-apt-repository -y ppa:deadsnakes/ppa
   - apt-get update -qy
   - apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript
