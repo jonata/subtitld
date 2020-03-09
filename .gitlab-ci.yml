@@ -1,6 +1,6 @@
 staging:amd64:
   image:
-    name: ubuntu:18.04
+    name: ubuntu:16.04
   type: deploy
   script:
   - apt-get update -qy

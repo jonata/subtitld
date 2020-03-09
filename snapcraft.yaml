@@ -7,7 +7,7 @@ description: |
 icon: dist/subtitld/graphics/subtitld.png
 confinement: strict
 grade: stable
-#base: core16
+base: core16
 
 apps:
   subtitld:
