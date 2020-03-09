@@ -241,9 +241,15 @@ def resized(self):
 def update_timeline(self):
     self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)
 
+def update_scrollbar(self, position=False):
+    offset = 0
+    if position == 'middle':
+        offset = self.timeline_scroll.width()*.5
+    self.timeline_scroll.horizontalScrollBar().setValue(self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01)) - offset)
+
 def update(self):
     if self.player_widget.mpv.time_pos and self.mediaplayer_is_playing:
         self.current_timeline_position = self.player_widget.mpv.time_pos
         if (self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
-            self.timeline_scroll.horizontalScrollBar().setValue(self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01)))
+            update_scrollbar(self)
     self.timeline_widget.update()

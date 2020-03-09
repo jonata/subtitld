@@ -101,7 +101,7 @@ class subtitld(QWidget):
 
         self.timer = QTimer(self)
         self.timer.setInterval(self.update_accuracy)
-        self.timer.timeout.connect(lambda:update_things(self))
+        self.timer.timeout.connect(lambda:self.update_things())
         self.timer.start()
 
     def resizeEvent(self, event):
@@ -290,19 +290,19 @@ class subtitld(QWidget):
         widget.start()
 
 
-def update_things(self):
-    # if self.mediaplayer_is_playing:
-    #     self.mediaplayer_current_position += ((self.update_accuracy*.001)/self.music_length)#(event.pos().x() / widget.width()) * len(self.music_waveform['full'])
-    #     if self.player_controls.play_button_selection.isChecked() and self.selected_note:
-    #         if self.mediaplayer_current_position*len(self.music_waveform['full']) > (int(self.lyrics_metadata['gap'] * ( len(self.music_waveform['full']) / (self.music_length * 1000))) + int(    ((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[0])) + int(    ((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[1]))):
-    #             self.player_controls.stop_button.setVisible(False)
-    #             self.player_controls.play_button.setVisible(True)
-    #             self.player_controls.play_button_selection.setVisible(True)
-    #             self.mediaplayer_is_playing = False
-    #             self.mediaplayer_current_position = float((int(self.lyrics_metadata['gap'] * ( len(self.music_waveform['full']) / (self.music_length * 1000))) + int(((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[0]))) / len(self.music_waveform['full']))
-    if self.mediaplayer_is_playing:
-        self.timeline.update(self)
-    self.player.update_subtitle_layer(self)
+    def update_things(self):
+        # if self.mediaplayer_is_playing:
+        #     self.mediaplayer_current_position += ((self.update_accuracy*.001)/self.music_length)#(event.pos().x() / widget.width()) * len(self.music_waveform['full'])
+        #     if self.player_controls.play_button_selection.isChecked() and self.selected_note:
+        #         if self.mediaplayer_current_position*len(self.music_waveform['full']) > (int(self.lyrics_metadata['gap'] * ( len(self.music_waveform['full']) / (self.music_length * 1000))) + int(    ((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[0])) + int(    ((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[1]))):
+        #             self.player_controls.stop_button.setVisible(False)
+        #             self.player_controls.play_button.setVisible(True)
+        #             self.player_controls.play_button_selection.setVisible(True)
+        #             self.mediaplayer_is_playing = False
+        #             self.mediaplayer_current_position = float((int(self.lyrics_metadata['gap'] * ( len(self.music_waveform['full']) / (self.music_length * 1000))) + int(((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[0]))) / len(self.music_waveform['full']))
+        if self.mediaplayer_is_playing:
+            self.timeline.update(self)
+        self.player.update_subtitle_layer(self)
 
 def edit_syllable_returnpressed(self):
     self.lyrics_notes[self.lyrics_notes.index(self.selected_note)][3] = self.player_controls.edit_sylable.text()

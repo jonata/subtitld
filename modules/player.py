@@ -117,6 +117,8 @@ def player_subtitle_textedit_changed(self):
     old_selected_subtitle = self.selected_subtitle
     counter = self.subtitles_list.index(old_selected_subtitle)
     self.subtitles_list[counter][2] = self.player_subtitle_textedit.toPlainText()
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
     update_subtitle_layer(self)
 
 def playpause(self):
