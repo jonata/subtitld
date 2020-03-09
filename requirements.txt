@@ -6,3 +6,4 @@ PyInstaller
 numpy
 timecode
 bcrypt
+cffi
