@@ -1,9 +1,10 @@
 staging:amd64:
   image:
-    name: ubuntu:19.04
+    name: ubuntu:16.04
   type: deploy
   script:
   - apt-get update -qy
+  - apt-get upgrade -y
   - apt-get install -y software-properties-common wget build-essential libmpv1 snapcraft python3-pip
   #- add-apt-repository -y ppa:deadsnakes/ppa
   #- apt-get update -qy
