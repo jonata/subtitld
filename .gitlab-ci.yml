@@ -1,6 +1,6 @@
 staging:amd64:
   image:
-    name: ubuntu:19.10
+    name: ubuntu:19.04
   type: deploy
   script:
   - apt-get update -qy
