@@ -1,17 +1,17 @@
 staging:amd64:
   image:
-    name: ubuntu:16.04
+    name: ubuntu:19.10
   type: deploy
   script:
   - apt-get update -qy
-  - apt-get install -y software-properties-common wget build-essential libmpv1
-  - add-apt-repository -y ppa:deadsnakes/ppa
-  - apt-get update -qy
-  - apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript
-  - wget https://bootstrap.pypa.io/get-pip.py
-  - python3.7 get-pip.py
-  - python3.7 -m pip install -r requirements.txt
-  - python3.7 -m PyInstaller subtitld_linux.spec
+  - apt-get install -y software-properties-common wget build-essential libmpv1 snapcraft python3-pip
+  #- add-apt-repository -y ppa:deadsnakes/ppa
+  #- apt-get update -qy
+  #- apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript
+  #- wget https://bootstrap.pypa.io/get-pip.py
+  #- python3.7 get-pip.py
+  - python3 -m pip install -r requirements.txt
+  - python3 -m PyInstaller subtitld_linux.spec
   - mv dist .dist
   - mv snap .snap
   - mv snapcraft.yaml .snapcraft.yaml
