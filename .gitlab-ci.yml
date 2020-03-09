@@ -5,7 +5,7 @@ staging:amd64:
   script:
   - apt-get update -qy
   - apt-get upgrade -y
-  - apt-get install -y software-properties-common wget build-essential libmpv1 snapcraft python3-pip
+  - apt-get install -y software-properties-common wget build-essential libmpv1 snapcraft python3-pip python3-pyqt5 python3-pyqt5.qtopengl
   #- add-apt-repository -y ppa:deadsnakes/ppa
   #- apt-get update -qy
   #- apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript
