@@ -5,3 +5,4 @@ pysrt
 PyInstaller
 numpy
 timecode
+bcrypt
