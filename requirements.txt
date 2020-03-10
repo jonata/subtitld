@@ -6,3 +6,4 @@ numpy
 timecode
 bcrypt
 sip
+cffi
