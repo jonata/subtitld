@@ -9,15 +9,11 @@ confinement: strict
 grade: stable
 base: core18
 adopt-info: subtitld
-assumes:
-- command-chain
 
 apps:
   subtitld:
     adapter: full
-    command: subtitld/subtitld
-    command-chain:
-      - bin/desktop-launch
+    command: bin/desktop-launch $SNAP/subtitld/subtitld
     environment:
         DISABLE_WAYLAND: 1
         QT_QPA_PLATFORMTHEME: gtk3
