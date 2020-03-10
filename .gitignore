@@ -52,3 +52,8 @@ pip-log.txt
 *.pyc
 
 .~*
+
+prime/
+snap/
+stage/
+parts/

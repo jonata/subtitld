@@ -4,8 +4,13 @@ staging:amd64:
   type: deploy
   script:
   - apt-get update -qy
-  - apt-get upgrade -y
-  - apt-get install -y software-properties-common wget build-essential libmpv1 snapcraft python3-pip python3-pyqt5 python3-pyqt5.qtopengl
+  - apt-get install -y software-properties-common
+  - add-apt-repository -y ppa:deadsnakes/ppa
+  - add-apt-repository -y ppa:mc3man/mpv-tests
+  - apt-get update -qy
+  - apt-get install -y python3.7 python3.7-dev snapcraft python3-pip
+  #- apt-get install -y snapcraft python3-pip python3-pyside2.qtgui python3-pyside2.qtcore python3-pyside2.qtwidgets
+  - apt-get install -y libmpv1 snapcraft python3-pip python3-pyqt5 python3-pyqt5.qtopengl
   #- add-apt-repository -y ppa:deadsnakes/ppa
   #- apt-get update -qy
   #- apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript

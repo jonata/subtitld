@@ -4,7 +4,7 @@ version-script: date +%y.%m.%d.%H%M
 summary: Subtitld
 description: |
  Subtitld is a software to create and edit subtitles. Visit http://subtitld.jonata.org/ for more information.
-icon: dist/subtitld/graphics/subtitld.png
+icon: graphics/subtitld.png
 confinement: strict
 grade: stable
 #base: core16
