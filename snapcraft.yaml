@@ -8,7 +8,6 @@ icon: dist/subtitld/graphics/subtitld.png
 confinement: strict
 grade: stable
 base: core18
-adopt-info: subtitld
 
 apps:
   subtitld:
