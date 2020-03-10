@@ -49,5 +49,6 @@ parts:
     stage-packages:
       - ffmpeg
       - libmpv1
+      - libxcb-xinerama0
     after:
       - desktop-qt5
