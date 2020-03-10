@@ -5,4 +5,4 @@ PyInstaller
 numpy
 timecode
 bcrypt
-cffi
+sip
