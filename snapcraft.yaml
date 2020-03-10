@@ -12,7 +12,6 @@ adopt-info: subtitld
 
 apps:
   subtitld:
-    adapter: full
     command: bin/desktop-launch $SNAP/subtitld/subtitld
     environment:
         DISABLE_WAYLAND: 1
