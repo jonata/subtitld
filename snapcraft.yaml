@@ -13,25 +13,18 @@ apps:
   subtitld:
     environment:
       LC_ALL: C.UTF-8
-      #XDG_DATA_DIRS: /usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/
-      #HOME: $(getent passwd $UID | cut -d ':' -f 6)
-      #QT_IM_MODULE: cedilla
-      #QT_STYLE_OVERRIDE: "gtk"
-      #GS_LIB: $SNAP/usr/share/ghostscript/9.26/lib
-      #DISABLE_WAYLAND: 1
+      QT_DEBUG_PLUGINS: 1
     command: desktop-launch $SNAP/subtitld/subtitld
     plugs:
-      - browser-support
       - unity7
       - home
       - network
+      - network-bind
       - desktop
       - desktop-legacy
       - mount-observe
       - removable-media
       - gsettings
-      #- x11
-      #- wayland
 
 plugs:
   gtk-3-themes:
@@ -53,25 +46,8 @@ parts:
     source: .
     organize:
       'dist' : .
-      #'subtitld/PySide2/plugins/platformthemes/libqgtk3.so' : '/usr/lib/x86_64-linux-gnu/qt5/plugins/platformthemes/libqgtk3.so'
     stage-packages:
       - ffmpeg
       - libmpv1
-      #- unity-gtk3-module
-      #- language-selector-common
-      #-ghostscript
-      #- libreoffice-writer
-      #- unoconv
-      #- qt5-gtk-platformtheme
-      #- libc6
-      #- qtwayland5
-      #- python3-pip
-    #override-build: |
-    #    apt-get update -qy
-    #    apt-get -y install python3-pip python3-dev
-    #    python3 -m pip install PySide2 setuptools
-    #    python3 -m pip install google-api-python-client oauth2client requests pyinstaller beautifulsoup4 unoconv
-    #    python3 -m PyInstaller subtitld_linux.spec
-    #    mv dist/subtitld ${SNAPCRAFT_PART_INSTALL}/usr/share/subtitld
     after:
       - desktop-qt5
