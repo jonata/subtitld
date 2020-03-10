@@ -60,7 +60,7 @@ parts:
       - gettext
       - qtwayland5
       # gtk-common-themes support
-      - qt5-gtk-platformtheme
+      #- qt5-gtk-platformtheme
     after:
       - desktop-qt5
 
