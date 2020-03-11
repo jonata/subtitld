@@ -9,6 +9,8 @@ import datetime
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
 
+from PyQt5.QtWidgets import QFileDialog
+
 from modules import waveform
 
 def open_filepath(self, file_to_open):
