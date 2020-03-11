@@ -29,6 +29,7 @@ apps:
       - desktop
       - opengl
       - removable-media
+      - mount-observe
 
 plugs:
   # gtk-common-themes support
