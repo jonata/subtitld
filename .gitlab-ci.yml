@@ -4,6 +4,9 @@ staging:amd64:
   type: deploy
   script:
   - apt-get update -qy
+  - apt-get install -y software-properties-common wget
+  - add-apt-repository -y ppa:mc3man/mpv-tests
+  - apt-get update -qy
   - apt-get install -y libmpv1 python3-pip libglu1-mesa snapcraft
   - python3 -m pip install --upgrade pip
   - python3 -m pip install -r requirements.txt
