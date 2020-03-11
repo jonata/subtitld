@@ -1,6 +1,6 @@
 staging:amd64:
   image:
-    name: ubuntu:19.04
+    name: ubuntu:16.04
   type: deploy
   script:
   - apt-get update -qy
@@ -10,7 +10,7 @@ staging:amd64:
   - apt-get upgrade -qy
   #- apt-get install -y python3.7 python3.7-dev snapcraft python3-pip
   #- apt-get install -y snapcraft python3-pip python3-pyside2.qtgui python3-pyside2.qtcore python3-pyside2.qtwidgets
-  - apt-get install -y libmpv1 python3-pip
+  - apt-get install -y libmpv1 python3-pip python3-opengl
   # snapcraft python3-pip python3-pyqt5 python3-pyqt5.qtopengl
   #- python3 -m pip install -U setuptools
   #- add-apt-repository -y ppa:deadsnakes/ppa
