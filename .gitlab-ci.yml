@@ -20,7 +20,7 @@ staging:amd64:
   #- python3.7 get-pip.py
   - python3 -m pip install --upgrade pip
   - python3 -m pip install -r requirements.txt
-  - python3 -m pip install https://github.com/bjones1/pyinstaller/archive/pyqt5_fix.zip
+  - python3 -m pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
   - python3 -m PyInstaller subtitld_linux.spec
   #- mv dist .dist
   #- mv snap .snap
