@@ -22,17 +22,17 @@ staging:amd64:
   - python3 -m pip install -r requirements.txt
   - python3 -m pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
   - python3 -m PyInstaller subtitld_linux.spec
-  #- mv dist .dist
-  #- mv snap .snap
-  #- mv snapcraft.yaml .snapcraft.yaml
-  #- mv * /tmp/
-  #- mv .dist dist
-  #- mv .snap snap
-  #- mv .snapcraft.yaml snapcraft.yaml
-  #- snapcraft
-  #- echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage > snapcraft.login
-  #- snapcraft login --with snapcraft.login
-  #- snapcraft push *.snap --release beta
+  - mv dist .dist
+  - mv snap .snap
+  - mv snapcraft.yaml .snapcraft.yaml
+  - mv * /tmp/
+  - mv .dist dist
+  - mv .snap snap
+  - mv .snapcraft.yaml snapcraft.yaml
+  - snapcraft
+  - echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage > snapcraft.login
+  - snapcraft login --with snapcraft.login
+  - snapcraft push *.snap --release beta
   artifacts:
     paths:
     - dist

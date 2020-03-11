@@ -51,39 +51,9 @@ parts:
     organize:
       'dist' : .
     stage-packages:
-      - libgettextpo0
-      - libchromaprint-tools
-      - python3-libdiscid
-      - python3-mutagen
-      - python3-pyqt5
-      - gettext
-      - qtwayland5
+      - ffmpeg
+      #- libmpv1
       # gtk-common-themes support
       #- qt5-gtk-platformtheme
     after:
       - desktop-qt5
-
-  # Part for supporting various desktop technologies
-  # Refer: https://github.com/ubuntu/snapcraft-desktop-helpers/blob/master/snapcraft.yaml
-  desktop-qt5:
-    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-    source-depth: 1
-    source-subdir: qt
-
-    plugin: make
-    make-parameters: ["FLAVOR=qt5"]
-    stage-packages:
-      - libxkbcommon0
-      - ttf-ubuntu-font-family
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
-      - shared-mime-info
-      - libqt5gui5
-      - libgdk-pixbuf2.0-0
-      - libqt5svg5 # for loading icon themes which are svg
-      - try: [appmenu-qt5] # not available on core18
-      - locales-all
-      - xdg-user-dirs
-      - fcitx-frontend-qt5
