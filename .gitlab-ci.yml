@@ -4,20 +4,7 @@ staging:amd64:
   type: deploy
   script:
   - apt-get update -qy
-  #- apt-get install -y software-properties-common
-  #- add-apt-repository -y ppa:deadsnakes/ppa
-  #- add-apt-repository -y ppa:mc3man/mpv-tests
-  #- apt-get upgrade -qy
-  #- apt-get install -y python3.7 python3.7-dev snapcraft python3-pip
-  #- apt-get install -y snapcraft python3-pip python3-pyside2.qtgui python3-pyside2.qtcore python3-pyside2.qtwidgets
   - apt-get install -y libmpv1 python3-pip libglu1-mesa snapcraft
-  # snapcraft python3-pip python3-pyqt5 python3-pyqt5.qtopengl
-  #- python3 -m pip install -U setuptools
-  #- add-apt-repository -y ppa:deadsnakes/ppa
-  #- apt-get update -qy
-  #- apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript
-  #- wget https://bootstrap.pypa.io/get-pip.py
-  #- python3.7 get-pip.py
   - python3 -m pip install --upgrade pip
   - python3 -m pip install -r requirements.txt
   - python3 -m pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
@@ -46,11 +33,6 @@ windows-nsis:
   script:
   - apt-get update -qy
   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full
-  #- wget 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks'
-  #- chmod +x winetricks
-  #- ./winetricks -q dotnet46
-  #- wget https://aka.ms/vs/15/release/vs_buildtools.exe
-  #- wine vs_buildtools.exe --quiet --wait --norestart --nocache
   - wine pip3 install -r requirements.txt
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
   - unzip ffmpeg-latest-win64-static.zip
