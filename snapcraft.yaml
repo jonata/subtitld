@@ -15,6 +15,7 @@ apps:
     environment:
         DISABLE_WAYLAND: 1
         QT_QPA_PLATFORMTHEME: gtk3
+        GSETTINGS_SCHEMA_DIR: $SNAP/share/glib-2.0/schemas
     plugs:
       - gsettings
       - home
