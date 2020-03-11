@@ -18,6 +18,7 @@ staging:amd64:
   #- apt-get install -y python3.7 python3.7-dev gnupg snapcraft ghostscript
   #- wget https://bootstrap.pypa.io/get-pip.py
   #- python3.7 get-pip.py
+  - python3 -m pip install --upgrade pip
   - python3 -m pip install -r requirements.txt
   - python3 -m PyInstaller subtitld_linux.spec
   #- mv dist .dist
