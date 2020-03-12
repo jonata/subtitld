@@ -9,7 +9,7 @@ staging:amd64:
   - cp /etc/apt/sources.list /etc/apt/sources.list~
   - sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
   - apt-get update -qy
-  - apt-get install -y python3-pip libglu1-mesa snapcraft
+  - apt-get install -y python3-pip libglu1-mesa snapcraft libavdevice-dev libavfilter-dev libavformat-dev
   #libluajit-5.1-dev libass-dev libbluray-dev libuchardet-dev librubberband-dev libarchive-dev libavcodec-dev
   - apt-get build-dep -y mpv libmpv1
   - wget https://github.com/mpv-player/mpv/archive/v0.32.0.zip
