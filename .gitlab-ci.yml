@@ -7,7 +7,15 @@ staging:amd64:
   - apt-get install -y software-properties-common wget
   - add-apt-repository -y ppa:mc3man/mpv-tests
   - apt-get update -qy
-  - apt-get install -y libmpv1 python3-pip libglu1-mesa snapcraft
+  - apt-get install -y python3-pip libglu1-mesa snapcraft
+  #libluajit-5.1-dev libass-dev libbluray-dev libuchardet-dev librubberband-dev libarchive-dev libavcodec-dev
+  - apt-get build-dep -y mpv
+  - wget https://github.com/mpv-player/mpv/archive/v0.32.0.zip
+  - unzip v0.32.0.zip
+  - ./mpv-0.32.0/bootstrap
+  - ./mpv-0.32.0/waf configure
+  - ./mpv-0.32.0/waf
+  - ./mpv-0.32.0/waf install
   - python3 -m pip install --upgrade pip
   - python3 -m pip install -r requirements.txt
   - python3 -m pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
