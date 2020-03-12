@@ -11,7 +11,7 @@ staging:amd64:
   - apt-get update -qy
   - apt-get install -y python3-pip libglu1-mesa snapcraft
   #libluajit-5.1-dev libass-dev libbluray-dev libuchardet-dev librubberband-dev libarchive-dev libavcodec-dev
-  - apt-get build-dep -y mpv
+  - apt-get build-dep -y mpv libmpv1
   - wget https://github.com/mpv-player/mpv/archive/v0.32.0.zip
   - unzip v0.32.0.zip
   - cd mpv-0.32.0
