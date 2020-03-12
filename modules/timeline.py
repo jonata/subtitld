@@ -116,7 +116,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                     break
             if not (widget.subtitle_end_is_clicked or widget.subtitle_start_is_clicked or widget.subtitle_is_clicked):
                 self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
-                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute', precision='exact')
+                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
 
 
             widget.update()
@@ -146,7 +146,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 widget.show_limiters = False
             if widget.is_cursor_pressing and not (widget.subtitle_start_is_clicked or widget.subtitle_end_is_clicked or widget.subtitle_is_clicked):
                 self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
-                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute', precision='exact')
+                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
             widget.update()
 
         def mouseDoubleClickEvent(widget, event):
