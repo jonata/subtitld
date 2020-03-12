@@ -18,6 +18,7 @@ apps:
         #QT_QPA_PLATFORMTHEME: gtk3
         GSETTINGS_SCHEMA_DIR: $SNAP/usr/share/glib-2.0/schemas
     plugs:
+      - audio-playback
       - gsettings
       - home
       - network
