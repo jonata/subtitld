@@ -14,7 +14,7 @@ staging:amd64:
   - apt-get build-dep -y mpv
   - wget https://github.com/mpv-player/mpv/archive/v0.32.0.zip
   - unzip v0.32.0.zip
-  - ./mpv-0.32.0/bootstrap
+  - ./mpv-0.32.0/bootstrap.py
   - ./mpv-0.32.0/waf configure
   - ./mpv-0.32.0/waf
   - ./mpv-0.32.0/waf install
