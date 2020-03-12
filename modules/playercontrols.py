@@ -34,6 +34,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 def playercontrols_stop_button_clicked(self):
     self.player_widget.mpv.pause = True
+    self.player_widget.mpv.wait_for_property('seekable')
     self.player_widget.mpv.seek(0, reference='absolute')#, precision='exact')
     self.mediaplayer_is_playing = False
 
