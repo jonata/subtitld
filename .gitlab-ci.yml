@@ -16,9 +16,9 @@ staging:amd64:
   - unzip v0.32.0.zip
   - cd mpv-0.32.0
   - ./bootstrap.py
-  - ./waf configure
-  - ./waf
-  - ./waf install
+  - python3 ./waf configure
+  - python3 ./waf
+  - python3 ./waf install
   - cd ..
   - python3 -m pip install --upgrade pip
   - python3 -m pip install -r requirements.txt
