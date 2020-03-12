@@ -8,7 +8,6 @@ staging:amd64:
   - add-apt-repository -y ppa:mc3man/mpv-tests
   - cp /etc/apt/sources.list /etc/apt/sources.list~
   - sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
-  - apt-get update
   - apt-get update -qy
   - apt-get install -y python3-pip libglu1-mesa snapcraft
   #libluajit-5.1-dev libass-dev libbluray-dev libuchardet-dev librubberband-dev libarchive-dev libavcodec-dev
