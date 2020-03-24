@@ -4,7 +4,7 @@
 from modules.paths import *
 
 def set_stylesheet(self):
-    self.setStyleSheet('''
+    stylesheet_text = '''
                             #background_label                           { background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 rgb(7,9,11), stop:1 rgb(26,35,43)); }
                             #background_label2                          { background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 rgb(26,35,43), stop:1 rgb(46,62,76)); }
                             #background_watermark_label                 { image: url("''' + get_graphics_path('background_watermark.png') + '''"); }
@@ -25,63 +25,6 @@ def set_stylesheet(self):
 
                             #player_subtitle_layer                      { font-size:40px; color: rgb(255, 255, 255); qproperty-alignment: "AlignCenter | AlignBottom"; padding: 10px; }
                             #player_subtitle_textedit                   { padding:10px; font-size:32px; color: rgb(0, 0, 0); }
-
-                            #button_dark                                { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_dark:hover:pressed                  { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark:checked                        { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark:hover:checked                  { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark:hover                          { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_dark:disabled                       { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }
-
-                            #button_dark_no_right                       { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_dark_no_right:hover:pressed         { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark_no_right:checked               { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark_no_right:hover:checked         { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark_no_right:hover                 { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_dark_no_right:disabled              { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }
-
-                            #button_dark_no_left                        { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_dark_no_left:hover:pressed          { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark_no_left:checked                { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark_no_left:hover:checked          { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_dark_no_left:hover                  { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_dark_no_left:disabled               { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_dark_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }
-
-                            #button_no_right_top                        { font-size:11px; border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_no_right_top:hover:pressed          { font-size:11px; border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_right_top:checked                { font-size:11px; border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_right_top:hover:checked          { font-size:11px; border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_right_top:hover                  { font-size:11px; border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_no_right_top:disabled               { font-size:11px; border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }
-
-                            #button                                     { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button:hover:pressed                       { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button:checked                             { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button:hover:checked                       { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button:hover                               { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button:disabled                            { font-size:11px; border-left: 5px; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }
-
-                            #button_no_left_top                         { font-size:11px; border-left: 0; border-top: 0; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_no_left_top:hover:pressed           { font-size:11px; border-left: 0; border-top: 0; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_left_top:checked                 { font-size:11px; border-left: 0; border-top: 0; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_left_top:hover:checked           { font-size:11px; border-left: 0; border-top: 0; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_left_top:hover                   { font-size:11px; border-left: 0; border-top: 0; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_no_left_top:disabled                { font-size:11px; border-left: 0; border-top: 0; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }
-
-                            #button_no_right                            { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_no_right:hover:pressed              { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_right:checked                    { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_right:hover:checked              { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_right:hover                      { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_no_right:disabled                   { font-size:11px; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }
-
-                            #button_no_left                             { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_normal.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_no_left:hover:pressed               { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_left:checked                     { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_left:hover:checked               { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_pressed.png') + '''") 5 5 5 5 stretch stretch; outline: none;  }
-                            #button_no_left:hover                       { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_hover.png') + '''") 5 5 5 5 stretch stretch; outline: none; }
-                            #button_no_left:disabled                    { font-size:11px; border-left: 0; border-top: 5px; border-right: 5px; border-bottom: 5px; border-image: url("''' + get_graphics_path('button_disabled.png') + '''") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }
-
                             #subtitles_list_qlistwidget                 { outline: none; font-size:14px; color:rgb(106, 116, 131); border-top-right-radius: 4px; background-color: rgba(255, 255, 255, 200); padding:5px;} QListWidget::item { padding:5px; border-radius: 2px;} QListWidget::item:selected { background:rgb(184, 206, 224); color:rgb(106, 116, 131); }
                             #start_screen_recent_listwidget             { outline: none; font-size:14px; color:rgb(106, 116, 131); border-radius: 4px; background-color: rgba(106, 116, 131, 20); padding:5px;} QListWidget::item { padding:5px; border-radius: 2px;} QListWidget::item:selected { background:rgb(184, 206, 224); color:rgb(106, 116, 131); }
 
@@ -103,7 +46,34 @@ def set_stylesheet(self):
                             #start_screen_adver_label_machineid         { font-size:24px; color:rgb(106, 116, 131); qproperty-alignment: "AlignCenter"; font-weight: bold; }
                             #start_screen_adver_label_status            { font-size:14px; color:rgb(106, 116, 131); qproperty-alignment: "AlignCenter"; padding-left:20px; padding-right:20px;  qproperty-wordWrap: true; }
                             #start_screen_adver_label_email             { padding:10px; border: 1px transparent rgba(255,255,255,20); border-radius: 2px; background-color: rgba(255,255,255,200); color:rgb(48,66,81); font-size:14px;  qproperty-alignment: "AlignCenter"; }
-    ''')
+                            '''
+
+    for button_color in ['button', 'button_dark', 'button_red', 'button_green']:
+        sides = ['left','top','right','bottom','']
+        for crop1 in sides:
+            c = ['5px', '5px', '5px', '5px']
+            if crop1:
+                c[sides.index(crop1)] = '0'
+                crop1 = '_no_' + crop1
+            for crop2 in sides:
+
+                if (crop1 and not crop2) or (not crop1 == crop2) or (not crop1 or not crop2):
+                    c1 = c.copy()
+                    print(sides)
+                    print(crop2)
+                    print(sides.index(crop2))
+                    print(c1)
+                    if crop2:
+                        c1[sides.index(crop2)] = '0'
+                        crop2 = '_no_' + crop2
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + '                                { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_normal.png') + '") 5 5 5 5 stretch stretch; outline: none; } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover:pressed                  { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':checked                        { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover:checked                  { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover                          { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 5 5 5 5 stretch stretch; outline: none; } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':disabled                       { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }'
+
+    self.setStyleSheet(stylesheet_text)
 
 
 # QScrollBar::add-line:horizontal             { margin: 0px 3px 0px 3px; border-image: url(:/qss_icons/rc/right_arrow_disabled.png); width: 10px; height: 10px; subcontrol-position: right; subcontrol-origin: margin; }
