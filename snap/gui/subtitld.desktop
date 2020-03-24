@@ -9,5 +9,6 @@ Comment=Create and edit subtitles
 Terminal=false
 Type=Application
 StartupNotify=true
+MimeType=image/srt;image/subtitld
 Name[pt_BR]=Subtitld
 Comment[pt_BR]=Crie e edite legendas

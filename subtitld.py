@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
-import os, sys, threading
+import os
+import sys
+import threading
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt, QTimer, QRect, QPropertyAnimation, QEasingCurve
@@ -9,6 +11,7 @@ from modules.paths import *
 #from modules import file_io
 from modules import waveform
 from modules import config
+from modules import authentication
 
 import numpy
 
@@ -17,6 +20,7 @@ class subtitld(QWidget):
         super().__init__()
         self.setWindowTitle('Subtitld')
         self.setWindowIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'subtitld.png')))
+        self.setAcceptDrops(True)
 
         # Setting some default values
         self.update_accuracy = 100
@@ -36,6 +40,10 @@ class subtitld(QWidget):
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 
+        self.machine_id = authentication.get_machine_id()
+
+        self.advanced_mode = authentication.check_authentication(auth_dict=self.settings['authentication'].get('codes', {}), email=self.settings['authentication'].get('email', ''), machineid=self.machine_id)
+        #self.advanced_mode = True
         # Setting the gradient background
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')
@@ -103,6 +111,26 @@ class subtitld(QWidget):
         self.timer.setInterval(self.update_accuracy)
         self.timer.timeout.connect(lambda:self.update_things())
         self.timer.start()
+
+    def dragEnterEvent(widget, event):
+        if event.mimeData().hasUrls and len(event.mimeData().urls()) > 0:
+            if sys.platform == 'darwin':
+                filename = str(NSURL.alloc().initWithString_(event.mimeData().urls()[0].toString()).fileSystemRepresentation())
+            else:
+                filename = event.mimeData().urls()[0].toLocalFile()
+
+            if filename.endswith(('.subtitld')) or check_name(self, filename.split(os.sep)[-1].replace('.' + filename.split(os.sep)[-1].split('.')[-1], ''))[0]:
+                event.accept()
+
+    def dropEvent(widget, event):
+        if sys.platform == 'darwin':
+            filename = str(NSURL.alloc().initWithString_(event.mimeData().urls()[0].toString()).fileSystemRepresentation())
+        else:
+            filename = event.mimeData().urls()[0].toLocalFile()
+
+        if filename.endswith(('.subtitld')):
+            authentication.append_authentication_keys(config=self.settings, dict=authentication.load_subtitld_codes_file(path=filename))
+            event.accept()
 
     def resizeEvent(self, event):
         self.background_label.setGeometry(0,0,self.width(),self.height())

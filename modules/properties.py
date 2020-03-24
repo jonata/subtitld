@@ -14,11 +14,15 @@ def load(self, path_catptilr_graphics):
     self.properties_widget_animation = QPropertyAnimation(self.properties_widget, b'geometry')
     self.properties_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
+    self.properties_information = QLabel(parent=self.properties_widget)
+    self.properties_information.setObjectName('properties_information')
+
 def resized(self):
     if self.subtitles_list:
         self.properties_widget.setGeometry((self.width()*.8)+15,0,(self.width()*.2)-15,self.height())
     else:
         self.properties_widget.setGeometry(self.width(),0,(self.width()*.2)-15,self.height())
+    self.properties_information.setGeometry(20,20,self.properties_widget.width()-40,self.properties_widget.height()-200)
 
 def save_button_clicked(self):
     if not self.actual_subtitle_file:
@@ -33,7 +37,8 @@ def open_button_clicked(self):
         update_properties_widget(self)
 
 def update_properties_widget(self):
-    None
+    if self.selected_subtitle:
+        self.properties_information.setText('<small>WORDS:</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))) + '</b></big><br><br><small>CHARACTERS:</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))) + '</b></big>')
 
 def show(self):
     self.generate_effect(self.properties_widget_animation, 'geometry', 700, [self.properties_widget.x(),self.properties_widget.y(),self.properties_widget.width(),self.properties_widget.height()], [int((self.width()*.8)+15), self.properties_widget.y(), self.properties_widget.width(),self.properties_widget.height()])
