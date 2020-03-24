@@ -166,11 +166,9 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     class timeline_scroll(QScrollArea):
         def enterEvent(widget, event):
-            if self.video_metadata.get('waveform', {}):
-                self.zoom_widgets.setVisible(True)
+            None
         def leaveEvent(widget, event):
-            if self.video_metadata.get('waveform', {}):
-                self.zoom_widgets.setVisible(False)
+            None
         def wheelEvent(widget, event):
             self.timeline_scroll.horizontalScrollBar().setValue(self.timeline_scroll.horizontalScrollBar().value() + event.angleDelta().y())
 
@@ -181,45 +179,16 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.timeline_scroll.setWidget(self.timeline_widget)
     #self.timeline_scroll.horizontalScrollBar().valueChanged.connect(lambda:timeline_scroll_updated(self))
 
-    self.zoom_widgets = QWidget(parent=self.timeline_scroll)
-    self.zoom_widgets.setVisible(False)
-
-    self.viewnotesin_button = QPushButton(parent=self.zoom_widgets)
-    self.viewnotesin_button.setIconSize(QSize(14,8))
-    self.viewnotesin_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'player_controls_up.png')))
-    self.viewnotesin_button.setStyleSheet('  QPushButton { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 0; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_normal.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                             QPushButton:hover:pressed { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 0; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_pressed.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                             QPushButton:disabled { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 0; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_disabled.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                             QPushButton:hover { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 0; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_hover.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } ')
-    self.viewnotesin_button.clicked.connect(lambda:viewnotesin_button_clicked(self))
-
-    self.viewnotesout_button = QPushButton(parent=self.zoom_widgets)
-    self.viewnotesout_button.setIconSize(QSize(14,8))
-    self.viewnotesout_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'player_controls_down.png')))
-    self.viewnotesout_button.setStyleSheet('  QPushButton { padding-top:1px; color:white; border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_normal.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                             QPushButton:hover:pressed { border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_pressed.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                             QPushButton:disabled { border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_disabled.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                             QPushButton:hover { border-left: 5px; border-top: 0; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_2_hover.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } ')
-    self.viewnotesout_button.clicked.connect(lambda:viewnotesout_button_clicked(self))
-
-    self.zoomin_button = QPushButton('+', parent=self.zoom_widgets)
+    self.zoomin_button = QPushButton(parent=self.playercontrols_widget)
     self.zoomin_button.setIconSize(QSize(16,17))
-    self.zoomin_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'view_zoomin.png')))
-    self.zoomin_button.setStyleSheet('  QPushButton { color:white; border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_normal.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                        QPushButton:checked { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_pressed.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                        QPushButton:hover:pressed { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_pressed.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                        QPushButton:disabled { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_disabled.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                        QPushButton:hover { border-left: 5px; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_hover.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } ')
+    self.zoomin_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_in_icon.png')))
+    self.zoomin_button.setObjectName('button_no_right_no_bottom')
     self.zoomin_button.clicked.connect(lambda:zoomin_button_clicked(self))
 
-    self.zoomout_button = QPushButton(parent=self.zoom_widgets)
+    self.zoomout_button = QPushButton(parent=self.playercontrols_widget)
     self.zoomout_button.setIconSize(QSize(16,17))
-    self.zoomout_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'view_zoomout.png')))
-    self.zoomout_button.setStyleSheet('  QPushButton { color:white; border-left: 0; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_normal.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                         QPushButton:checked { border-left: 0; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_pressed.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                         QPushButton:hover:pressed { border-left: 0; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_pressed.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                         QPushButton:disabled { border-left: 0; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_disabled.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } \
-                                         QPushButton:hover { border-left: 0; border-top: 5px; border-right: 0; border-bottom: 5px; border-image: url("' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'button_3_hover.png').replace('\\', '/') + '") 5 5 5 5 stretch stretch; outline: none; } ')
+    self.zoomout_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_out_icon.png')))
+    self.zoomout_button.setObjectName('button_no_left_no_bottom')
     self.zoomout_button.clicked.connect(lambda:zoomout_button_clicked(self))
 
 def resized(self):
@@ -229,16 +198,9 @@ def resized(self):
     #self.timeline_widget.setGeometry(0,0,self.timeline_scroll.width(),self.timeline_scroll.height())
     #self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)
 
-    zoom_widgets_size = [60,60]
-    self.zoom_widgets.setGeometry(  self.timeline_scroll.x() + self.timeline_scroll.width() - zoom_widgets_size[0],
-                                    self.timeline_scroll.x() + (self.timeline_scroll.height()*.5) - (zoom_widgets_size[1]*.5),
-                                    zoom_widgets_size[0],
-                                    zoom_widgets_size[1])
 
-    self.zoomin_button.setGeometry(0,self.zoom_widgets.height()*.2,self.zoom_widgets.width()*.5,self.zoom_widgets.height()*.6)
-    self.zoomout_button.setGeometry(self.zoom_widgets.width()*.5,self.zoom_widgets.height()*.2,self.zoom_widgets.width()*.5,self.zoom_widgets.height()*.6)
-    self.viewnotesin_button.setGeometry(self.zoom_widgets.width()*.25,0,self.zoom_widgets.width()*.75,self.zoom_widgets.height()*.25)
-    self.viewnotesout_button.setGeometry(self.zoom_widgets.width()*.25,self.zoom_widgets.height()*.75,self.zoom_widgets.width()*.75,self.zoom_widgets.height()*.25)
+    self.zoomin_button.setGeometry(self.timeline_scroll.width() - 120,60,40,40)
+    self.zoomout_button.setGeometry(self.timeline_scroll.width() - 80,60,40,40)
 
 def update_timeline(self):
     self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)

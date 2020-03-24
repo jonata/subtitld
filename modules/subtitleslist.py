@@ -41,11 +41,11 @@ def load(self, path_catptilr_graphics):
 
     self.subtitleslist_add_button = QPushButton('ADD', parent=self.subtitles_list_widget)
     self.subtitleslist_add_button.clicked.connect(lambda:subtitleslist_add_button_clicked(self))
-    self.subtitleslist_add_button.setObjectName('button_no_right_top')
+    self.subtitleslist_add_button.setObjectName('button_no_right_no_top')
 
     self.subtitleslist_remove_button = QPushButton('REMOVE', parent=self.subtitles_list_widget)
     self.subtitleslist_remove_button.clicked.connect(lambda:subtitleslist_remove_button_clicked(self))
-    self.subtitleslist_remove_button.setObjectName('button_no_left_top')
+    self.subtitleslist_remove_button.setObjectName('button_no_left_no_top')
 
 def resized(self):
     if self.subtitles_list:

@@ -4,7 +4,7 @@ import os
 import sys
 import threading
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect
-from PyQt5.QtGui import QIcon, QFont
+from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 from PyQt5.QtCore import Qt, QTimer, QRect, QPropertyAnimation, QEasingCurve
 
 from modules.paths import *
@@ -376,13 +376,41 @@ if __name__ == '__main__':
     app.setStyle("plastique")
     app.setApplicationName("Subtitld")
 
-    if sys.platform == 'darwin':
-        from PyQt5.QtGui import QFontDatabase
-        font_database = QFontDatabase()
-        font_database.addApplicationFont(os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'Ubuntu-RI.ttf'))
-        font_database.addApplicationFont(os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'Ubuntu-R.ttf'))
-        font_database.addApplicationFont(os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'Ubuntu-B.ttf'))
-        font_database.addApplicationFont(os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'Ubuntu-BI.ttf'))
+    font_database = QFontDatabase()
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-B.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-BI.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-C.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-L.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-LI.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-M.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-MI.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'UbuntuMono-B.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'UbuntuMono-BI.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'UbuntuMono-R.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'UbuntuMono-RI.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-R.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-RI.ttf'))
+    font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-Th.ttf'))
+
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-Black.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-BlackItalic.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-Bold.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-BoldItalic.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-ExtraBold.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-ExtraBoldItalic.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-ExtraLight.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-ExtraLightItalic.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-Italic.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-Light.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-LightItalic.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-Medium.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-MediumItalic.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-Regular.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-SemiBold.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-SemiBoldItalic.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-Thin.otf'))
+    # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-ThinItalic.otf'))
+
 
     app.setFont(QFont('Ubuntu', 10))
     app.main = subtitld()
