@@ -57,7 +57,7 @@ parts:
     stage-packages:
       - ffmpeg
       #- desktop-gnome-platform
-      #- libmpv1
+      - libmpv1
       # gtk-common-themes support
       #- qt5-gtk-platformtheme
     after:
