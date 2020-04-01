@@ -182,13 +182,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.zoomin_button = QPushButton(parent=self.playercontrols_widget)
     self.zoomin_button.setIconSize(QSize(16,17))
     self.zoomin_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_in_icon.png')))
-    self.zoomin_button.setObjectName('button_no_right_no_bottom')
+    self.zoomin_button.setObjectName('button_no_left_no_bottom')
     self.zoomin_button.clicked.connect(lambda:zoomin_button_clicked(self))
 
     self.zoomout_button = QPushButton(parent=self.playercontrols_widget)
     self.zoomout_button.setIconSize(QSize(16,17))
     self.zoomout_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_out_icon.png')))
-    self.zoomout_button.setObjectName('button_no_left_no_bottom')
+    self.zoomout_button.setObjectName('button_no_right_no_bottom')
     self.zoomout_button.clicked.connect(lambda:zoomout_button_clicked(self))
 
 def resized(self):
@@ -199,8 +199,8 @@ def resized(self):
     #self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)
 
 
-    self.zoomin_button.setGeometry(self.timeline_scroll.width() - 120,60,40,40)
-    self.zoomout_button.setGeometry(self.timeline_scroll.width() - 80,60,40,40)
+    self.zoomin_button.setGeometry(self.timeline_scroll.width() - 80,60,40,40)
+    self.zoomout_button.setGeometry(self.timeline_scroll.width() - 120,60,40,40)
 
 def update_timeline(self):
     self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)
@@ -217,3 +217,22 @@ def update(self):
         if (self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
             update_scrollbar(self)
     self.timeline_widget.update()
+
+
+def zoomin_button_clicked(self):
+    self.mediaplayer_zoom += 5.0
+    #if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
+    #    threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True).start()
+    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
+    zoom_buttons_update(self)
+
+def zoomout_button_clicked(self):
+    self.mediaplayer_zoom -= 5.0
+    #if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
+    #    threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True).start()
+    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
+    zoom_buttons_update(self)
+
+def zoom_buttons_update(self):
+    self.zoomout_button.setEnabled(True if self.mediaplayer_zoom - 5.0 > 0.0 else False)
+    self.zoomin_button.setEnabled(True if self.mediaplayer_zoom + 5.0 < 500.0 else False)
