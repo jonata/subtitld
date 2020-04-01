@@ -192,10 +192,10 @@ class subtitld(QWidget):
             self.player_controls.note_remove(self)
 
         if event.key() == Qt.Key_Plus:
-            zoomin_button_clicked(self)
+            self.timeline.zoomin_button_clicked(self)
 
         if event.key() == Qt.Key_Minus:
-            zoomout_button_clicked(self)
+            self.timeline.zoomout_button_clicked(self)
 
         if event.key() == Qt.Key_Q:
             if self.player_controls.listen_note_preview.isChecked():
@@ -335,20 +335,6 @@ class subtitld(QWidget):
 def edit_syllable_returnpressed(self):
     self.lyrics_notes[self.lyrics_notes.index(self.selected_note)][3] = self.player_controls.edit_sylable.text()
     self.timeline_widget.update()
-
-def zoomin_button_clicked(self):
-    self.mediaplayer_zoom += 5.0
-    #if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
-    #    threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True).start()
-    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
-    #self.timeline_widget.update()
-
-def zoomout_button_clicked(self):
-    self.mediaplayer_zoom -= 5.0
-    #if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
-    #    threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True).start()
-    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
-    #self.timeline_widget.update()
 
 def viewnotesin_button_clicked(self):
     if self.mediaplayer_viewnotes[0] + 1 < 29 and self.mediaplayer_viewnotes[-1] - 1 > -29:

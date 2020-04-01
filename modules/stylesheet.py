@@ -56,13 +56,8 @@ def set_stylesheet(self):
                 c[sides.index(crop1)] = '0'
                 crop1 = '_no_' + crop1
             for crop2 in sides:
-
                 if (crop1 and not crop2) or (not crop1 == crop2) or (not crop1 or not crop2):
                     c1 = c.copy()
-                    print(sides)
-                    print(crop2)
-                    print(sides.index(crop2))
-                    print(c1)
                     if crop2:
                         c1[sides.index(crop2)] = '0'
                         crop2 = '_no_' + crop2
