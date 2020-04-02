@@ -15,8 +15,9 @@ staging:amd64:
   - apt-get install -y python3-pip libglu1-mesa snapcraft git python devscripts equivs
   - git clone https://github.com/mpv-player/mpv-build.git
   - cd mpv-build
+  - ./update
   - ./rebuild -j4
-  - sudo ./install
+  - ./install
   - cd ..
   #libluajit-5.1-dev libass-dev libbluray-dev libuchardet-dev librubberband-dev libarchive-dev libavcodec-dev
   #- apt-get build-dep -y mpv libmpv1
