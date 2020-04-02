@@ -12,7 +12,7 @@ staging:amd64:
   #- cp /etc/apt/sources.list /etc/apt/sources.list~
   #- sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
   #- apt-get update -qy
-  - apt-get install -y python3-pip libglu1-mesa snapcraft git python autoconf
+  - apt-get install -y python3-pip libglu1-mesa snapcraft git python devscripts equivs
   - git clone https://github.com/mpv-player/mpv-build.git
   - cd mpv-build
   - ./rebuild -j4
