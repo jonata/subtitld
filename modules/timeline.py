@@ -2,9 +2,25 @@
 # -*- coding: utf-8 -*-
 
 import os
-from PyQt5.QtGui import QIcon, QPainter, QPen, QColor, QPolygonF
+import bisect
+import timecode
+from PyQt5.QtGui import QIcon, QPainter, QPen, QColor, QPolygonF, QPixmap
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QSpinBox, QDoubleSpinBox, QWidget, QScrollArea
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize, QRect, QPointF
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize, QRect, QPointF, QThread, pyqtSignal
+
+from modules import waveform
+
+class thread_get_waveform(QThread):
+    command = pyqtSignal(dict)
+    zoom = False
+    audio = False
+    duration = False
+    width = False
+    height = False
+    def run(self):
+        #if self.audio.any() and not self.zoom == False and not self.duration == False and not self.audio == False and not self.width == False and not self.height == False:
+        result = {self.zoom : waveform.get_waveform_zoom(zoom=self.zoom, duration=self.duration, audio=self.audio, width=self.width, height=self.height)}
+        self.command.emit(result)
 
 def load(self, PATH_SUBTITLD_GRAPHICS):
     class timeline(QWidget):
@@ -12,8 +28,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
         subtitle_start_is_clicked = False
         subtitle_end_is_clicked = False
         width_proportion =  self.width()/self.video_metadata.get('duration', 0.01)
-        subtitle_height = 80#height()-20
-        subtitle_y = 35
+        subtitle_height = 50#height()-20
+        subtitle_y = 55
         offset = 0.0
         show_limiters = False
         is_cursor_pressing = False
@@ -23,23 +39,20 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             scroll_width = widget.width()
 
             painter.setRenderHint(QPainter.Antialiasing)
+
             if self.subtitles_list:
+                painter.setOpacity(self.mediaplayer_opacity)
                 if self.mediaplayer_view_mode and self.video_metadata.get('waveform', {}):
                     if self.mediaplayer_view_mode in ['waveform', 'verticalform']:
-                        if len([*self.video_metadata.get('waveform', {})]) > 1:
-                            if self.mediaplayer_zoom in [*self.video_metadata.get('waveform', {})]:
+                        zoom_values = sorted(self.video_metadata.get('waveform', {}).keys())[1:]
+                        if len(zoom_values) > 0:
+                            if self.mediaplayer_zoom in zoom_values:
                                 waveform = self.video_metadata.get('waveform', {})[self.mediaplayer_zoom]
+                                #painter.drawPixmap(0, 40, waveform)
                             else:
-                                for zoom in sorted(self.video_metadata.get('waveform', {}).keys()):
-                                    if zoom > self.mediaplayer_zoom:
-                                        break
-                                    else:
-                                        last_zoom = zoom
-                                    waveform = self.video_metadata.get('waveform', {})[last_zoom]
+                                waveform = self.video_metadata.get('waveform', {})[zoom_values[bisect.bisect(zoom_values, self.mediaplayer_zoom)]]
+                            painter.drawPixmap(0, 43, widget.width(), widget.height() - 40, waveform)
 
-                            painter.setOpacity(self.mediaplayer_opacity)
-
-                            painter.drawPixmap(0, 30, waveform)
 
                 painter.setOpacity(1)
 
@@ -88,10 +101,10 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 painter.setOpacity(1)
 
 
-            painter.setPen(QPen(QColor.fromRgb(255,0,0,200), 4, Qt.SolidLine))
+            painter.setPen(QPen(QColor.fromRgb(255,0,0,200), 2, Qt.SolidLine))
 
             cursor_pos = self.current_timeline_position * widget.width_proportion
-            painter.drawLine(cursor_pos, 3, cursor_pos, widget.height())
+            painter.drawLine(cursor_pos, 0, cursor_pos, widget.height())
 
             painter.end()
 
@@ -118,6 +131,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
                 self.player_widget.mpv.wait_for_property('seekable')
                 self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
+                update_timecode_label(self)
 
 
             widget.update()
@@ -149,6 +163,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
                 self.player_widget.mpv.wait_for_property('seekable')
                 self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
+                update_timecode_label(self)
             widget.update()
 
         def mouseDoubleClickEvent(widget, event):
@@ -157,7 +172,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
         def resizeEvent(widget, event):
             widget.width_proportion =  widget.width()/self.video_metadata.get('duration', 0.01)
-            widget.subtitle_height = widget.height()-40
+            widget.subtitle_height = widget.height()-65
             #widget.subtitle_height = widget.height()-20
 
     self.timeline_widget = timeline(self)
@@ -179,31 +194,24 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.timeline_scroll.setWidget(self.timeline_widget)
     #self.timeline_scroll.horizontalScrollBar().valueChanged.connect(lambda:timeline_scroll_updated(self))
 
-    self.zoomin_button = QPushButton(parent=self.playercontrols_widget)
-    self.zoomin_button.setIconSize(QSize(16,17))
-    self.zoomin_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_in_icon.png')))
-    self.zoomin_button.setObjectName('button_no_left_no_bottom')
-    self.zoomin_button.clicked.connect(lambda:zoomin_button_clicked(self))
 
-    self.zoomout_button = QPushButton(parent=self.playercontrols_widget)
-    self.zoomout_button.setIconSize(QSize(16,17))
-    self.zoomout_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_out_icon.png')))
-    self.zoomout_button.setObjectName('button_no_right_no_bottom')
-    self.zoomout_button.clicked.connect(lambda:zoomout_button_clicked(self))
+    def thread_get_waveform_ended(command):
+        zoom = [*command.keys()][0]
+        self.video_metadata['waveform'][zoom] = command[zoom]
+
+    self.thread_get_waveform = thread_get_waveform(self)
+    self.thread_get_waveform.command.connect(thread_get_waveform_ended)
 
 def resized(self):
-
-    self.timeline_scroll.setGeometry(0,100,self.playercontrols_widget.width(),self.playercontrols_widget.height()-100)
+    self.timeline_scroll.setGeometry(0,self.playercontrols_widget_central_bottom_background.y(),self.playercontrols_widget.width(),self.playercontrols_widget.height()-self.playercontrols_widget_central_bottom_background.y())
     update_timeline(self)
     #self.timeline_widget.setGeometry(0,0,self.timeline_scroll.width(),self.timeline_scroll.height())
     #self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)
 
 
-    self.zoomin_button.setGeometry(self.timeline_scroll.width() - 80,60,40,40)
-    self.zoomout_button.setGeometry(self.timeline_scroll.width() - 120,60,40,40)
 
 def update_timeline(self):
-    self.timeline_widget.setGeometry(0,0,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-20)
+    self.timeline_widget.setGeometry(0,-40,self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom,self.timeline_scroll.height()-15)
 
 def update_scrollbar(self, position=False):
     offset = 0
@@ -211,28 +219,24 @@ def update_scrollbar(self, position=False):
         offset = self.timeline_scroll.width()*.5
     self.timeline_scroll.horizontalScrollBar().setValue(self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01)) - offset)
 
+def update_timecode_label(self):
+    self.playercontrols_timecode_label.setText(str(timecode.Timecode('1000', start_seconds=self.current_timeline_position, fractional=True)))
+
 def update(self):
     if self.player_widget.mpv.time_pos and self.mediaplayer_is_playing:
         self.current_timeline_position = self.player_widget.mpv.time_pos
         if (self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
             update_scrollbar(self)
+    update_timecode_label(self)
     self.timeline_widget.update()
 
 
-def zoomin_button_clicked(self):
-    self.mediaplayer_zoom += 5.0
-    #if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
-    #    threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True).start()
-    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
-    zoom_buttons_update(self)
 
-def zoomout_button_clicked(self):
-    self.mediaplayer_zoom -= 5.0
-    #if not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
-    #    threading.Thread(target=waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True).start()
-    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
-    zoom_buttons_update(self)
-
-def zoom_buttons_update(self):
-    self.zoomout_button.setEnabled(True if self.mediaplayer_zoom - 5.0 > 0.0 else False)
-    self.zoomin_button.setEnabled(True if self.mediaplayer_zoom + 5.0 < 500.0 else False)
+def zoom_update_waveform(self):
+    if not type(self.video_metadata['waveform'][0]) == bool and not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
+        self.thread_get_waveform.audio = self.video_metadata['waveform'][0]
+        self.thread_get_waveform.zoom = self.mediaplayer_zoom
+        self.thread_get_waveform.duration = self.video_metadata.get('duration', 0.01)
+        self.thread_get_waveform.width = self.timeline_widget.width()
+        self.thread_get_waveform.height = self.timeline_widget.height()-40
+        self.thread_get_waveform.start(QThread.IdlePriority)

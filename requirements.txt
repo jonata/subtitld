@@ -4,7 +4,6 @@ pyopengl
 pysrt
 PyInstaller
 numpy
-timecode
 bcrypt
 sip
 cffi
