@@ -63,8 +63,8 @@ def load(self):
 
     class start_screen_adver_holder(QWidget):
         def enterEvent(widget, event):
-            self.start_screen_adver_label_show_machineid_button.setVisible(True)        #   <<<<< REMOVE WHEN READY
-            self.start_screen_adver_label_details.setVisible(False)        #   <<<<< REMOVE WHEN READY
+            None#self.start_screen_adver_label_show_machineid_button.setVisible(True)        #   <<<<< REMOVE WHEN READY
+            #self.start_screen_adver_label_details.setVisible(False)        #   <<<<< REMOVE WHEN READY
 
         def leaveEvent(widget, event):
             if not self.start_screen_adver_label_show_machineid_button.isChecked():
@@ -215,7 +215,7 @@ def start_screen_adver_label_show_machineid_button_clicked(self):
 def update_start_screen_adver_panel(self):
     self.start_screen_adver_panel.setVisible(self.start_screen_adver_label_show_machineid_button.isChecked())
     self.start_screen_adver_label_machineid_verify.setEnabled(bool(self.settings['authentication'].get('email', '')))
-    
+
 def start_screen_adver_label_machineid_copy_clicked(self):
     QApplication.clipboard().setText(self.start_screen_adver_label_machineid.text())
 
