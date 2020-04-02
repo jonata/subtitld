@@ -62,6 +62,11 @@ class subtitld(QWidget):
         from modules import stylesheet
         stylesheet.set_stylesheet(self)
 
+        # The file io system
+        from modules import file_io
+        self.file_io = file_io
+        self.file_io.load(self)
+
         # The start screen
         from modules import startscreen
         self.startscreen = startscreen
@@ -81,13 +86,12 @@ class subtitld(QWidget):
         self.properties = properties
         self.properties.load(self, PATH_SUBTITLD_GRAPHICS)
 
+        from modules import timeline
+        self.timeline = timeline
+
         from modules import playercontrols
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
-
-        from modules import timeline
-        self.timeline = timeline
-        self.timeline.load(self, PATH_SUBTITLD_GRAPHICS)
 
         #from modules import document_edit
         #self.document_edit = document_edit
@@ -154,6 +158,8 @@ class subtitld(QWidget):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space:
             self.player.playpause(self)
+            self.playercontrols_playpayse_button.setChecked(not self.playercontrols_playpayse_button.isChecked())
+            self.playercontrols.playercontrols_playpause_button_update(self)
 
         if event.key() == Qt.Key_Slash:
             self.player_controls.play_button_selection.setChecked(not self.player_controls.play_button_selection.isChecked())

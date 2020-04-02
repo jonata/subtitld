@@ -6,12 +6,34 @@ import sys
 import pysrt
 import timecode
 import datetime
+import numpy
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
 
 from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtCore import QThread, pyqtSignal
 
 from modules import waveform
+
+class thread_extract_waveform(QThread):
+    command = pyqtSignal(numpy.ndarray)
+    filepath = ''
+    audio = ''
+    duration = ''
+    width = ''
+    height = ''
+    def run(self):
+        if self.filepath:
+            result = waveform.ffmpeg_load_audio(filepath=self.filepath)
+            self.command.emit(result)
+
+def load(self):
+    def thread_extract_waveform_ended(command):
+        self.video_metadata['waveform'][0] = command
+        self.timeline.zoom_update_waveform(self)
+
+    self.thread_extract_waveform = thread_extract_waveform(self)
+    self.thread_extract_waveform.command.connect(thread_extract_waveform_ended)
 
 def open_filepath(self, file_to_open):
     self.subtitles_list, self.video_metadata = open_file(file_to_open)
@@ -20,9 +42,12 @@ def open_filepath(self, file_to_open):
         if file_to_open and os.path.isfile(file_to_open):
             self.video_metadata = process_video_metadata(file_to_open)
 
-
     if self.video_metadata:
-        #waveform.ffmpeg_load_audio(self, self.video_metadata['filepath'])
+        self.thread_extract_waveform.filepath = self.video_metadata['filepath']
+        self.thread_extract_waveform.start()
+
+
+        #waveform.ffmpeg_load_audio(self, )
         #waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30)
         #t = threading.Thread(target=waveform.get_waveform_zoom, args=(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True)
         #t = multiprocessing.Process(target=waveform.get_waveform_zoom, args=(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True)
@@ -72,7 +97,7 @@ def open_file(filepath):
 def process_video_metadata(mp4_file):
     video_metadata = {}
     json_result = waveform.ffmpeg_load_metadata(mp4_file)
-    video_metadata['waveform'] = {0: []}
+    video_metadata['waveform'] = {0: False}
     video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
     video_metadata['width'] =  int(json_result.get('streams', [])[0].get('width', '640'))
     video_metadata['height'] =  int(json_result.get('streams', [])[0].get('height', '640'))
