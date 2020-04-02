@@ -3,8 +3,10 @@ staging:amd64:
     name: ubuntu:18.04
   type: deploy
   script:
+  - cp /etc/apt/sources.list /etc/apt/sources.list~
+  - sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
   - apt-get update -qy
-  - apt-get install -y software-properties-common wget unzip
+  # - apt-get install -y software-properties-common wget unzip
   #- add-apt-repository -y ppa:mc3man/mpv-tests
   #- add-apt-repository ppa:savoury1/graphics
   #- add-apt-repository ppa:savoury1/multimedia
