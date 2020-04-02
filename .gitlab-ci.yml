@@ -14,7 +14,7 @@ staging:amd64:
   #- apt-get update -qy
   - apt-get install -y python3-pip libglu1-mesa snapcraft git
   # python devscripts equivs pkg-config libfreetype6-dev libfribidi-dev libfontconfig1-dev yasm xorg-dev
-  - apt-get build-dep libmpv1
+  - apt-get -y build-dep libmpv1
   - git clone https://github.com/mpv-player/mpv-build.git
   - cd mpv-build
   - ./update
