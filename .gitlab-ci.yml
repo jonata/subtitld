@@ -3,8 +3,10 @@ staging:amd64:
     name: ubuntu:18.04
   type: deploy
   script:
-  - cp /etc/apt/sources.list /etc/apt/sources.list~
-  - sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+  #- cp /etc/apt/sources.list /etc/apt/sources.list~
+  #- sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+  - add-apt-repository ppa:mc3man/mpv-tests -y
+  - add-apt-repository ppa:jonathonf/ffmpeg-3 -y
   - apt-get update -qy
   # - apt-get install -y software-properties-common wget unzip
   #- add-apt-repository -y ppa:mc3man/mpv-tests
@@ -14,15 +16,16 @@ staging:amd64:
   #- cp /etc/apt/sources.list /etc/apt/sources.list~
   #- sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
   #- apt-get update -qy
-  - apt-get install -y python3-pip libglu1-mesa snapcraft git python
+  - apt-get install -y python3-pip libglu1-mesa snapcraft libmpv1 ffmpeg
+  # git python
   # python devscripts equivs pkg-config libfreetype6-dev libfribidi-dev libfontconfig1-dev yasm xorg-dev
-  - apt-get -y build-dep libmpv1 ffmpeg
-  - git clone https://github.com/mpv-player/mpv-build.git
-  - cd mpv-build
-  - ./update
-  - ./rebuild -j4
-  - ./install
-  - cd ..
+  #- apt-get -y build-dep libmpv1 ffmpeg
+  #- git clone https://github.com/mpv-player/mpv-build.git
+  #- cd mpv-build
+  #- ./update
+  #- ./rebuild -j4
+  #- ./install
+  #- cd ..
   #libluajit-5.1-dev libass-dev libbluray-dev libuchardet-dev librubberband-dev libarchive-dev libavcodec-dev
   #- apt-get build-dep -y mpv libmpv1
   #- wget https://github.com/mpv-player/mpv/archive/v0.32.0.zip
