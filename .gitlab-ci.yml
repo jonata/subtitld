@@ -8,7 +8,6 @@ staging:amd64:
   - apt-get update -qy
   - apt-get install -y software-properties-common
   - add-apt-repository ppa:mc3man/mpv-tests -y
-  - add-apt-repository ppa:jonathonf/ffmpeg-3 -y
   - apt-get update -qy
   # - apt-get install -y software-properties-common wget unzip
   #- add-apt-repository -y ppa:mc3man/mpv-tests
