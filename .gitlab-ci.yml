@@ -5,6 +5,8 @@ staging:amd64:
   script:
   #- cp /etc/apt/sources.list /etc/apt/sources.list~
   #- sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+  - apt-get update -qy
+  - apt-get install -y software-properties-common
   - add-apt-repository ppa:mc3man/mpv-tests -y
   - add-apt-repository ppa:jonathonf/ffmpeg-3 -y
   - apt-get update -qy
