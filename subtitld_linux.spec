@@ -7,7 +7,6 @@ a = Analysis(['subtitld.py'],
              binaries=[],
              datas=[
                      ( 'graphics/*.png', 'graphics' ),
-                     ( 'timecode/*', 'timecode' ),
                  ],
              hiddenimports=['sip', '_cffi_backend'],
              hookspath=[],
