@@ -7,7 +7,7 @@ staging:amd64:
   #- sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
   - apt-get update -qy
   - apt-get install -y software-properties-common
-  - add-apt-repository ppa:mc3man/mpv-tests -y
+  - add-apt-repository ppa:mc3man/bionic-media -y
   - apt-get update -qy
   # - apt-get install -y software-properties-common wget unzip
   #- add-apt-repository -y ppa:mc3man/mpv-tests
