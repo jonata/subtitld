@@ -9,11 +9,11 @@ from datetime import datetime
 def get_machine_id():
     machine_id = ''
     if sys.platform == 'darwin':
-        ioreg_cmd = subprocess.run(['ioreg','-rd1','-c','IOPlatformExpertDevice'], stdout=subprocess.PIPE)
-        machine_id = ioreg.stdout.read().decode().split('IOPlatformUUID',1)[1].split('\n')[0].strip()
+        ioreg_cmd = subprocess.run(['ioreg','-rd1','-c','IOPlatformExpertDevice'], stdout=subprocess.PIPE, text=True)
+        machine_id = ioreg.stdout.read().split('IOPlatformUUID',1)[1].split('\n')[0].strip()
     elif sys.platform in ['win32', 'msys']:
-        reg_cmd = subprocess.run(['reg', 'query', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography', '/v', 'MachineGuid'], stdout=subprocess.PIPE)
-        machine_id = reg_cmd.stdout.decode().read().decode().split('REG_SZ',1)[1].strip()
+        reg_cmd = subprocess.run(['reg', 'query', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography', '/v', 'MachineGuid'], stdout=subprocess.PIPE, text=True)
+        machine_id = reg_cmd.stdout.read().split('REG_SZ',1)[1].strip()
     elif 'bsd' in sys.platform:
         machine_id = open('/etc/hostid', 'r').read().strip()
     else:
