@@ -57,23 +57,33 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 painter.setOpacity(1)
 
                 painter.setPen(QPen(QColor.fromRgb(240,240,240,200), 1, Qt.SolidLine))
-                painter.setBrush(QColor.fromRgb(240,240,240,alpha=50))
+
 
                 for subtitle in self.subtitles_list:
                     if ((subtitle[0] / self.video_metadata.get('duration', 0.01)) > (scroll_position / widget.width()) or ((subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01)) > (scroll_position / widget.width())) and ((subtitle[0] / self.video_metadata.get('duration', 0.01)) < ((scroll_position + scroll_width) / widget.width()) or ((subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01)) < ((scroll_position + scroll_width) / widget.width())):
                         if self.selected_subtitle == subtitle:
-                            painter.setPen(QColor.fromRgb(0,0,0,alpha=255))
+                            painter.setPen(QColor.fromRgb(48,66,81,alpha=255))
+                            painter.setBrush(QColor.fromRgb(62,83,99,alpha=220))
                         else:
-                            painter.setPen(QColor.fromRgb(255,255,255,alpha=255))
+                            painter.setPen(QColor.fromRgb(106,116,131,alpha=255))
+                            painter.setBrush(QColor.fromRgb(184,206,224,alpha=220))
 
                         subtitle_rect = QRect(  subtitle[0] * widget.width_proportion ,
                                             widget.subtitle_y,
                                             subtitle[1] * widget.width_proportion,
                                             widget.subtitle_height
                                         )
-                        painter.setBrush(QColor.fromRgb(200,200,200,alpha=200))
+                        #painter.setBrush(QColor.fromRgb(200,200,200,alpha=200))
 
                         painter.drawRoundedRect(subtitle_rect,2.0,2.0,Qt.AbsoluteSize)
+
+                        if self.selected_subtitle == subtitle:
+                            painter.setPen(QColor.fromRgb(255,255,255,alpha=255))
+                            #painter.setBrush(QColor.fromRgb(62,83,99,alpha=220))
+                        else:
+                            painter.setPen(QColor.fromRgb(48,66,81,alpha=255))
+                            #painter.setBrush(QColor.fromRgb(184,206,224,alpha=220))
+
                         painter.drawText(subtitle_rect,Qt.AlignCenter | Qt.TextWrapAnywhere,subtitle[2])
 
                         if widget.show_limiters:
@@ -115,7 +125,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             self.selected_subtitle = False
 
             for subtitle in self.subtitles_list:
-                if event.pos().y() > 40 and event.pos().y() < (widget.subtitle_height + 40) and (((event.pos().x())/widget.width_proportion) > subtitle[0] and ((event.pos().x())/widget.width_proportion) < (subtitle[0] + subtitle[1])):
+                if event.pos().y() > widget.subtitle_y and event.pos().y() < (widget.subtitle_height + widget.subtitle_y) and (((event.pos().x())/widget.width_proportion) > subtitle[0] and ((event.pos().x())/widget.width_proportion) < (subtitle[0] + subtitle[1])):
                     self.selected_subtitle = subtitle
                     if event.pos().x()/widget.width_proportion > (subtitle[0] + subtitle[1]) - (20/widget.width_proportion):
                         widget.subtitle_end_is_clicked = True
@@ -155,7 +165,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                     self.subtitles_list[slsub][1] = ((event.pos().x() + widget.offset) / widget.width_proportion) - self.subtitles_list[slsub][0]
                 elif widget.subtitle_is_clicked:
                     self.subtitles_list[slsub][0] = (event.pos().x() - widget.offset) / widget.width_proportion
-            if event.pos().y() > 40 and event.pos().y() < (widget.subtitle_height + 40):# and (((event.pos().x())/widget.width_proportion) > subtitle[0] and ((event.pos().x())/widget.width_proportion) < (subtitle[0] + subtitle[1])):
+            if event.pos().y() > widget.subtitle_y and event.pos().y() < (widget.subtitle_height + widget.subtitle_y):# and (((event.pos().x())/widget.width_proportion) > subtitle[0] and ((event.pos().x())/widget.width_proportion) < (subtitle[0] + subtitle[1])):
                 widget.show_limiters = True
             else:
                 widget.show_limiters = False
