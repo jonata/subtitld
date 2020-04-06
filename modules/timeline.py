@@ -40,25 +40,21 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
             painter.setRenderHint(QPainter.Antialiasing)
 
+            painter.setOpacity(self.mediaplayer_opacity)
+            if self.mediaplayer_view_mode and self.video_metadata.get('waveform', {}):
+                if self.mediaplayer_view_mode in ['waveform', 'verticalform']:
+                    zoom_values = sorted(self.video_metadata.get('waveform', {}).keys())[1:]
+                    if len(zoom_values) > 0:
+                        if self.mediaplayer_zoom in zoom_values:
+                            waveform = self.video_metadata.get('waveform', {})[self.mediaplayer_zoom]
+                            #painter.drawPixmap(0, 40, waveform)
+                        else:
+                            waveform = self.video_metadata.get('waveform', {})[zoom_values[bisect.bisect(zoom_values, self.mediaplayer_zoom)]]
+                        painter.drawPixmap(0, 43, widget.width(), widget.height() - 40, waveform)
+
             if self.subtitles_list:
-                painter.setOpacity(self.mediaplayer_opacity)
-                if self.mediaplayer_view_mode and self.video_metadata.get('waveform', {}):
-                    if self.mediaplayer_view_mode in ['waveform', 'verticalform']:
-                        zoom_values = sorted(self.video_metadata.get('waveform', {}).keys())[1:]
-                        if len(zoom_values) > 0:
-                            if self.mediaplayer_zoom in zoom_values:
-                                waveform = self.video_metadata.get('waveform', {})[self.mediaplayer_zoom]
-                                #painter.drawPixmap(0, 40, waveform)
-                            else:
-                                waveform = self.video_metadata.get('waveform', {})[zoom_values[bisect.bisect(zoom_values, self.mediaplayer_zoom)]]
-                            painter.drawPixmap(0, 43, widget.width(), widget.height() - 40, waveform)
-
-
                 painter.setOpacity(1)
-
                 painter.setPen(QPen(QColor.fromRgb(240,240,240,200), 1, Qt.SolidLine))
-
-
                 for subtitle in self.subtitles_list:
                     if ((subtitle[0] / self.video_metadata.get('duration', 0.01)) > (scroll_position / widget.width()) or ((subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01)) > (scroll_position / widget.width())) and ((subtitle[0] / self.video_metadata.get('duration', 0.01)) < ((scroll_position + scroll_width) / widget.width()) or ((subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01)) < ((scroll_position + scroll_width) / widget.width())):
                         if self.selected_subtitle == subtitle:
