@@ -31,6 +31,7 @@ def load(self):
     def thread_extract_waveform_ended(command):
         self.video_metadata['waveform'][0] = command
         self.timeline.zoom_update_waveform(self)
+        self.toppanel_videoinfo_label.setText('Audio extracted')
 
     self.thread_extract_waveform = thread_extract_waveform(self)
     self.thread_extract_waveform.command.connect(thread_extract_waveform_ended)
@@ -45,6 +46,7 @@ def open_filepath(self, file_to_open):
     if self.video_metadata:
         self.thread_extract_waveform.filepath = self.video_metadata['filepath']
         self.thread_extract_waveform.start()
+        self.toppanel_videoinfo_label.setText('Extracting audio...')
 
 
         #waveform.ffmpeg_load_audio(self, )
@@ -75,6 +77,8 @@ def open_filepath(self, file_to_open):
     self.playercontrols.show(self)
     self.properties.show(self)
     self.subtitleslist.show(self)
+    self.toppanel.show(self)
+    self.toppanel_subtitle_file_info_label.setText('<b><snall>ACTUAL PROJECT</small></b><br><big>' + file_to_open + '</big>')
 
     self.settings['recent_files'][datetime.datetime.now().strftime("%Y%m%d")] = file_to_open
 

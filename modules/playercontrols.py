@@ -109,8 +109,8 @@ def resized(self):
     self.playercontrols_playpayse_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-30,11,60,43)
 
 
-    self.zoomin_button.setGeometry(self.timeline_scroll.width() - 80,44,40,40)
-    self.zoomout_button.setGeometry(self.timeline_scroll.width() - 120,44,40,40)
+    self.zoomin_button.setGeometry(self.playercontrols_widget.width() - 80,44,40,40)
+    self.zoomout_button.setGeometry(self.playercontrols_widget.width() - 120,44,40,40)
 
 def show(self):
     self.generate_effect(self.playercontrols_widget_animation, 'geometry', 1000, [self.playercontrols_widget.x(),self.playercontrols_widget.y(),self.playercontrols_widget.width(),self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(),self.playercontrols_widget.height()])

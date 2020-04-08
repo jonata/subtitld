@@ -74,8 +74,8 @@ class Timecode(object):
             if frames is not None:  # because 0==False, and frames can be 0
                 self.frames = frames
             elif start_seconds is not None:
-                if start_seconds == 0:
-                    raise ValueError("``start_seconds`` argument can not be 0")
+                #if start_seconds == 0:
+                #    start_seconds = 0.001
                 self.frames = self.float_to_tc(start_seconds)
             else:
                 # use default value of 00:00:00:00

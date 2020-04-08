@@ -133,13 +133,15 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                         else:
                             widget.subtitle_is_clicked = True
                     break
+
+
             if not (widget.subtitle_end_is_clicked or widget.subtitle_start_is_clicked or widget.subtitle_is_clicked):
                 self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
                 self.player_widget.mpv.wait_for_property('seekable')
                 self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
                 update_timecode_label(self)
 
-
+            self.properties.update_properties_widget(self)
             widget.update()
 
         def mouseReleaseEvent(widget, event):
@@ -151,16 +153,26 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
         def mouseMoveEvent(widget, event):
             if self.selected_subtitle:
-                slsub = self.subtitles_list.index(self.selected_subtitle)
+                i = self.subtitles_list.index(self.selected_subtitle)
+                last = self.subtitles_list[self.subtitles_list.index(self.selected_subtitle)-1] if self.subtitles_list.index(self.selected_subtitle) > 0 else [0,0,'']
+                next = self.subtitles_list[self.subtitles_list.index(self.selected_subtitle)+1] if self.subtitles_list.index(self.selected_subtitle) < len(self.subtitles_list) else [self.video_metadata['duration'],0,'']
                 #print('mouse moved ' + str(event.pos().x()) + ' x ' + str(event.pos().y()))
                 if widget.subtitle_start_is_clicked:
-                    last_end = self.subtitles_list[slsub][0] + self.subtitles_list[slsub][1]
-                    self.subtitles_list[slsub][0] = (event.pos().x() - widget.offset) / widget.width_proportion
-                    self.subtitles_list[slsub][1] = last_end - self.subtitles_list[slsub][0]
+                    end = self.subtitles_list[i][0] + self.subtitles_list[i][1]
+                    if not ((event.pos().x() - widget.offset) / widget.width_proportion) > (end - self.minimum_subtitle_width):
+                        if self.timeline_snap and (last[0] + last[1] + self.timeline_snap) > ((event.pos().x() - widget.offset) / widget.width_proportion):
+                            self.subtitles_list[i][0] = last[0] + last[1] + 0.001
+                        else:
+                            self.subtitles_list[i][0] = (event.pos().x() - widget.offset) / widget.width_proportion
+                        self.subtitles_list[i][1] = end - self.subtitles_list[i][0]
                 elif widget.subtitle_end_is_clicked:
-                    self.subtitles_list[slsub][1] = ((event.pos().x() + widget.offset) / widget.width_proportion) - self.subtitles_list[slsub][0]
+                    if not ((event.pos().x() + widget.offset) / widget.width_proportion) < (self.subtitles_list[i][0] + self.minimum_subtitle_width):
+                        if self.timeline_snap and (next[0] - self.timeline_snap) < ((event.pos().x() + widget.offset) / widget.width_proportion):
+                            self.subtitles_list[i][1] = (next[0] - 0.001) - self.subtitles_list[i][0]
+                        else:
+                            self.subtitles_list[i][1] = ((event.pos().x() + widget.offset) / widget.width_proportion) - self.subtitles_list[i][0]
                 elif widget.subtitle_is_clicked:
-                    self.subtitles_list[slsub][0] = (event.pos().x() - widget.offset) / widget.width_proportion
+                    self.subtitles_list[i][0] = (event.pos().x() - widget.offset) / widget.width_proportion
             if event.pos().y() > widget.subtitle_y and event.pos().y() < (widget.subtitle_height + widget.subtitle_y):# and (((event.pos().x())/widget.width_proportion) > subtitle[0] and ((event.pos().x())/widget.width_proportion) < (subtitle[0] + subtitle[1])):
                 widget.show_limiters = True
             else:
@@ -204,6 +216,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     def thread_get_waveform_ended(command):
         zoom = [*command.keys()][0]
         self.video_metadata['waveform'][zoom] = command[zoom]
+        self.toppanel_videoinfo_label.setText('Waveform updated')
 
     self.thread_get_waveform = thread_get_waveform(self)
     self.thread_get_waveform.command.connect(thread_get_waveform_ended)
@@ -240,6 +253,7 @@ def update(self):
 
 def zoom_update_waveform(self):
     if not type(self.video_metadata['waveform'][0]) == bool and not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
+        self.toppanel_videoinfo_label.setText('Generating waveform...')
         self.thread_get_waveform.audio = self.video_metadata['waveform'][0]
         self.thread_get_waveform.zoom = self.mediaplayer_zoom
         self.thread_get_waveform.duration = self.video_metadata.get('duration', 0.01)

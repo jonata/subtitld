@@ -22,14 +22,14 @@ def get_proc_addr(_, name):
 def load(self):
     class player_widget_area(QWidget):
         def enterEvent(widget, event):
-            if self.selected_subtitle and not self.player_subtitle_textedit.isVisible() and self.player_subtitle_layer.text():
-                self.player_subtitle_textedit.setPlainText(self.selected_subtitle[2])
-                self.player_subtitle_layer.setVisible(False)
-                self.player_subtitle_textedit.setVisible(True)
+            None#if self.selected_subtitle and not self.player_subtitle_textedit.isVisible() and self.player_subtitle_layer.text():
+            #    self.player_subtitle_textedit.setPlainText(self.selected_subtitle[2])
+            #    self.player_subtitle_layer.setVisible(False)
+            #    self.player_subtitle_textedit.setVisible(True)
         def leaveEvent(widget, event):
-            if self.selected_subtitle:
-                self.player_subtitle_layer.setVisible(True)
-                self.player_subtitle_textedit.setVisible(False)
+            None#if self.selected_subtitle:
+            #    self.player_subtitle_layer.setVisible(True)
+            #    self.player_subtitle_textedit.setVisible(False)
 
     self.player_widget_area = player_widget_area(self)
 
@@ -133,6 +133,7 @@ def update_subtitle_layer(self):
             break
 
     self.player_subtitle_layer.setText(text)
+    #self.properties_textedit.setText(text)
     #self.player_subtitle_textedit.setPlainText(text)
 
 def resize_player_widget(self):
