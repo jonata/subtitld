@@ -20,6 +20,7 @@ def set_stylesheet(self):
                             #playercontrols_widget_bottom_right                  { border-top: 0;    border-right: 25px;  border-bottom: 0;    border-left: 0;    border-image: url("''' + get_graphics_path('timeline_bottom_controls.png') + '''")          0 1 0 24 stretch stretch; }
                             #player_border                                       { border-top: 5px;  border-right: 5px;   border-bottom: 5px;  border-left: 5px;  border-image: url("''' + get_graphics_path('video_border.png') + '''")                      5  5 5 5 stretch stretch; }
                             #playercontrols_timecode_label                       { font-size:14px; color: rgba(106, 116, 131,100); qproperty-alignment: "AlignCenter"; font-family:"Ubuntu Mono"; }
+
                             #player_controls_button                              { border-top: 0;    border-right: 15px;  border-bottom: 0;    border-left: 15px; border-image: url("''' + get_graphics_path('player_controls_button_normal.png') + '''")          0 15 0 15 stretch stretch; }
                             #player_controls_button:hover:pressed                { border-top: 0;    border-right: 15px;  border-bottom: 0;    border-left: 15px; border-image: url("''' + get_graphics_path('player_controls_button_pressed.png') + '''")          0 15 0 15 stretch stretch; }
                             #player_controls_button:checked                      { border-top: 0;    border-right: 15px;  border-bottom: 0;    border-left: 15px; border-image: url("''' + get_graphics_path('player_controls_button_pressed.png') + '''")          0 15 0 15 stretch stretch; }
@@ -27,9 +28,21 @@ def set_stylesheet(self):
                             #player_controls_button:hover                        { border-top: 0;    border-right: 15px;  border-bottom: 0;    border-left: 15px; border-image: url("''' + get_graphics_path('player_controls_button_hover.png') + '''")          0 15 0 15 stretch stretch; }
                             #player_controls_button:disabled                     { border-top: 0;    border-right: 15px;  border-bottom: 0;    border-left: 15px; border-image: url("''' + get_graphics_path('player_controls_button_normal.png') + '''")          0 15 0 15 stretch stretch; color:rgba(255,255,255,100);}
 
+                            #toppanel_toggle_button                              { border-top: 5px;    border-right: 10px;  border-bottom: 5px;    border-left: 5px; border-image: url("''' + get_graphics_path('toppanel_button_switch_normal.png') + '''")          5 10 5 5 stretch stretch; }
+                            #toppanel_toggle_button:hover:pressed                { border-top: 5px;    border-right: 10px;  border-bottom: 5px;    border-left: 5px; border-image: url("''' + get_graphics_path('toppanel_button_switch_pressed.png') + '''")          5 10 5 5 stretch stretch; }
+                            #toppanel_toggle_button:checked                      { border-top: 5px;    border-right: 10px;  border-bottom: 5px;    border-left: 5px; border-image: url("''' + get_graphics_path('toppanel_button_switch_pressed.png') + '''")          5 10 5 5 stretch stretch; }
+                            #toppanel_toggle_button:hover:checked                { border-top: 5px;    border-right: 10px;  border-bottom: 5px;    border-left: 5px; border-image: url("''' + get_graphics_path('toppanel_button_switch_pressed.png') + '''")          5 10 5 5 stretch stretch; }
+                            #toppanel_toggle_button:hover                        { border-top: 5px;    border-right: 10px;  border-bottom: 5px;    border-left: 5px; border-image: url("''' + get_graphics_path('toppanel_button_switch_hover.png') + '''")          5 10 5 5 stretch stretch; }
+                            #toppanel_toggle_button:disabled                     { border-top: 5px;    border-right: 10px;  border-bottom: 5px;    border-left: 5px; border-image: url("''' + get_graphics_path('toppanel_button_switch_normal.png') + '''")          5 10 5 5 stretch stretch; color:rgba(255,255,255,100);}
+
                             #playercontrols_widget                               { border-top: 108px; border-right: 0; border-bottom: 0; border-left: 0; border-image: url("''' + get_graphics_path('timeline_background.png') + '''") 108 0 0 0 stretch stretch; }
                             #timeline_scroll                                     { background-color:transparent; }
                             #timeline_widget                                     { background-color:transparent; }
+
+                            #toppanel_widget_left                                { border-top: 0;    border-right: 16px;  border-bottom: 55px;    border-left: 0;    border-image: url("''' + get_graphics_path('toppanel_background_left.png') + '''")          0 16 55 0 stretch stretch; }
+                            #toppanel_widget_right                               { border-top: 0;    border-right: 18px;  border-bottom: 55px;    border-left: 5px;  border-image: url("''' + get_graphics_path('toppanel_background_right.png') + '''")          0 18 55 5 stretch stretch; }
+                            #toppanel_videoinfo_label                            { font-size:12px; color: rgba(106, 116, 131,100); qproperty-alignment: "AlignVCenter | AlignLeft"; font-family:"Ubuntu Mono"; }
+                            #toppanel_subtitle_file_info_label                   { font-size:10px; color: rgba(48, 66, 81,255); qproperty-alignment: "AlignVCenter | AlignLeft";  }
 
                             QPushButton                                          { font-size:10px; color:white; }
                             #start_screen_recent_alert                           { font-size:14px; color: rgb(106, 116, 131); qproperty-alignment: "AlignCenter"; padding: 40px; }
@@ -47,6 +60,13 @@ def set_stylesheet(self):
                             QScrollBar::sub-line:horizontal                      { border: none; background: none; }
                             QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal { background: none; }
                             QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: none; }
+
+                            QScrollBar:vertical                                { width: 15px; margin: 2px 2px 2px 2px; border: 1px transparent rgba(0,0,0,50); border-radius: 2px; background-color: rgba(0,0,0,50); }
+                            QScrollBar::handle:vertical                        { background-color: rgba(0,0,0,50); min-width: 5px; border-radius: 2px; }
+                            QScrollBar::add-line:vertical                      { border: none; background: none; }
+                            QScrollBar::sub-line:vertical                      { border: none; background: none; }
+                            QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical { background: none; }
+                            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { background: none; }
 
                             #start_screen_recentfiles_background                 { background-color: rgba(106, 116, 131, 50); }
                             #start_screen_adver_panel                            { background-color: rgba(0, 0, 0, 50); border-radius: 5px;}

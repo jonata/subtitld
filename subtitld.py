@@ -37,6 +37,8 @@ class subtitld(QWidget):
         self.mediaplayer_view_mode = 'verticalform'
         self.mediaplayer_is_playing = False
         self.current_timeline_position = 0.0
+        self.timeline_snap = .5
+        self.minimum_subtitle_width = 1
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 
@@ -92,6 +94,10 @@ class subtitld(QWidget):
         from modules import playercontrols
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
+
+        from modules import toppanel
+        self.toppanel = toppanel
+        self.toppanel.load(self, PATH_SUBTITLD_GRAPHICS)
 
         #from modules import document_edit
         #self.document_edit = document_edit
@@ -150,6 +156,7 @@ class subtitld(QWidget):
         self.properties.resized(self)
         self.player.resized(self)
         self.timeline.resized(self)
+        self.toppanel.resized(self)
 
     def closeEvent(self, _):
         config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)
