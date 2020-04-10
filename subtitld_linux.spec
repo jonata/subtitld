@@ -7,6 +7,7 @@ a = Analysis(['subtitld.py'],
              binaries=[],
              datas=[
                      ( 'graphics/*.png', 'graphics' ),
+                     ( 'graphics/*.ttf', 'graphics' ),
                  ],
              hiddenimports=['sip', '_cffi_backend'],
              hookspath=[],
