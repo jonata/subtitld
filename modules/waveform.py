@@ -10,7 +10,7 @@ import json
 from modules.paths import *
 
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QPixmap
+from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QPixmap, QImage
 from PyQt5.QtCore import Qt, QPointF, pyqtSignal
 
 def return_audio_numpy(self, audionp):
@@ -206,7 +206,7 @@ def generate_waveform_zoom(zoom, duration, waveform):
 
     return positive_values, negative_values, average
 
-class waveform_qpixmap_widget(QWidget):
+class waveform_qpixmap_widget(QImage):
     view_mode = 'waveform'
     full_waveform = []
     waveformsize = .7
@@ -267,14 +267,85 @@ class waveform_qpixmap_widget(QWidget):
         painter.end()
 
 def get_waveform_zoom(zoom, duration, audio, width, height):
-    qpixmap_widget = waveform_qpixmap_widget()
-    qpixmap_widget.setStyleSheet("background-color: rgba(0,0,0,0)")
-    qpixmap_widget.zoom = zoom
-    qpixmap_widget.duration = duration
-    qpixmap_widget.full_waveform = generate_waveform_zoom(zoom, duration, audio)
-    qpixmap_widget.setGeometry(0,0,width, height)
-    qpixmap_widget.update()
-    return qpixmap_widget.grab()
+    # qpixmap_widget = waveform_qpixmap_widget()
+    # qpixmap_widget.setStyleSheet("background-color: rgba(0,0,0,0)")
+    # qpixmap_widget.zoom = zoom
+    # qpixmap_widget.duration = duration
+    # qpixmap_widget.full_waveform = generate_waveform_zoom(zoom, duration, audio)
+    # qpixmap_widget.setGeometry(0,0,width, height)
+    # qpixmap_widget.update()
+    # return qpixmap_widget.grab()
+    if width > 32767:
+        x_factor = 32767/width
+        width = 32767
+    else:
+        x_factor = 1
+    widget = QImage(width, height, QImage.Format_ARGB32)
+    widget.fill(Qt.transparent)
+    widget.view_mode = 'waveform'
+    widget.waveformsize = .7
+    widget.full_waveform = generate_waveform_zoom(zoom, duration, audio)
+
+    painter = QPainter(widget)
+    painter.setRenderHint(QPainter.Antialiasing)
+    painter.setPen(QPen(QColor.fromRgb(21,52,80,255), 1, Qt.SolidLine))
+    painter.setBrush(QColor.fromRgb(21,52,80,alpha=200))
+
+
+    if widget.view_mode == 'waveform':
+        x_position = 0
+        polygon = QPolygonF()
+
+        for point in widget.full_waveform[0]:
+            polygon.append(QPointF(x_position, (widget.height()*.5) + (point*(widget.waveformsize*100))))
+            x_position += x_factor
+
+        for point in reversed(widget.full_waveform[1]):
+            polygon.append(QPointF(x_position, (widget.height()*.5) + (point*(widget.waveformsize*100))))
+            x_position -= x_factor
+
+        painter.drawPolygon(polygon)
+    elif widget.view_mode == 'verticalform':
+        polygon1 = QPolygonF()
+        polygon2 = QPolygonF()
+
+        x_position = 0
+        polygon1.append(QPointF(0, widget.height()))
+        for point in widget.full_waveform[0]:
+            polygon1.append(QPointF(x_position, widget.height() + (-1.0*(point*(widget.waveformsize*200)))))
+            x_position += x_factor
+        polygon1.append(QPointF(x_position, widget.height()))
+
+        x_position = 0
+        polygon2.append(QPointF(0, widget.height()))
+        for point in widget.full_waveform[1]:
+            polygon2.append(QPointF(x_position, widget.height() + (point*(widget.waveformsize*200))))
+            x_position += x_factor
+        polygon2.append(QPointF(x_position, widget.height()))
+
+        painter.drawPolygon(polygon1)
+        painter.drawPolygon(polygon2)
+    if widget.full_waveform[2]:
+        painter.setPen(QPen(QColor.fromRgb(0,200,240,50), 5, Qt.SolidLine))
+        x_position = 0
+        polygon = QPolygonF()
+        last_point = 0.0
+        for point in widget.full_waveform[2]:
+            polygon.append(QPointF(x_position, widget.height() - (point*(widget.height()*.0008))))
+            x_position += x_factor
+
+        painter.drawPolyline(polygon)
+        painter.setOpacity(1)
+
+    painter.end()
+
+    #widget.setStyleSheet("background-color: rgba(0,0,0,0)")
+    #widget.zoom = zoom
+    #widget.duration = duration
+    #widget.full_waveform = generate_waveform_zoom(zoom, duration, audio)
+    #widget.setGeometry(0,0,)
+    #widget.update()
+    return widget
 
 def return_waveform_zoom(self, qpixmap):
     self.video_metadata['waveform'][qpixmap[0]] = qpixmap[1]

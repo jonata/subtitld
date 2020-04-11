@@ -4,14 +4,14 @@
 import os
 from bisect import bisect
 import timecode
-from PyQt5.QtGui import QIcon, QPainter, QPen, QColor, QPolygonF, QPixmap, QFont
+from PyQt5.QtGui import QIcon, QPainter, QPen, QColor, QPolygonF, QPixmap, QFont, QImage
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QSpinBox, QDoubleSpinBox, QWidget, QScrollArea
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize, QRect, QPointF, QThread, pyqtSignal
 
 from modules import waveform
 
 class thread_get_waveform(QThread):
-    command = pyqtSignal(dict)
+    command = pyqtSignal(QImage)
     zoom = False
     audio = False
     duration = False
@@ -19,8 +19,8 @@ class thread_get_waveform(QThread):
     height = False
     def run(self):
         #if self.audio.any() and not self.zoom == False and not self.duration == False and not self.audio == False and not self.width == False and not self.height == False:
-        result = {self.zoom : waveform.get_waveform_zoom(zoom=self.zoom, duration=self.duration, audio=self.audio, width=self.width, height=self.height)}
-        self.command.emit(result)
+        #result = {self.zoom : waveform.get_waveform_zoom(zoom=self.zoom, duration=self.duration, audio=self.audio, width=self.width, height=self.height)}
+        self.command.emit(waveform.get_waveform_zoom(zoom=self.zoom, duration=self.duration, audio=self.audio, width=self.width, height=self.height))
 
 def get_timeline_time_str(seconds):
     secs = int(seconds % 60)
@@ -56,14 +56,18 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             painter.setOpacity(self.mediaplayer_opacity)
             if self.mediaplayer_view_mode and self.video_metadata.get('waveform', {}):
                 if self.mediaplayer_view_mode in ['waveform', 'verticalform']:
-                    zoom_values = sorted(self.video_metadata.get('waveform', {}).keys())[1:]
-                    if len(zoom_values) > 0:
-                        if self.mediaplayer_zoom in zoom_values:
-                            waveform = self.video_metadata.get('waveform', {})[self.mediaplayer_zoom]
-                            #painter.drawPixmap(0, 40, waveform)
-                        #else:
-                        #    waveform = self.video_metadata.get('waveform', {})[zoom_values[bisect(zoom_values, self.mediaplayer_zoom)]]
-                            painter.drawPixmap(0, 43, widget.width(), widget.height() - 40, waveform)
+                    if self.video_metadata.get('waveform', False):
+                        p = self.video_metadata['waveform'].width()/widget.width()
+                        painter.drawPixmap(scroll_position, 43, scroll_width, widget.height() - 40, QPixmap(self.video_metadata['waveform'].copy(scroll_position*p, 0, scroll_width*p, widget.height() - 40))) #
+                    # zoom_values = sorted(self.video_metadata.get('waveform', {}).keys())[1:]
+                    # if len(zoom_values) > 0:
+                    #     if self.mediaplayer_zoom in zoom_values:
+                    #         waveform = self.video_metadata.get('waveform', {})[self.mediaplayer_zoom]
+                    #         #painter.drawPixmap(0, 40, waveform)
+                    #     #else:
+                    #     #    waveform = self.video_metadata.get('waveform', {})[zoom_values[bisect(zoom_values, self.mediaplayer_zoom)]]
+                    #         p = waveform.width()/widget.width()
+                    #         painter.drawPixmap(scroll_position, 43, scroll_width, widget.height() - 40, QPixmap(waveform.copy(scroll_position*p, 0, scroll_width*p, widget.height() - 40))) #
 
             if self.subtitles_list:
                 painter.setOpacity(1)
@@ -199,7 +203,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 i = self.subtitles_list.index(self.selected_subtitle)
                 last = self.subtitles_list[self.subtitles_list.index(self.selected_subtitle)-1] if self.subtitles_list.index(self.selected_subtitle) > 0 else [0,0,'']
                 next = self.subtitles_list[self.subtitles_list.index(self.selected_subtitle)+1] if self.subtitles_list.index(self.selected_subtitle) < len(self.subtitles_list) else [self.video_metadata['duration'],0,'']
-                scenes_list = self.video_metadata['scenes'] if len(self.video_metadata['scenes']) > 1 else [0.0, self.video_metadata['duration']]
+                scenes_list = self.video_metadata['scenes'] if len(self.video_metadata['scenes']) > 1 else [0.0]
+                scenes_list.append(self.video_metadata['duration'])
                 start_position = (event.pos().x() - widget.offset) / widget.width_proportion
                 last_scene = scenes_list[bisect(scenes_list, start_position)-1]
                 next_scene = scenes_list[bisect(scenes_list, start_position)]
@@ -310,8 +315,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
     def thread_get_waveform_ended(command):
-        zoom = [*command.keys()][0]
-        self.video_metadata['waveform'][zoom] = command[zoom]
+        #zoom = [*command.keys()][0]
+        self.video_metadata['waveform'] = command
         self.toppanel_videoinfo_label.setText('Waveform updated')
         self.timeline_widget.update()
 
@@ -348,9 +353,11 @@ def update(self):
     self.timeline_widget.update()
 
 def zoom_update_waveform(self):
-    if not type(self.video_metadata['waveform'][0]) == bool and not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
+    #if not type(self.video_metadata['waveform'][0]) == bool and not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
+    if not type(self.video_metadata['audio']) == bool:
         self.toppanel_videoinfo_label.setText('Generating waveform...')
-        self.thread_get_waveform.audio = self.video_metadata['waveform'][0]
+        #self.thread_get_waveform.audio = self.video_metadata['waveform'][0]
+        self.thread_get_waveform.audio = self.video_metadata['audio']
         self.thread_get_waveform.zoom = self.mediaplayer_zoom
         self.thread_get_waveform.duration = self.video_metadata.get('duration', 0.01)
         self.thread_get_waveform.width = self.timeline_widget.width()

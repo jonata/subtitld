@@ -50,7 +50,8 @@ class thread_extract_waveform(QThread):
 
 def load(self):
     def thread_extract_waveform_ended(command):
-        self.video_metadata['waveform'][0] = command
+        #self.video_metadata['waveform'][0] = command
+        self.video_metadata['audio'] = command
         self.timeline.zoom_update_waveform(self)
         self.toppanel_videoinfo_label.setText('Audio extracted')
 
@@ -130,7 +131,8 @@ def open_file(filepath):
 def process_video_metadata(mp4_file):
     video_metadata = {}
     json_result = waveform.ffmpeg_load_metadata(mp4_file)
-    video_metadata['waveform'] = {0: False}
+    video_metadata['audio'] = False #{0: False}
+    video_metadata['waveform'] = False #{0: False}
     video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
     video_metadata['width'] =  int(json_result.get('streams', [])[0].get('width', '640'))
     video_metadata['height'] =  int(json_result.get('streams', [])[0].get('height', '640'))

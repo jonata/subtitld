@@ -189,7 +189,7 @@ def zoom_buttons_update(self):
     self.zoomin_button.setEnabled(True if self.mediaplayer_zoom + 5.0 < 500.0 else False)
     proportion = ((self.current_timeline_position*self.timeline_widget.width_proportion)-self.timeline_scroll.horizontalScrollBar().value())/self.timeline_scroll.width()
     self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
-    self.timeline.zoom_update_waveform(self)
+    #self.timeline.zoom_update_waveform(self)
     self.timeline.update_scrollbar(self, position=proportion)
 
 def snap_button_clicked(self):
