@@ -79,6 +79,8 @@ def set_stylesheet(self):
                             #start_screen_adver_label_machineid                  { font-size:24px; color:rgb(106, 116, 131); qproperty-alignment: "AlignCenter"; font-weight: bold; }
                             #start_screen_adver_label_status                     { font-size:14px; color:rgb(106, 116, 131); qproperty-alignment: "AlignCenter"; padding-left:20px; padding-right:20px;  qproperty-wordWrap: true; }
                             #start_screen_adver_label_email                      { padding:10px; border: 1px transparent rgba(255,255,255,20); border-radius: 2px; background-color: rgba(255,255,255,200); color:rgb(48,66,81); font-size:14px;  qproperty-alignment: "AlignCenter"; }
+
+                            QDoubleSpinBox                                      { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
                             '''
 
     for button_color in ['button', 'button_dark', 'button_red', 'button_green']:
@@ -101,8 +103,35 @@ def set_stylesheet(self):
                     stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover                          { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 5 5 5 5 stretch stretch; outline: none; } '
                     stylesheet_text += '#' + button_color + crop1 + crop2 + ':disabled                       { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }'
 
+    for button_color in ['subbutton', 'subbutton_dark']:
+        sides = ['left','top','right','bottom','']
+        for crop1 in sides:
+            c = ['5px', '2px', '2px', '2px']
+            if crop1:
+                c[sides.index(crop1)] = '0'
+                crop1 = '_no_' + crop1
+            for crop2 in sides:
+                if (crop1 and not crop2) or (not crop1 == crop2) or (not crop1 or not crop2):
+                    c1 = c.copy()
+                    if crop2:
+                        c1[sides.index(crop2)] = '0'
+                        crop2 = '_no_' + crop2
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + '                                { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_normal.png') + '") 2 2 2 5 stretch stretch; outline: none; color:rgba(48,66,81,255); text-align:left; font-weight:bold;} '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover:pressed                  { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':checked                        { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover:checked                  { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover                          { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 2 2 2 5 stretch stretch; outline: none; } '
+                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':disabled                       { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 2 2 2 5 stretch stretch; outline: none; color:rgba(0,0,0,100); }'
+
     self.setStyleSheet(stylesheet_text)
 
+
+                            #subbutton                                           { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_normal.png') + '''")                       2 2 2 5 stretch stretch; color:rgba(48,66,81,255); text-align:left;}
+                            #subbutton:hover:pressed                             { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_pressed.png') + '''")                      2 2 2 5 stretch stretch; }
+                            #subbutton:checked                                   { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_pressed.png') + '''")                      2 2 2 5 stretch stretch; }
+                            #subbutton:hover:checked                             { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_pressed.png') + '''")                      2 2 2 5 stretch stretch; }
+                            #subbutton:hover                                     { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_hover.png') + '''")                        2 2 2 5 stretch stretch; }
+                            #subbutton:disabled                                  { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_normal.png') + '''")                       2 2 2 5 stretch stretch; color:rgba(255,255,255,100);}
 
 # QScrollBar::add-line:horizontal             { margin: 0px 3px 0px 3px; border-image: url(:/qss_icons/rc/right_arrow_disabled.png); width: 10px; height: 10px; subcontrol-position: right; subcontrol-origin: margin; }
 # QScrollBar::sub-line:horizontal             { margin: 0px 3px 0px 3px; border-image: url(:/qss_icons/rc/left_arrow_disabled.png); height: 10px; width: 10px; subcontrol-position: left; subcontrol-origin: margin; }

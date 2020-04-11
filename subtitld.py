@@ -3,6 +3,7 @@
 import os
 import sys
 import threading
+import time
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 from PyQt5.QtCore import Qt, QTimer, QRect, QPropertyAnimation, QEasingCurve
@@ -37,8 +38,14 @@ class subtitld(QWidget):
         self.mediaplayer_view_mode = 'verticalform'
         self.mediaplayer_is_playing = False
         self.current_timeline_position = 0.0
-        self.timeline_snap = .5
+        self.timeline_snap = True
+        self.timeline_snap_value = .1
+        self.timeline_snap_limits = True
+        self.timeline_snap_moving = True
+        self.timeline_snap_grid = False
         self.minimum_subtitle_width = 1
+        self.timeline_show_grid = False
+        self.timeline_grid_type = False
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 
@@ -158,9 +165,13 @@ class subtitld(QWidget):
         self.timeline.resized(self)
         self.toppanel.resized(self)
 
-    def closeEvent(self, _):
+    def closeEvent(self, event):
         config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)
+        self.thread_get_waveform.quit()
+        self.thread_extract_waveform.quit()
         self.player_widget.close()
+        time.sleep(.1)
+        event.accept()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space:

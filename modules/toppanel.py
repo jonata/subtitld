@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QSpinBox, QDoubleS
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 
 from modules.paths import *
+from modules import file_io
 
 def load(self, PATH_SUBTITLD_GRAPHICS):
     self.toppanel_widget = QLabel(parent=self)

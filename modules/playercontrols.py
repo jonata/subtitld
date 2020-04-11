@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QLineEdit
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QThread, pyqtSignal, QSize, QPropertyAnimation
+from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QLineEdit, QDoubleSpinBox
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, pyqtSignal, QSize, QPropertyAnimation
 from PyQt5.QtGui import QIcon
 
 from modules import waveform
@@ -67,6 +67,55 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.zoomout_button.setObjectName('button_no_right_no_bottom')
     self.zoomout_button.clicked.connect(lambda:zoomout_button_clicked(self))
 
+    self.grid_button = QPushButton('GRID', parent=self.playercontrols_widget)
+    self.grid_button.setObjectName('subbutton_no_bottom_no_right')
+    self.grid_button.setCheckable(True)
+    self.grid_button.clicked.connect(lambda:grid_button_clicked(self))
+
+    self.grid_frames_button = QPushButton(parent=self.playercontrols_widget)
+    self.grid_frames_button.setObjectName('subbutton_no_bottom_no_right')
+    self.grid_frames_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'grid_frames_icon.png')))
+    self.grid_frames_button.setCheckable(True)
+    self.grid_frames_button.clicked.connect(lambda:grid_type_changed(self, 'frames'))
+
+    self.grid_seconds_button = QPushButton(parent=self.playercontrols_widget)
+    self.grid_seconds_button.setObjectName('subbutton_no_bottom_no_right')
+    self.grid_seconds_button.setCheckable(True)
+    self.grid_seconds_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'grid_seconds_icon.png')))
+    self.grid_seconds_button.clicked.connect(lambda:grid_type_changed(self, 'seconds'))
+
+    self.grid_scenes_button = QPushButton(parent=self.playercontrols_widget)
+    self.grid_scenes_button.setObjectName('subbutton_no_bottom')
+    self.grid_scenes_button.setCheckable(True)
+    self.grid_scenes_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'grid_scenes_icon.png')))
+    self.grid_scenes_button.clicked.connect(lambda:grid_type_changed(self, 'scenes'))
+
+    self.snap_button = QPushButton('SNAP', parent=self.playercontrols_widget)
+    self.snap_button.setObjectName('subbutton_no_bottom_no_right')
+    self.snap_button.setCheckable(True)
+    self.snap_button.clicked.connect(lambda:snap_button_clicked(self))
+
+    self.snap_value = QDoubleSpinBox(parent=self.snap_button)
+    self.snap_value.valueChanged.connect(lambda:snap_value_changed(self))
+
+    self.snap_limits_button = QPushButton(parent=self.playercontrols_widget)
+    self.snap_limits_button.setObjectName('subbutton_no_bottom_no_right')
+    self.snap_limits_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_limits_icon.png')))
+    self.snap_limits_button.setCheckable(True)
+    self.snap_limits_button.clicked.connect(lambda:snap_limits_button_clicked(self))
+
+    self.snap_move_button = QPushButton(parent=self.playercontrols_widget)
+    self.snap_move_button.setObjectName('subbutton_no_bottom_no_right')
+    self.snap_move_button.setCheckable(True)
+    self.snap_move_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_moving_icon.png')))
+    self.snap_move_button.clicked.connect(lambda:snap_move_button_clicked(self))
+
+    self.snap_grid_button = QPushButton(parent=self.playercontrols_widget)
+    self.snap_grid_button.setObjectName('subbutton_no_bottom')
+    self.snap_grid_button.setCheckable(True)
+    self.snap_grid_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_grid_icon.png')))
+    self.snap_grid_button.clicked.connect(lambda:snap_grid_button_clicked(self))
+
 def playercontrols_stop_button_clicked(self):
     self.player_widget.mpv.pause = True
     self.player_widget.mpv.wait_for_property('seekable')
@@ -108,26 +157,85 @@ def resized(self):
     self.playercontrols_stop_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-80,11,50,43)
     self.playercontrols_playpayse_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-30,11,60,43)
 
+    self.zoomout_button.setGeometry(20,44,40,40)
+    self.zoomin_button.setGeometry(60,44,40,40)
 
-    self.zoomin_button.setGeometry(self.playercontrols_widget.width() - 80,44,40,40)
-    self.zoomout_button.setGeometry(self.playercontrols_widget.width() - 120,44,40,40)
+    self.snap_button.setGeometry(self.playercontrols_widget.width()-210,54,100,30)
+    self.snap_value.setGeometry(self.snap_button.width()-50,4,46,self.snap_button.height()-8)
+    self.snap_limits_button.setGeometry(self.snap_button.x()+self.snap_button.width(),self.snap_button.y(),self.snap_button.height(),self.snap_button.height())
+    self.snap_move_button.setGeometry(self.snap_limits_button.x()+self.snap_limits_button.width(),self.snap_button.y(),self.snap_button.height(),self.snap_button.height())
+    self.snap_grid_button.setGeometry(self.snap_move_button.x()+self.snap_move_button.width(),self.snap_button.y(),self.snap_button.height(),self.snap_button.height())
+
+    self.grid_button.setGeometry(self.playercontrols_widget.width()-410,54,50,30)
+    self.grid_frames_button.setGeometry(self.grid_button.x()+self.grid_button.width(),self.grid_button.y(),self.grid_button.height(),self.grid_button.height())
+    self.grid_seconds_button.setGeometry(self.grid_frames_button.x()+self.grid_frames_button.width(),self.grid_button.y(),self.grid_button.height(),self.grid_button.height())
+    self.grid_scenes_button.setGeometry(self.grid_seconds_button.x()+self.grid_seconds_button.width(),self.grid_button.y(),self.grid_button.height(),self.grid_button.height())
 
 def show(self):
     self.generate_effect(self.playercontrols_widget_animation, 'geometry', 1000, [self.playercontrols_widget.x(),self.playercontrols_widget.y(),self.playercontrols_widget.width(),self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(),self.playercontrols_widget.height()])
-
+    update_snap_buttons(self)
+    update_grid_buttons(self)
 
 def zoomin_button_clicked(self):
     self.mediaplayer_zoom += 5.0
-    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
-    self.timeline.zoom_update_waveform(self)
     zoom_buttons_update(self)
 
 def zoomout_button_clicked(self):
     self.mediaplayer_zoom -= 5.0
-    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
-    self.timeline.zoom_update_waveform(self)
     zoom_buttons_update(self)
 
 def zoom_buttons_update(self):
     self.zoomout_button.setEnabled(True if self.mediaplayer_zoom - 5.0 > 0.0 else False)
     self.zoomin_button.setEnabled(True if self.mediaplayer_zoom + 5.0 < 500.0 else False)
+    proportion = ((self.current_timeline_position*self.timeline_widget.width_proportion)-self.timeline_scroll.horizontalScrollBar().value())/self.timeline_scroll.width()
+    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
+    self.timeline.zoom_update_waveform(self)
+    self.timeline.update_scrollbar(self, position=proportion)
+
+def snap_button_clicked(self):
+    self.timeline_snap = self.snap_button.isChecked()
+    update_snap_buttons(self)
+
+def snap_move_button_clicked(self):
+    self.timeline_snap_moving = self.snap_move_button.isChecked()
+
+def snap_limits_button_clicked(self):
+    self.timeline_snap_limits = self.snap_limits_button.isChecked()
+
+def snap_grid_button_clicked(self):
+    self.timeline_snap_grid = self.snap_grid_button.isChecked()
+
+def snap_value_changed(self):
+    self.timeline_snap_value = self.snap_value.value() if self.snap_value.value() else .1
+
+def update_snap_buttons(self):
+    self.snap_button.setChecked(bool(self.timeline_snap))
+    self.snap_limits_button.setEnabled(self.snap_button.isChecked())
+    self.snap_limits_button.setChecked(bool(self.timeline_snap_limits))
+    self.snap_move_button.setEnabled(self.snap_button.isChecked())
+    self.snap_move_button.setChecked(bool(self.timeline_snap_moving))
+    self.snap_grid_button.setEnabled(self.snap_button.isChecked())
+    self.snap_grid_button.setChecked(bool(self.timeline_snap_grid))
+    self.snap_value.setEnabled(self.snap_button.isChecked())
+    self.snap_value.setValue(self.timeline_snap_value if self.timeline_snap_value else .1)
+    self.timeline_widget.update()
+
+def grid_button_clicked(self):
+    self.timeline_show_grid = self.grid_button.isChecked()
+    if not self.timeline_grid_type:
+        self.timeline_grid_type = 'seconds'
+    update_grid_buttons(self)
+
+def grid_type_changed(self, type):
+    self.timeline_grid_type = type
+    update_grid_buttons(self)
+
+def update_grid_buttons(self):
+    self.grid_button.setChecked(self.timeline_show_grid)
+    self.grid_frames_button.setEnabled(self.timeline_show_grid)
+    self.grid_frames_button.setChecked(True if self.timeline_grid_type == 'frames' else False)
+    self.grid_seconds_button.setEnabled(self.timeline_show_grid)
+    self.grid_seconds_button.setChecked(True if self.timeline_grid_type == 'seconds' else False)
+    self.grid_scenes_button.setEnabled(self.timeline_show_grid)
+    self.grid_scenes_button.setChecked(True if self.timeline_grid_type == 'scenes' else False)
+    self.timeline_widget.update()
