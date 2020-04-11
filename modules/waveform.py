@@ -11,7 +11,7 @@ from modules.paths import *
 
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QPixmap
-from PyQt5.QtCore import Qt, QPointF, QThread, pyqtSignal
+from PyQt5.QtCore import Qt, QPointF, pyqtSignal
 
 def return_audio_numpy(self, audionp):
     self.video_metadata['waveform'][0] = audionp

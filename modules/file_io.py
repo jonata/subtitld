@@ -14,6 +14,27 @@ from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from modules import waveform
+from modules.paths import *
+
+class thread_extract_scene_time_positions(QThread):
+    command = pyqtSignal(list)
+    filepath = ''
+    def run(self):
+        if self.filepath:
+            result = []
+            command = [
+                FFMPEG_EXECUTABLE,
+                '-i', self.filepath,
+                '-vf', "select='gt(scene,0.4)',showinfo",
+                '-f', 'null',
+                '-']
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            for line in p.stdout.read().decode().split('\n'):
+                if line.startswith(('[')) and 'pts_time:' in line:
+                    result.append(float(line.split('pts_time:',1)[-1].split(' ',1)[0]))
+
+            self.command.emit(result)
+
 
 class thread_extract_waveform(QThread):
     command = pyqtSignal(numpy.ndarray)
@@ -36,6 +57,12 @@ def load(self):
     self.thread_extract_waveform = thread_extract_waveform(self)
     self.thread_extract_waveform.command.connect(thread_extract_waveform_ended)
 
+    def thread_extract_scene_time_positions_ended(command):
+        self.video_metadata['scenes'] = command
+
+    self.thread_extract_scene_time_positions = thread_extract_scene_time_positions(self)
+    self.thread_extract_scene_time_positions.command.connect(thread_extract_scene_time_positions_ended)
+
 def open_filepath(self, file_to_open):
     self.subtitles_list, self.video_metadata = open_file(file_to_open)
     if not self.video_metadata:
@@ -47,6 +74,8 @@ def open_filepath(self, file_to_open):
         self.thread_extract_waveform.filepath = self.video_metadata['filepath']
         self.thread_extract_waveform.start()
         self.toppanel_videoinfo_label.setText('Extracting audio...')
+        self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
+        self.thread_extract_scene_time_positions.start()
 
 
         #waveform.ffmpeg_load_audio(self, )
@@ -80,7 +109,7 @@ def open_filepath(self, file_to_open):
     self.toppanel.show(self)
     self.toppanel_subtitle_file_info_label.setText('<b><snall>ACTUAL PROJECT</small></b><br><big>' + file_to_open + '</big>')
 
-    self.settings['recent_files'][datetime.datetime.now().strftime("%Y%m%d")] = file_to_open
+    self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
 
 def open_file(filepath):
     final_subtitles = []
@@ -105,7 +134,9 @@ def process_video_metadata(mp4_file):
     video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
     video_metadata['width'] =  int(json_result.get('streams', [])[0].get('width', '640'))
     video_metadata['height'] =  int(json_result.get('streams', [])[0].get('height', '640'))
+    video_metadata['framerate'] =  int(json_result.get('streams', [])[0].get('time_base', '1/30').split('/',1)[-1])
     video_metadata['filepath'] = mp4_file
+    video_metadata['scenes'] = []
     return video_metadata
 
 def save_file(final_file, subtitles_list):

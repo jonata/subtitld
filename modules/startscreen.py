@@ -187,8 +187,13 @@ def resized(self):
 def show(self):
     if self.settings['recent_files']:
         self.start_screen_recent_alert.setVisible(False)
-        for date in reversed(sorted(self.settings['recent_files'].keys())):
-            self.start_screen_recent_listwidget.addItem(self.settings['recent_files'][date])
+        hist_dict = {}
+        for filename in self.settings['recent_files'].keys():
+            hist_dict[self.settings['recent_files'][filename]] = filename
+
+
+        for date in reversed(sorted(hist_dict.keys())):
+            self.start_screen_recent_listwidget.addItem(hist_dict[date])
     else:
         self.start_screen_recent_listwidget.setVisible(False)
     self.generate_effect(self.start_screen_transparency_animation, 'opacity', 2000, 0.0, 1.0)
@@ -203,7 +208,7 @@ def start_screen_adver_label_email_editing_finished(self):
     update_start_screen_adver_panel(self)
 
 def start_screen_open_button_clicked(self):
-    self.subtitleslist.open_button_clicked(self)
+    self.toppanel.toppanel_open_button_clicked(self)
 
 def start_screen_recent_listwidget_item_clicked(self):
     file_to_open = self.start_screen_recent_listwidget.currentItem().text()
