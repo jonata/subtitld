@@ -4,7 +4,7 @@
 import os
 from bisect import bisect
 import timecode
-from PyQt5.QtGui import QIcon, QPainter, QPen, QColor, QPolygonF, QPixmap
+from PyQt5.QtGui import QIcon, QPainter, QPen, QColor, QPolygonF, QPixmap, QFont
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QSpinBox, QDoubleSpinBox, QWidget, QScrollArea
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize, QRect, QPointF, QThread, pyqtSignal
 
@@ -119,17 +119,14 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                             painter.drawText(lim_rect,Qt.AlignCenter, '❯')
                 painter.setOpacity(1)
 
-
-
-
             grid_pen = QPen(QColor.fromRgb(106,116,131,20), 1, Qt.SolidLine)
-
+            painter.setFont(QFont('Ubuntu Mono', 8))
             x = 0
             for sec in range(int(self.video_metadata['duration'])):
                 if x >= scroll_position and x <= (scroll_position + self.timeline_scroll.width()):
                     if (self.mediaplayer_zoom > 75) or (self.mediaplayer_zoom > 50 and self.mediaplayer_zoom <= 75 and not int((sec % 2))) or (self.mediaplayer_zoom > 25 and self.mediaplayer_zoom <= 50 and not int((sec % 4))) or (self.mediaplayer_zoom <= 25 and not int((sec % 8))):
                         lim_rect = QRect(  x+3,
-                                            26,
+                                            27,
                                             50,
                                             20
                                         )
