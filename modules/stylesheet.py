@@ -55,7 +55,7 @@ def set_stylesheet(self):
                             #start_screen_recent_listwidget                      { outline: none; font-size:14px; color:rgb(106, 116, 131); border-radius: 4px; background-color: rgba(106, 116, 131, 20); padding:5px;} QListWidget::item { padding:5px; border-radius: 2px;} QListWidget::item:selected { background:rgb(184, 206, 224); color:rgb(106, 116, 131); }
 
                             QScrollBar:horizontal                                { height: 15px; margin: 2px 2px 2px 2px; border: 1px transparent rgba(0,0,0,50); border-radius: 2px; background-color: rgba(0,0,0,50); }
-                            QScrollBar::handle:horizontal                        { background-color: rgba(0,0,0,50); min-width: 5px; border-radius: 2px; }
+                            QScrollBar::handle:horizontal                        { background-color: rgba(106,116,131,150); min-width: 5px; border-radius: 2px; }
                             QScrollBar::add-line:horizontal                      { border: none; background: none; }
                             QScrollBar::sub-line:horizontal                      { border: none; background: none; }
                             QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal { background: none; }
