@@ -69,24 +69,23 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.playercontrols_play_from_next_start_button.setIconSize(QSize(24,24))
     self.playercontrols_play_from_next_start_button.clicked.connect(lambda:playercontrols_play_from_next_start_button_clicked(self))
 
-    self.add_subtitle_button = QPushButton(parent=self.playercontrols_widget)
+    self.add_subtitle_button = QPushButton('ADD', parent=self.playercontrols_widget)
     self.add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_subtitle_icon.png')))
     self.add_subtitle_button.setIconSize(QSize(20,20))
-    self.add_subtitle_button.setObjectName('button_no_right_no_top')
+    self.add_subtitle_button.setObjectName('button_dark_no_right_no_top')
     self.add_subtitle_button.clicked.connect(lambda:add_subtitle_button_clicked(self))
 
-    self.remove_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
+    self.remove_selected_subtitle_button = QPushButton('REMOVE', parent=self.playercontrols_widget)
     self.remove_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'remove_selected_subtitle_icon.png')))
     self.remove_selected_subtitle_button.setIconSize(QSize(20,20))
-    self.remove_selected_subtitle_button.setObjectName('button_no_left_no_top')
+    self.remove_selected_subtitle_button.setObjectName('button_dark_no_left_no_top')
     self.remove_selected_subtitle_button.clicked.connect(lambda:remove_selected_subtitle_button_clicked(self))
 
-    self.slice_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
+    self.slice_selected_subtitle_button = QPushButton('SLICE', parent=self.playercontrols_widget)
     self.slice_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'slice_selected_subtitle_icon.png')))
     self.slice_selected_subtitle_button.setIconSize(QSize(20,20))
-    self.slice_selected_subtitle_button.setObjectName('button_no_top')
+    self.slice_selected_subtitle_button.setObjectName('button_dark_no_top')
     self.slice_selected_subtitle_button.clicked.connect(lambda:slice_selected_subtitle_button_clicked(self))
-
 
     self.playercontrols_timecode_label = QLabel(parent=self.playercontrols_widget_central_bottom)
     self.playercontrols_timecode_label.setObjectName('playercontrols_timecode_label')
@@ -195,10 +194,10 @@ def resized(self):
     self.playercontrols_play_from_last_start_button.setGeometry(self.playercontrols_stop_button.x()-50,11,50,43)
     self.playercontrols_play_from_next_start_button.setGeometry(self.playercontrols_playpause_button.x()+self.playercontrols_playpause_button.width(),11,50,43)
 
-    self.add_subtitle_button.setGeometry(self.playercontrols_widget_central_top.x()-130,7,40,40)
-    self.remove_selected_subtitle_button.setGeometry(self.add_subtitle_button.x() + self.add_subtitle_button.width(),7,40,40)
+    self.add_subtitle_button.setGeometry(self.playercontrols_widget_central_top.x()-270,7,80,40)
+    self.remove_selected_subtitle_button.setGeometry(self.add_subtitle_button.x() + self.add_subtitle_button.width(),7,100,40)
 
-    self.slice_selected_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() + self.remove_selected_subtitle_button.width() + 5,7,40,40)
+    self.slice_selected_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() + self.remove_selected_subtitle_button.width() + 5,7,80,40)
 
     self.zoomout_button.setGeometry(20,44,40,40)
     self.zoomin_button.setGeometry(60,44,40,40)
