@@ -60,7 +60,7 @@ def update_properties_widget(self):
 
 
     self.properties_information.setVisible(bool(self.selected_subtitle))
-    self.properties_textedit.setVisible(bool(text))
+    self.properties_textedit.setVisible(bool(self.selected_subtitle))
     #self.properties_textedit.textChanged.disconnect()
     self.properties_textedit.setText(text)
     #self.properties_textedit.textChanged.connect()
