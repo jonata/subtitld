@@ -187,13 +187,13 @@ def resized(self):
 def show(self):
     if self.settings['recent_files']:
         self.start_screen_recent_alert.setVisible(False)
-        hist_dict = {}
+        hist_list = []
         for filename in self.settings['recent_files'].keys():
-            hist_dict[self.settings['recent_files'][filename]] = filename
+            hist_list.append([self.settings['recent_files'][filename], filename])
 
 
-        for date in reversed(sorted(hist_dict.keys())):
-            self.start_screen_recent_listwidget.addItem(hist_dict[date])
+        for date in reversed(sorted(hist_list)):
+            self.start_screen_recent_listwidget.addItem(date[1])
     else:
         self.start_screen_recent_listwidget.setVisible(False)
     self.generate_effect(self.start_screen_transparency_animation, 'opacity', 2000, 0.0, 1.0)
