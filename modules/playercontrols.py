@@ -52,7 +52,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.playercontrols_stop_button = QPushButton(parent=self.playercontrols_widget_central_top)
     self.playercontrols_stop_button.setObjectName('player_controls_button')
     self.playercontrols_stop_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'stop_icon.png')))
-    self.playercontrols_stop_button.setIconSize(QSize(10,10))
+    self.playercontrols_stop_button.setIconSize(QSize(15,15))
     self.playercontrols_stop_button.clicked.connect(lambda:playercontrols_stop_button_clicked(self))
 
     self.playercontrols_playpause_button = QPushButton(parent=self.playercontrols_widget_central_top)
@@ -262,14 +262,16 @@ def playercontrols_play_from_last_start_button_clicked(self):
     subt = [item[0] for item in self.subtitles_list]
     last_subtitle = self.subtitles_list[bisect(subt, self.current_timeline_position)-1]
     self.current_timeline_position = last_subtitle[0]
-    self.timeline.update(self)
     self.player_widget.mpv.wait_for_property('seekable')
     self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
+    self.timeline.update_scrollbar(self)
+    self.timeline.update(self)
 
 def playercontrols_play_from_next_start_button_clicked(self):
     subt = [item[0] for item in self.subtitles_list]
     last_subtitle = self.subtitles_list[bisect(subt, self.current_timeline_position)]
     self.current_timeline_position = last_subtitle[0]
-    self.timeline.update(self)
     self.player_widget.mpv.wait_for_property('seekable')
     self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
+    self.timeline.update_scrollbar(self)
+    self.timeline.update(self)
