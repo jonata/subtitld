@@ -8,6 +8,7 @@ from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, pyqtSignal, QSize
 from PyQt5.QtGui import QIcon
 
 from modules import waveform
+from modules import subtitles
 from modules.paths import *
 
 def load(self, PATH_SUBTITLD_GRAPHICS):
@@ -301,24 +302,24 @@ def playercontrols_play_from_next_start_button_clicked(self):
     self.timeline.update(self)
 
 def add_subtitle_button_clicked(self):
-    self.subtitleslist.subtitleslist_add_button_clicked(self)
+    self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.update_things()
+    self.properties.update_properties_widget(self)
 
 def remove_selected_subtitle_button_clicked(self):
-    self.subtitleslist.subtitleslist_remove_button_clicked(self)
+    subtitles.remove_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
+    self.selected_subtitle = False
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.update_things()
+    self.properties.update_properties_widget(self)
 
 def slice_selected_subtitle_button_clicked(self):
     if self.selected_subtitle:
-        if self.current_timeline_position > self.selected_subtitle[0] and self.current_timeline_position < (self.selected_subtitle[0] + self.selected_subtitle[1]):
-            position_to_cut = self.current_timeline_position
-
-        else:
-            position_to_cut = (self.selected_subtitle[0] + self.selected_subtitle[1])/2
-        new_duration = (self.selected_subtitle[0] + self.selected_subtitle[1]) - position_to_cut
         pos = self.properties_textedit.textCursor().position()
-        self.selected_subtitle[1] = position_to_cut - self.selected_subtitle[0] - 0.001
-        self.selected_subtitle[2] = self.properties_textedit.toPlainText()[:pos]
-
-        text_to_new_subtitle = self.properties_textedit.toPlainText()[pos:]
-        self.subtitleslist.subtitleslist_add_button_clicked(self, duration=new_duration)
-        self.selected_subtitle[2] = text_to_new_subtitle
+        last_text = self.properties_textedit.toPlainText()[:pos]
+        next_text = self.properties_textedit.toPlainText()[pos:]
+        self.selected_subtitle = subtitles.slice_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, position=self.current_timeline_position, next_text=next_text, last_text=last_text)
         self.properties.update_properties_widget(self)
