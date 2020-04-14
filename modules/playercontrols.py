@@ -72,14 +72,14 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.playercontrols_timecode_label.setObjectName('playercontrols_timecode_label')
 
     self.zoomin_button = QPushButton(parent=self.playercontrols_widget)
-    self.zoomin_button.setIconSize(QSize(16,17))
     self.zoomin_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_in_icon.png')))
+    self.zoomin_button.setIconSize(QSize(20,20))
     self.zoomin_button.setObjectName('button_no_left_no_bottom')
     self.zoomin_button.clicked.connect(lambda:zoomin_button_clicked(self))
 
     self.zoomout_button = QPushButton(parent=self.playercontrols_widget)
-    self.zoomout_button.setIconSize(QSize(16,17))
     self.zoomout_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_out_icon.png')))
+    self.zoomout_button.setIconSize(QSize(20,20))
     self.zoomout_button.setObjectName('button_no_right_no_bottom')
     self.zoomout_button.clicked.connect(lambda:zoomout_button_clicked(self))
 
