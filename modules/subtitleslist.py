@@ -80,7 +80,7 @@ def subtitles_list_qlistwidget_item_clicked(self):
     self.timeline.update_scrollbar(self, position='middle')
     self.update_things()
 
-def subtitleslist_add_button_clicked(self):
+def subtitleslist_add_button_clicked(self, duration=5.0):
     current_index = 0
 
     for subtitle in self.subtitles_list:
@@ -91,7 +91,6 @@ def subtitleslist_add_button_clicked(self):
     if current_index and self.subtitles_list[current_index - 1][0] + self.subtitles_list[current_index - 1][1] > self.current_timeline_position:
         self.subtitles_list[current_index - 1][1] -= (self.subtitles_list[current_index - 1][0] + self.subtitles_list[current_index - 1][1]) - self.current_timeline_position
 
-    duration = 5.0
 
     if len(self.subtitles_list) - 1 > current_index and self.subtitles_list[current_index][0] - self.current_timeline_position < duration:
         duration = self.subtitles_list[current_index][0] - self.current_timeline_position
@@ -101,6 +100,7 @@ def subtitleslist_add_button_clicked(self):
     update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.update_things()
+    self.properties.update_properties_widget(self)
 
 def subtitleslist_remove_button_clicked(self):
     self.subtitles_list.remove(self.selected_subtitle)
@@ -108,6 +108,7 @@ def subtitleslist_remove_button_clicked(self):
     update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.update_things()
+    self.properties.update_properties_widget(self)
 
 def show(self):
     self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(),self.subtitles_list_widget.y(),self.subtitles_list_widget.width(),self.subtitles_list_widget.height()], [0, self.subtitles_list_widget.y(), self.subtitles_list_widget.width(),self.subtitles_list_widget.height()])
