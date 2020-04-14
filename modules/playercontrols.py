@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import os
+from bisect import bisect
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QLineEdit, QDoubleSpinBox
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, pyqtSignal, QSize, QPropertyAnimation
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, pyqtSignal, QSize, QPropertyAnimation, QSize
 from PyQt5.QtGui import QIcon
 
 from modules import waveform
@@ -41,16 +42,31 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.playercontrols_widget_bottom_left = QLabel(parent=self.playercontrols_widget)
     self.playercontrols_widget_bottom_left.setObjectName('playercontrols_widget_bottom_left')
 
+    self.playercontrols_play_from_last_start_button = QPushButton(parent=self.playercontrols_widget_central_top)
+    self.playercontrols_play_from_last_start_button.setObjectName('player_controls_button')
+    self.playercontrols_play_from_last_start_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_from_last_start_icon.png')))
+    self.playercontrols_play_from_last_start_button.setIconSize(QSize(24,24))
+    #self.playercontrols_play_from_last_start_button.setStyleSheet('QPushButton {image: url(' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_from_last_start_icon.png') + ');}')
+    self.playercontrols_play_from_last_start_button.clicked.connect(lambda:playercontrols_play_from_last_start_button_clicked(self))
+
     self.playercontrols_stop_button = QPushButton(parent=self.playercontrols_widget_central_top)
     self.playercontrols_stop_button.setObjectName('player_controls_button')
     self.playercontrols_stop_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'stop_icon.png')))
+    self.playercontrols_stop_button.setIconSize(QSize(10,10))
     self.playercontrols_stop_button.clicked.connect(lambda:playercontrols_stop_button_clicked(self))
 
-    self.playercontrols_playpayse_button = QPushButton(parent=self.playercontrols_widget_central_top)
-    self.playercontrols_playpayse_button.setObjectName('player_controls_button')
-    self.playercontrols_playpayse_button.setCheckable(True)
-    self.playercontrols_playpayse_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')))
-    self.playercontrols_playpayse_button.clicked.connect(lambda:playercontrols_playpause_button_clicked(self))
+    self.playercontrols_playpause_button = QPushButton(parent=self.playercontrols_widget_central_top)
+    self.playercontrols_playpause_button.setObjectName('player_controls_button')
+    self.playercontrols_playpause_button.setCheckable(True)
+    self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')))
+    self.playercontrols_playpause_button.setIconSize(QSize(20,20))
+    self.playercontrols_playpause_button.clicked.connect(lambda:playercontrols_playpause_button_clicked(self))
+
+    self.playercontrols_play_from_next_start_button = QPushButton(parent=self.playercontrols_widget_central_top)
+    self.playercontrols_play_from_next_start_button.setObjectName('player_controls_button')
+    self.playercontrols_play_from_next_start_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_from_next_start_icon.png')))
+    self.playercontrols_play_from_next_start_button.setIconSize(QSize(24,24))
+    self.playercontrols_play_from_next_start_button.clicked.connect(lambda:playercontrols_play_from_next_start_button_clicked(self))
 
     self.playercontrols_timecode_label = QLabel(parent=self.playercontrols_widget_central_bottom)
     self.playercontrols_timecode_label.setObjectName('playercontrols_timecode_label')
@@ -121,7 +137,7 @@ def playercontrols_stop_button_clicked(self):
     self.player_widget.mpv.wait_for_property('seekable')
     self.player_widget.mpv.seek(0, reference='absolute')#, precision='exact')
     self.mediaplayer_is_playing = False
-    self.playercontrols_playpayse_button.setChecked(False)
+    self.playercontrols_playpause_button.setChecked(False)
     playercontrols_playpause_button_update(self)
 
 def playercontrols_playpause_button_clicked(self):
@@ -129,7 +145,7 @@ def playercontrols_playpause_button_clicked(self):
     playercontrols_playpause_button_update(self)
 
 def playercontrols_playpause_button_update(self):
-    self.playercontrols_playpayse_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.png')) if self.playercontrols_playpayse_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')) )
+    self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.png')) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')) )
 
 def resized(self):
     if self.subtitles_list:
@@ -154,8 +170,10 @@ def resized(self):
     #self.playercontrols_widget_central.setGeometry((self.playercontrols_widget.width()*.5)-(top_width*.5),0,top_width,self.playercontrols_widget.height())
     #self.playercontrols_widget_right.setGeometry((self.playercontrols_widget.width()*.5)+(top_width*.5),0,(self.playercontrols_widget.width()*.5)-(top_width*.5),self.playercontrols_widget.height())
     #self.playercontrols_widget_left.setGeometry(0,0,(self.playercontrols_widget.width()*.5)-(top_width*.5),self.playercontrols_widget.height())
-    self.playercontrols_stop_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-80,11,50,43)
-    self.playercontrols_playpayse_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-30,11,60,43)
+    self.playercontrols_stop_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-55,11,50,43)
+    self.playercontrols_playpause_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-5,11,60,43)
+    self.playercontrols_play_from_last_start_button.setGeometry(self.playercontrols_stop_button.x()-50,11,50,43)
+    self.playercontrols_play_from_next_start_button.setGeometry(self.playercontrols_playpause_button.x()+self.playercontrols_playpause_button.width(),11,50,43)
 
     self.zoomout_button.setGeometry(20,44,40,40)
     self.zoomin_button.setGeometry(60,44,40,40)
@@ -239,3 +257,19 @@ def update_grid_buttons(self):
     self.grid_scenes_button.setEnabled(self.timeline_show_grid)
     self.grid_scenes_button.setChecked(True if self.timeline_grid_type == 'scenes' else False)
     self.timeline_widget.update()
+
+def playercontrols_play_from_last_start_button_clicked(self):
+    subt = [item[0] for item in self.subtitles_list]
+    last_subtitle = self.subtitles_list[bisect(subt, self.current_timeline_position)-1]
+    self.current_timeline_position = last_subtitle[0]
+    self.timeline.update(self)
+    self.player_widget.mpv.wait_for_property('seekable')
+    self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
+
+def playercontrols_play_from_next_start_button_clicked(self):
+    subt = [item[0] for item in self.subtitles_list]
+    last_subtitle = self.subtitles_list[bisect(subt, self.current_timeline_position)]
+    self.current_timeline_position = last_subtitle[0]
+    self.timeline.update(self)
+    self.player_widget.mpv.wait_for_property('seekable')
+    self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')

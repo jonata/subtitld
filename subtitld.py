@@ -176,7 +176,7 @@ class subtitld(QWidget):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space:
             self.player.playpause(self)
-            self.playercontrols_playpayse_button.setChecked(not self.playercontrols_playpayse_button.isChecked())
+            self.playercontrols_playpause_button.setChecked(not self.playercontrols_playpause_button.isChecked())
             self.playercontrols.playercontrols_playpause_button_update(self)
 
         if event.key() == Qt.Key_Slash:
