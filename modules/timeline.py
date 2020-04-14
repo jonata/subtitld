@@ -202,7 +202,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             if self.selected_subtitle:
                 i = self.subtitles_list.index(self.selected_subtitle)
                 last = self.subtitles_list[self.subtitles_list.index(self.selected_subtitle)-1] if self.subtitles_list.index(self.selected_subtitle) > 0 else [0,0,'']
-                next = self.subtitles_list[self.subtitles_list.index(self.selected_subtitle)+1] if self.subtitles_list.index(self.selected_subtitle) < len(self.subtitles_list) else [self.video_metadata['duration'],0,'']
+                next = self.subtitles_list[self.subtitles_list.index(self.selected_subtitle)+1] if self.subtitles_list.index(self.selected_subtitle) < len(self.subtitles_list) - 1 else [self.video_metadata['duration'],0,'']
                 scenes_list = self.video_metadata['scenes'] if len(self.video_metadata['scenes']) > 1 else [0.0]
                 scenes_list.append(self.video_metadata['duration'])
                 start_position = (event.pos().x() - widget.offset) / widget.width_proportion
