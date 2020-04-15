@@ -117,6 +117,20 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.zoomout_button.setObjectName('button_no_right_no_bottom')
     self.zoomout_button.clicked.connect(lambda:zoomout_button_clicked(self))
 
+    self.next_start_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
+    self.next_start_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'next_start_to_current_position_icon.png')))
+    self.next_start_to_current_position_button.setIconSize(QSize(20,20))
+    self.next_start_to_current_position_button.setObjectName('button_dark')
+    self.next_start_to_current_position_button.setStyleSheet('QPushButton {border-top:0; border-right:0;}')
+    self.next_start_to_current_position_button.clicked.connect(lambda:next_start_to_current_position_button_clicked(self))
+
+    self.last_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
+    self.last_end_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'last_end_to_current_position_icon.png')))
+    self.last_end_to_current_position_button.setIconSize(QSize(20,20))
+    self.last_end_to_current_position_button.setObjectName('button_dark')
+    self.last_end_to_current_position_button.setStyleSheet('QPushButton {border-top:0; border-left:0;}')
+    self.last_end_to_current_position_button.clicked.connect(lambda:last_end_to_current_position_button_clicked(self))
+
     self.grid_button = QPushButton('GRID', parent=self.playercontrols_widget)
     self.grid_button.setObjectName('subbutton_no_bottom_no_right')
     self.grid_button.setCheckable(True)
@@ -215,6 +229,9 @@ def resized(self):
     self.merge_back_selected_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() + self.remove_selected_subtitle_button.width() + 5,7,40,40)
     self.slice_selected_subtitle_button.setGeometry(self.merge_back_selected_subtitle_button.x() + self.merge_back_selected_subtitle_button.width(),7,40,40)
     self.merge_next_selected_subtitle_button.setGeometry(self.slice_selected_subtitle_button.x() + self.slice_selected_subtitle_button.width(),7,40,40)
+
+    self.next_start_to_current_position_button.setGeometry(self.playercontrols_widget_central_top.x()+self.playercontrols_widget_central_top.width()+10,7,40,40)
+    self.last_end_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+self.next_start_to_current_position_button.width(),7,40,40)
 
     self.zoomout_button.setGeometry(20,44,40,40)
     self.zoomin_button.setGeometry(60,44,40,40)
@@ -358,3 +375,17 @@ def merge_next_selected_subtitle_button_clicked(self):
         self.timeline.update(self)
         self.update_things()
         self.properties.update_properties_widget(self)
+
+def next_start_to_current_position_button_clicked(self):
+    subtitles.next_start_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.update_things()
+    self.properties.update_properties_widget(self)
+
+def last_end_to_current_position_button_clicked(self):
+    subtitles.last_end_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.update_things()
+    self.properties.update_properties_widget(self)
