@@ -21,7 +21,7 @@ def add_subtitle(subtitles=[], position=0.0, duration=5.0, text=''):
 
 def remove_subtitle(subtitles=[], selected_subtitle=False):
     if selected_subtitle:
-        subttiles.remove(selected_subtitle)
+        subtitles.remove(selected_subtitle)
     return subtitles
 
 def slice_subtitle(subtitles=[], selected_subtitle=False, position=0.0, last_text='', next_text=''):
@@ -39,3 +39,23 @@ def slice_subtitle(subtitles=[], selected_subtitle=False, position=0.0, last_tex
         subtitles[index][2] = last_text
 
         return add_subtitle(subtitles=subtitles, position=position_to_cut, duration=new_duration, text=next_text)
+
+def merge_back_subtitle(subtitles=[], selected_subtitle=False):
+    if selected_subtitle and subtitles.index(selected_subtitle):
+        index = subtitles.index(selected_subtitle)
+        subtitles[index-1][1] = selected_subtitle[0] + selected_subtitle[1] - subtitles[index-1][0]
+        subtitles[index-1][2] += ' ' + subtitles[index][2]
+
+        remove_subtitle(subtitles=subtitles, selected_subtitle=subtitles[index])
+
+        return subtitles[index-1]
+
+def merge_next_subtitle(subtitles=[], selected_subtitle=False):
+    if selected_subtitle and subtitles.index(selected_subtitle) < len(subtitles) - 1:
+        index = subtitles.index(selected_subtitle)
+        subtitles[index][1] = subtitles[index+1][0] + subtitles[index+1][1] - selected_subtitle[0]
+        subtitles[index][2] += ' ' + subtitles[index+1][2]
+
+        remove_subtitle(subtitles=subtitles, selected_subtitle=subtitles[index+1])
+
+        return subtitles[index]

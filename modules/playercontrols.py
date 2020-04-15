@@ -81,11 +81,26 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.remove_selected_subtitle_button.setObjectName('button_dark_no_left_no_top')
     self.remove_selected_subtitle_button.clicked.connect(lambda:remove_selected_subtitle_button_clicked(self))
 
-    self.slice_selected_subtitle_button = QPushButton('SLICE', parent=self.playercontrols_widget)
+    self.merge_back_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
+    self.merge_back_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'merge_back_selected_subtitle_icon.png')))
+    self.merge_back_selected_subtitle_button.setIconSize(QSize(20,20))
+    self.merge_back_selected_subtitle_button.setObjectName('button_dark')
+    self.merge_back_selected_subtitle_button.setStyleSheet('QPushButton {border-top:0; border-right:0;}')
+    self.merge_back_selected_subtitle_button.clicked.connect(lambda:merge_back_selected_subtitle_button_clicked(self))
+
+    self.slice_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
     self.slice_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'slice_selected_subtitle_icon.png')))
     self.slice_selected_subtitle_button.setIconSize(QSize(20,20))
-    self.slice_selected_subtitle_button.setObjectName('button_dark_no_top')
+    self.slice_selected_subtitle_button.setObjectName('button_dark')
+    self.slice_selected_subtitle_button.setStyleSheet('QPushButton {border-top:0; border-left:0; border-right:0;}')
     self.slice_selected_subtitle_button.clicked.connect(lambda:slice_selected_subtitle_button_clicked(self))
+
+    self.merge_next_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
+    self.merge_next_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'merge_next_selected_subtitle_icon.png')))
+    self.merge_next_selected_subtitle_button.setIconSize(QSize(20,20))
+    self.merge_next_selected_subtitle_button.setObjectName('button_dark')
+    self.merge_next_selected_subtitle_button.setStyleSheet('QPushButton {border-top:0; border-left:0;}')
+    self.merge_next_selected_subtitle_button.clicked.connect(lambda:merge_next_selected_subtitle_button_clicked(self))
 
     self.playercontrols_timecode_label = QLabel(parent=self.playercontrols_widget_central_bottom)
     self.playercontrols_timecode_label.setObjectName('playercontrols_timecode_label')
@@ -194,10 +209,12 @@ def resized(self):
     self.playercontrols_play_from_last_start_button.setGeometry(self.playercontrols_stop_button.x()-50,11,50,43)
     self.playercontrols_play_from_next_start_button.setGeometry(self.playercontrols_playpause_button.x()+self.playercontrols_playpause_button.width(),11,50,43)
 
-    self.add_subtitle_button.setGeometry(self.playercontrols_widget_central_top.x()-270,7,80,40)
+    self.add_subtitle_button.setGeometry(self.playercontrols_widget_central_top.x()-310,7,80,40)
     self.remove_selected_subtitle_button.setGeometry(self.add_subtitle_button.x() + self.add_subtitle_button.width(),7,100,40)
 
-    self.slice_selected_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() + self.remove_selected_subtitle_button.width() + 5,7,80,40)
+    self.merge_back_selected_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() + self.remove_selected_subtitle_button.width() + 5,7,40,40)
+    self.slice_selected_subtitle_button.setGeometry(self.merge_back_selected_subtitle_button.x() + self.merge_back_selected_subtitle_button.width(),7,40,40)
+    self.merge_next_selected_subtitle_button.setGeometry(self.slice_selected_subtitle_button.x() + self.slice_selected_subtitle_button.width(),7,40,40)
 
     self.zoomout_button.setGeometry(20,44,40,40)
     self.zoomin_button.setGeometry(60,44,40,40)
@@ -321,4 +338,23 @@ def slice_selected_subtitle_button_clicked(self):
         last_text = self.properties_textedit.toPlainText()[:pos]
         next_text = self.properties_textedit.toPlainText()[pos:]
         self.selected_subtitle = subtitles.slice_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, position=self.current_timeline_position, next_text=next_text, last_text=last_text)
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.timeline.update(self)
+        self.update_things()
+        self.properties.update_properties_widget(self)
+
+def merge_back_selected_subtitle_button_clicked(self):
+    if self.selected_subtitle:
+        self.selected_subtitle = subtitles.merge_back_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.timeline.update(self)
+        self.update_things()
+        self.properties.update_properties_widget(self)
+
+def merge_next_selected_subtitle_button_clicked(self):
+    if self.selected_subtitle:
+        self.selected_subtitle = subtitles.merge_next_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.timeline.update(self)
+        self.update_things()
         self.properties.update_properties_widget(self)
