@@ -59,3 +59,32 @@ def merge_next_subtitle(subtitles=[], selected_subtitle=False):
         remove_subtitle(subtitles=subtitles, selected_subtitle=subtitles[index+1])
 
         return subtitles[index]
+
+def next_start_to_current_position(subtitles=[], position=0.0):
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    if index < len(subt) - 1:
+        end = subtitles[index][0] + subtitles[index][1]
+        subtitles[index][0] = position
+        subtitles[index][1] = end - position
+    if index -1 < len(subt) - 1 and (subtitles[index-1][0] + subtitles[index-1][1]) > position:
+        last_end_to_current_position(subtitles=subtitles, position=position - 0.001)
+
+def last_end_to_current_position(subtitles=[], position=0.0):
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    print(subtitles[index])
+    if index -1 < len(subt) - 1:
+        subtitles[index-1][1] = position - subtitles[index-1][0]
+
+def send_text_to_next_subtitle(subtitles=[], selected_subtitle=False, last_text='', next_text=''):
+    if selected_subtitle and subtitles.index(selected_subtitle) + 1 < len(subtitles):
+        index = subtitles.index(selected_subtitle)
+        subtitles[index][2] = last_text
+        subtitles[index+1][2] = next_text + ' ' + subtitles[index+1][2]
+
+def send_text_to_last_subtitle(subtitles=[], selected_subtitle=False, last_text='', next_text=''):
+    if selected_subtitle and subtitles.index(selected_subtitle):
+        index = subtitles.index(selected_subtitle)
+        subtitles[index][2] = next_text
+        subtitles[index-1][2] += ' ' + last_text
