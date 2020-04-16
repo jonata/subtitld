@@ -125,6 +125,9 @@ def playpause(self):
     self.player_widget.mpv.pause = not self.player_widget.mpv.pause
     self.mediaplayer_is_playing = not self.player_widget.mpv.pause
 
+def update_speed(self):
+    self.player_widget.mpv.speed = self.playback_speed
+
 def update_subtitle_layer(self):
     text = ''
     for subtitle in self.subtitles_list:
