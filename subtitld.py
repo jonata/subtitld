@@ -46,6 +46,7 @@ class subtitld(QWidget):
         self.minimum_subtitle_width = 1
         self.timeline_show_grid = False
         self.timeline_grid_type = False
+        self.playback_speed = 1.0
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 
@@ -178,6 +179,9 @@ class subtitld(QWidget):
             self.player.playpause(self)
             self.playercontrols_playpause_button.setChecked(not self.playercontrols_playpause_button.isChecked())
             self.playercontrols.playercontrols_playpause_button_update(self)
+
+        if event.key() == Qt.Key_F1:
+            self.playercontrols.add_subtitle_button_clicked(self)
 
         if event.key() == Qt.Key_Slash:
             self.player_controls.play_button_selection.setChecked(not self.player_controls.play_button_selection.isChecked())

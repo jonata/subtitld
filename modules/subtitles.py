@@ -17,7 +17,7 @@ def add_subtitle(subtitles=[], position=0.0, duration=5.0, text=''):
 
     subtitles.insert(index, [position, duration, text])
 
-    return subtitles[current_index]
+    return subtitles[subtitles.index([position, duration, text])]
 
 def remove_subtitle(subtitles=[], selected_subtitle=False):
     if selected_subtitle:
@@ -63,19 +63,35 @@ def merge_next_subtitle(subtitles=[], selected_subtitle=False):
 def next_start_to_current_position(subtitles=[], position=0.0):
     subt = [item[0] for item in subtitles]
     index = bisect(subt, position)
-    if index < len(subt) - 1:
+    if index < len(subt):
         end = subtitles[index][0] + subtitles[index][1]
         subtitles[index][0] = position
         subtitles[index][1] = end - position
-    if index -1 < len(subt) - 1 and (subtitles[index-1][0] + subtitles[index-1][1]) > position:
+    if index and subtitles[index-1][0] + subtitles[index-1][1] > position:
         last_end_to_current_position(subtitles=subtitles, position=position - 0.001)
+
+def next_end_to_current_position(subtitles=[], position=0.0):
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    if index:
+        end = subtitles[index-1][0] + subtitles[index-1][1]
+        if end > position:
+            subtitles[index-1][1] = position - subtitles[index-1][0]
 
 def last_end_to_current_position(subtitles=[], position=0.0):
     subt = [item[0] for item in subtitles]
     index = bisect(subt, position)
-    print(subtitles[index])
+
     if index -1 < len(subt) - 1:
         subtitles[index-1][1] = position - subtitles[index-1][0]
+
+def last_start_to_current_position(subtitles=[], position=0.0):
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    if index and subtitles[index-1][0] < position and not (subtitles[index-1][0] + subtitles[index-1][1]) < position:
+        end = subtitles[index-1][0] + subtitles[index-1][1]
+        subtitles[index-1][0] = position
+        subtitles[index-1][1] = end - position
 
 def send_text_to_next_subtitle(subtitles=[], selected_subtitle=False, last_text='', next_text=''):
     if selected_subtitle and subtitles.index(selected_subtitle) + 1 < len(subtitles):

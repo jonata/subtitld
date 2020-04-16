@@ -3,8 +3,8 @@
 
 import os
 from bisect import bisect
-from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QLineEdit, QDoubleSpinBox
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, pyqtSignal, QSize, QPropertyAnimation, QSize
+from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QLineEdit, QDoubleSpinBox, QSlider
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, pyqtSignal, QSize, QPropertyAnimation
 from PyQt5.QtGui import QIcon
 
 from modules import waveform
@@ -124,12 +124,51 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.next_start_to_current_position_button.setStyleSheet('QPushButton {border-top:0; border-right:0;}')
     self.next_start_to_current_position_button.clicked.connect(lambda:next_start_to_current_position_button_clicked(self))
 
+    self.last_start_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
+    self.last_start_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'last_start_to_current_position_icon.png')))
+    self.last_start_to_current_position_button.setIconSize(QSize(20,20))
+    self.last_start_to_current_position_button.setObjectName('button_dark')
+    self.last_start_to_current_position_button.setStyleSheet('QPushButton {border-top:0; border-right:0; border-left:0;}')
+    self.last_start_to_current_position_button.clicked.connect(lambda:last_start_to_current_position_button_clicked(self))
+
     self.last_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
     self.last_end_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'last_end_to_current_position_icon.png')))
     self.last_end_to_current_position_button.setIconSize(QSize(20,20))
     self.last_end_to_current_position_button.setObjectName('button_dark')
     self.last_end_to_current_position_button.setStyleSheet('QPushButton {border-top:0; border-left:0;}')
     self.last_end_to_current_position_button.clicked.connect(lambda:last_end_to_current_position_button_clicked(self))
+
+    self.next_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
+    self.next_end_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'next_end_to_current_position_icon.png')))
+    self.next_end_to_current_position_button.setIconSize(QSize(20,20))
+    self.next_end_to_current_position_button.setObjectName('button_dark')
+    self.next_end_to_current_position_button.setStyleSheet('QPushButton {border-top:0; border-left:0; border-right:0;}')
+    self.next_end_to_current_position_button.clicked.connect(lambda:next_end_to_current_position_button_clicked(self))
+
+    self.change_playback_speed = QPushButton(parent=self.playercontrols_widget)
+    self.change_playback_speed.setObjectName('button')
+    self.change_playback_speed.setCheckable(True)
+    self.change_playback_speed.setStyleSheet('QPushButton {border-top:0; padding-left:36px; text-align:left;}')
+    self.change_playback_speed.clicked.connect(lambda:change_playback_speed_clicked(self))
+
+    self.change_playback_speed_icon_label = QLabel(parent=self.change_playback_speed)
+    self.change_playback_speed_icon_label.setStyleSheet('QLabel { image: url(' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'playback_speed_icon.png') + ')}')
+
+    self.change_playback_speed_decrease = QPushButton('-', parent=self.change_playback_speed)
+    self.change_playback_speed_decrease.setObjectName('button')
+    self.change_playback_speed_decrease.setStyleSheet('QPushButton {border-top:5px; padding-left:5px; border-right:0;}')
+    self.change_playback_speed_decrease.clicked.connect(lambda:change_playback_speed_decrease_clicked(self))
+
+    self.change_playback_speed_slider = QSlider(orientation=Qt.Horizontal, parent=self.change_playback_speed)
+    self.change_playback_speed_slider.setMinimum(5)
+    self.change_playback_speed_slider.setMaximum(300)
+    self.change_playback_speed_slider.setPageStep(10)
+    self.change_playback_speed_slider.sliderReleased.connect(lambda:change_playback_speed_slider(self))
+
+    self.change_playback_speed_increase = QPushButton('+', parent=self.change_playback_speed)
+    self.change_playback_speed_increase.setObjectName('button')
+    self.change_playback_speed_increase.setStyleSheet('QPushButton {border-top:5px; padding-left:5px; border-left:0;}')
+    self.change_playback_speed_increase.clicked.connect(lambda:change_playback_speed_increase_clicked(self))
 
     self.grid_button = QPushButton('GRID', parent=self.playercontrols_widget)
     self.grid_button.setObjectName('subbutton_no_bottom_no_right')
@@ -214,7 +253,6 @@ def resized(self):
     self.playercontrols_widget_bottom_right.setGeometry(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width(),self.playercontrols_widget_central_bottom.y(),self.playercontrols_widget.width()-(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width()),self.playercontrols_widget_central_bottom.height())
     self.playercontrols_widget_bottom_left.setGeometry(0,self.playercontrols_widget_central_bottom.y(),self.playercontrols_widget_central_bottom.x(),self.playercontrols_widget_central_bottom.height())
 
-
     #self.playercontrols_widget_central.setGeometry((self.playercontrols_widget.width()*.5)-(top_width*.5),0,top_width,self.playercontrols_widget.height())
     #self.playercontrols_widget_right.setGeometry((self.playercontrols_widget.width()*.5)+(top_width*.5),0,(self.playercontrols_widget.width()*.5)-(top_width*.5),self.playercontrols_widget.height())
     #self.playercontrols_widget_left.setGeometry(0,0,(self.playercontrols_widget.width()*.5)-(top_width*.5),self.playercontrols_widget.height())
@@ -230,8 +268,17 @@ def resized(self):
     self.slice_selected_subtitle_button.setGeometry(self.merge_back_selected_subtitle_button.x() + self.merge_back_selected_subtitle_button.width(),7,40,40)
     self.merge_next_selected_subtitle_button.setGeometry(self.slice_selected_subtitle_button.x() + self.slice_selected_subtitle_button.width(),7,40,40)
 
-    self.next_start_to_current_position_button.setGeometry(self.playercontrols_widget_central_top.x()+self.playercontrols_widget_central_top.width()+10,7,40,40)
-    self.last_end_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+self.next_start_to_current_position_button.width(),7,40,40)
+    self.next_start_to_current_position_button.setGeometry(self.playercontrols_widget_central_top.x()+self.playercontrols_widget_central_top.width()+400,7,40,40)
+    self.last_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+self.next_start_to_current_position_button.width(),7,40,40)
+    self.next_end_to_current_position_button.setGeometry(self.last_start_to_current_position_button.x()+self.last_start_to_current_position_button.width(),7,40,40)
+    self.last_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x()+self.next_end_to_current_position_button.width(),7,40,40)
+
+
+    self.change_playback_speed.setGeometry(self.playercontrols_widget_central_top.x()+self.playercontrols_widget_central_top.width()+5,7,180,40)
+    self.change_playback_speed_icon_label.setGeometry(0,0,self.change_playback_speed.height(),self.change_playback_speed.height())
+    self.change_playback_speed_decrease.setGeometry(70,10,20,20)
+    self.change_playback_speed_slider.setGeometry(90,10,60,20)
+    self.change_playback_speed_increase.setGeometry(150,10,20,20)
 
     self.zoomout_button.setGeometry(20,44,40,40)
     self.zoomin_button.setGeometry(60,44,40,40)
@@ -251,6 +298,7 @@ def show(self):
     self.generate_effect(self.playercontrols_widget_animation, 'geometry', 1000, [self.playercontrols_widget.x(),self.playercontrols_widget.y(),self.playercontrols_widget.width(),self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(),self.playercontrols_widget.height()])
     update_snap_buttons(self)
     update_grid_buttons(self)
+    update_playback_speed_buttons(self)
 
 def zoomin_button_clicked(self):
     self.mediaplayer_zoom += 5.0
@@ -296,6 +344,14 @@ def update_snap_buttons(self):
     self.snap_value.setValue(self.timeline_snap_value if self.timeline_snap_value else .1)
     self.timeline_widget.update()
 
+def update_playback_speed_buttons(self):
+    self.change_playback_speed_icon_label.setEnabled(self.change_playback_speed.isChecked())
+    self.change_playback_speed_decrease.setEnabled(self.change_playback_speed.isChecked())
+    self.change_playback_speed_slider.setEnabled(self.change_playback_speed.isChecked())
+    self.change_playback_speed_increase.setEnabled(self.change_playback_speed.isChecked())
+    self.change_playback_speed.setText('x' + str(self.playback_speed))
+    self.change_playback_speed_slider.setValue(self.playback_speed*100)
+
 def grid_button_clicked(self):
     self.timeline_show_grid = self.grid_button.isChecked()
     if not self.timeline_grid_type:
@@ -340,6 +396,7 @@ def add_subtitle_button_clicked(self):
     self.timeline.update(self)
     self.update_things()
     self.properties.update_properties_widget(self)
+    self.properties_textedit.setFocus(Qt.TabFocusReason)
 
 def remove_selected_subtitle_button_clicked(self):
     subtitles.remove_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
@@ -389,3 +446,40 @@ def last_end_to_current_position_button_clicked(self):
     self.timeline.update(self)
     self.update_things()
     self.properties.update_properties_widget(self)
+
+def last_start_to_current_position_button_clicked(self):
+    subtitles.last_start_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.update_things()
+    self.properties.update_properties_widget(self)
+
+def next_end_to_current_position_button_clicked(self):
+    subtitles.next_end_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.update_things()
+    self.properties.update_properties_widget(self)
+
+def change_playback_speed_clicked(self):
+    if not self.change_playback_speed.isChecked():
+        self.playback_speed = 1.0
+        self.player.update_speed(self)
+    update_playback_speed_buttons(self)
+
+def change_playback_speed_decrease_clicked(self):
+    self.change_playback_speed_slider.setValue(self.change_playback_speed_slider.value()-10)
+    self.playback_speed = self.change_playback_speed_slider.value()/100.0
+    self.player.update_speed(self)
+    update_playback_speed_buttons(self)
+
+def change_playback_speed_slider(self):
+    self.playback_speed = self.change_playback_speed_slider.value()/100.0
+    self.player.update_speed(self)
+    update_playback_speed_buttons(self)
+
+def change_playback_speed_increase_clicked(self):
+    self.change_playback_speed_slider.setValue(self.change_playback_speed_slider.value()+10)
+    self.playback_speed = self.change_playback_speed_slider.value()/100.0
+    self.player.update_speed(self)
+    update_playback_speed_buttons(self)

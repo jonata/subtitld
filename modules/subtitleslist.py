@@ -18,10 +18,6 @@ def load(self, path_catptilr_graphics):
     self.subtitles_list_widget_animation = QPropertyAnimation(self.subtitles_list_widget, b'geometry')
     self.subtitles_list_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
-    self.subtitles_list_widget_alert = QLabel('There is no subtitle to show. Please open a file or create a new one.', parent=self.subtitles_list_widget)
-    self.subtitles_list_widget_alert.setWordWrap(True)
-    self.subtitles_list_widget_alert.setObjectName('subtitles_list_widget_alert')
-
     self.subtitles_list_qlistwidget = QListWidget(parent=self.subtitles_list_widget)
     self.subtitles_list_qlistwidget.setViewMode(QListView.ListMode)
     self.subtitles_list_qlistwidget.setObjectName('subtitles_list_qlistwidget')
@@ -36,12 +32,10 @@ def resized(self):
         self.subtitles_list_widget.setGeometry(0,0,(self.width()*.2)-15,self.height())
     else:
         self.subtitles_list_widget.setGeometry(-((self.width()*.2)-15),0,(self.width()*.2)-15,self.height())
-    self.subtitles_list_widget_alert.setGeometry(0,0,self.subtitles_list_widget.width()-2, self.subtitles_list_widget.height())
     self.subtitles_list_qlistwidget.setGeometry(20,60,self.subtitles_list_widget.width()-40,self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-15)
 
 def update_subtitles_list_widget(self):
-    self.subtitles_list_widget_alert.setVisible(not bool(self.subtitles_list))
-    self.subtitles_list_qlistwidget.setVisible(bool(self.subtitles_list))
+    #self.subtitles_list_qlistwidget.setVisible(bool(self.subtitles_list))
     update_subtitles_list_qlistwidget(self)
 
 def update_subtitles_list_qlistwidget(self):
