@@ -3,7 +3,7 @@
 
 import os
 from bisect import bisect
-from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QLineEdit, QDoubleSpinBox, QSlider
+from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QLineEdit, QDoubleSpinBox, QSlider, QSpinBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, pyqtSignal, QSize, QPropertyAnimation
 from PyQt5.QtGui import QIcon
 
@@ -73,7 +73,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_subtitle_icon.png')))
     self.add_subtitle_button.setIconSize(QSize(20,20))
     self.add_subtitle_button.setObjectName('button_dark_no_right_no_top')
+    self.add_subtitle_button.setStyleSheet('QPushButton {padding-right:50px;}')
     self.add_subtitle_button.clicked.connect(lambda:add_subtitle_button_clicked(self))
+
+    self.add_subtitle_duration = QDoubleSpinBox(parent=self.add_subtitle_button)
+    self.add_subtitle_duration.setMinimum(.1)
+    self.add_subtitle_duration.setMaximum(60.)
+    self.add_subtitle_duration.valueChanged.connect(lambda:add_subtitle_duration_changed(self))
 
     self.remove_selected_subtitle_button = QPushButton('REMOVE', parent=self.playercontrols_widget)
     self.remove_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'remove_selected_subtitle_icon.png')))
@@ -170,6 +176,29 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.change_playback_speed_increase.setStyleSheet('QPushButton {border-top:5px; padding-left:5px; border-left:0;}')
     self.change_playback_speed_increase.clicked.connect(lambda:change_playback_speed_increase_clicked(self))
 
+    self.repeat_playback = QPushButton(parent=self.playercontrols_widget)
+    self.repeat_playback.setObjectName('button')
+    self.repeat_playback.setCheckable(True)
+    self.repeat_playback.setStyleSheet('QPushButton {border-top:0; }')
+    self.repeat_playback.clicked.connect(lambda:repeat_playback_clicked(self))
+
+    self.repeat_playback_icon_label = QLabel(parent=self.repeat_playback)
+    self.repeat_playback_icon_label.setStyleSheet('QLabel { image: url(' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'playback_repeat_icon.png') + ')}')
+
+    self.repeat_playback_duration = QDoubleSpinBox(parent=self.repeat_playback)
+    self.repeat_playback_duration.setMinimum(.1)
+    self.repeat_playback_duration.setMaximum(60.)
+    self.repeat_playback_duration.valueChanged.connect(lambda:repeat_playback_duration_changed(self))
+
+    self.repeat_playback_x_label = QLabel('x', parent=self.repeat_playback)
+    #self.repeat_playback_x_label.setObjectName('start_screen_recent_label')
+    self.repeat_playback_x_label.setStyleSheet('QLabel {qproperty-alignment:AlignCenter; font-weight:bold; color:rgb(184,206,224); }')
+
+    self.repeat_playback_times = QSpinBox(parent=self.repeat_playback)
+    self.repeat_playback_times.setMinimum(1)
+    self.repeat_playback_times.setMaximum(20)
+    self.repeat_playback_times.valueChanged.connect(lambda:repeat_playback_times_changed(self))
+
     self.grid_button = QPushButton('GRID', parent=self.playercontrols_widget)
     self.grid_button.setObjectName('subbutton_no_bottom_no_right')
     self.grid_button.setCheckable(True)
@@ -223,6 +252,7 @@ def playercontrols_stop_button_clicked(self):
     self.player_widget.mpv.pause = True
     self.player_widget.mpv.wait_for_property('seekable')
     self.player_widget.mpv.seek(0, reference='absolute')#, precision='exact')
+    self.repeat_duration_tmp = []
     self.mediaplayer_is_playing = False
     self.playercontrols_playpause_button.setChecked(False)
     playercontrols_playpause_button_update(self)
@@ -261,24 +291,30 @@ def resized(self):
     self.playercontrols_play_from_last_start_button.setGeometry(self.playercontrols_stop_button.x()-50,11,50,43)
     self.playercontrols_play_from_next_start_button.setGeometry(self.playercontrols_playpause_button.x()+self.playercontrols_playpause_button.width(),11,50,43)
 
-    self.add_subtitle_button.setGeometry(self.playercontrols_widget_central_top.x()-310,7,80,40)
+    self.add_subtitle_button.setGeometry(self.playercontrols_widget_central_top.x()-350,7,120,40)
+    self.add_subtitle_duration.setGeometry(68,6,46,self.add_subtitle_button.height()-14)
     self.remove_selected_subtitle_button.setGeometry(self.add_subtitle_button.x() + self.add_subtitle_button.width(),7,100,40)
 
     self.merge_back_selected_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() + self.remove_selected_subtitle_button.width() + 5,7,40,40)
     self.slice_selected_subtitle_button.setGeometry(self.merge_back_selected_subtitle_button.x() + self.merge_back_selected_subtitle_button.width(),7,40,40)
     self.merge_next_selected_subtitle_button.setGeometry(self.slice_selected_subtitle_button.x() + self.slice_selected_subtitle_button.width(),7,40,40)
 
-    self.next_start_to_current_position_button.setGeometry(self.playercontrols_widget_central_top.x()+self.playercontrols_widget_central_top.width()+400,7,40,40)
-    self.last_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+self.next_start_to_current_position_button.width(),7,40,40)
-    self.next_end_to_current_position_button.setGeometry(self.last_start_to_current_position_button.x()+self.last_start_to_current_position_button.width(),7,40,40)
-    self.last_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x()+self.next_end_to_current_position_button.width(),7,40,40)
-
-
     self.change_playback_speed.setGeometry(self.playercontrols_widget_central_top.x()+self.playercontrols_widget_central_top.width()+5,7,180,40)
     self.change_playback_speed_icon_label.setGeometry(0,0,self.change_playback_speed.height(),self.change_playback_speed.height())
     self.change_playback_speed_decrease.setGeometry(70,10,20,20)
     self.change_playback_speed_slider.setGeometry(90,10,60,20)
     self.change_playback_speed_increase.setGeometry(150,10,20,20)
+
+    self.repeat_playback.setGeometry(self.change_playback_speed.x()+self.change_playback_speed.width()+5,7,150,40)
+    self.repeat_playback_icon_label.setGeometry(0,0,self.repeat_playback.height(),self.repeat_playback.height())
+    self.repeat_playback_duration.setGeometry(self.repeat_playback_icon_label.x()+self.repeat_playback_icon_label.width(),6,46,self.repeat_playback.height()-14)
+    self.repeat_playback_x_label.setGeometry(self.repeat_playback_duration.x()+self.repeat_playback_duration.width(),0,15,self.repeat_playback.height())
+    self.repeat_playback_times.setGeometry(self.repeat_playback_x_label.x()+self.repeat_playback_x_label.width(),6,40,self.repeat_playback.height()-14)
+
+    self.next_start_to_current_position_button.setGeometry(self.repeat_playback.x()+self.repeat_playback.width()+5,7,40,40)
+    self.last_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+self.next_start_to_current_position_button.width(),7,40,40)
+    self.next_end_to_current_position_button.setGeometry(self.last_start_to_current_position_button.x()+self.last_start_to_current_position_button.width(),7,40,40)
+    self.last_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x()+self.next_end_to_current_position_button.width(),7,40,40)
 
     self.zoomout_button.setGeometry(20,44,40,40)
     self.zoomin_button.setGeometry(60,44,40,40)
@@ -299,6 +335,9 @@ def show(self):
     update_snap_buttons(self)
     update_grid_buttons(self)
     update_playback_speed_buttons(self)
+    self.add_subtitle_duration.setValue(self.default_new_subtitle_duration)
+    self.repeat_playback_duration.setValue(self.repeat_duration)
+    self.repeat_playback_times.setValue(self.repeat_times)
 
 def zoomin_button_clicked(self):
     self.mediaplayer_zoom += 5.0
@@ -331,6 +370,9 @@ def snap_grid_button_clicked(self):
 
 def snap_value_changed(self):
     self.timeline_snap_value = self.snap_value.value() if self.snap_value.value() else .1
+
+def add_subtitle_duration_changed(self):
+    self.default_new_subtitle_duration = self.add_subtitle_duration.value()
 
 def update_snap_buttons(self):
     self.snap_button.setChecked(bool(self.timeline_snap))
@@ -391,7 +433,7 @@ def playercontrols_play_from_next_start_button_clicked(self):
     self.timeline.update(self)
 
 def add_subtitle_button_clicked(self):
-    self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.current_timeline_position, duration=self.default_new_subtitle_duration)
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.update_things()
@@ -483,3 +525,12 @@ def change_playback_speed_increase_clicked(self):
     self.playback_speed = self.change_playback_speed_slider.value()/100.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
+
+def repeat_playback_clicked(self):
+    self.repeat_activated = self.repeat_playback.isChecked()
+
+def repeat_playback_duration_changed(self):
+    self.repeat_duration = self.repeat_playback_duration.value()
+
+def repeat_playback_times_changed(self):
+    self.repeat_times = self.repeat_playback_times.value()

@@ -47,6 +47,11 @@ class subtitld(QWidget):
         self.timeline_show_grid = False
         self.timeline_grid_type = False
         self.playback_speed = 1.0
+        self.default_new_subtitle_duration = 5.0
+        self.repeat_duration = 5.0
+        self.repeat_duration_tmp = []
+        self.repeat_times = 3
+        self.repeat_activated = False
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 
@@ -181,6 +186,9 @@ class subtitld(QWidget):
             self.playercontrols.playercontrols_playpause_button_update(self)
 
         if event.key() == Qt.Key_F1:
+            self.playercontrols.add_subtitle_button_clicked(self)
+
+        if event.key() == Qt.Key_F12:
             self.playercontrols.add_subtitle_button_clicked(self)
 
         if event.key() == Qt.Key_Slash:
@@ -358,6 +366,15 @@ class subtitld(QWidget):
         #             self.mediaplayer_current_position = float((int(self.lyrics_metadata['gap'] * ( len(self.music_waveform['full']) / (self.music_length * 1000))) + int(((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[0]))) / len(self.music_waveform['full']))
         if self.mediaplayer_is_playing:
             self.timeline.update(self)
+            if self.repeat_activated and not self.repeat_duration_tmp:
+                self.repeat_duration_tmp = [[self.current_timeline_position, self.current_timeline_position + self.repeat_duration] for i in range(self.repeat_times)]
+            if self.repeat_activated and self.repeat_duration_tmp and self.current_timeline_position > self.repeat_duration_tmp[0][1]:
+                self.current_timeline_position = self.repeat_duration_tmp[0][0]
+                self.player_widget.mpv.wait_for_property('seekable')
+                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
+                pos = self.repeat_duration_tmp.pop(0)
+                self.repeat_duration_tmp.append([pos[1], pos[1] + self.repeat_duration])
+
         self.player.update_subtitle_layer(self)
 
 def edit_syllable_returnpressed(self):
