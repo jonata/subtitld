@@ -124,7 +124,7 @@ def player_subtitle_textedit_changed(self):
 def playpause(self):
     self.player_widget.mpv.pause = not self.player_widget.mpv.pause
     self.mediaplayer_is_playing = not self.player_widget.mpv.pause
-
+    
 def update_speed(self):
     self.player_widget.mpv.speed = self.playback_speed
 
