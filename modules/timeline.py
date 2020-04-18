@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QSpinBox, QDoubleS
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize, QRect, QPointF, QThread, pyqtSignal
 
 from modules import waveform
+from modules import history
 
 class thread_get_waveform(QThread):
     command = pyqtSignal(QImage)
@@ -196,6 +197,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             widget.subtitle_start_is_clicked = False
             widget.subtitle_end_is_clicked = False
             widget.is_cursor_pressing = False
+            history.history_append(self.subtitles_list)
             widget.update()
 
         def mouseMoveEvent(widget, event):
