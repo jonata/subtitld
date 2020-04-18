@@ -9,6 +9,7 @@ def set_stylesheet(self):
                             #background_label2                                   { background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 rgb(26,35,43), stop:1 rgb(46,62,76)); }
                             #background_watermark_label                          { image: url("''' + get_graphics_path('background_watermark.png') + '''"); }
                             #subtitles_list_widget                               { border-top: 0;    border-right: 2px;   border-bottom: 0;    border-left: 0;    border-image: url("''' + get_graphics_path('subtitle_list_widget_background.png') + '''")  0 2  0  0 stretch stretch; }
+                            #subtitles_list_top_widget                           { border-top: 0;    border-right: 0;     border-bottom: 2px;  border-left: 0;    border-image: url("''' + get_graphics_path('subtitle_list_top_background.png') + '''")    0 0  2  0 stretch stretch; }
                             #properties_widget                                   { border-top: 0;    border-right: 0;     border-bottom: 0;    border-left: 2px;  border-image: url("''' + get_graphics_path('properties_widget_background.png') + '''")     0 0  0  2 stretch stretch; }
                             #playercontrols_widget_central_top_background        { border-top: 0;    border-right: 0;     border-bottom: 0;    border-left: 0;    border-image: url("''' + get_graphics_path('timeline_top_controls_background.png') + '''") 0 0 0 0 stretch stretch; }
                             #playercontrols_widget_central_top                   { border-top: 0;    border-right: 18px;  border-bottom: 0;    border-left: 18px; border-image: url("''' + get_graphics_path('timeline_top_controls.png') + '''")            0 18 0 18 stretch stretch; }
@@ -41,7 +42,7 @@ def set_stylesheet(self):
 
                             #toppanel_widget_left                                { border-top: 0;    border-right: 16px;  border-bottom: 55px;    border-left: 0;    border-image: url("''' + get_graphics_path('toppanel_background_left.png') + '''")          0 16 55 0 stretch stretch; }
                             #toppanel_widget_right                               { border-top: 0;    border-right: 18px;  border-bottom: 55px;    border-left: 5px;  border-image: url("''' + get_graphics_path('toppanel_background_right.png') + '''")          0 18 55 5 stretch stretch; }
-                            #toppanel_videoinfo_label                            { font-size:12px; color: rgba(106, 116, 131,100); qproperty-alignment: "AlignVCenter | AlignLeft"; font-family:"Ubuntu Mono"; }
+                            #videoinfo_label                                     { font-size:12px; color: rgba(106, 116, 131,100); qproperty-alignment: "AlignCenter"; font-family:"Ubuntu Mono"; }
                             #toppanel_subtitle_file_info_label                   { font-size:10px; color: rgba(48, 66, 81,255); qproperty-alignment: "AlignVCenter | AlignLeft";  }
 
                             QPushButton                                          { font-size:10px; color:white; }

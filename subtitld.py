@@ -108,9 +108,6 @@ class subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
 
-        from modules import toppanel
-        self.toppanel = toppanel
-        self.toppanel.load(self, PATH_SUBTITLD_GRAPHICS)
 
         #from modules import document_edit
         #self.document_edit = document_edit
@@ -169,7 +166,6 @@ class subtitld(QWidget):
         self.properties.resized(self)
         self.player.resized(self)
         self.timeline.resized(self)
-        self.toppanel.resized(self)
 
     def closeEvent(self, event):
         config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)

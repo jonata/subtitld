@@ -53,7 +53,7 @@ def load(self):
         #self.video_metadata['waveform'][0] = command
         self.video_metadata['audio'] = command
         self.timeline.zoom_update_waveform(self)
-        self.toppanel_videoinfo_label.setText('Audio extracted')
+        self.videoinfo_label.setText('Audio extracted')
 
     self.thread_extract_waveform = thread_extract_waveform(self)
     self.thread_extract_waveform.command.connect(thread_extract_waveform_ended)
@@ -74,7 +74,7 @@ def open_filepath(self, file_to_open):
     if self.video_metadata:
         self.thread_extract_waveform.filepath = self.video_metadata['filepath']
         self.thread_extract_waveform.start()
-        self.toppanel_videoinfo_label.setText('Extracting audio...')
+        self.videoinfo_label.setText('Extracting audio...')
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
         self.thread_extract_scene_time_positions.start()
 
@@ -102,13 +102,15 @@ def open_filepath(self, file_to_open):
 
     self.subtitleslist.update_subtitles_list_widget(self)
     self.timeline.update_timeline(self)
+    if not file_to_open.endswith(('.srt')):
+        file_to_open = ''
     self.actual_subtitle_file = file_to_open
     self.startscreen.hide(self)
     self.playercontrols.show(self)
     self.properties.show(self)
     self.subtitleslist.show(self)
-    self.toppanel.show(self)
-    self.toppanel_subtitle_file_info_label.setText('<b><snall>ACTUAL PROJECT</small></b><br><big>' + file_to_open + '</big>')
+    #self.toppanel.show(self)
+    #
 
     self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
 
