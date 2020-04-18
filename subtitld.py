@@ -190,15 +190,14 @@ class subtitld(QWidget):
 
         if event.key() == Qt.Key_Z:
             if event.modifiers() == Qt.ControlModifier | Qt.ShiftModifier:
-                self.subtitles_list = history_redo(self.subtitles_list)
+                history_redo(actual_subtitles=self.subtitles_list)
             elif event.modifiers() == Qt.ControlModifier:
-                self.subtitles_list = history_undo(self.subtitles_list)
-                print(self.subtitles_list)
+                history_undo(actual_subtitles=self.subtitles_list)
+            self.selected_subtitle = False
             self.subtitleslist.update_subtitles_list_qlistwidget(self)
-            self.timeline.update(self)
             self.update_things()
             self.properties.update_properties_widget(self)
-
+            self.timeline.update(self)
         #
         # if event.key() == Qt.Key_Slash:
         #     self.player_controls.play_button_selection.setChecked(not self.player_controls.play_button_selection.isChecked())

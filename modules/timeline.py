@@ -190,6 +190,10 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 update_timecode_label(self)
 
             self.properties.update_properties_widget(self)
+
+            if (widget.subtitle_is_clicked or widget.subtitle_start_is_clicked or widget.subtitle_end_is_clicked):
+                history.history_append(self.subtitles_list)
+
             widget.update()
 
         def mouseReleaseEvent(widget, event):
@@ -197,7 +201,6 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             widget.subtitle_start_is_clicked = False
             widget.subtitle_end_is_clicked = False
             widget.is_cursor_pressing = False
-            history.history_append(self.subtitles_list)
             widget.update()
 
         def mouseMoveEvent(widget, event):

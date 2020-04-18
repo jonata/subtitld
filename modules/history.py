@@ -10,9 +10,12 @@ def history_append(subtitles=[]):
     REDO_HISTORY = []
 
 def history_undo(actual_subtitles):
-    REDO_HISTORY.append(copy.deepcopy(actual_subtitles))
-    return ALL_HISTORY.pop() if ALL_HISTORY else []
-
+    if ALL_HISTORY:
+        REDO_HISTORY.append(copy.deepcopy(actual_subtitles))
+        actual_subtitles.clear()
+        actual_subtitles.extend(copy.deepcopy(ALL_HISTORY.pop()))
 
 def history_redo(actual_subtitles):
-    return REDO_HISTORY.pop() if REDO_HISTORY else []
+    if REDO_HISTORY:
+        actual_subtitles.clear()
+        actual_subtitles.extend(copy.deepcopy(REDO_HISTORY.pop()))
