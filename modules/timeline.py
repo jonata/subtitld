@@ -317,7 +317,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     def thread_get_waveform_ended(command):
         #zoom = [*command.keys()][0]
         self.video_metadata['waveform'] = command
-        self.toppanel_videoinfo_label.setText('Waveform updated')
+        self.videoinfo_label.setText('Waveform updated')
         self.timeline_widget.update()
 
     self.thread_get_waveform = thread_get_waveform(self)
@@ -355,7 +355,7 @@ def update(self):
 def zoom_update_waveform(self):
     #if not type(self.video_metadata['waveform'][0]) == bool and not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
     if not type(self.video_metadata['audio']) == bool:
-        self.toppanel_videoinfo_label.setText('Generating waveform...')
+        self.videoinfo_label.setText('Generating waveform...')
         #self.thread_get_waveform.audio = self.video_metadata['waveform'][0]
         self.thread_get_waveform.audio = self.video_metadata['audio']
         self.thread_get_waveform.zoom = self.mediaplayer_zoom

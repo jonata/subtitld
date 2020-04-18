@@ -104,6 +104,8 @@ def load(self):
     self.player_subtitle_textedit.setObjectName('player_subtitle_textedit')
     self.player_subtitle_textedit.textChanged.connect(lambda:player_subtitle_textedit_changed(self))
 
+    self.videoinfo_label = QLabel(parent=self)
+    self.videoinfo_label.setObjectName('videoinfo_label')
 
 def update(self):
     self.player_widget_area.setVisible(bool(self.video_metadata))
@@ -111,6 +113,7 @@ def update(self):
 
 def resized(self):
     self.player_widget_area.setGeometry(self.width()*.2,0,self.width()*.6,self.height()-self.playercontrols_widget.height())
+    self.videoinfo_label.setGeometry(self.player_widget_area.x(),20,self.player_widget_area.width(),50)
     resize_player_widget(self)
 
 def player_subtitle_textedit_changed(self):
@@ -124,7 +127,7 @@ def player_subtitle_textedit_changed(self):
 def playpause(self):
     self.player_widget.mpv.pause = not self.player_widget.mpv.pause
     self.mediaplayer_is_playing = not self.player_widget.mpv.pause
-    
+
 def update_speed(self):
     self.player_widget.mpv.speed = self.playback_speed
 

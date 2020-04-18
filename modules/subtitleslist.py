@@ -9,14 +9,35 @@ import datetime
 from modules import file_io
 from modules import waveform
 
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QSpinBox, QDoubleSpinBox, QListWidget, QListView
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 
-def load(self, path_catptilr_graphics):
+def load(self, PATH_SUBTITLD_GRAPHICS):
     self.subtitles_list_widget = QLabel(parent=self)
     self.subtitles_list_widget.setObjectName('subtitles_list_widget')
     self.subtitles_list_widget_animation = QPropertyAnimation(self.subtitles_list_widget, b'geometry')
     self.subtitles_list_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
+
+    self.subtitles_list_top_widget = QLabel(parent=self.subtitles_list_widget)
+    self.subtitles_list_top_widget.setObjectName('subtitles_list_top_widget')
+
+    self.toppanel_save_button = QPushButton(parent=self.subtitles_list_top_widget)
+    self.toppanel_save_button.clicked.connect(lambda:toppanel_save_button_clicked(self))
+    self.toppanel_save_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'save_icon.png')))
+    self.toppanel_save_button.setIconSize(QSize(20,20))
+    self.toppanel_save_button.setObjectName('button_dark')
+    self.toppanel_save_button.setStyleSheet('QPushButton {padding-left:0px;border-left:0;border-right:0;}')
+
+    self.toppanel_open_button = QPushButton(parent=self.subtitles_list_top_widget)
+    self.toppanel_open_button.clicked.connect(lambda:toppanel_open_button_clicked(self))
+    self.toppanel_open_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'open_icon.png')))
+    self.toppanel_open_button.setIconSize(QSize(20,20))
+    self.toppanel_open_button.setObjectName('button')
+    self.toppanel_open_button.setStyleSheet('QPushButton {border-left:0;}')
+
+    self.toppanel_subtitle_file_info_label = QLabel(parent=self.subtitles_list_top_widget)
+    self.toppanel_subtitle_file_info_label.setObjectName('toppanel_subtitle_file_info_label')
 
     self.subtitles_list_qlistwidget = QListWidget(parent=self.subtitles_list_widget)
     self.subtitles_list_qlistwidget.setViewMode(QListView.ListMode)
@@ -32,7 +53,13 @@ def resized(self):
         self.subtitles_list_widget.setGeometry(0,0,(self.width()*.2)-15,self.height())
     else:
         self.subtitles_list_widget.setGeometry(-((self.width()*.2)-15),0,(self.width()*.2)-15,self.height())
-    self.subtitles_list_qlistwidget.setGeometry(20,60,self.subtitles_list_widget.width()-40,self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-15)
+
+    self.subtitles_list_top_widget.setGeometry(0,0,self.subtitles_list_widget.width()-2,80)
+    self.toppanel_save_button.setGeometry(0,20,60,40)
+    self.toppanel_open_button.setGeometry(self.toppanel_save_button.x()+self.toppanel_save_button.width(),self.toppanel_save_button.y(),self.toppanel_save_button.height(),self.toppanel_save_button.height())
+    self.toppanel_subtitle_file_info_label.setGeometry(self.toppanel_open_button.x()+self.toppanel_open_button.width()+10,self.toppanel_save_button.y(),self.subtitles_list_top_widget.width()-self.toppanel_open_button.x()-self.toppanel_open_button.width()-20,self.toppanel_save_button.height())
+
+    self.subtitles_list_qlistwidget.setGeometry(20,self.subtitles_list_top_widget.height() + 20,self.subtitles_list_widget.width()-40,self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-35)
 
 def update_subtitles_list_widget(self):
     #self.subtitles_list_qlistwidget.setVisible(bool(self.subtitles_list))
@@ -66,3 +93,24 @@ def subtitles_list_qlistwidget_item_clicked(self):
 
 def show(self):
     self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(),self.subtitles_list_widget.y(),self.subtitles_list_widget.width(),self.subtitles_list_widget.height()], [0, self.subtitles_list_widget.y(), self.subtitles_list_widget.width(),self.subtitles_list_widget.height()])
+    update_toppanel_subtitle_file_info_label(self)
+
+def toppanel_save_button_clicked(self):
+    if not self.actual_subtitle_file:
+        suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.',1)[0]
+        suggested_path = os.path.dirname(self.video_metadata['filepath'])
+        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, "Select the srt file", os.path.join(suggested_path, suggested_path + '.srt'), "SRT file (*.srt)")[0]
+    if self.actual_subtitle_file:
+        file_io.save_file(self.actual_subtitle_file, self.subtitles_list)
+        update_toppanel_subtitle_file_info_label(self)
+
+def toppanel_open_button_clicked(self):
+    file_to_open = QFileDialog.getOpenFileName(self, "Select the subtitle or video file", os.path.expanduser("~"), "SRT file (*.srt);;MP4 file (*.mp4)")[0]
+    if file_to_open and os.path.isfile(file_to_open):
+        file_io.open_filepath(self, file_to_open)
+
+def update_toppanel_subtitle_file_info_label(self):
+    text = 'Actual video does not have saved subtitle file.'
+    if self.actual_subtitle_file:
+        text = '<b><snall>ACTUAL PROJECT</small></b><br><big>' + os.path.basename(self.actual_subtitle_file) + '</big>'
+    self.toppanel_subtitle_file_info_label.setText(text)
