@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 from bisect import bisect
+from modules import history
 
 def add_subtitle(subtitles=[], position=0.0, duration=5.0, text=''):
+    history.history_append(subtitles)
     current_index = 0
 
     subt = [item[0] for item in subtitles]
@@ -21,11 +23,13 @@ def add_subtitle(subtitles=[], position=0.0, duration=5.0, text=''):
 
 def remove_subtitle(subtitles=[], selected_subtitle=False):
     if selected_subtitle:
+        history.history_append(subtitles)
         subtitles.remove(selected_subtitle)
     return subtitles
 
 def slice_subtitle(subtitles=[], selected_subtitle=False, position=0.0, last_text='', next_text=''):
     if selected_subtitle and position > selected_subtitle[0] and position < (selected_subtitle[0] + selected_subtitle[1]):
+        history.history_append(subtitles)
         index = subtitles.index(selected_subtitle)
 
         if position > subtitles[index][0] and position < (subtitles[index][0] + subtitles[index][1]):
@@ -42,6 +46,7 @@ def slice_subtitle(subtitles=[], selected_subtitle=False, position=0.0, last_tex
 
 def merge_back_subtitle(subtitles=[], selected_subtitle=False):
     if selected_subtitle and subtitles.index(selected_subtitle):
+        history.history_append(subtitles)
         index = subtitles.index(selected_subtitle)
         subtitles[index-1][1] = selected_subtitle[0] + selected_subtitle[1] - subtitles[index-1][0]
         subtitles[index-1][2] += ' ' + subtitles[index][2]
@@ -52,6 +57,7 @@ def merge_back_subtitle(subtitles=[], selected_subtitle=False):
 
 def merge_next_subtitle(subtitles=[], selected_subtitle=False):
     if selected_subtitle and subtitles.index(selected_subtitle) < len(subtitles) - 1:
+        history.history_append(subtitles)
         index = subtitles.index(selected_subtitle)
         subtitles[index][1] = subtitles[index+1][0] + subtitles[index+1][1] - selected_subtitle[0]
         subtitles[index][2] += ' ' + subtitles[index+1][2]
@@ -61,6 +67,7 @@ def merge_next_subtitle(subtitles=[], selected_subtitle=False):
         return subtitles[index]
 
 def next_start_to_current_position(subtitles=[], position=0.0):
+    history.history_append(subtitles)
     subt = [item[0] for item in subtitles]
     index = bisect(subt, position)
     if index < len(subt):
@@ -71,6 +78,7 @@ def next_start_to_current_position(subtitles=[], position=0.0):
         last_end_to_current_position(subtitles=subtitles, position=position - 0.001)
 
 def next_end_to_current_position(subtitles=[], position=0.0):
+    history.history_append(subtitles)
     subt = [item[0] for item in subtitles]
     index = bisect(subt, position)
     if index:
@@ -79,6 +87,7 @@ def next_end_to_current_position(subtitles=[], position=0.0):
             subtitles[index-1][1] = position - subtitles[index-1][0]
 
 def last_end_to_current_position(subtitles=[], position=0.0):
+    history.history_append(subtitles)
     subt = [item[0] for item in subtitles]
     index = bisect(subt, position)
 
@@ -86,6 +95,7 @@ def last_end_to_current_position(subtitles=[], position=0.0):
         subtitles[index-1][1] = position - subtitles[index-1][0]
 
 def last_start_to_current_position(subtitles=[], position=0.0):
+    history.history_append(subtitles)
     subt = [item[0] for item in subtitles]
     index = bisect(subt, position)
     if index and subtitles[index-1][0] < position and not (subtitles[index-1][0] + subtitles[index-1][1]) < position:
@@ -95,12 +105,14 @@ def last_start_to_current_position(subtitles=[], position=0.0):
 
 def send_text_to_next_subtitle(subtitles=[], selected_subtitle=False, last_text='', next_text=''):
     if selected_subtitle and subtitles.index(selected_subtitle) + 1 < len(subtitles):
+        history.history_append(subtitles)
         index = subtitles.index(selected_subtitle)
         subtitles[index][2] = last_text
         subtitles[index+1][2] = next_text + ' ' + subtitles[index+1][2]
 
 def send_text_to_last_subtitle(subtitles=[], selected_subtitle=False, last_text='', next_text=''):
     if selected_subtitle and subtitles.index(selected_subtitle):
+        history.history_append(subtitles)
         index = subtitles.index(selected_subtitle)
         subtitles[index][2] = next_text
         subtitles[index-1][2] += ' ' + last_text

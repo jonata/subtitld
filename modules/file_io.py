@@ -100,19 +100,19 @@ def open_filepath(self, file_to_open):
         self.player_widget.mpv.pause = True
         self.player.resize_player_widget(self)
 
-    self.subtitleslist.update_subtitles_list_widget(self)
-    self.timeline.update_timeline(self)
-    if not file_to_open.endswith(('.srt')):
-        file_to_open = ''
-    self.actual_subtitle_file = file_to_open
-    self.startscreen.hide(self)
-    self.playercontrols.show(self)
-    self.properties.show(self)
-    self.subtitleslist.show(self)
-    #self.toppanel.show(self)
-    #
+        self.subtitleslist.update_subtitles_list_widget(self)
+        self.timeline.update_timeline(self)
+        if not file_to_open.endswith(('.srt')):
+            file_to_open = ''
+        self.actual_subtitle_file = file_to_open
+        self.startscreen.hide(self)
+        self.playercontrols.show(self)
+        self.properties.show(self)
+        self.subtitleslist.show(self)
+        #self.toppanel.show(self)
+        #
 
-    self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
+        self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
 
 def open_file(filepath):
     final_subtitles = []
