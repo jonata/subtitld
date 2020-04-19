@@ -208,7 +208,7 @@ def start_screen_adver_label_email_editing_finished(self):
     update_start_screen_adver_panel(self)
 
 def start_screen_open_button_clicked(self):
-    self.toppanel.toppanel_open_button_clicked(self)
+    None#self.toppanel.toppanel_open_button_clicked(self)
 
 def start_screen_recent_listwidget_item_clicked(self):
     file_to_open = self.start_screen_recent_listwidget.currentItem().text()
