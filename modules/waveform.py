@@ -34,7 +34,7 @@ def ffmpeg_load_audio(filepath, sr=44100, mono=True, normalize=True, in_type=num
         '-ar', str(sr),
         '-ac', str(channels),
         '-']
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=4096) # creationflags=subprocess.CREATE_NO_WINDOW,
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=4096, startupinfo=STARTUPINFO) # creationflags=subprocess.CREATE_NO_WINDOW,
     bytes_per_sample = numpy.dtype(in_type).itemsize
     frame_size = bytes_per_sample * channels
     chunk_size = frame_size * sr # read in 1-second chunks
@@ -116,7 +116,7 @@ def ffmpeg_load_metadata(filepath):
         '-show_format',
         '-show_streams',
         filepath]
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=open(os.devnull,'w'))
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=open(os.devnull,'w'), startupinfo=STARTUPINFO)
     json_file = False
     with p.stdout as stdout:
          json_file = json.loads(stdout.read())
