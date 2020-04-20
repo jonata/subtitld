@@ -28,7 +28,7 @@ class thread_extract_scene_time_positions(QThread):
                 '-vf', "select='gt(scene,0.4)',showinfo",
                 '-f', 'null',
                 '-']
-            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
             for line in p.stdout.read().decode().split('\n'):
                 if line.startswith(('[')) and 'pts_time:' in line:
                     result.append(float(line.split('pts_time:',1)[-1].split(' ',1)[0]))
