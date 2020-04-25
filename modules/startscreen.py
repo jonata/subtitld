@@ -208,7 +208,7 @@ def start_screen_adver_label_email_editing_finished(self):
     update_start_screen_adver_panel(self)
 
 def start_screen_open_button_clicked(self):
-    self.subtitleslist.toppanel_open_button_clicked(self)
+    file_io.open_filepath(self)
 
 def start_screen_recent_listwidget_item_clicked(self):
     file_to_open = self.start_screen_recent_listwidget.currentItem().text()
@@ -229,7 +229,6 @@ def start_screen_adver_label_machineid_verify_clicked(self):
     self.thread_verify_user_and_machineid.machine_id = self.start_screen_adver_label_machineid.text()
     self.thread_verify_user_and_machineid.start()
     self.start_screen_adver_label_status.setText('<small style="color:#3e5363;" >Verifying...</small>')
-
 
 def start_screen_adver_label_machineid_register_clicked(self):
     webbrowser.open(self.settings['authentication'].get('register_url', 'https://subtitld.jonata.org/'))
