@@ -96,6 +96,10 @@ def open_filepath(self, file_to_open=False):
         self.player_widget.mpv.pause = True
         self.player.resize_player_widget(self)
 
+        if not self.actual_subtitle_file:
+            if self.video_metadata.get('subttiles', ''):
+                self.subtitles_list = process_subtitles_file(self.video_metadata['subttiles'])
+
         self.subtitleslist.update_subtitles_list_widget(self)
         self.timeline.update_timeline(self)
         self.startscreen.hide(self)
@@ -127,7 +131,8 @@ def process_video_file(video_file=False):
             video_metadata['width'] =  int(stream.get('width', '640'))
             video_metadata['height'] =  int(stream.get('height', '640'))
             video_metadata['framerate'] =  int(stream.get('time_base', '1/30').split('/',1)[-1])
-            break
+        elif stream.get('codec_type', '') == 'subtitle':
+            video_metadata['subttiles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
     video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
     return video_metadata
