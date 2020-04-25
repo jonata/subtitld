@@ -122,7 +122,6 @@ def process_subtitles_file(subtitle_file=False):
     if subtitle_file.lower().endswith(('.vtt', '.webvtt')):
         vttfile = webvtt.read(subtitle_file)
         for caption in vttfile:
-            print(caption)
             start = (timecode.Timecode('ms', str(caption.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
             end = (timecode.Timecode('ms', str(caption.end).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
             duration = end - start
@@ -136,9 +135,9 @@ def process_video_file(video_file=False):
     video_metadata['waveform'] = False #{0: False}
     video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
     for stream in json_result.get('streams', []):
-        if stream.get('codec_type', '') == 'video':
-            video_metadata['width'] =  int(stream.get('width', '640'))
-            video_metadata['height'] =  int(stream.get('height', '640'))
+        if stream.get('codec_type', '') == 'video' and not stream.get('codec_name', 'png') == 'png':
+            video_metadata['width'] =  int(stream.get('width', 640))
+            video_metadata['height'] =  int(stream.get('height', 480))
             video_metadata['framerate'] =  int(stream.get('time_base', '1/30').split('/',1)[-1])
         elif stream.get('codec_type', '') == 'subtitle':
             video_metadata['subttiles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
