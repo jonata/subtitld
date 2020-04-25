@@ -7,6 +7,7 @@ import pysrt
 import timecode
 import datetime
 import numpy
+import webvtt
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
 
@@ -118,6 +119,14 @@ def process_subtitles_file(subtitle_file=False):
                 start = (timecode.Timecode('ms', str(sub.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
                 duration = (timecode.Timecode('ms', str(sub.duration).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
                 final_subtitles.append([start, duration, str(sub.text)])
+    if subtitle_file.lower().endswith(('.vtt', '.webvtt')):
+        vttfile = webvtt.read(subtitle_file)
+        for caption in vttfile:
+            print(caption)
+            start = (timecode.Timecode('ms', str(caption.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
+            end = (timecode.Timecode('ms', str(caption.end).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
+            duration = end - start
+            final_subtitles.append([start, duration, str(caption.text)])
     return final_subtitles
 
 def process_video_file(video_file=False):
