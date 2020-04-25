@@ -106,6 +106,17 @@ def ffmpeg_load_audio(filepath, sr=44100, mono=True, normalize=True, in_type=num
     #         audio /= numpy.iinfo(in_type).max
     # return audio
 
+def ffmpeg_extract_subtitle(filepath, index):
+    command = [
+        FFMPEG_EXECUTABLE,
+        '-i',
+        filepath,
+        '-map',
+        '0:' + str(index),
+        os.path.join(path_tmp, 'subtitle.vtt')]
+    p = subprocess.run(command, stdout=subprocess.PIPE, stderr=open(os.devnull,'w'), startupinfo=STARTUPINFO)
+    return os.path.join(path_tmp, 'subtitle.vtt')
+
 def ffmpeg_load_metadata(filepath):
     command = [
         FFPROBE_EXECUTABLE,
