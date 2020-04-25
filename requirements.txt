@@ -1,7 +1,6 @@
 PyQt5
 python-mpv
 pyopengl
-pysrt
 PyInstaller
 numpy
 bcrypt

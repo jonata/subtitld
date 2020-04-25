@@ -64,36 +64,32 @@ def load(self):
     self.thread_extract_scene_time_positions = thread_extract_scene_time_positions(self)
     self.thread_extract_scene_time_positions.command.connect(thread_extract_scene_time_positions_ended)
 
-def open_filepath(self, file_to_open):
-    self.subtitles_list, self.video_metadata = open_file(file_to_open)
+def open_filepath(self, file_to_open=False):
+    if not file_to_open:
+        supported_subtitle_files = ';;'.join([str(ext + ' file (*' + ext + ')') for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS])
+        supported_video_files = ';;'.join([str(ext + ' file (*' + ext + ')') for ext in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS])
+        file_to_open = QFileDialog.getOpenFileName(self, "Select the video or subtitle file", os.path.expanduser("~"), supported_subtitle_files + ';;' + supported_video_files)[0]
+
+    if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS):
+        self.subtitles_list = process_subtitles_file(file_to_open)
+        self.actual_subtitle_file = file_to_open
+
+    elif file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
+        self.video_metadata = process_video_file(file_to_open)
+
     if not self.video_metadata:
-        file_to_open = QFileDialog.getOpenFileName(self, "Select the video file", os.path.expanduser("~"), "MP4 file (*.mp4)")[0]
-        if file_to_open and os.path.isfile(file_to_open):
-            self.video_metadata = process_video_metadata(file_to_open)
+        file_to_open = QFileDialog.getOpenFileName(self, "Select the video file", os.path.expanduser("~"), supported_video_files)[0]
+        if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
+            self.video_metadata = process_video_file(file_to_open)
 
     if self.video_metadata:
+        self.actual_video_file = file_to_open
         self.thread_extract_waveform.filepath = self.video_metadata['filepath']
         self.thread_extract_waveform.start()
         self.videoinfo_label.setText('Extracting audio...')
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
         self.thread_extract_scene_time_positions.start()
 
-
-        #waveform.ffmpeg_load_audio(self, )
-        #waveform.get_waveform_zoom(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30)
-        #t = threading.Thread(target=waveform.get_waveform_zoom, args=(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True)
-        #t = multiprocessing.Process(target=waveform.get_waveform_zoom, args=(self, self.mediaplayer_zoom, self.video_metadata['duration'], self.video_metadata['waveform'][0], self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom, self.timeline_widget.height()-30), daemon=True)
-        # qth = waveform.generate_test(self)
-        # qth.zoom = self.mediaplayer_zoom
-        # qth.duration = self.video_metadata['duration']
-        # qth.full_waveform = self.video_metadata['waveform'][0]
-        # qth.widget_width = self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom
-        #qth.widget_height = self.timeline_widget.height()-30
-
-        #qth.qwidget.connect(self.update_things())
-        #qth.start()
-        #t.start()
-        #print("imediato")
         self.player.update(self)
         self.player_widget.mpv.play(self.video_metadata['filepath'])
         self.player_widget.mpv.wait_for_property('seekable')
@@ -102,37 +98,27 @@ def open_filepath(self, file_to_open):
 
         self.subtitleslist.update_subtitles_list_widget(self)
         self.timeline.update_timeline(self)
-        if not file_to_open.endswith(('.srt')):
-            file_to_open = ''
-        self.actual_subtitle_file = file_to_open
         self.startscreen.hide(self)
         self.playercontrols.show(self)
         self.properties.show(self)
         self.subtitleslist.show(self)
-        #self.toppanel.show(self)
-        #
 
         self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
 
-def open_file(filepath):
+def process_subtitles_file(subtitle_file=False):
     final_subtitles = []
-    if filepath:
-        if filepath.lower().endswith('.srt'):
-            with open(filepath) as srtfile:
-                subs = pysrt.from_string(srtfile.read())
-                for sub in subs:
-                    start = (timecode.Timecode('ms', str(sub.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
-                    duration = (timecode.Timecode('ms', str(sub.duration).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
-                    final_subtitles.append([start, duration, str(sub.text)])
-    video_metadata = {}
-    mp4_file = os.path.join(os.path.dirname(filepath), os.path.basename(filepath).rsplit('.',1)[0] + '.mp4')
-    if os.path.isfile(mp4_file):
-        video_metadata = process_video_metadata(mp4_file)
-    return final_subtitles, video_metadata
+    if subtitle_file.lower().endswith('.srt'):
+        with open(subtitle_file) as srtfile:
+            subs = pysrt.from_string(srtfile.read())
+            for sub in subs:
+                start = (timecode.Timecode('ms', str(sub.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
+                duration = (timecode.Timecode('ms', str(sub.duration).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
+                final_subtitles.append([start, duration, str(sub.text)])
+    return final_subtitles
 
-def process_video_metadata(mp4_file):
+def process_video_file(video_file=False):
     video_metadata = {}
-    json_result = waveform.ffmpeg_load_metadata(mp4_file)
+    json_result = waveform.ffmpeg_load_metadata(video_file)
     video_metadata['audio'] = False #{0: False}
     video_metadata['waveform'] = False #{0: False}
     video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
@@ -142,7 +128,7 @@ def process_video_metadata(mp4_file):
             video_metadata['height'] =  int(stream.get('height', '640'))
             video_metadata['framerate'] =  int(stream.get('time_base', '1/30').split('/',1)[-1])
             break
-    video_metadata['filepath'] = mp4_file
+    video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
     return video_metadata
 

@@ -97,17 +97,23 @@ def show(self):
 
 def toppanel_save_button_clicked(self):
     if not self.actual_subtitle_file:
-        suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.',1)[0]
-        suggested_path = os.path.dirname(self.video_metadata['filepath'])
-        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, "Select the srt file", os.path.join(suggested_path, suggested_path + '.srt'), "SRT file (*.srt)")[0]
+
+        suggested_path = os.path.dirname(actual_video_file)
+        if self.advanced_mode:
+            save_formats = 'SRT file (*.srt)'
+            suggested_name = os.path.basename(actual_video_file).rsplit('.',1)[0]
+        else:
+            save_formats = 'SRT file (*.srt)'
+            suggested_name = os.path.basename(actual_video_file).rsplit('.',1)[0] + '.srt'
+
+        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, "Select the srt file", os.path.join(suggested_path, suggested_path), save_formats)[0]
+
     if self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list)
         update_toppanel_subtitle_file_info_label(self)
 
 def toppanel_open_button_clicked(self):
-    file_to_open = QFileDialog.getOpenFileName(self, "Select the subtitle or video file", os.path.expanduser("~"), "SRT file (*.srt);;MP4 file (*.mp4)")[0]
-    if file_to_open and os.path.isfile(file_to_open):
-        file_io.open_filepath(self, file_to_open)
+    file_io.open_filepath(self)
 
 def update_toppanel_subtitle_file_info_label(self):
     text = 'Actual video does not have saved subtitle file.'

@@ -61,3 +61,6 @@ def get_graphics_path(filename):
     if sys.platform == 'win32' or os.name == 'nt':
         final_path = final_path.replace('\\', '/')
     return final_path
+
+LIST_OF_SUPPORTED_VIDEO_EXTENSIONS = (('.mp4', '.mkv', '.mov', '.mpg', '.webm', '.ogv'))
+LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = (('.srt', '.webvtt', '.vtt'))
