@@ -7,3 +7,4 @@ bcrypt
 sip
 cffi
 requests
+webvtt-py
