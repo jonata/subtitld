@@ -52,7 +52,9 @@ def load_subtitld_codes_file(path=''):
     final_dict = {}
     if path and os.path.isfile(path):
         with open(path) as f:
-            final_dict = json.load(f)
+            json_dict = json.load(f)
+            if ACTUAL_OS in json_dict.get('authentication_keys', {}).keys():
+                final_dict = json_dict['authentication_keys'][ACTUAL_OS]
     return final_dict
 
 def get_days_to_expiry_date(auth_dict=False):
