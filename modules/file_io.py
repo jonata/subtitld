@@ -10,6 +10,7 @@ import numpy
 import webvtt
 import ass
 import re
+import ttml
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
 
@@ -131,6 +132,9 @@ def process_subtitles_file(subtitle_file=False):
             end = (timecode.Timecode('ms', str(caption.end).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
             duration = end - start
             final_subtitles.append([start, duration, str(caption.text)])
+    elif subtitle_file.lower().endswith(('.ttml')):
+        final_subtitles = ttml.parse_ttml_file(subtitle_file)
+        
     elif subtitle_file.lower().endswith(('.ass')):
         def clean_text(text):
             clean = re.compile('{.*?}')
