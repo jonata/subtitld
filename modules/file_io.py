@@ -8,6 +8,8 @@ import timecode
 import datetime
 import numpy
 import webvtt
+import ass
+import re
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
 
@@ -67,8 +69,11 @@ def load(self):
 
 def open_filepath(self, file_to_open=False):
     if not file_to_open:
-        supported_subtitle_files = ';;'.join([str(ext + ' file (*' + ext + ')') for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS])
-        supported_video_files = ';;'.join([str(ext + ' file (*' + ext + ')') for ext in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS])
+        supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS]))
+        supported_video_files = "Video files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
+
+        #supported_subtitle_files = ';;'.join([str(ext + ' file (*' + ext + ')') for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS])
+        #supported_video_files = ';;'.join([str(ext + ' file (*' + ext + ')') for ext in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS])
         file_to_open = QFileDialog.getOpenFileName(self, "Select the video or subtitle file", os.path.expanduser("~"), supported_subtitle_files + ';;' + supported_video_files)[0]
 
     if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS):
@@ -119,13 +124,40 @@ def process_subtitles_file(subtitle_file=False):
                 start = (timecode.Timecode('ms', str(sub.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
                 duration = (timecode.Timecode('ms', str(sub.duration).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
                 final_subtitles.append([start, duration, str(sub.text)])
-    if subtitle_file.lower().endswith(('.vtt', '.webvtt')):
+    elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
         vttfile = webvtt.read(subtitle_file)
         for caption in vttfile:
             start = (timecode.Timecode('ms', str(caption.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
             end = (timecode.Timecode('ms', str(caption.end).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
             duration = end - start
             final_subtitles.append([start, duration, str(caption.text)])
+    elif subtitle_file.lower().endswith(('.ass')):
+        def clean_text(text):
+            clean = re.compile('{.*?}')
+            result = re.sub(clean, '', text)
+            if '\\' in result.split(' ')[-1]:
+                result = result.rsplit(' ',1)[0]
+            result = result.replace('\\N', '<br>')
+            return result
+
+        with open(subtitle_file, encoding='utf_8_sig') as f:
+            assfile = ass.parse(f)
+            last_start = None
+            last_end = 0.0
+            for event in assfile.events:
+                start = event.start.total_seconds()
+                end = event.end.total_seconds()
+                duration = end - start
+                if not last_start == None and last_start == start:
+                    if last_end <= end:
+                        final_subtitles[-1][2] += '<br>' + clean_text(event.text)
+                    else:
+                        duration = end - last_end - .001
+                        final_subtitles.append([last_end + .001, duration, clean_text(event.text)])
+                else:
+                    final_subtitles.append([start, duration, clean_text(event.text)])
+                last_start = start
+                last_end = end
     return final_subtitles
 
 def process_video_file(video_file=False):
