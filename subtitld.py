@@ -28,8 +28,10 @@ class subtitld(QWidget):
         self.update_accuracy = 100
         self.subtitles_list = []
         self.video_metadata = {}
+
         self.actual_subtitle_file = ''
         self.actual_video_file = ''
+        
         self.selected_subtitle = False
         self.mediaplayer_zoom = 100.0
         self.video_waveformsize = .7

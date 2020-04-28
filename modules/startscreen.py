@@ -143,6 +143,8 @@ def load(self):
 
         if command['is_valid']:
             text = 'You can use Subtitld Advanced features until ' + command['expiry_date']  + str('.')
+            if command.get('authentication_keys', '') and command['authentication_keys'].get(ACTUAL_OS, ''):
+                authentication.append_authentication_keys(config=self.settings, dict=command['authentication_keys'][ACTUAL_OS])
         else:
             text = 'You cannot use Subtitld Advanced features. Click on Register for more information.'
         text = text + str(str('<br><small style="color:#3e5363;" >LAST CHECKED: ' + datetime.strptime(self.settings['authentication']['last_checked'], '%Y%m%d%H%M%S').strftime("%d/%m/%Y - %H:%M:%S")) if self.settings['authentication'].get('last_checked', '') else str(''))
