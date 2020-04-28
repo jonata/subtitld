@@ -450,6 +450,7 @@ def playercontrols_play_from_next_start_button_clicked(self):
 
 def add_subtitle_button_clicked(self):
     self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.current_timeline_position, duration=self.default_new_subtitle_duration)
+    self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.update_things()
@@ -458,6 +459,7 @@ def add_subtitle_button_clicked(self):
 
 def remove_selected_subtitle_button_clicked(self):
     subtitles.remove_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
+    self.unsaved = True
     self.selected_subtitle = False
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
@@ -470,6 +472,7 @@ def slice_selected_subtitle_button_clicked(self):
         last_text = self.properties_textedit.toPlainText()[:pos]
         next_text = self.properties_textedit.toPlainText()[pos:]
         self.selected_subtitle = subtitles.slice_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, position=self.current_timeline_position, next_text=next_text, last_text=last_text)
+        self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
         self.update_things()
@@ -478,6 +481,7 @@ def slice_selected_subtitle_button_clicked(self):
 def merge_back_selected_subtitle_button_clicked(self):
     if self.selected_subtitle:
         self.selected_subtitle = subtitles.merge_back_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
+        self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
         self.update_things()
@@ -486,6 +490,7 @@ def merge_back_selected_subtitle_button_clicked(self):
 def merge_next_selected_subtitle_button_clicked(self):
     if self.selected_subtitle:
         self.selected_subtitle = subtitles.merge_next_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
+        self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
         self.update_things()
@@ -493,6 +498,7 @@ def merge_next_selected_subtitle_button_clicked(self):
 
 def next_start_to_current_position_button_clicked(self):
     subtitles.next_start_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.update_things()
@@ -500,6 +506,7 @@ def next_start_to_current_position_button_clicked(self):
 
 def last_end_to_current_position_button_clicked(self):
     subtitles.last_end_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.update_things()
@@ -507,6 +514,7 @@ def last_end_to_current_position_button_clicked(self):
 
 def last_start_to_current_position_button_clicked(self):
     subtitles.last_start_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.update_things()
@@ -514,6 +522,7 @@ def last_start_to_current_position_button_clicked(self):
 
 def next_end_to_current_position_button_clicked(self):
     subtitles.next_end_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.update_things()

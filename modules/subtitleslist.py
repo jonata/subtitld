@@ -111,8 +111,22 @@ def toppanel_save_button_clicked(self):
     if self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list)
         update_toppanel_subtitle_file_info_label(self)
+        self.unsaved = False
 
 def toppanel_open_button_clicked(self):
+    if self.unsaved:
+        save_message_box = QMessageBox(self)
+
+        save_message_box.setWindowTitle("Unsaved changes")
+        save_message_box.setText(
+            "Do you want to save the changes you made on the subtitles?"
+        )
+        save_message_box.addButton("Save", QMessageBox.AcceptRole)
+        save_message_box.addButton("Don't save", QMessageBox.RejectRole)
+        ret = save_message_box.exec_()
+
+        if ret == QMessageBox.AcceptRole:
+            self.subttileslist.toppanel_save_button_clicked(self)
     file_io.open_filepath(self)
 
 def update_toppanel_subtitle_file_info_label(self):
