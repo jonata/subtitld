@@ -31,7 +31,7 @@ class subtitld(QWidget):
 
         self.actual_subtitle_file = ''
         self.actual_video_file = ''
-        
+
         self.selected_subtitle = False
         self.mediaplayer_zoom = 100.0
         self.video_waveformsize = .7
@@ -143,7 +143,7 @@ class subtitld(QWidget):
             else:
                 filename = event.mimeData().urls()[0].toLocalFile()
 
-            if filename.endswith(('.subtitld')) or check_name(self, filename.split(os.sep)[-1].replace('.' + filename.split(os.sep)[-1].split('.')[-1], ''))[0]:
+            if filename.lower().endswith(('.subtitld')) or filename.lower().endswith(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS) or filename.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
                 event.accept()
 
     def dropEvent(widget, event):
@@ -152,8 +152,11 @@ class subtitld(QWidget):
         else:
             filename = event.mimeData().urls()[0].toLocalFile()
 
-        if filename.endswith(('.subtitld')):
-            authentication.append_authentication_keys(config=self.settings, dict=authentication.load_subtitld_codes_file(path=filename))
+        if filename.lower().endswith(('.subtitld')) or filename.lower().endswith(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS) or filename.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
+            if filename.lower().endswith(('.subtitld')):
+                authentication.append_authentication_keys(config=widget.settings, dict=authentication.load_subtitld_codes_file(path=filename))
+            else:
+                widget.file_io.open_filepath(widget, file_to_open=filename)
             event.accept()
 
     def resizeEvent(self, event):
