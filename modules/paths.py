@@ -17,8 +17,11 @@ FFPROBE_EXECUTABLE = 'ffprobe'
 
 STARTUPINFO = None
 
+ACTUAL_OS = 'linux'
+
 path_tmp = os.path.join(tempfile.gettempdir(), 'subtitld-' + str(random.randint(1000,9999)))
 if sys.platform == 'darwin':
+    ACTUAL_OS = 'macos'
     PATH_SUBTITLD_USER_CONFIG = os.path.join(PATH_HOME, 'Library', 'Application Support', 'subtitld')
     FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg')
     FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe')
@@ -28,6 +31,7 @@ if sys.platform == 'darwin':
         sys.path.append('/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC')
         from Foundation import NSURL
 elif sys.platform == 'win32' or os.name == 'nt':
+    ACTUAL_OS = 'windows'
     PATH_SUBTITLD_USER_CONFIG = os.path.join(os.getenv('LOCALAPPDATA'), 'subtitld')
     FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
     FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')

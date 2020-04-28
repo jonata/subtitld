@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import requests
+import hashlib
 from datetime import datetime
 
 def get_machine_id():
@@ -25,7 +26,8 @@ def verify_user_and_machineid(email=False, machine_id=False):
     if email and machine_id:
         information = {
                             'email': email,
-                            'machineid': machine_id
+                            'machineid': machine_id,
+                            'os': str(sys.platform)
         }
         response = requests.post('https://api.jonata.org/subtitld/verify_email_and_machineid', json=information)
 
@@ -36,7 +38,7 @@ def check_authentication(auth_dict=False, email=False, machineid=False):
     if auth_dict and email and machineid:
         date_today = datetime.now().strftime("%Y%m%d")
         auth_hash = auth_dict.get(date_today, '')
-        if bcrypt.checkpw(str(email + '|' + machineid + '|' + date_today).encode('utf-8'), auth_hash.encode('utf-8')):
+        if auth_hash == hashlib.md5(str(email + '|' + machineid + '|' + date_today).encode()).hexdigest():
             result = True
     return result
 
