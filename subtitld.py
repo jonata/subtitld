@@ -188,7 +188,7 @@ class subtitld(QWidget):
             ret = save_message_box.exec_()
 
             if ret == QMessageBox.AcceptRole:
-                self.subttileslist.toppanel_save_button_clicked(self)
+                self.subtitleslist.toppanel_save_button_clicked(self)
 
         config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)
         self.thread_get_waveform.quit()
