@@ -143,8 +143,12 @@ def update_subtitle_layer(self):
     #self.player_subtitle_textedit.setPlainText(text)
 
 def resize_player_widget(self):
-    heigth_proportion = (self.player_widget_area.width()-6) / self.video_metadata.get('width', 1)
-    self.player_widget.setGeometry(3,(self.player_widget_area.height()*.5)-((heigth_proportion*self.video_metadata.get('height', 1))*.5),self.player_widget_area.width()-6,self.video_metadata.get('height', 1)*heigth_proportion)
+    if self.video_metadata.get('width', 640) > self.video_metadata.get('height', 480):
+        heigth_proportion = (self.player_widget_area.width()-6) / self.video_metadata.get('width', 640)
+        self.player_widget.setGeometry(3,(self.player_widget_area.height()*.5)-((heigth_proportion*self.video_metadata.get('height', 480))*.5),self.player_widget_area.width()-6,self.video_metadata.get('height', 480)*heigth_proportion)
+    else:
+        width_proportion = (self.player_widget_area.height()-6) / self.video_metadata.get('height', 480)
+        self.player_widget.setGeometry((self.player_widget_area.width()*.5)-((width_proportion*self.video_metadata.get('width', 640))*.5),3,self.video_metadata.get('width', 640)*width_proportion, self.player_widget_area.height()-6)
     self.player_border.setGeometry(self.player_widget.x()-3, self.player_widget.y()-3, self.player_widget.width()+6, self.player_widget.height()+6)
     self.player_subtitle_layer.setGeometry(self.player_widget.x(),self.player_widget.y(), self.player_widget.width(), self.player_widget.height())
     self.player_subtitle_textedit.setGeometry(self.player_widget.x()+(self.player_widget.width()*.1),self.player_widget.y()+(self.player_widget.height()*.5), self.player_widget.width()*.8, self.player_widget.height()*.4)
