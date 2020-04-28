@@ -83,6 +83,9 @@ def set_stylesheet(self):
 
                             QDoubleSpinBox                                      { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
                             QSpinBox                                            { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
+                            QMessageBox                                         { background-color:rgb(26,35,43); }
+                            QMessageBox QLabel                                  { color: rgb(106, 116, 131); }
+                            QMessageBox QPushButton                             { background-color: rgb(106, 116, 131); }
                             '''
 
     for button_color in ['button', 'button_dark', 'button_red', 'button_green']:

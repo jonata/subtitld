@@ -193,6 +193,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
             if (widget.subtitle_is_clicked or widget.subtitle_start_is_clicked or widget.subtitle_end_is_clicked):
                 history.history_append(self.subtitles_list)
+                self.unsaved = True
 
             widget.update()
 

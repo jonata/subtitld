@@ -4,7 +4,7 @@ import os
 import sys
 import threading
 import time
-from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect
+from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 from PyQt5.QtCore import Qt, QTimer, QRect, QPropertyAnimation, QEasingCurve
 
@@ -56,6 +56,7 @@ class subtitld(QWidget):
         self.repeat_duration_tmp = []
         self.repeat_times = 3
         self.repeat_activated = False
+        self.unsaved = False
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 
@@ -175,6 +176,20 @@ class subtitld(QWidget):
         self.timeline.resized(self)
 
     def closeEvent(self, event):
+        if self.unsaved:
+            save_message_box = QMessageBox(self)
+
+            save_message_box.setWindowTitle("Unsaved changes")
+            save_message_box.setText(
+                "Do you want to save the changes you made on the subtitles?"
+            )
+            save_message_box.addButton("Save", QMessageBox.AcceptRole)
+            save_message_box.addButton("Don't save", QMessageBox.RejectRole)
+            ret = save_message_box.exec_()
+
+            if ret == QMessageBox.AcceptRole:
+                self.subttileslist.toppanel_save_button_clicked(self)
+
         config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)
         self.thread_get_waveform.quit()
         self.thread_extract_waveform.quit()
