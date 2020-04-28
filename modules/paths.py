@@ -67,4 +67,4 @@ def get_graphics_path(filename):
     return final_path
 
 LIST_OF_SUPPORTED_VIDEO_EXTENSIONS = (('.mp4', '.mkv', '.mov', '.mpg', '.webm', '.ogv'))
-LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = (('.srt', '.webvtt', '.vtt', '.ass'))
+LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = (('.srt', '.webvtt', '.vtt', '.ass', '.ssa'))
