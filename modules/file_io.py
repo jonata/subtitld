@@ -140,6 +140,11 @@ def process_subtitles_file(subtitle_file=False):
         captions = sbv_reader(open(subtitle_file)).read()
         for caption in captions:
             final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), caption.text])
+    elif subtitle_file.lower().endswith(( '.smi', '.sami')):
+        from captionstransformer.sami import Reader as sami_reader
+        captions = sami_reader(open(subtitle_file)).read()
+        for caption in captions:
+            final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), caption.text])
 
     elif subtitle_file.lower().endswith(('.xml')):
         if '<transcript>' in open(subtitle_file).read():
