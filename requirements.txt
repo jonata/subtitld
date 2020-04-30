@@ -9,3 +9,4 @@ cffi
 requests
 webvtt-py
 captionstransformer
+bleach
