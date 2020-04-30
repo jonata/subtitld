@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 class Reader(core.Reader):
     def text_to_captions(self):
-        soup = BeautifulSoup(self.rawcontent)
+        soup = BeautifulSoup(self.rawcontent, features="lxml")
         texts = soup.find_all('text')
         for text in texts:
             caption = core.Caption()
