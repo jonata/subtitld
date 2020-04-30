@@ -11,6 +11,7 @@ import webvtt
 import ass
 import re
 import ttml
+import captionstransformer
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
 
@@ -134,6 +135,11 @@ def process_subtitles_file(subtitle_file=False):
             final_subtitles.append([start, duration, str(caption.text)])
     elif subtitle_file.lower().endswith(('.ttml')):
         final_subtitles = ttml.parse_ttml_file(subtitle_file)
+    elif subtitle_file.lower().endswith(('.sbv')):
+        from captionstransformer.sbv import Reader as sbv_reader
+        captions = sbv_reader(open(subtitle_file)).read()
+        for caption in captions:
+            final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), caption.text])
         
     elif subtitle_file.lower().endswith(('.ass')):
         def clean_text(text):
@@ -183,18 +189,19 @@ def process_video_file(video_file=False):
 
 def save_file(final_file, subtitles_list):
     if subtitles_list:
-        if final_file.lower().endswith('.srt'):
+        if not final_file.lower().endswith('.srt'):
+            final_file += '.srt'
 
-            def humanize_time(secs):
-                secs, mils = divmod(secs, 1)
-                mins, secs = divmod(secs, 60)
-                hours, mins = divmod(mins, 60)
-                return '%02d:%02d:%02d,%03d' % (hours, mins, secs, mils*1000)
+        def humanize_time(secs):
+            secs, mils = divmod(secs, 1)
+            mins, secs = divmod(secs, 60)
+            hours, mins = divmod(mins, 60)
+            return '%02d:%02d:%02d,%03d' % (hours, mins, secs, mils*1000)
 
-            srtfile = pysrt.SubRipFile()
-            counter = 1
-            for sub in subtitles_list:
-                sub = pysrt.SubRipItem(counter, start=humanize_time(sub[0]), end=humanize_time(sub[0] + sub[1]), text=sub[2])
-                srtfile.append(sub)
-                counter += 1
-            srtfile.save(final_file)
+        srtfile = pysrt.SubRipFile()
+        counter = 1
+        for sub in subtitles_list:
+            sub = pysrt.SubRipItem(counter, start=humanize_time(sub[0]), end=humanize_time(sub[0] + sub[1]), text=sub[2])
+            srtfile.append(sub)
+            counter += 1
+        srtfile.save(final_file)
