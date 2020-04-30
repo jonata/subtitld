@@ -140,7 +140,15 @@ def process_subtitles_file(subtitle_file=False):
         captions = sbv_reader(open(subtitle_file)).read()
         for caption in captions:
             final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), caption.text])
-        
+
+    elif subtitle_file.lower().endswith(('.xml')):
+        if '<transcript>' in open(subtitle_file).read():
+            from captionstransformer.transcript import Reader as transcript_reader
+            import html
+            captions = transcript_reader(open(subtitle_file)).read()
+            for caption in captions:
+                final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
+
     elif subtitle_file.lower().endswith(('.ass')):
         def clean_text(text):
             clean = re.compile('{.*?}')
