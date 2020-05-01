@@ -145,7 +145,9 @@ def process_subtitles_file(subtitle_file=False):
         captions = sami_reader(open(subtitle_file)).read()
         for caption in captions:
             final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), caption.text])
-
+    elif subtitle_file.lower().endswith(( '.scc')):
+        import scc2srt
+        final_subtitles = scc2srt.get_list_of_captions(subtitle_file)
     elif subtitle_file.lower().endswith(('.xml')):
         if '<transcript>' in open(subtitle_file).read():
             from captionstransformer.transcript import Reader as transcript_reader
@@ -153,7 +155,6 @@ def process_subtitles_file(subtitle_file=False):
             captions = transcript_reader(open(subtitle_file)).read()
             for caption in captions:
                 final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
-
     elif subtitle_file.lower().endswith(('.ass')):
         def clean_text(text):
             clean = re.compile('{.*?}')

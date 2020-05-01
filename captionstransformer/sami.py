@@ -24,7 +24,6 @@ class Reader(core.Reader):
             for sync in soup.sami.body.find_all('sync'):
                 this_line_time = self.get_start(sync)
                 linerepr = repr(str(sync.p)[1:].split('<',1)[0].split('>',1)[-1])[1:-1]
-
                 this_line_text = linerepr.replace('<br>', '\n').strip()
                 if this_line_text.endswith('\\t'):
                     this_line_text = this_line_text[:-2]
