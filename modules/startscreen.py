@@ -10,6 +10,7 @@ from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize, QThread, p
 
 from modules import file_io
 from modules import authentication
+from modules.paths import *
 
 class thread_verify_user_and_machineid(QThread):
     command = pyqtSignal(dict)
@@ -76,7 +77,7 @@ def load(self):
     self.start_screen_adver_label_details = QLabel(parent=self.start_screen_adver_holder)
     self.start_screen_adver_label_details.setObjectName('start_screen_adver_label_details')
 
-    days = authentication.get_days_to_expiry_date(auth_dict=self.settings['authentication'].get('codes', {}))
+    days = authentication.get_days_to_expiry_date(auth_dict=self.settings['authentication'].get('codes', {}).get(ACTUAL_OS, {}))
 
     self.start_screen_adver_label_details.setText(str('You have more %s days to use<br>the Advanced version. If you<br>need some more information,<br>visit <b>subtitld.jonata.org</b>.' % days) if self.advanced_mode else 'If you need more features,<br>enable the advanced version.<br>Visit <b>subtitld.jonata.org</b> for<br>more information.')
 
@@ -140,8 +141,8 @@ def load(self):
         text = ''
 
         self.settings['authentication']['last_checked'] = datetime.now().strftime("%Y%m%d%H%M%S")
-
-        if command['is_valid']:
+        print(command)
+        if command.get('is_valid', False):
             text = 'You can use Subtitld Advanced features until ' + command['expiry_date']  + str('.')
             if command.get('authentication_keys', '') and command['authentication_keys'].get(ACTUAL_OS, ''):
                 authentication.append_authentication_keys(config=self.settings, dict=command['authentication_keys'][ACTUAL_OS])

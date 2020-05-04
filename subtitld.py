@@ -62,7 +62,8 @@ class subtitld(QWidget):
 
         self.machine_id = authentication.get_machine_id()
 
-        self.advanced_mode = authentication.check_authentication(auth_dict=self.settings['authentication'].get('codes', {}), email=self.settings['authentication'].get('email', ''), machineid=self.machine_id)
+        self.advanced_mode = authentication.check_authentication(auth_dict=self.settings['authentication'].get('codes', {}).get(ACTUAL_OS, {}), email=self.settings['authentication'].get('email', ''), machineid=self.machine_id)
+        print(self.advanced_mode)
         #self.advanced_mode = True
         # Setting the gradient background
         self.background_label = QLabel(self)
