@@ -12,6 +12,7 @@ import ass
 import re
 import ttml
 import captionstransformer
+import pycaption
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
 
@@ -133,8 +134,13 @@ def process_subtitles_file(subtitle_file=False):
             end = (timecode.Timecode('ms', str(caption.end).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
             duration = end - start
             final_subtitles.append([start, duration, str(caption.text)])
-    elif subtitle_file.lower().endswith(('.ttml')):
+    elif subtitle_file.lower().endswith(('.ttml')): # same as dfxp
         final_subtitles = ttml.parse_ttml_file(subtitle_file)
+    elif subtitle_file.lower().endswith(('.dfxp')):# same as ttml
+        with open(subtitle_file) as dfxp_file:
+            dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
+            for caption in dfxp_reader.get_captions(list(dfxp_reader._captions.keys())[0]):
+                final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
     elif subtitle_file.lower().endswith(('.sbv')):
         from captionstransformer.sbv import Reader as sbv_reader
         captions = sbv_reader(open(subtitle_file)).read()

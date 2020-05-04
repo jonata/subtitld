@@ -5,16 +5,26 @@ import sys
 import subprocess
 import requests
 import hashlib
-from datetime import datetime
+import json
+from datetime import datetime, timedelta
+
+from modules.paths import *
+
 
 def get_machine_id():
     machine_id = ''
     if sys.platform == 'darwin':
-        ioreg_cmd = subprocess.run(['ioreg','-rd1','-c','IOPlatformExpertDevice'], stdout=subprocess.PIPE, text=True)
-        machine_id = ioreg.stdout.split('IOPlatformUUID',1)[1].split('\n')[0].strip()
+        ioreg_cmd = subprocess.run([
+                'ioreg',
+                '-rd1',
+                '-c',
+                'IOPlatformExpertDevice'
+                ], stdout=subprocess.PIPE, text=True)
+        machine_id = ioreg.stdout.split('IOPlatformUUID', 1)[1].split('\n')[0].strip()
     elif sys.platform in ['win32', 'msys']:
-        reg_cmd = subprocess.run(['reg', 'query', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography', '/v', 'MachineGuid'], stdout=subprocess.PIPE, text=True, startupinfo=STARTUPINFO)
-        machine_id = reg_cmd.stdout.split('REG_SZ',1)[1].strip()
+        reg_cmd = subprocess.run(['reg', 'query', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography',
+                                  '/v', 'MachineGuid'], stdout=subprocess.PIPE, text=True, startupinfo=STARTUPINFO)
+        machine_id = reg_cmd.stdout.split('REG_SZ', 1)[1].strip()
     elif 'bsd' in sys.platform:
         machine_id = open('/etc/hostid', 'r').read().strip()
     else:
@@ -22,31 +32,40 @@ def get_machine_id():
 
     return machine_id
 
+
 def verify_user_and_machineid(email=False, machine_id=False):
     if email and machine_id:
         information = {
-                            'email': email,
-                            'machineid': machine_id,
-                            'os': str(sys.platform)
+            'email': email,
+            'machineid': machine_id,
+            'os': str(sys.platform)
         }
-        response = requests.post('https://api.jonata.org/subtitld/verify_email_and_machineid', json=information)
+        response = requests.post(
+            'https://api2.jonata.org/subtitld/verify_email_and_machineid', json=information)
 
         return response.json()
+
 
 def check_authentication(auth_dict=False, email=False, machineid=False):
     result = False
     if auth_dict and email and machineid:
         date_today = datetime.now().strftime("%Y%m%d")
         auth_hash = auth_dict.get(date_today, '')
+        print(auth_dict)
+        print(hashlib.md5(str(email + '|' + machineid + '|' + date_today).encode()).hexdigest())
         if auth_hash == hashlib.md5(str(email + '|' + machineid + '|' + date_today).encode()).hexdigest():
             result = True
     return result
 
+
 def append_authentication_keys(config=False, dict=False):
+    if not 'codes' in config['authentication'].keys():
+        config['authentication']['codes'] = { ACTUAL_OS : {} }
     if config and dict:
         for date in dict.keys():
-            if datetime.strptime(date, '%Y%m%d') >= datetime.now():
-                config['authentication']['codes'][date] = dict[date]
+            if datetime.strptime(date, '%Y%m%d') >= (datetime.now() - timedelta(days=1)):
+                config['authentication']['codes'][ACTUAL_OS][date] = dict[date]
+
 
 def load_subtitld_codes_file(path=''):
     final_dict = {}
@@ -57,11 +76,13 @@ def load_subtitld_codes_file(path=''):
                 final_dict = json_dict['authentication_keys'][ACTUAL_OS]
     return final_dict
 
+
 def get_days_to_expiry_date(auth_dict=False):
     days = 0
     if auth_dict:
-        last_day = auth_dict.keys()[-1]
+        last_day = sorted(auth_dict.keys())[-1]
         days = (datetime.strptime(last_day, '%Y%m%d') - datetime.now()).days
+
     return days
 
 #
