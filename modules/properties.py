@@ -49,7 +49,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.properties_information.setObjectName('properties_information')
 
 def resized(self):
-    if self.subtitles_list:
+    if self.subtitles_list or self.video_metadata:
         self.properties_widget.setGeometry((self.width()*.8)+15,0,(self.width()*.2)-15,self.height())
     else:
         self.properties_widget.setGeometry(self.width(),0,(self.width()*.2)-15,self.height())

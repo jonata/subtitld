@@ -127,7 +127,12 @@ def load(self):
 
     self.start_screen_adver_label_status = QLabel(parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_status.setObjectName('start_screen_adver_label_status')
-    self.start_screen_adver_label_status.setText('There is no information available.' + str(str('<br><small style="color:#3e5363;" >LAST CHECKED: ' + datetime.strptime(self.settings['authentication']['last_checked'], '%Y%m%d%H%M%S').strftime("%d/%m/%Y - %H:%M:%S")) if self.settings['authentication'].get('last_checked', '') else str('')))
+    if self.advanced_mode:
+        text = 'You are using the advanced version.'
+    else:
+        text = 'You are usign the basic version.'
+    text += str(str('<br><small style="color:#3e5363;" >LAST CHECKED: ' + datetime.strptime(self.settings['authentication']['last_checked'], '%Y%m%d%H%M%S').strftime("%d/%m/%Y - %H:%M:%S")) if self.settings['authentication'].get('last_checked', '') else str(''))
+    self.start_screen_adver_label_status.setText(text)
 
     self.start_screen_adver_label_machineid_verify = QPushButton('VERIFY', parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_machineid_verify.clicked.connect(lambda:start_screen_adver_label_machineid_verify_clicked(self))
@@ -141,7 +146,6 @@ def load(self):
         text = ''
 
         self.settings['authentication']['last_checked'] = datetime.now().strftime("%Y%m%d%H%M%S")
-        print(command)
         if command.get('is_valid', False):
             text = 'You can use Subtitld Advanced features until ' + command['expiry_date']  + str('.')
             if command.get('authentication_keys', '') and command['authentication_keys'].get(ACTUAL_OS, ''):

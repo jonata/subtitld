@@ -268,7 +268,7 @@ def playercontrols_playpause_button_update(self):
     self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.png')) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')) )
 
 def resized(self):
-    if self.subtitles_list:
+    if self.subtitles_list or self.video_metadata:
         self.playercontrols_widget.setGeometry(0,self.height()-200,self.width(),200)
     else:
         self.playercontrols_widget.setGeometry(0,self.height(),self.width(),200)
@@ -356,11 +356,11 @@ def show(self):
         self.repeat_playback_times.setVisible(False)
 
 def zoomin_button_clicked(self):
-    self.mediaplayer_zoom += 5.0
+    self.mediaplayer_zoom += 10.0
     zoom_buttons_update(self)
 
 def zoomout_button_clicked(self):
-    self.mediaplayer_zoom -= 5.0
+    self.mediaplayer_zoom -= 10.0
     zoom_buttons_update(self)
 
 def zoom_buttons_update(self):

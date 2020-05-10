@@ -97,7 +97,7 @@ def open_filepath(self, file_to_open=False):
         self.thread_extract_waveform.start()
         self.videoinfo_label.setText('Extracting audio...')
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
-        self.thread_extract_scene_time_positions.start()
+        #self.thread_extract_scene_time_positions.start()
 
         self.player.update(self)
         self.player_widget.mpv.play(self.video_metadata['filepath'])
@@ -194,7 +194,7 @@ def process_video_file(video_file=False):
     video_metadata = {}
     json_result = waveform.ffmpeg_load_metadata(video_file)
     video_metadata['audio'] = False #{0: False}
-    video_metadata['waveform'] = False #{0: False}
+    video_metadata['waveform'] = {} #{0: False}
     video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
     for stream in json_result.get('streams', []):
         if stream.get('codec_type', '') == 'video' and not stream.get('codec_name', 'png') == 'png':
