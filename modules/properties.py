@@ -16,14 +16,6 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.properties_widget_animation = QPropertyAnimation(self.properties_widget, b'geometry')
     self.properties_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
-    # class properties_textedit(QTextEdit):
-    #     def keyPressEvent(self, e):
-    #         print("event", e)
-    #         if e.key()  == Qt.Key_Return :
-    #             print(' return')
-    #         elif e.key() == Qt.Key_Enter :
-    #             print(' enter')
-
     self.properties_textedit = QTextEdit(parent=self.properties_widget)
     #self.properties_textedit.setAttribute(Qt.WA_AlwaysStackOnTop)
     #self.properties_textedit.setVisible(False)

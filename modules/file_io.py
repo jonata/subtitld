@@ -121,12 +121,16 @@ def open_filepath(self, file_to_open=False):
 def process_subtitles_file(subtitle_file=False):
     final_subtitles = []
     if subtitle_file.lower().endswith('.srt'):
-        with open(subtitle_file) as srtfile:
-            subs = pysrt.from_string(srtfile.read())
-            for sub in subs:
-                start = (timecode.Timecode('ms', str(sub.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
-                duration = (timecode.Timecode('ms', str(sub.duration).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
-                final_subtitles.append([start, duration, str(sub.text)])
+        with open(subtitle_file) as srt_file:
+            dfxp_reader = pycaption.SRTReader().read(srt_file.read())
+            for caption in dfxp_reader.get_captions(list(dfxp_reader._captions.keys())[0]):
+                final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+        # with open(subtitle_file) as srtfile:
+        #     subs = pysrt.from_string(srtfile.read())
+        #     for sub in subs:
+        #         start = (timecode.Timecode('ms', str(sub.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
+        #         duration = (timecode.Timecode('ms', str(sub.duration).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
+        #         final_subtitles.append([start, duration, str(sub.text)])
     elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
         vttfile = webvtt.read(subtitle_file)
         for caption in vttfile:
