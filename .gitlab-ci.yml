@@ -39,8 +39,8 @@ staging:amd64:
   #- cd ..
   - python3 -m pip install --upgrade pip
   - python3 -m pip install -r requirements.txt
-  - python3 -m pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
-  - python3 -m pip uninstall -y enum34
+  #- python3 -m pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
+  #- python3 -m pip uninstall -y enum34
   - python3 -m PyInstaller subtitld_linux.spec
   - mv dist .dist
   - mv snap .snap
@@ -71,7 +71,7 @@ windows-nsis:
   - unzip ffmpeg-latest-win64-static.zip
   - wget https://mpv.srsfckn.biz/mpv-dev-latest.7z
   - 7z x -ompv mpv-dev-latest.7z
-  - wine pip uninstall -y enum34
+  # - wine pip uninstall -y enum34
   - wine pyinstaller subtitld_win.spec
   - makensis subtitld_win.nsi
   - export SSHPASS=$USER_PASS
