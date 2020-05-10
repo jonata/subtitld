@@ -12,7 +12,7 @@ from modules import waveform
 from modules import history
 
 class thread_get_waveform(QThread):
-    command = pyqtSignal(QImage)
+    command = pyqtSignal(list)
     zoom = False
     audio = False
     duration = False
@@ -21,7 +21,8 @@ class thread_get_waveform(QThread):
     def run(self):
         #if self.audio.any() and not self.zoom == False and not self.duration == False and not self.audio == False and not self.width == False and not self.height == False:
         #result = {self.zoom : waveform.get_waveform_zoom(zoom=self.zoom, duration=self.duration, audio=self.audio, width=self.width, height=self.height)}
-        self.command.emit(waveform.get_waveform_zoom(zoom=self.zoom, duration=self.duration, audio=self.audio, width=self.width, height=self.height))
+        #self.command.emit(waveform.get_waveform_zoom(zoom=self.zoom, duration=self.duration, audio=self.audio, width=self.width, height=self.height))
+        self.command.emit([self.zoom, waveform.generate_waveform_zoom(zoom=self.zoom, duration=self.duration, waveform=self.audio)])
 
 def get_timeline_time_str(seconds):
     secs = int(seconds % 60)
@@ -47,34 +48,68 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
         offset = 0.0
         show_limiters = False
         is_cursor_pressing = False
+        waveformsize = .7
         def paintEvent(widget, paintEvent):
             painter = QPainter(widget)
             scroll_position = self.timeline_scroll.horizontalScrollBar().value()
-            scroll_width = widget.width()
+            scroll_width = self.timeline_scroll.width()
 
             painter.setRenderHint(QPainter.Antialiasing)
 
             painter.setOpacity(self.mediaplayer_opacity)
+
             if self.mediaplayer_view_mode and self.video_metadata.get('waveform', {}):
                 if self.mediaplayer_view_mode in ['waveform', 'verticalform']:
-                    if self.video_metadata.get('waveform', False):
-                        p = self.video_metadata['waveform'].width()/widget.width()
-                        painter.drawPixmap(scroll_position, 43, scroll_width, widget.height() - 40, QPixmap(self.video_metadata['waveform'].copy(scroll_position*p, 0, scroll_width*p, widget.height() - 40))) #
-                    # zoom_values = sorted(self.video_metadata.get('waveform', {}).keys())[1:]
-                    # if len(zoom_values) > 0:
-                    #     if self.mediaplayer_zoom in zoom_values:
-                    #         waveform = self.video_metadata.get('waveform', {})[self.mediaplayer_zoom]
-                    #         #painter.drawPixmap(0, 40, waveform)
-                    #     #else:
-                    #     #    waveform = self.video_metadata.get('waveform', {})[zoom_values[bisect(zoom_values, self.mediaplayer_zoom)]]
-                    #         p = waveform.width()/widget.width()
-                    #         painter.drawPixmap(scroll_position, 43, scroll_width, widget.height() - 40, QPixmap(waveform.copy(scroll_position*p, 0, scroll_width*p, widget.height() - 40))) #
+                    if self.video_metadata.get('waveform', {}):
+                        x_factor = 1
+                        available_zoom = self.mediaplayer_zoom
+                        if not available_zoom in self.video_metadata['waveform'].keys():
+                            available_zoom = sorted(self.video_metadata['waveform'].keys())[0]
+                            x_factor *= (self.mediaplayer_zoom/available_zoom)
+
+                        painter.setPen(QPen(QColor.fromRgb(21,52,80,255), 1, Qt.SolidLine))
+                        painter.setBrush(QColor.fromRgb(21,52,80,alpha=200))
+
+                        x_position = 0
+                        polygon = QPolygonF()
+
+                        for point in self.video_metadata['waveform'][available_zoom][0][int(scroll_position/x_factor):int((scroll_position+scroll_width)/x_factor)]:
+                            polygon.append(QPointF(x_position+scroll_position, ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
+                            x_position += x_factor
+
+                        for point in reversed(self.video_metadata['waveform'][available_zoom][1][int(scroll_position/x_factor):int((scroll_position+scroll_width)/x_factor)]):
+                            polygon.append(QPointF(x_position+scroll_position, ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
+                            x_position -= x_factor
+
+                        painter.drawPolygon(polygon)
+
+                #             p = self.video_metadata['waveform'].width()/widget.width()
+                #             painter.drawPixmap(scroll_position, 43, scroll_width, widget.height() - 40, QPixmap(self.video_metadata['waveform'].copy(scroll_position*p, 0, scroll_width*p, widget.height() - 40))) #
+
+
+                # zoom_values = sorted(self.video_metadata.get('waveform', {}).keys())[1:]
+                # if len(zoom_values) > 0:
+                #     if self.mediaplayer_zoom in zoom_values:
+                #         waveform = self.video_metadata.get('waveform', {})[self.mediaplayer_zoom]
+                #         #painter.drawPixmap(0, 40, waveform)
+                #     #else:
+                #     #    waveform = self.video_metadata.get('waveform', {})[zoom_values[bisect(zoom_values, self.mediaplayer_zoom)]]
+                #         p = waveform.width()/widget.width()
+                #         painter.drawPixmap(scroll_position, 43, scroll_width, widget.height() - 40, QPixmap(waveform.copy(scroll_position*p, 0, scroll_width*p, widget.height() - 40))) #
+
 
             if self.subtitles_list:
                 painter.setOpacity(1)
                 painter.setPen(QPen(QColor.fromRgb(240,240,240,200), 1, Qt.SolidLine))
+                #showing_sub = 0
                 for subtitle in self.subtitles_list:
-                    if ((subtitle[0] / self.video_metadata.get('duration', 0.01)) > (scroll_position / widget.width()) or ((subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01)) > (scroll_position / widget.width())) and ((subtitle[0] / self.video_metadata.get('duration', 0.01)) < ((scroll_position + scroll_width) / widget.width()) or ((subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01)) < ((scroll_position + scroll_width) / widget.width())):
+                    #if ((subtitle[0] / self.video_metadata.get('duration', 0.01)) > (scroll_position / widget.width()) or ((subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01)) > (scroll_position / widget.width())) and ((subtitle[0] / self.video_metadata.get('duration', 0.01)) < ((scroll_position + scroll_width) / widget.width()) or ((subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01)) < ((scroll_position + scroll_width) / widget.width())):
+                    if (subtitle[0] / self.video_metadata.get('duration', 0.01)) > ((scroll_position + scroll_width) / widget.width()):
+                        break
+                    elif (subtitle[0] + subtitle[1]) / self.video_metadata.get('duration', 0.01) < (scroll_position / widget.width()):
+                        continue
+                    else:
+                        #showing_sub += 1
                         if self.selected_subtitle == subtitle:
                             painter.setPen(QColor.fromRgb(48,66,81,alpha=255))
                             painter.setBrush(QColor.fromRgb(62,83,99,alpha=220))
@@ -122,7 +157,9 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                             painter.drawRoundedRect(lim_rect,1.0,1.0,Qt.AbsoluteSize)
                             painter.setPen(QColor.fromRgb(150,150,150,alpha=255))
                             painter.drawText(lim_rect,Qt.AlignCenter, '❯')
+
                 painter.setOpacity(1)
+                #print(showing_sub)
 
             grid_pen = QPen(QColor.fromRgb(106,116,131,20), 1, Qt.SolidLine)
             painter.setFont(QFont('Ubuntu Mono', 8))
@@ -322,7 +359,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     def thread_get_waveform_ended(command):
         #zoom = [*command.keys()][0]
-        self.video_metadata['waveform'] = command
+        self.video_metadata['waveform'][command[0]] = command[1]
         self.videoinfo_label.setText('Waveform updated')
         self.timeline_widget.update()
 
@@ -359,13 +396,12 @@ def update(self):
     self.timeline_widget.update()
 
 def zoom_update_waveform(self):
-    #if not type(self.video_metadata['waveform'][0]) == bool and not self.mediaplayer_zoom in self.video_metadata.get('waveform', {}).keys():
-    if not type(self.video_metadata['audio']) == bool:
+    if not type(self.video_metadata['audio']) == bool and not self.mediaplayer_zoom in self.video_metadata['waveform'].keys():
         self.videoinfo_label.setText('Generating waveform...')
         #self.thread_get_waveform.audio = self.video_metadata['waveform'][0]
         self.thread_get_waveform.audio = self.video_metadata['audio']
         self.thread_get_waveform.zoom = self.mediaplayer_zoom
         self.thread_get_waveform.duration = self.video_metadata.get('duration', 0.01)
-        self.thread_get_waveform.width = self.timeline_widget.width()
-        self.thread_get_waveform.height = self.timeline_widget.height()-40
+        #self.thread_get_waveform.width = self.timeline_widget.width()
+        #self.thread_get_waveform.height = self.timeline_widget.height()-40
         self.thread_get_waveform.start(QThread.IdlePriority)

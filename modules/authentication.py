@@ -51,8 +51,6 @@ def check_authentication(auth_dict=False, email=False, machineid=False):
     if auth_dict and email and machineid:
         date_today = datetime.now().strftime("%Y%m%d")
         auth_hash = auth_dict.get(date_today, '')
-        print(auth_dict)
-        print(hashlib.md5(str(email + '|' + machineid + '|' + date_today).encode()).hexdigest())
         if auth_hash == hashlib.md5(str(email + '|' + machineid + '|' + date_today).encode()).hexdigest():
             result = True
     return result

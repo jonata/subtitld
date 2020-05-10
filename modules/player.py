@@ -43,6 +43,7 @@ def load(self):
             self.mpv = MPV(vo='opengl-cb', ytdl=True)
             self.mpv.osd = False
             self.mpv.autosub = False
+            self.mpv.sid = 'no'
             self.mpv_gl = _mpv_get_sub_api(self.mpv.handle, MpvSubApi.MPV_SUB_API_OPENGL_CB)
             self.on_update_c = OpenGlCbUpdateFn(self.on_update)
             self.on_update_fake_c = OpenGlCbUpdateFn(self.on_update_fake)

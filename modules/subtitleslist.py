@@ -49,7 +49,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.subtitles_list_qlistwidget.clicked.connect(lambda:subtitles_list_qlistwidget_item_clicked(self))
 
 def resized(self):
-    if self.subtitles_list:
+    if self.subtitles_list or self.video_metadata:
         self.subtitles_list_widget.setGeometry(0,0,(self.width()*.2)-15,self.height())
     else:
         self.subtitles_list_widget.setGeometry(-((self.width()*.2)-15),0,(self.width()*.2)-15,self.height())

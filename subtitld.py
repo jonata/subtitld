@@ -25,7 +25,7 @@ class subtitld(QWidget):
         self.setAcceptDrops(True)
 
         # Setting some default values
-        self.update_accuracy = 100
+        self.update_accuracy = 200
         self.subtitles_list = []
         self.video_metadata = {}
 
@@ -63,7 +63,6 @@ class subtitld(QWidget):
         self.machine_id = authentication.get_machine_id()
 
         self.advanced_mode = authentication.check_authentication(auth_dict=self.settings['authentication'].get('codes', {}).get(ACTUAL_OS, {}), email=self.settings['authentication'].get('email', ''), machineid=self.machine_id)
-        print(self.advanced_mode)
         #self.advanced_mode = True
         # Setting the gradient background
         self.background_label = QLabel(self)
