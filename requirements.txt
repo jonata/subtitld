@@ -10,4 +10,3 @@ requests
 webvtt-py
 captionstransformer
 pycaption
-enum-compat
