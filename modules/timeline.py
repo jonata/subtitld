@@ -65,7 +65,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                         available_zoom = self.mediaplayer_zoom
                         if not available_zoom in self.video_metadata['waveform'].keys():
                             available_zoom = sorted(self.video_metadata['waveform'].keys())[0]
-                            x_factor *= (self.mediaplayer_zoom/available_zoom)
+                            #x_factor *= (available_zoom/self.mediaplayer_zoom)
+                            x_factor = self.mediaplayer_zoom/available_zoom
 
                         painter.setPen(QPen(QColor.fromRgb(21,52,80,255), 1, Qt.SolidLine))
                         painter.setBrush(QColor.fromRgb(21,52,80,alpha=200))
@@ -159,7 +160,6 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                             painter.drawText(lim_rect,Qt.AlignCenter, '❯')
 
                 painter.setOpacity(1)
-                #print(showing_sub)
 
             grid_pen = QPen(QColor.fromRgb(106,116,131,20), 1, Qt.SolidLine)
             painter.setFont(QFont('Ubuntu Mono', 8))
@@ -251,7 +251,6 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 start_position = (event.pos().x() - widget.offset) / widget.width_proportion
                 last_scene = scenes_list[bisect(scenes_list, start_position)-1]
                 next_scene = scenes_list[bisect(scenes_list, start_position)]
-                #print('mouse moved ' + str(event.pos().x()) + ' x ' + str(event.pos().y()))
                 if widget.subtitle_start_is_clicked:
                     end = self.subtitles_list[i][0] + self.subtitles_list[i][1]
                     if not start_position > (end - self.minimum_subtitle_width):
