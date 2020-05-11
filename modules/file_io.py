@@ -7,7 +7,6 @@ import datetime
 import numpy
 import ass
 import re
-import ttml
 import pycaption
 import subprocess
 # from moviepy.editor import VideoFileClip
@@ -137,10 +136,7 @@ def process_subtitles_file(subtitle_file=False):
             for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
-    elif subtitle_file.lower().endswith(('.ttml')): # same as dfxp
-        final_subtitles = ttml.parse_ttml_file(subtitle_file)
-
-    elif subtitle_file.lower().endswith(('.dfxp')):# same as ttml
+    elif subtitle_file.lower().endswith(('.ttml', '.dfxp')):
         with open(subtitle_file) as dfxp_file:
             dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
             for caption in dfxp_reader.get_captions(list(dfxp_reader._captions.keys())[0]):
