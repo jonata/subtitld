@@ -10,8 +10,9 @@ import ass
 import re
 import ttml
 import pycaption
-#from moviepy.editor import VideoFileClip
-#from pymediainfo import MediaInfo
+import subprocess
+# from moviepy.editor import VideoFileClip
+# from pymediainfo import MediaInfo
 
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
