@@ -5,7 +5,6 @@ import os
 import timecode
 import datetime
 import numpy
-import webvtt
 import ass
 import re
 import ttml
@@ -118,6 +117,7 @@ def open_filepath(self, file_to_open=False):
 
 def process_subtitles_file(subtitle_file=False):
     final_subtitles = []
+
     if subtitle_file.lower().endswith('.srt'):
         with open(subtitle_file) as srt_file:
             srt_content = srt_file.read()
@@ -125,25 +125,21 @@ def process_subtitles_file(subtitle_file=False):
             if ' -> ' in srt_content:
                 srt_content = srt_content.replace(' -> ', ' --> ')
 
-            dfxp_reader = pycaption.SRTReader().read(srt_content)
-            for caption in dfxp_reader.get_captions(list(dfxp_reader._captions.keys())[0]):
+            srt_reader = pycaption.SRTReader().read(srt_content)
+            for caption in srt_reader.get_captions(list(srt_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
-        # with open(subtitle_file) as srtfile:
-        #     subs = pysrt.from_string(srtfile.read())
-        #     for sub in subs:
-        #         start = (timecode.Timecode('ms', str(sub.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
-        #         duration = (timecode.Timecode('ms', str(sub.duration).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
-        #         final_subtitles.append([start, duration, str(sub.text)])
     elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
-        vttfile = webvtt.read(subtitle_file)
-        for caption in vttfile:
-            start = (timecode.Timecode('ms', str(caption.start).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
-            end = (timecode.Timecode('ms', str(caption.end).replace(',','.')).frames/1000) - .001 # sugerir para o pessoal do timecode pra implementar virgula
-            duration = end - start
-            final_subtitles.append([start, duration, str(caption.text)])
+        with open(subtitle_file) as vtt_file:
+            vtt_content = vtt_file.read()
+
+            vtt_reader = pycaption.WebVTTReader().read(vtt_content)
+            for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
+                final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+
     elif subtitle_file.lower().endswith(('.ttml')): # same as dfxp
         final_subtitles = ttml.parse_ttml_file(subtitle_file)
+
     elif subtitle_file.lower().endswith(('.dfxp')):# same as ttml
         with open(subtitle_file) as dfxp_file:
             dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
