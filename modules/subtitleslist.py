@@ -98,15 +98,15 @@ def show(self):
 def toppanel_save_button_clicked(self):
     if not self.actual_subtitle_file:
 
-        suggested_path = os.path.dirname(actual_video_file)
+        suggested_path = os.path.dirname(self.video_metadata['filepath'])
         if self.advanced_mode:
             save_formats = 'SRT file (*.srt)'
-            suggested_name = os.path.basename(actual_video_file).rsplit('.',1)[0]
+            suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.',1)[0]
         else:
             save_formats = 'SRT file (*.srt)'
-            suggested_name = os.path.basename(actual_video_file).rsplit('.',1)[0] + '.srt'
+            suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.',1)[0] + '.srt'
 
-        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, "Select the srt file", os.path.join(suggested_path, suggested_path), save_formats)[0]
+        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, "Select the srt file", os.path.join(suggested_path, suggested_name), save_formats)[0]
 
     if self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list)
