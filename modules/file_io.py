@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
-import pysrt
 import timecode
 import datetime
 import numpy
@@ -11,7 +9,6 @@ import webvtt
 import ass
 import re
 import ttml
-import captionstransformer
 import pycaption
 #from moviepy.editor import VideoFileClip
 #from pymediainfo import MediaInfo
