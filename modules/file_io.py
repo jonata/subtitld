@@ -122,9 +122,15 @@ def process_subtitles_file(subtitle_file=False):
     final_subtitles = []
     if subtitle_file.lower().endswith('.srt'):
         with open(subtitle_file) as srt_file:
-            dfxp_reader = pycaption.SRTReader().read(srt_file.read())
+            srt_content = srt_file.read()
+
+            if ' -> ' in srt_content:
+                srt_content = srt_content.replace(' -> ', ' --> ')
+
+            dfxp_reader = pycaption.SRTReader().read(srt_content)
             for caption in dfxp_reader.get_captions(list(dfxp_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+
         # with open(subtitle_file) as srtfile:
         #     subs = pysrt.from_string(srtfile.read())
         #     for sub in subs:
@@ -216,16 +222,12 @@ def save_file(final_file, subtitles_list):
         if not final_file.lower().endswith('.srt'):
             final_file += '.srt'
 
-        def humanize_time(secs):
-            secs, mils = divmod(secs, 1)
-            mins, secs = divmod(secs, 60)
-            hours, mins = divmod(mins, 60)
-            return '%02d:%02d:%02d,%03d' % (hours, mins, secs, mils*1000)
-
-        srtfile = pysrt.SubRipFile()
-        counter = 1
+        captions = pycaption.CaptionList()
         for sub in subtitles_list:
-            sub = pysrt.SubRipItem(counter, start=humanize_time(sub[0]), end=humanize_time(sub[0] + sub[1]), text=sub[2])
-            srtfile.append(sub)
-            counter += 1
-        srtfile.save(final_file)
+            # skip extra blank lines
+            nodes = [pycaption.CaptionNode.create_text(sub[2])]
+            caption = pycaption.Caption(sub[0]*1000000, (sub[0] + sub[1])*.1000000, nodes)
+            captions.append(caption)
+        caption_set = pycaption.CaptionSet({'en': captions})
+
+        open(final_file, 'w').write(pycaption.SRTWriter().write(caption_set))
