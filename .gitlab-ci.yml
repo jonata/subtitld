@@ -69,7 +69,7 @@ windows-nsis:
   - wine pip3 install -r requirements.txt
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
   - unzip ffmpeg-latest-win64-static.zip
-  - wget https://mpv.srsfckn.biz/mpv-dev-latest.7z
+  - wget --no-check-certificate https://mpv.srsfckn.biz/mpv-dev-latest.7z
   - 7z x -ompv mpv-dev-latest.7z
   - wine pip uninstall -y enum34
   - wine PyInstaller subtitld_win.spec
