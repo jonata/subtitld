@@ -130,9 +130,7 @@ def process_subtitles_file(subtitle_file=False):
 
     elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
         with open(subtitle_file) as vtt_file:
-            vtt_content = vtt_file.read()
-
-            vtt_reader = pycaption.WebVTTReader().read(vtt_content)
+            vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
             for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
@@ -141,19 +139,23 @@ def process_subtitles_file(subtitle_file=False):
             dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
             for caption in dfxp_reader.get_captions(list(dfxp_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+
     elif subtitle_file.lower().endswith(('.sbv')):
         from captionstransformer.sbv import Reader as sbv_reader
         captions = sbv_reader(open(subtitle_file)).read()
         for caption in captions:
             final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), caption.text])
+
     elif subtitle_file.lower().endswith(( '.smi', '.sami')):
-        from captionstransformer.sami import Reader as sami_reader
-        captions = sami_reader(open(subtitle_file)).read()
-        for caption in captions:
-            final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), caption.text])
+        with open(subtitle_file) as sami_file:
+            sami_reader = pycaption.SAMIReader().read(sami_file.read())
+            for caption in sami_reader.get_captions(list(sami_reader._captions.keys())[0]):
+                final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+
     elif subtitle_file.lower().endswith(( '.scc')):
         import scc2srt
         final_subtitles = scc2srt.get_list_of_captions(subtitle_file)
+
     elif subtitle_file.lower().endswith(('.xml')):
         if '<transcript>' in open(subtitle_file).read():
             from captionstransformer.transcript import Reader as transcript_reader

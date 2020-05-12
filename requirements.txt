@@ -8,3 +8,4 @@ sip
 cffi
 requests
 pycaption
+captionstransformer
