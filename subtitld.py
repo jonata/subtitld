@@ -168,7 +168,6 @@ class subtitld(QWidget):
 
         self.background_watermark_label.setGeometry(int((self.width()*.5)-129), int(((self.height()-self.playercontrols_widget.height())*.5)-129), 258, 258)
 
-
         self.player.resized(self)
         self.timeline.resized(self)
 
@@ -413,17 +412,9 @@ def viewnotesout_button_clicked(self):
     self.timeline_widget.update()
 
 
-def show_importer_pannel_button_clicked(self):
-    if self.show_importer_panel_button.isChecked():
-        generate_effect(self.importer.widget_animation, 'geometry', 500, [self.importer.widget.x(),self.importer.widget.y(),self.importer.widget.width(),self.importer.widget.height()], [self.width()-300,self.importer.widget.y(),self.importer.widget.width(),self.importer.widget.height()])
-        generate_effect(self.show_importer_panel_button_animation, 'geometry', 500, [self.show_importer_panel_button.x(),self.show_importer_panel_button.y(),self.show_importer_panel_button.width(),self.show_importer_panel_button.height()], [self.width()-290,self.show_importer_panel_button.y(),self.show_importer_panel_button.width(),self.show_importer_panel_button.height()])
-    else:
-        generate_effect(self.importer.widget_animation, 'geometry', 500, [self.importer.widget.x(),self.importer.widget.y(),self.importer.widget.width(),self.importer.widget.height()], [self.width(),self.importer.widget.y(),self.importer.widget.width(),self.importer.widget.height()])
-        generate_effect(self.show_importer_panel_button_animation, 'geometry', 500, [self.show_importer_panel_button.x(),self.show_importer_panel_button.y(),self.show_importer_panel_button.width(),self.show_importer_panel_button.height()], [self.width()-25,self.show_importer_panel_button.y(),self.show_importer_panel_button.width(),self.show_importer_panel_button.height()])
-
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    #app.setDesktopSettingsAware(False)
+    # app.setDesktopSettingsAware(False)
     app.setStyle("plastique")
     app.setApplicationName("Subtitld")
 
@@ -461,7 +452,6 @@ if __name__ == '__main__':
     # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-SemiBoldItalic.otf'))
     # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-Thin.otf'))
     # font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Montserrat-ThinItalic.otf'))
-
 
     app.setFont(QFont('Ubuntu', 10))
     app.main = subtitld()

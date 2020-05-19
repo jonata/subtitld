@@ -2,25 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import os
-import timecode
 import datetime
 import numpy
 import ass
 import re
 import pycaption
 import subprocess
-# from moviepy.editor import VideoFileClip
-# from pymediainfo import MediaInfo
 
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from modules import waveform
-from modules.paths import *
+from modules.paths import STARTUPINFO, FFMPEG_EXECUTABLE, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
+
 
 class thread_extract_scene_time_positions(QThread):
     command = pyqtSignal(list)
     filepath = ''
+
     def run(self):
         if self.filepath:
             result = []
@@ -33,7 +32,7 @@ class thread_extract_scene_time_positions(QThread):
             p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
             for line in p.stdout.read().decode().split('\n'):
                 if line.startswith(('[')) and 'pts_time:' in line:
-                    result.append(float(line.split('pts_time:',1)[-1].split(' ',1)[0]))
+                    result.append(float(line.split('pts_time:', 1)[-1].split(' ', 1)[0]))
 
             self.command.emit(result)
 
@@ -45,14 +44,15 @@ class thread_extract_waveform(QThread):
     duration = ''
     width = ''
     height = ''
+
     def run(self):
         if self.filepath:
             result = waveform.ffmpeg_load_audio(filepath=self.filepath)
             self.command.emit(result)
 
+
 def load(self):
     def thread_extract_waveform_ended(command):
-        #self.video_metadata['waveform'][0] = command
         self.video_metadata['audio'] = command
         self.timeline.zoom_update_waveform(self)
         self.videoinfo_label.setText('Audio extracted')
@@ -66,13 +66,12 @@ def load(self):
     self.thread_extract_scene_time_positions = thread_extract_scene_time_positions(self)
     self.thread_extract_scene_time_positions.command.connect(thread_extract_scene_time_positions_ended)
 
+
 def open_filepath(self, file_to_open=False):
     if not file_to_open:
         supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS]))
         supported_video_files = "Video files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
 
-        #supported_subtitle_files = ';;'.join([str(ext + ' file (*' + ext + ')') for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS])
-        #supported_video_files = ';;'.join([str(ext + ' file (*' + ext + ')') for ext in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS])
         file_to_open = QFileDialog.getOpenFileName(self, "Select the video or subtitle file", os.path.expanduser("~"), supported_subtitle_files + ';;' + supported_video_files)[0]
 
     if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS):
@@ -93,7 +92,6 @@ def open_filepath(self, file_to_open=False):
         self.thread_extract_waveform.start()
         self.videoinfo_label.setText('Extracting audio...')
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
-        #self.thread_extract_scene_time_positions.start()
 
         self.player.update(self)
         self.player_widget.mpv.play(self.video_metadata['filepath'])
@@ -116,6 +114,7 @@ def open_filepath(self, file_to_open=False):
         #    self.global_properties_panel.hide_global_properties_panel(self)
 
         self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
+
 
 def process_subtitles_file(subtitle_file=False):
     final_subtitles = []

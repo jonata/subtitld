@@ -2,10 +2,9 @@
 
 import os
 import json
-import bcrypt
-import datetime
 
-from modules.paths import *
+from modules.paths import PATH_SUBTITLD_USER_CONFIG_FILE
+
 
 def load(config_file_path=False):
     config = {}
@@ -20,6 +19,7 @@ def load(config_file_path=False):
         config['authentication'] = {}
 
     return config
+
 
 def save(config=False, config_file_path=False):
     if config:

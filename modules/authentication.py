@@ -8,13 +8,13 @@ import hashlib
 import json
 from datetime import datetime, timedelta
 
-from modules.paths import *
+from modules.paths import STARTUPINFO, ACTUAL_OS
 
 
 def get_machine_id():
     machine_id = ''
     if sys.platform == 'darwin':
-        ioreg_cmd = subprocess.run([
+        ioreg = subprocess.run([
                 'ioreg',
                 '-rd1',
                 '-c',
@@ -22,7 +22,7 @@ def get_machine_id():
                 ], stdout=subprocess.PIPE, text=True)
         machine_id = ioreg.stdout.split('IOPlatformUUID', 1)[1].split('\n')[0].strip()
     elif sys.platform in ['win32', 'msys']:
-        reg_cmd = subprocess.run(['reg', 'query', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography',
+        reg_cmd = subprocess.run(['reg', 'query', 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography',
                                   '/v', 'MachineGuid'], stdout=subprocess.PIPE, text=True, startupinfo=STARTUPINFO)
         machine_id = reg_cmd.stdout.split('REG_SZ', 1)[1].strip()
     elif 'bsd' in sys.platform:
@@ -57,8 +57,8 @@ def check_authentication(auth_dict=False, email=False, machineid=False):
 
 
 def append_authentication_keys(config=False, dict=False):
-    if not 'codes' in config['authentication'].keys():
-        config['authentication']['codes'] = { ACTUAL_OS : {} }
+    if 'codes' not in config['authentication'].keys():
+        config['authentication']['codes'] = {ACTUAL_OS: {}}
     if config and dict:
         for date in dict.keys():
             if datetime.strptime(date, '%Y%m%d') >= (datetime.now() - timedelta(days=1)):

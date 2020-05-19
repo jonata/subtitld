@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from modules.paths import *
+from modules.paths import get_graphics_path
+
 
 def set_stylesheet(self):
     stylesheet_text = '''
@@ -99,64 +100,19 @@ def set_stylesheet(self):
                             '''
 
     for button_color in ['button', 'button_dark', 'button_red', 'button_green']:
-        sides = ['left','top','right','bottom','']
-        for crop1 in sides:
-            c = ['5px', '5px', '5px', '5px']
-            if crop1:
-                c[sides.index(crop1)] = '0'
-                crop1 = '_no_' + crop1
-            for crop2 in sides:
-                if (crop1 and not crop2) or (not crop1 == crop2) or (not crop1 or not crop2):
-                    c1 = c.copy()
-                    if crop2:
-                        c1[sides.index(crop2)] = '0'
-                        crop2 = '_no_' + crop2
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + '                                { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_normal.png') + '") 5 5 5 5 stretch stretch; outline: none; } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover:pressed                  { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':checked                        { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover:checked                  { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover                          { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 5 5 5 5 stretch stretch; outline: none; } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':disabled                       { font-size:11px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }'
+        stylesheet_text += '#' + button_color + '                                { font-size:11px; border-left:5px; border-top:5px; border-right:5px; border-bottom:5px; border-image: url("' + get_graphics_path(button_color + '_normal.png') + '") 5 5 5 5 stretch stretch; outline: none; } '
+        stylesheet_text += '#' + button_color + ':hover:pressed                  { font-size:11px; border-left:5px; border-top:5px; border-right:5px; border-bottom:5px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':checked                        { font-size:11px; border-left:5px; border-top:5px; border-right:5px; border-bottom:5px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':hover:checked                  { font-size:11px; border-left:5px; border-top:5px; border-right:5px; border-bottom:5px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 5 5 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':hover                          { font-size:11px; border-left:5px; border-top:5px; border-right:5px; border-bottom:5px; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 5 5 5 5 stretch stretch; outline: none; } '
+        stylesheet_text += '#' + button_color + ':disabled                       { font-size:11px; border-left:5px; border-top:5px; border-right:5px; border-bottom:5px; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 5 5 5 5 stretch stretch; outline: none; color:rgba(255,255,255,100); }'
 
     for button_color in ['subbutton', 'subbutton_dark']:
-        sides = ['left','top','right','bottom','']
-        for crop1 in sides:
-            c = ['5px', '2px', '2px', '2px']
-            if crop1:
-                c[sides.index(crop1)] = '0'
-                crop1 = '_no_' + crop1
-            for crop2 in sides:
-                if (crop1 and not crop2) or (not crop1 == crop2) or (not crop1 or not crop2):
-                    c1 = c.copy()
-                    if crop2:
-                        c1[sides.index(crop2)] = '0'
-                        crop2 = '_no_' + crop2
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + '                                { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_normal.png') + '") 2 2 2 5 stretch stretch; outline: none; color:rgba(48,66,81,255); text-align:left; font-weight:bold;} '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover:pressed                  { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':checked                        { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover:checked                  { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':hover                          { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 2 2 2 5 stretch stretch; outline: none; } '
-                    stylesheet_text += '#' + button_color + crop1 + crop2 + ':disabled                       { padding-left:4px; font-size:10px; border-left: ' + c1[0] + '; border-top: ' + c1[1] + '; border-right: ' + c1[2] + '; border-bottom: ' + c1[3] + '; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 2 2 2 5 stretch stretch; outline: none; color:rgba(0,0,0,100); }'
+        stylesheet_text += '#' + button_color + '                                { padding-left:4px; font-size:10px; border-left:5px; border-top:2px; border-right:2px; border-bottom:2px; border-image: url("' + get_graphics_path(button_color + '_normal.png') + '") 2 2 2 5 stretch stretch; outline: none; color:rgba(48,66,81,255); text-align:left; font-weight:bold;} '
+        stylesheet_text += '#' + button_color + ':hover:pressed                  { padding-left:4px; font-size:10px; border-left:5px; border-top:2px; border-right:2px; border-bottom:2px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':checked                        { padding-left:4px; font-size:10px; border-left:5px; border-top:2px; border-right:2px; border-bottom:2px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':hover:checked                  { padding-left:4px; font-size:10px; border-left:5px; border-top:2px; border-right:2px; border-bottom:2px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 2 2 2 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':hover                          { padding-left:4px; font-size:10px; border-left:5px; border-top:2px; border-right:2px; border-bottom:2px; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 2 2 2 5 stretch stretch; outline: none; } '
+        stylesheet_text += '#' + button_color + ':disabled                       { padding-left:4px; font-size:10px; border-left:5px; border-top:2px; border-right:2px; border-bottom:2px; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 2 2 2 5 stretch stretch; outline: none; color:rgba(0,0,0,100); }'
 
     self.setStyleSheet(stylesheet_text)
-
-
-                            #subbutton                                           { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_normal.png') + '''")                       2 2 2 5 stretch stretch; color:rgba(48,66,81,255); text-align:left;}
-                            #subbutton:hover:pressed                             { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_pressed.png') + '''")                      2 2 2 5 stretch stretch; }
-                            #subbutton:checked                                   { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_pressed.png') + '''")                      2 2 2 5 stretch stretch; }
-                            #subbutton:hover:checked                             { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_pressed.png') + '''")                      2 2 2 5 stretch stretch; }
-                            #subbutton:hover                                     { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_hover.png') + '''")                        2 2 2 5 stretch stretch; }
-                            #subbutton:disabled                                  { padding-left:2px;   border-top: 2px;    border-right: 2px;   border-bottom: 2px;    border-left: 5px; border-image: url("''' + get_graphics_path('subbutton_normal.png') + '''")                       2 2 2 5 stretch stretch; color:rgba(255,255,255,100);}
-
-# QScrollBar::add-line:horizontal             { margin: 0px 3px 0px 3px; border-image: url(:/qss_icons/rc/right_arrow_disabled.png); width: 10px; height: 10px; subcontrol-position: right; subcontrol-origin: margin; }
-# QScrollBar::sub-line:horizontal             { margin: 0px 3px 0px 3px; border-image: url(:/qss_icons/rc/left_arrow_disabled.png); height: 10px; width: 10px; subcontrol-position: left; subcontrol-origin: margin; }
-# QScrollBar::add-line:horizontal:hover,QScrollBar::add-line:horizontal:on { border-image: url(:/qss_icons/rc/right_arrow.png); height: 10px; width: 10px; subcontrol-position: right; subcontrol-origin: margin; }
-# QScrollBar::sub-line:horizontal:hover, QScrollBar::sub-line:horizontal:on {  border-image: url(:/qss_icons/rc/left_arrow.png); height: 10px; width: 10px; subcontrol-position: left; subcontrol-origin: margin; }
-#QScrollBar:vertical { background-color: #2A2929; width: 15px; margin: 15px 3px 15px 3px; border: 1px transparent #2A2929; border-radius: 4px; }
-# QScrollBar::handle:vertical { background-color: red; min-height: 5px; border-radius: 4px; }
-# QScrollBar::sub-line:vertical { margin: 3px 0px 3px 0px; border-image: url(:/qss_icons/rc/up_arrow_disabled.png); height: 10px; width: 10px; subcontrol-position: top; subcontrol-origin: margin; }
-# QScrollBar::add-line:vertical { margin: 3px 0px 3px 0px; border-image: url(:/qss_icons/rc/down_arrow_disabled.png); height: 10px; width: 10px; subcontrol-position: bottom; subcontrol-origin: margin; }
-# QScrollBar::sub-line:vertical:hover,QScrollBar::sub-line:vertical:on { border-image: url(:/qss_icons/rc/up_arrow.png); height: 10px; width: 10px; subcontrol-position: top; subcontrol-origin: margin; }
-# QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on { border-image: url(:/qss_icons/rc/down_arrow.png); height: 10px; width: 10px; subcontrol-position: bottom; subcontrol-origin: margin; }
-# QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical { background: none; }
-# QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { background: none; }
