@@ -19,7 +19,7 @@ STARTUPINFO = None
 
 ACTUAL_OS = 'linux'
 
-path_tmp = os.path.join(tempfile.gettempdir(), 'subtitld-' + str(random.randint(1000,9999)))
+path_tmp = os.path.join(tempfile.gettempdir(), 'subtitld-' + str(random.randint(1000, 9999)))
 if sys.platform == 'darwin':
     ACTUAL_OS = 'macos'
     PATH_SUBTITLD_USER_CONFIG = os.path.join(PATH_HOME, 'Library', 'Application Support', 'subtitld')
@@ -39,7 +39,7 @@ elif sys.platform == 'win32' or os.name == 'nt':
     STARTUPINFO.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     STARTUPINFO.wShowWindow = subprocess.SW_HIDE
 else:
-    REAL_PATH_HOME = subprocess.Popen(['getent','passwd',str(os.getuid())], stdout=subprocess.PIPE).stdout.read().decode().split(':')[5]
+    REAL_PATH_HOME = subprocess.Popen(['getent', 'passwd', str(os.getuid())], stdout=subprocess.PIPE).stdout.read().decode().split(':')[5]
     if not os.path.isdir(os.path.join(PATH_HOME, '.config')):
         os.mkdir(os.path.join(PATH_HOME, '.config'))
     PATH_SUBTITLD_USER_CONFIG = os.path.join(PATH_HOME, '.config', 'subtitld')
@@ -60,11 +60,13 @@ if not os.path.isdir(PATH_SUBTITLD_DATA_AUTH):
 
 PATH_SUBTITLD_USER_CONFIG_FILE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'subtitld.config')
 
+
 def get_graphics_path(filename):
     final_path = os.path.join(PATH_SUBTITLD_GRAPHICS, filename)
     if sys.platform == 'win32' or os.name == 'nt':
         final_path = final_path.replace('\\', '/')
     return final_path
+
 
 LIST_OF_SUPPORTED_VIDEO_EXTENSIONS = (('.mp4', '.mkv', '.mov', '.mpg', '.webm', '.ogv'))
 LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = (('.srt', '.webvtt', '.vtt', '.ass', '.ssa', '.ttml', '.sbv', '.xml', '.smi', '.sami', '.scc', '.dfxp'))

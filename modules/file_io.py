@@ -111,6 +111,9 @@ def open_filepath(self, file_to_open=False):
         self.playercontrols.show(self)
         self.properties.show(self)
         self.subtitleslist.show(self)
+        # if self.advanced_mode:
+        #    self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
+        #    self.global_properties_panel.hide_global_properties_panel(self)
 
         self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
 
