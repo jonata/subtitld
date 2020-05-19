@@ -2,20 +2,19 @@
 
 import os
 import sys
-import threading
 import time
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import Qt, QTimer, QRect, QPropertyAnimation, QEasingCurve
+from PyQt5.QtCore import Qt, QTimer, QRect, QPropertyAnimation
 
-from modules.paths import *
-from modules.history import *
-#from modules import file_io
-from modules import waveform
+from modules.paths import PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
+from modules.history import history_redo, history_undo
 from modules import config
 from modules import authentication
 
-import numpy
+if ACTUAL_OS == 'darwin':
+    from modules.paths import NSURL
+
 
 class subtitld(QWidget):
     def __init__(self):
@@ -63,8 +62,7 @@ class subtitld(QWidget):
         self.machine_id = authentication.get_machine_id()
 
         self.advanced_mode = authentication.check_authentication(auth_dict=self.settings['authentication'].get('codes', {}).get(ACTUAL_OS, {}), email=self.settings['authentication'].get('email', ''), machineid=self.machine_id)
-        #self.advanced_mode = True
-        # Setting the gradient background
+
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')
 
@@ -98,9 +96,17 @@ class subtitld(QWidget):
         self.player = player
         self.player.load(self)
 
+        from modules import global_subtitlesvideo_panel
+        self.global_subtitlesvideo_panel = global_subtitlesvideo_panel
+        self.global_subtitlesvideo_panel.load(self, PATH_SUBTITLD_GRAPHICS)
+
         from modules import subtitleslist
         self.subtitleslist = subtitleslist
         self.subtitleslist.load(self, PATH_SUBTITLD_GRAPHICS)
+
+        from modules import global_properties_panel
+        self.global_properties_panel = global_properties_panel
+        self.global_properties_panel.load(self, PATH_SUBTITLD_GRAPHICS)
 
         from modules import properties
         self.properties = properties
@@ -113,19 +119,6 @@ class subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
 
-
-        #from modules import document_edit
-        #self.document_edit = document_edit
-        #self.document_edit.load(self, PATH_SUBTITLD_GRAPHICS)
-
-        #from modules import top_bar
-        #self.top_bar = top_bar
-        #self.top_bar.load(self, PATH_SUBTITLD_GRAPHICS)
-
-        #from modules import importer
-        #self.importer = importer
-        #self.importer.load(self, PATH_SUBTITLD_GRAPHICS)
-
         self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
 
         self.subtitleslist.update_subtitles_list_widget(self)
@@ -134,7 +127,7 @@ class subtitld(QWidget):
 
         self.timer = QTimer(self)
         self.timer.setInterval(self.update_accuracy)
-        self.timer.timeout.connect(lambda:self.update_things())
+        self.timer.timeout.connect(lambda: self.update_things())
         self.timer.start()
 
     def dragEnterEvent(widget, event):
@@ -161,17 +154,21 @@ class subtitld(QWidget):
             event.accept()
 
     def resizeEvent(self, event):
-        self.background_label.setGeometry(0,0,self.width(),self.height())
-        self.background_label2.setGeometry(0,0,self.width(),self.height())
+        self.background_label.setGeometry(0, 0, self.width(), self.height())
+        self.background_label2.setGeometry(0, 0, self.width(), self.height())
 
         self.startscreen.resized(self)
-
         self.subtitleslist.resized(self)
+        self.properties.resized(self)
+
+        self.global_subtitlesvideo_panel.resized(self)
+        self.global_properties_panel.resized(self)
+
         self.playercontrols.resized(self)
 
-        self.background_watermark_label.setGeometry(int((self.width()*.5)-129),int(((self.height()-self.playercontrols_widget.height())*.5)-129),258,258)
+        self.background_watermark_label.setGeometry(int((self.width()*.5)-129), int(((self.height()-self.playercontrols_widget.height())*.5)-129), 258, 258)
 
-        self.properties.resized(self)
+
         self.player.resized(self)
         self.timeline.resized(self)
 
@@ -375,24 +372,14 @@ class subtitld(QWidget):
     def generate_effect(self, widget, effect_type, duration, startValue, endValue):
         widget.setDuration(duration)
         if effect_type == 'geometry':
-            widget.setStartValue(QRect(startValue[0],startValue[1],startValue[2],startValue[3]))
-            widget.setEndValue(QRect(endValue[0],endValue[1],endValue[2],endValue[3]))
+            widget.setStartValue(QRect(startValue[0], startValue[1], startValue[2], startValue[3]))
+            widget.setEndValue(QRect(endValue[0], endValue[1], endValue[2], endValue[3]))
         elif effect_type == 'opacity':
             widget.setStartValue(startValue)
             widget.setEndValue(endValue)
         widget.start()
 
-
     def update_things(self):
-        # if self.mediaplayer_is_playing:
-        #     self.mediaplayer_current_position += ((self.update_accuracy*.001)/self.music_length)#(event.pos().x() / widget.width()) * len(self.music_waveform['full'])
-        #     if self.player_controls.play_button_selection.isChecked() and self.selected_note:
-        #         if self.mediaplayer_current_position*len(self.music_waveform['full']) > (int(self.lyrics_metadata['gap'] * ( len(self.music_waveform['full']) / (self.music_length * 1000))) + int(    ((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[0])) + int(    ((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[1]))):
-        #             self.player_controls.stop_button.setVisible(False)
-        #             self.player_controls.play_button.setVisible(True)
-        #             self.player_controls.play_button_selection.setVisible(True)
-        #             self.mediaplayer_is_playing = False
-        #             self.mediaplayer_current_position = float((int(self.lyrics_metadata['gap'] * ( len(self.music_waveform['full']) / (self.music_length * 1000))) + int(((len(self.music_waveform['full']) / (self.music_length/60.0))    /     self.lyrics_metadata['bpm'])*.25         * int(self.selected_note[0]))) / len(self.music_waveform['full']))
         if self.mediaplayer_is_playing:
             self.timeline.update(self)
             if self.repeat_activated and not self.repeat_duration_tmp:
@@ -400,15 +387,17 @@ class subtitld(QWidget):
             if self.repeat_activated and self.repeat_duration_tmp and self.current_timeline_position > self.repeat_duration_tmp[0][1]:
                 self.current_timeline_position = self.repeat_duration_tmp[0][0]
                 self.player_widget.mpv.wait_for_property('seekable')
-                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')#, precision='exact')
+                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')
                 pos = self.repeat_duration_tmp.pop(0)
                 self.repeat_duration_tmp.append([pos[1], pos[1] + self.repeat_duration])
 
         self.player.update_subtitle_layer(self)
 
+
 def edit_syllable_returnpressed(self):
     self.lyrics_notes[self.lyrics_notes.index(self.selected_note)][3] = self.player_controls.edit_sylable.text()
     self.timeline_widget.update()
+
 
 def viewnotesin_button_clicked(self):
     if self.mediaplayer_viewnotes[0] + 1 < 29 and self.mediaplayer_viewnotes[-1] - 1 > -29:
@@ -416,11 +405,13 @@ def viewnotesin_button_clicked(self):
         self.mediaplayer_viewnotes.append(self.mediaplayer_viewnotes[-1] - 1)
     self.timeline_widget.update()
 
+
 def viewnotesout_button_clicked(self):
     if len(self.mediaplayer_viewnotes) > 2:
         del self.mediaplayer_viewnotes[0]
         del self.mediaplayer_viewnotes[-1]
     self.timeline_widget.update()
+
 
 def show_importer_pannel_button_clicked(self):
     if self.show_importer_panel_button.isChecked():

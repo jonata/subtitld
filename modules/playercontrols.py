@@ -258,6 +258,7 @@ def playercontrols_stop_button_clicked(self):
     self.repeat_duration_tmp = []
     self.mediaplayer_is_playing = False
     self.playercontrols_playpause_button.setChecked(False)
+    self.timeline.update_scrollbar(self)
     playercontrols_playpause_button_update(self)
 
 def playercontrols_playpause_button_clicked(self):
