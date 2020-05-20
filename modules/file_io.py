@@ -146,15 +146,15 @@ def process_subtitles_file(subtitle_file=False):
         from captionstransformer.sbv import Reader as sbv_reader
         captions = sbv_reader(open(subtitle_file)).read()
         for caption in captions:
-            final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), caption.text])
+            final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text])
 
-    elif subtitle_file.lower().endswith(( '.smi', '.sami')):
+    elif subtitle_file.lower().endswith(('.smi', '.sami')):
         with open(subtitle_file) as sami_file:
             sami_reader = pycaption.SAMIReader().read(sami_file.read())
             for caption in sami_reader.get_captions(list(sami_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
-    elif subtitle_file.lower().endswith(( '.scc')):
+    elif subtitle_file.lower().endswith(('.scc')):
         import scc2srt
         final_subtitles = scc2srt.get_list_of_captions(subtitle_file)
 
@@ -164,13 +164,14 @@ def process_subtitles_file(subtitle_file=False):
             import html
             captions = transcript_reader(open(subtitle_file)).read()
             for caption in captions:
-                final_subtitles.append([(caption.start-datetime.datetime(1900,1,1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
+                final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
+
     elif subtitle_file.lower().endswith(('.ass')):
         def clean_text(text):
             clean = re.compile('{.*?}')
             result = re.sub(clean, '', text)
             if '\\' in result.split(' ')[-1]:
-                result = result.rsplit(' ',1)[0]
+                result = result.rsplit(' ', 1)[0]
             result = result.replace('\\N', '<br>')
             return result
 
@@ -182,7 +183,7 @@ def process_subtitles_file(subtitle_file=False):
                 start = event.start.total_seconds()
                 end = event.end.total_seconds()
                 duration = end - start
-                if not last_start == None and last_start == start:
+                if last_start is not None and last_start == start:
                     if last_end <= end:
                         final_subtitles[-1][2] += '<br>' + clean_text(event.text)
                     else:
@@ -192,29 +193,32 @@ def process_subtitles_file(subtitle_file=False):
                     final_subtitles.append([start, duration, clean_text(event.text)])
                 last_start = start
                 last_end = end
+
     return final_subtitles
+
 
 def process_video_file(video_file=False):
     video_metadata = {}
     json_result = waveform.ffmpeg_load_metadata(video_file)
-    video_metadata['audio'] = False #{0: False}
-    video_metadata['waveform'] = {} #{0: False}
-    video_metadata['duration'] =  float(json_result.get('format', {}).get('duration', '0.01'))
+    video_metadata['audio'] = False
+    video_metadata['waveform'] = {}
+    video_metadata['duration'] = float(json_result.get('format', {}).get('duration', '0.01'))
     for stream in json_result.get('streams', []):
         if stream.get('codec_type', '') == 'video' and not stream.get('codec_name', 'png') == 'png':
-            video_metadata['width'] =  int(stream.get('width', 640))
-            video_metadata['height'] =  int(stream.get('height', 480))
-            video_metadata['framerate'] =  int(stream.get('time_base', '1/30').split('/',1)[-1])
+            video_metadata['width'] = int(stream.get('width', 640))
+            video_metadata['height'] = int(stream.get('height', 480))
+            video_metadata['framerate'] = int(stream.get('time_base', '1/30').split('/', 1)[-1])
         elif stream.get('codec_type', '') == 'subtitle':
             video_metadata['subttiles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
     video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
     return video_metadata
 
-def save_file(final_file, subtitles_list):
+
+def save_file(final_file, subtitles_list, format='SRT', language='en'):
     if subtitles_list:
-        if not final_file.lower().endswith('.srt'):
-            final_file += '.srt'
+        if not final_file.lower().endswith('.' + format.lower()):
+            final_file += '.' + format.lower()
 
         captions = pycaption.CaptionList()
         for sub in subtitles_list:
@@ -222,6 +226,15 @@ def save_file(final_file, subtitles_list):
             nodes = [pycaption.CaptionNode.create_text(sub[2])]
             caption = pycaption.Caption(sub[0]*1000000, (sub[0] + sub[1])*.1000000, nodes)
             captions.append(caption)
-        caption_set = pycaption.CaptionSet({'en': captions})
+        caption_set = pycaption.CaptionSet({language: captions})
 
-        open(final_file, 'w').write(pycaption.SRTWriter().write(caption_set))
+        if format == 'SRT':
+            open(final_file, 'w').write(pycaption.SRTWriter().write(caption_set))
+        elif format == 'DFXP':
+            open(final_file, 'w').write(pycaption.DFXPWriter().write(caption_set))
+        elif format == 'SAMI':
+            open(final_file, 'w').write(pycaption.SAMIWriter().write(caption_set))
+        elif format == 'SCC':
+            open(final_file, 'w').write(pycaption.SCCWriter().write(caption_set))
+        elif format == 'VTT':
+            open(final_file, 'w').write(pycaption.WebVTTWriter().write(caption_set))
