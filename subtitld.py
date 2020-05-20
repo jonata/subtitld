@@ -56,6 +56,8 @@ class subtitld(QWidget):
         self.repeat_times = 3
         self.repeat_activated = False
         self.unsaved = False
+        self.format_to_save = 'SRT'
+        self.selected_language = 'en'
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 

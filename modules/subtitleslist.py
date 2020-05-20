@@ -146,7 +146,7 @@ def toppanel_save_button_clicked(self):
         self.actual_subtitle_file = QFileDialog.getSaveFileName(self, "Select the srt file", os.path.join(suggested_path, suggested_name), save_formats)[0]
 
     if self.actual_subtitle_file:
-        file_io.save_file(self.actual_subtitle_file, self.subtitles_list)
+        file_io.save_file(self.actual_subtitle_file, self.subtitles_list, self.format_to_save, self.selected_language)
         update_toppanel_subtitle_file_info_label(self)
         self.unsaved = False
 
