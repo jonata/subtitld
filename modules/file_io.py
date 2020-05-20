@@ -4,16 +4,22 @@
 import os
 import datetime
 import numpy
-import ass
 import re
 import pycaption
 import subprocess
+import pysubs2
 
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from modules import waveform
 from modules.paths import STARTUPINFO, FFMPEG_EXECUTABLE, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
+
+
+list_of_supported_subtitle_extensions = []
+for type in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS.keys():
+    for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[type]['extensions']:
+        list_of_supported_subtitle_extensions.append(ext)
 
 
 class thread_extract_scene_time_positions(QThread):
@@ -69,12 +75,12 @@ def load(self):
 
 def open_filepath(self, file_to_open=False):
     if not file_to_open:
-        supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS]))
+        supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
         supported_video_files = "Video files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
 
         file_to_open = QFileDialog.getOpenFileName(self, "Select the video or subtitle file", os.path.expanduser("~"), supported_subtitle_files + ';;' + supported_video_files)[0]
 
-    if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS):
+    if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(tuple(list_of_supported_subtitle_extensions)):
         self.subtitles_list = process_subtitles_file(file_to_open)
         self.actual_subtitle_file = file_to_open
 
@@ -166,33 +172,14 @@ def process_subtitles_file(subtitle_file=False):
             for caption in captions:
                 final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
 
-    elif subtitle_file.lower().endswith(('.ass')):
-        def clean_text(text):
-            clean = re.compile('{.*?}')
-            result = re.sub(clean, '', text)
-            if '\\' in result.split(' ')[-1]:
-                result = result.rsplit(' ', 1)[0]
-            result = result.replace('\\N', '<br>')
-            return result
-
-        with open(subtitle_file, encoding='utf_8_sig') as f:
-            assfile = ass.parse(f)
-            last_start = None
-            last_end = 0.0
-            for event in assfile.events:
-                start = event.start.total_seconds()
-                end = event.end.total_seconds()
-                duration = end - start
-                if last_start is not None and last_start == start:
-                    if last_end <= end:
-                        final_subtitles[-1][2] += '<br>' + clean_text(event.text)
-                    else:
-                        duration = end - last_end - .001
-                        final_subtitles.append([last_end + .001, duration, clean_text(event.text)])
-                else:
-                    final_subtitles.append([start, duration, clean_text(event.text)])
-                last_start = start
-                last_end = end
+    elif subtitle_file.lower().endswith(('.ass', '.ssa')):
+        with open(subtitle_file) as f:
+            ssafile = pysubs2.SSAFile.from_string(f.read())
+            for event in ssafile.events:
+                start = event.start / 1000.0
+                duration = event.duration / 1000.0
+                text = event.plaintext
+                final_subtitles.append([start, duration, text])
 
     return final_subtitles
 
@@ -220,21 +207,48 @@ def save_file(final_file, subtitles_list, format='SRT', language='en'):
         if not final_file.lower().endswith('.' + format.lower()):
             final_file += '.' + format.lower()
 
-        captions = pycaption.CaptionList()
-        for sub in subtitles_list:
-            # skip extra blank lines
-            nodes = [pycaption.CaptionNode.create_text(sub[2])]
-            caption = pycaption.Caption(sub[0]*1000000, (sub[0] + sub[1])*.1000000, nodes)
-            captions.append(caption)
-        caption_set = pycaption.CaptionSet({language: captions})
+        if format in ['SRT', 'DFXP', 'SAMI', 'SCC', 'VTT']:
+            captions = pycaption.CaptionList()
+            for sub in subtitles_list:
+                # skip extra blank lines
+                nodes = [pycaption.CaptionNode.create_text(sub[2])]
+                caption = pycaption.Caption(sub[0]*1000000, (sub[0] + sub[1])*.1000000, nodes)
+                captions.append(caption)
+            caption_set = pycaption.CaptionSet({language: captions})
 
-        if format == 'SRT':
-            open(final_file, 'w').write(pycaption.SRTWriter().write(caption_set))
-        elif format == 'DFXP':
-            open(final_file, 'w').write(pycaption.DFXPWriter().write(caption_set))
-        elif format == 'SAMI':
-            open(final_file, 'w').write(pycaption.SAMIWriter().write(caption_set))
-        elif format == 'SCC':
-            open(final_file, 'w').write(pycaption.SCCWriter().write(caption_set))
-        elif format == 'VTT':
-            open(final_file, 'w').write(pycaption.WebVTTWriter().write(caption_set))
+            if format == 'SRT':
+                open(final_file, 'w').write(pycaption.SRTWriter().write(caption_set))
+            elif format == 'DFXP':
+                open(final_file, 'w').write(pycaption.DFXPWriter().write(caption_set))
+            elif format == 'SAMI':
+                open(final_file, 'w').write(pycaption.SAMIWriter().write(caption_set))
+            elif format == 'SCC':
+                open(final_file, 'w').write(pycaption.SCCWriter().write(caption_set))
+            elif format == 'VTT':
+                open(final_file, 'w').write(pycaption.WebVTTWriter().write(caption_set))
+
+        elif format in ['ASS', 'SBV', 'XML']:
+            if format == 'ASS':
+                assfile = pysubs2.SSAFile()
+                index = 0
+                for sub in subtitles_list:
+                    assfile.insert(index, pysubs2.SSAEvent(start=int(sub[0]*1000), duration=int(sub[1]*1000), text=sub[2]))
+                assfile.save(final_file)
+            else:
+                from captionstransformer.core import Caption, get_date
+
+                if format == 'SBV':
+                    from captionstransformer.sbv import Writer
+                elif format == 'XML':
+                    from captionstransformer.transcript import Writer
+
+                writer = Writer(final_file)
+                captions = []
+                for caption in subtitles_list:
+                    c = Caption()
+                    c.start = get_date(second=caption[0])
+                    c.duration = get_date(second=caption[1])
+                    c.text = caption[2]
+                    captions.append(c)
+                writer.set_captions(captions)
+                writer.write()
