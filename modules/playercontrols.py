@@ -89,7 +89,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     self.merge_back_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
     self.merge_back_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'merge_back_selected_subtitle_icon.png')))
-    self.merge_back_selected_subtitle_button.setIconSize(QSize(20,20))
+    self.merge_back_selected_subtitle_button.setIconSize(QSize(20, 20))
     self.merge_back_selected_subtitle_button.setObjectName('button_dark')
     self.merge_back_selected_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0;}')
     self.merge_back_selected_subtitle_button.clicked.connect(lambda: merge_back_selected_subtitle_button_clicked(self))
@@ -267,7 +267,7 @@ def playercontrols_playpause_button_clicked(self):
 
 
 def playercontrols_playpause_button_update(self):
-    self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.png')) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')) )
+    self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.png')) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')))
 
 
 def resized(self):
@@ -370,8 +370,8 @@ def zoom_buttons_update(self):
     self.zoomout_button.setEnabled(True if self.mediaplayer_zoom - 5.0 > 0.0 else False)
     self.zoomin_button.setEnabled(True if self.mediaplayer_zoom + 5.0 < 500.0 else False)
     proportion = ((self.current_timeline_position*self.timeline_widget.width_proportion)-self.timeline_scroll.horizontalScrollBar().value())/self.timeline_scroll.width()
-    self.timeline_widget.setGeometry(0,0,int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)),self.timeline_scroll.height()-20)
-    #self.timeline.zoom_update_waveform(self)
+    self.timeline_widget.setGeometry(0, 0, int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)), self.timeline_scroll.height()-20)
+    # self.timeline.zoom_update_waveform(self)
     self.timeline.update_scrollbar(self, position=proportion)
 
 
