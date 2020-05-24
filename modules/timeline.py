@@ -67,6 +67,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                             available_zoom = sorted(self.video_metadata['waveform'].keys())[0]
                             x_factor = self.mediaplayer_zoom/available_zoom
 
+                        w_factor = (self.video_metadata.get('duration', 0.01)*available_zoom)/len(self.video_metadata['waveform'][available_zoom][0])
+
                         painter.setPen(QPen(QColor.fromRgb(21, 52, 80, 255), 1, Qt.SolidLine))
                         painter.setBrush(QColor.fromRgb(21, 52, 80, alpha=200))
 
@@ -74,11 +76,11 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                         polygon = QPolygonF()
 
                         for point in self.video_metadata['waveform'][available_zoom][0][int(scroll_position/x_factor):int((scroll_position+scroll_width)/x_factor)]:
-                            polygon.append(QPointF(x_position+scroll_position, ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
+                            polygon.append(QPointF((x_position+scroll_position)*w_factor, ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
                             x_position += x_factor
 
                         for point in reversed(self.video_metadata['waveform'][available_zoom][1][int(scroll_position/x_factor):int((scroll_position+scroll_width)/x_factor)]):
-                            polygon.append(QPointF(x_position+scroll_position, ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
+                            polygon.append(QPointF((x_position+scroll_position)*w_factor, ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
                             x_position -= x_factor
 
                         painter.drawPolygon(polygon)
