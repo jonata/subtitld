@@ -17,11 +17,11 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def resized(self):
-    if (self.subtitles_list or self.video_metadata) and self.advanced_mode:
+    if (self.subtitles_list or self.video_metadata):
         if self.subtitles_list_toggle_button.isChecked():
             self.global_subtitlesvideo_panel_widget.setGeometry(0, 0, self.width()*.8, self.height()-self.playercontrols_widget.height()+20)
         else:
-            self.global_subtitlesvideo_panel_widget.setGeometry(-(self.width()*.6)-15, 0, self.width()*.8, self.height()-self.playercontrols_widget.height()+20)
+            self.global_subtitlesvideo_panel_widget.setGeometry(-(self.width()*.6)-18, 0, self.width()*.8, self.height()-self.playercontrols_widget.height()+20)
     else:
         self.global_subtitlesvideo_panel_widget.setGeometry(-(self.width()*.8), 0, self.width()*.8, self.height()-self.playercontrols_widget.height()+20)
 

@@ -62,7 +62,7 @@ def resized(self):
 
     self.subtitles_list_qlistwidget.setGeometry(20, 100, self.subtitles_list_widget.width()-40, self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-35)
 
-    if (self.subtitles_list or self.video_metadata) and self.advanced_mode:
+    if (self.subtitles_list or self.video_metadata):
         if self.subtitles_list_toggle_button.isChecked():
             self.subtitles_list_toggle_button.setGeometry(self.global_subtitlesvideo_panel_widget.width()-25, 0, 25, 80)
         else:
