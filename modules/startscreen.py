@@ -62,9 +62,8 @@ def load(self):
 
     class start_screen_adver_holder(QWidget):
         def enterEvent(widget, event):
-            None
-            # self.start_screen_adver_label_show_machineid_button.setVisible(True)        #   <<<<< REMOVE WHEN READY
-            # self.start_screen_adver_label_details.setVisible(False)        #   <<<<< REMOVE WHEN READY
+            self.start_screen_adver_label_show_machineid_button.setVisible(True)
+            self.start_screen_adver_label_details.setVisible(False)
 
         def leaveEvent(widget, event):
             if not self.start_screen_adver_label_show_machineid_button.isChecked():
