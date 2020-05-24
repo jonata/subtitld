@@ -105,7 +105,7 @@ def generate_waveform_zoom(zoom, duration, waveform):
     while parser < len(waveform):
         positive_values.append(numpy.amax(waveform[parser:parser+int(len(waveform)/(duration*zoom))]))
         negative_values.append(numpy.amin(waveform[parser:parser+int(len(waveform)/(duration*zoom))]))
-        parser += int(len(waveform)/(duration*zoom)) + 1
+        parser += int(len(waveform)/(duration*zoom))
     average = False
     parser = 0
 
