@@ -132,11 +132,13 @@ def load(self):
 
     self.start_screen_adver_label_machineid_verify = QPushButton('VERIFY', parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_machineid_verify.clicked.connect(lambda: start_screen_adver_label_machineid_verify_clicked(self))
-    self.start_screen_adver_label_machineid_verify.setObjectName('button_no_right')
+    self.start_screen_adver_label_machineid_verify.setObjectName('button')
+    self.start_screen_adver_label_machineid_verify.setStyleSheet('QPushButton {border-right:0}')
 
     self.start_screen_adver_label_machineid_register = QPushButton('REGISTER', parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_machineid_register.clicked.connect(lambda: start_screen_adver_label_machineid_register_clicked(self))
-    self.start_screen_adver_label_machineid_register.setObjectName('button_dark_no_left')
+    self.start_screen_adver_label_machineid_register.setObjectName('button_dark')
+    self.start_screen_adver_label_machineid_register.setStyleSheet('QPushButton {border-left:0}')
 
     def thread_verify_user_and_machineid_ended(command):
         text = ''
