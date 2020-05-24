@@ -21,18 +21,18 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.properties_textedit.setObjectName('properties_textedit')
     self.properties_textedit.textChanged.connect(lambda: properties_textedit_changed(self))
 
-    self.send_text_to_next_subtitle_button = QPushButton(parent=self.properties_widget)
+    self.send_text_to_next_subtitle_button = QPushButton('Send to next'.upper(), parent=self.properties_widget)
     self.send_text_to_next_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'send_text_to_next_subtitle_icon.png')))
     self.send_text_to_next_subtitle_button.setIconSize(QSize(20, 20))
     self.send_text_to_next_subtitle_button.setObjectName('button_dark')
-    self.send_text_to_next_subtitle_button.setStyleSheet('QPushButton {border-top:0; border-left:0;}')
+    self.send_text_to_next_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0;padding-bottom:3px;}')
     self.send_text_to_next_subtitle_button.clicked.connect(lambda: send_text_to_next_subtitle_button_clicked(self))
 
-    self.send_text_to_last_subtitle_button = QPushButton(parent=self.properties_widget)
+    self.send_text_to_last_subtitle_button = QPushButton('Send to last'.upper(), parent=self.properties_widget)
     self.send_text_to_last_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'send_text_to_last_subtitle_icon.png')))
     self.send_text_to_last_subtitle_button.setIconSize(QSize(20, 20))
     self.send_text_to_last_subtitle_button.setObjectName('button_dark')
-    self.send_text_to_last_subtitle_button.setStyleSheet('QPushButton {border-top:0; border-right:0;}')
+    self.send_text_to_last_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0;padding-bottom:3px;}')
     self.send_text_to_last_subtitle_button.clicked.connect(lambda: send_text_to_last_subtitle_button_clicked(self))
 
     self.properties_information = QLabel(parent=self.properties_widget)
@@ -52,10 +52,10 @@ def resized(self):
     else:
         self.properties_widget.setGeometry(self.width(), 0, (self.width()*.2)-15, self.height())
 
-    self.properties_textedit.setGeometry(20, 20, self.properties_widget.width()-40, 200)
-    self.send_text_to_last_subtitle_button.setGeometry(self.properties_textedit.x(), self.properties_textedit.y()+self.properties_textedit.height(), 40, 40)
-    self.send_text_to_next_subtitle_button.setGeometry(self.send_text_to_last_subtitle_button.x()+self.send_text_to_last_subtitle_button.width(), self.send_text_to_last_subtitle_button.y(), 40, 40)
-    self.properties_information.setGeometry(20, self.send_text_to_last_subtitle_button.y() + self.send_text_to_last_subtitle_button.height(), self.properties_widget.width()-40, 400)
+    self.properties_textedit.setGeometry(20, self.properties_widget.height()-self.playercontrols_widget.height()-35-180, self.properties_widget.width()-40, 200)
+    self.send_text_to_last_subtitle_button.setGeometry(self.properties_textedit.x(), self.properties_textedit.y()-40, self.properties_textedit.width()*.5, 40)
+    self.send_text_to_next_subtitle_button.setGeometry(self.send_text_to_last_subtitle_button.x()+self.send_text_to_last_subtitle_button.width(), self.send_text_to_last_subtitle_button.y(), self.properties_textedit.width()*.5, 40)
+    self.properties_information.setGeometry(20, 20, self.properties_widget.width()-40, 400)
 
     if (self.subtitles_list or self.video_metadata) and self.advanced_mode:
         self.properties_toggle_button.setGeometry(self.properties_widget.x()+5, 0, 25, 80)
