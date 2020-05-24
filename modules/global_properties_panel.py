@@ -15,7 +15,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def resized(self):
-    if (self.subtitles_list or self.video_metadata) and self.advanced_mode:
+    if (self.subtitles_list or self.video_metadata):
         if self.properties_toggle_button.isChecked():
             self.global_properties_panel_widget.setGeometry(self.width()*.8, 0, (self.width()*.2), self.height()-self.playercontrols_widget.height()+20)
         else:
