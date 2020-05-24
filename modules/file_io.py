@@ -74,10 +74,10 @@ def load(self):
 
 
 def open_filepath(self, file_to_open=False):
-    if not file_to_open:
-        supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
-        supported_video_files = "Video files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
+    supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
+    supported_video_files = "Video files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
 
+    if not file_to_open:
         file_to_open = QFileDialog.getOpenFileName(self, "Select the video or subtitle file", os.path.expanduser("~"), supported_subtitle_files + ';;' + supported_video_files)[0]
 
     if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(tuple(list_of_supported_subtitle_extensions)):
@@ -212,7 +212,7 @@ def save_file(final_file, subtitles_list, format='SRT', language='en'):
             for sub in subtitles_list:
                 # skip extra blank lines
                 nodes = [pycaption.CaptionNode.create_text(sub[2])]
-                caption = pycaption.Caption(sub[0]*1000000, (sub[0] + sub[1])*.1000000, nodes)
+                caption = pycaption.Caption(start=sub[0]*1000000, end=(sub[0] + sub[1])*1000000, nodes=nodes)
                 captions.append(caption)
             caption_set = pycaption.CaptionSet({language: captions})
 
