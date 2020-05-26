@@ -10,3 +10,5 @@ requests
 pycaption
 captionstransformer
 pysubs2
+lxml
+python3-html5lib
