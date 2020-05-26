@@ -11,4 +11,4 @@ pycaption
 captionstransformer
 pysubs2
 lxml
-html5lib
+html5lib==1.0b8
