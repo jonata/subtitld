@@ -23,8 +23,8 @@ exe = EXE(pyz,
     name='Subtitld.exe',
     strip=False,
     upx=True,
-    console=True,
-    debug=True,
+    console=False,
+    debug=False,
     icon='graphics/subtitld.ico' )
 
 coll = COLLECT( exe,
