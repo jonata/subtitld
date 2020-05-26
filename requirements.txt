@@ -9,3 +9,4 @@ cffi
 requests
 pycaption
 captionstransformer
+pysubs2
