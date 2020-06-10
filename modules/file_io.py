@@ -4,7 +4,6 @@
 import os
 import datetime
 import numpy
-import re
 import pycaption
 import subprocess
 import pysubs2
