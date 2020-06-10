@@ -75,13 +75,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                         x_position = 0
                         polygon = QPolygonF()
 
-                        for point in self.video_metadata['waveform'][available_zoom][0][int(scroll_position/x_factor):int((scroll_position+scroll_width)/x_factor)]:
-                            polygon.append(QPointF((x_position+scroll_position)*w_factor, ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
-                            x_position += x_factor
+                        for point in self.video_metadata['waveform'][available_zoom][0][int(scroll_position/w_factor):int((scroll_position+scroll_width)/w_factor)]:
+                            polygon.append(QPointF((x_position+scroll_position), ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
+                            x_position += (x_factor*w_factor)
 
-                        for point in reversed(self.video_metadata['waveform'][available_zoom][1][int(scroll_position/x_factor):int((scroll_position+scroll_width)/x_factor)]):
-                            polygon.append(QPointF((x_position+scroll_position)*w_factor, ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
-                            x_position -= x_factor
+                        for point in reversed(self.video_metadata['waveform'][available_zoom][1][int(scroll_position/w_factor):int((scroll_position+scroll_width)/w_factor)]):
+                            polygon.append(QPointF((x_position+scroll_position), ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
+                            x_position -= (x_factor*w_factor)
 
                         painter.drawPolygon(polygon)
 
