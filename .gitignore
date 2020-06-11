@@ -31,6 +31,7 @@ eggs/
 parts/
 var/
 sdist/
+examples/
 develop-eggs/
 .installed.cfg
 
