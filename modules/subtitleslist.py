@@ -4,6 +4,7 @@
 import os
 
 from modules import file_io
+from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QListWidget, QListView, QMessageBox
@@ -133,17 +134,42 @@ def hide(self):
 
 
 def toppanel_save_button_clicked(self):
-    if not self.actual_subtitle_file:
+    actual_subtitle_file = False
+    if self.actual_subtitle_file:
+        for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']:
+            if self.actual_subtitle_file.endswith(ext):
+                actual_subtitle_file = self.actual_subtitle_file
+                break
 
+    if not actual_subtitle_file:
         suggested_path = os.path.dirname(self.video_metadata['filepath'])
         if self.advanced_mode:
-            save_formats = 'SRT file (*.srt)'
+            save_formats = self.format_to_save + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']]))
+
+            for format in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+                if not format == self.format_to_save:
+                    save_formats += ';;' + format + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['extensions']]))
             suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
         else:
-            save_formats = 'SRT file (*.srt)'
+            save_formats = 'SRT file (.srt)'
             suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.srt'
+        # tem que reportar o bug que não retorna o selectedFilter se o dialogo for nativo
+        filedialog = QFileDialog.getSaveFileName(self, "Select the subtitle file", os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)
 
-        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, "Select the srt file", os.path.join(suggested_path, suggested_name), save_formats)[0]
+        if filedialog[0] and filedialog[1]:
+            filename = filedialog[0]
+            exts = []
+            for ext in filedialog[1].split('(', 1)[1].split(')', 1)[0].split('*'):
+                if ext:
+                    exts.append(ext.strip())
+            if not filename.endswith(tuple(exts)):
+                filename += exts[0]
+            if not self.format_to_save == filedialog[1].split(' ', 1)[0]:
+                self.format_to_save = filedialog[1].split(' ', 1)[0]
+
+            self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
+
+            self.actual_subtitle_file = filename
 
     if self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list, self.format_to_save, self.selected_language)
