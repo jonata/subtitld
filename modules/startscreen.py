@@ -119,6 +119,7 @@ def load(self):
     self.start_screen_adver_label_email = QLineEdit(parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_email.setObjectName('start_screen_adver_label_email')
     self.start_screen_adver_label_email.editingFinished.connect(lambda: start_screen_adver_label_email_editing_finished(self))
+    self.start_screen_adver_label_email.textEdited.connect(lambda: update_start_screen_adver_label_machineid_verify(self))
     self.start_screen_adver_label_email.setText(self.settings['authentication'].get('email', ''))
 
     self.start_screen_adver_label_status = QLabel(parent=self.start_screen_adver_panel)
@@ -230,7 +231,11 @@ def start_screen_adver_label_show_machineid_button_clicked(self):
 
 def update_start_screen_adver_panel(self):
     self.start_screen_adver_panel.setVisible(self.start_screen_adver_label_show_machineid_button.isChecked())
-    self.start_screen_adver_label_machineid_verify.setEnabled(bool(self.settings['authentication'].get('email', '')))
+    update_start_screen_adver_label_machineid_verify(self)
+
+
+def update_start_screen_adver_label_machineid_verify(self):
+    self.start_screen_adver_label_machineid_verify.setEnabled(bool('@' in self.start_screen_adver_label_email.text() and len(self.start_screen_adver_label_email.text().split('@', 1)[0]) > 0 and len(self.start_screen_adver_label_email.text().split('@', 1)[1].split('.')) > 1 and len(self.start_screen_adver_label_email.text().split('@', 1)[1].split('.', 1)[0]) > 1 and len(self.start_screen_adver_label_email.text().split('@', 1)[1].split('.', 1)[1]) > 1))
 
 
 def start_screen_adver_label_machineid_copy_clicked(self):
