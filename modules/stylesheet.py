@@ -62,7 +62,7 @@ def set_stylesheet(self):
                             #properties_information                              { font-size:12px; color:white; }
 
                             #player_subtitle_layer                               { font-size:40px; color: rgb(255, 255, 255); qproperty-alignment: "AlignCenter | AlignBottom"; padding: 10px; }
-                            #properties_textedit                                 { margin:5px; font-size:26px; color: rgb(106,116,131); border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; }
+                            #properties_textedit                                 { margin-left:2px; margin-right:2px; font-size:26px; color: black; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; }
                             #subtitles_list_qlistwidget                          { outline: none; font-size:14px; color:rgb(106, 116, 131); border-top-right-radius: 4px; background-color: rgba(255, 255, 255, 200); padding:5px;} QListWidget::item { padding:5px; border-radius: 2px;} QListWidget::item:selected { background:rgb(184, 206, 224); color:rgb(106, 116, 131); }
                             #start_screen_recent_listwidget                      { outline: none; font-size:14px; color:rgb(106, 116, 131); border-radius: 4px; background-color: rgba(106, 116, 131, 20); padding:5px;} QListWidget::item { padding:5px; border-radius: 2px;} QListWidget::item:selected { background:rgb(184, 206, 224); color:rgb(106, 116, 131); }
 
