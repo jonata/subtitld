@@ -73,14 +73,13 @@ def load(self):
 
 
 def open_filepath(self, file_to_open=False):
-    supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
+    supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*.{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
     supported_video_files = "Video files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
-
     if not file_to_open:
         file_to_open = QFileDialog.getOpenFileName(self, "Select the video or subtitle file", os.path.expanduser("~"), supported_subtitle_files + ';;' + supported_video_files)[0]
 
     if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(tuple(list_of_supported_subtitle_extensions)):
-        self.subtitles_list = process_subtitles_file(file_to_open)
+        self.subtitles_list, self.format_to_save = process_subtitles_file(file_to_open)
         self.actual_subtitle_file = file_to_open
 
     elif file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
@@ -106,7 +105,7 @@ def open_filepath(self, file_to_open=False):
 
         if not self.actual_subtitle_file:
             if self.video_metadata.get('subttiles', ''):
-                self.subtitles_list = process_subtitles_file(self.video_metadata['subttiles'])
+                self.subtitles_list, self.format_to_save = process_subtitles_file(self.video_metadata['subttiles'])
 
         self.subtitleslist.update_subtitles_list_widget(self)
         self.timeline.update_timeline(self)
@@ -119,12 +118,13 @@ def open_filepath(self, file_to_open=False):
         #    self.global_properties_panel.hide_global_properties_panel(self)
 
         self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
+    self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
-
-def process_subtitles_file(subtitle_file=False):
+def process_subtitles_file(subtitle_file=False, format=False):
     final_subtitles = []
 
     if subtitle_file.lower().endswith('.srt'):
+        format = 'SRT'
         with open(subtitle_file) as srt_file:
             srt_content = srt_file.read()
 
@@ -136,34 +136,40 @@ def process_subtitles_file(subtitle_file=False):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
     elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
+        format = 'VTT'
         with open(subtitle_file) as vtt_file:
             vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
             for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
     elif subtitle_file.lower().endswith(('.ttml', '.dfxp')):
+        format = 'DFXP'
         with open(subtitle_file) as dfxp_file:
             dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
             for caption in dfxp_reader.get_captions(list(dfxp_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
     elif subtitle_file.lower().endswith(('.sbv')):
+        format = 'SBV'
         from captionstransformer.sbv import Reader as sbv_reader
         captions = sbv_reader(open(subtitle_file)).read()
         for caption in captions:
             final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text])
 
     elif subtitle_file.lower().endswith(('.smi', '.sami')):
+        format = 'SAMI'
         with open(subtitle_file) as sami_file:
             sami_reader = pycaption.SAMIReader().read(sami_file.read())
             for caption in sami_reader.get_captions(list(sami_reader._captions.keys())[0]):
                 final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
     elif subtitle_file.lower().endswith(('.scc')):
+        format = 'SCC'
         import scc2srt
         final_subtitles = scc2srt.get_list_of_captions(subtitle_file)
 
     elif subtitle_file.lower().endswith(('.xml')):
+        format = 'XML'
         if '<transcript>' in open(subtitle_file).read():
             from captionstransformer.transcript import Reader as transcript_reader
             import html
@@ -172,6 +178,7 @@ def process_subtitles_file(subtitle_file=False):
                 final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
 
     elif subtitle_file.lower().endswith(('.ass', '.ssa')):
+        fomat = 'ASS'
         with open(subtitle_file) as f:
             ssafile = pysubs2.SSAFile.from_string(f.read())
             for event in ssafile.events:
@@ -180,7 +187,7 @@ def process_subtitles_file(subtitle_file=False):
                 text = event.plaintext
                 final_subtitles.append([start, duration, text])
 
-    return final_subtitles
+    return final_subtitles, format
 
 
 def process_video_file(video_file=False):
@@ -203,8 +210,8 @@ def process_video_file(video_file=False):
 
 def save_file(final_file, subtitles_list, format='SRT', language='en'):
     if subtitles_list:
-        if not final_file.lower().endswith('.' + format.lower()):
-            final_file += '.' + format.lower()
+        # if not final_file.lower().endswith('.' + format.lower()):
+        #     final_file += '.' + format.lower()
 
         if format in ['SRT', 'DFXP', 'SAMI', 'SCC', 'VTT']:
             captions = pycaption.CaptionList()
