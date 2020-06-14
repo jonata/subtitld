@@ -7,12 +7,13 @@ import numpy
 import pycaption
 import subprocess
 import pysubs2
+from cleantext import clean
 
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from modules import waveform
-from modules.paths import STARTUPINFO, FFMPEG_EXECUTABLE, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
+from modules.paths import STARTUPINFO, FFMPEG_EXECUTABLE, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS
 
 
 list_of_supported_subtitle_extensions = []
@@ -120,6 +121,7 @@ def open_filepath(self, file_to_open=False):
         self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
     self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
+
 def process_subtitles_file(subtitle_file=False, format=False):
     final_subtitles = []
 
@@ -206,6 +208,30 @@ def process_video_file(video_file=False):
     video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
     return video_metadata
+
+
+def import_file(filename=False, format=False, fit_to_length=False, length=.01, distribute_fixed_duration=False):
+    final_subtitles = []
+    if filename:
+        if filename.lower().endswith(('.txt')):
+            format = 'TXT'
+            with open(filename) as txt_file:
+                txt_content = clean(txt_file.read())
+                pos = 0.0
+                for phrase in txt_content.split('. '):
+                    final_subtitles.append([pos, 5.0, phrase + '.'])
+                    pos += 5.0
+    return final_subtitles, format
+
+
+def export_file(filename=False, subtitles_list=False, format='TXT'):
+    if subtitles_list and filename:
+        if format == 'TXT':
+            final_txt = ''
+            for sub in subtitles_list:
+                final_txt += sub[2].replace('\n', ' ') + ' '
+            with open(filename, 'w') as txt_file:
+                txt_file.write(final_txt)
 
 
 def save_file(final_file, subtitles_list, format='SRT', language='en'):

@@ -69,6 +69,7 @@ def get_graphics_path(filename):
 
 
 LIST_OF_SUPPORTED_VIDEO_EXTENSIONS = (('.mp4', '.mkv', '.mov', '.mpg', '.webm', '.ogv'))
+
 LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
     'SRT': {'description': 'SubRip Subtitle format', 'extensions': ['srt']},
     'DFXP': {'description': 'Subtitle format', 'extensions': ['ttml', 'dfxp']},
@@ -78,4 +79,8 @@ LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
     'ASS': {'description': 'SubStation Alpha Subtitle format', 'extensions': ['ass', 'ssa']},
     'SBV': {'description': 'Subtitle format', 'extensions': ['sbv']},
     'XML': {'description': 'Subtitle format', 'extensions': ['xml']}
+}
+
+LIST_OF_SUPPORTED_IMPORT_EXTENSIONS = {
+    'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']}
 }
