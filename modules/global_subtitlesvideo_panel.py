@@ -134,7 +134,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_video_burn_marvinr.setMaximum(500)
     self.global_subtitlesvideo_video_burn_marvinr.setValue(50)
 
-    self.global_subtitlesvideo_video_burn_pcolor_selected_color = ''
+    self.global_subtitlesvideo_video_burn_pcolor_selected_color = '#ffffff'
 
     self.global_subtitlesvideo_video_burn_pcolor_label = QLabel('FONT COLOR', parent=self.global_subtitlesvideo_panel_widget)
 
