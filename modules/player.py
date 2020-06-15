@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5.QtCore import Qt, QMetaObject, pyqtSlot
+from PyQt5.QtGui import QPainter, QPen, QColor
 from PyQt5.QtWidgets import QOpenGLWidget, QLabel, QTextEdit, QWidget
 from PyQt5.QtOpenGL import QGLContext
 
@@ -39,6 +40,7 @@ def load(self):
             self.mpv = MPV(vo='opengl-cb', ytdl=True)
             self.mpv.osd = False
             self.mpv.autosub = False
+            self.show_margins = False
             self.mpv.sid = 'no'
             self.mpv_gl = _mpv_get_sub_api(self.mpv.handle, MpvSubApi.MPV_SUB_API_OPENGL_CB)
             self.on_update_c = OpenGlCbUpdateFn(self.on_update)
@@ -56,6 +58,16 @@ def load(self):
             w = int(self.width() * ratio)
             h = int(self.height() * ratio)
             _mpv_opengl_cb_draw(self.mpv_gl, self.defaultFramebufferObject(), w, -h)
+            if self.show_margins:
+                painter = QPainter(self)
+                #painter.setBrush(QColor.fromRgb(21, 52, 80, alpha=200))
+                #painter.setRenderHint(QPainter.Antialiasing)
+                # painter.setCompositionMode(QPainter.CompositionMode_Xor)
+                painter.setPen(QPen(QColor.fromRgb(0, 0, 0), 1, Qt.SolidLine))
+                painter.drawRect((self.width()*self.show_margins[0])+1, (self.height()*self.show_margins[1])+1, self.width()*(1-(self.show_margins[0]*2)), self.height()*(1-(self.show_margins[1]*2)))
+                painter.setPen(QPen(QColor.fromRgb(255, 255, 255), 1, Qt.SolidLine))
+                painter.drawRect(self.width()*self.show_margins[0], self.height()*self.show_margins[1], self.width()*(1-(self.show_margins[0]*2)), self.height()*(1-(self.show_margins[1]*2)))
+                painter.end()
 
         @pyqtSlot()
         def maybe_update(self):
@@ -89,14 +101,23 @@ def load(self):
 
     self.player_widget = MpvWidget(parent=self.player_widget_area)
 
+    class player_subtitle_layer(QLabel):
+        def paintEvent(widget, paintEvent):
+            painter = QPainter(widget)
+            #painter.setRenderHint(QPainter.Antialiasing)
+            painter.setCompositionMode(26)
+            painter.drawRect(10, 10, 200, 200)
+            painter.end()
+
     self.player_subtitle_layer = QLabel(parent=self.player_widget_area)
+    #self.player_subtitle_layer = player_subtitle_layer(parent=self.player_widget_area)
     self.player_subtitle_layer.setWordWrap(True)
     self.player_subtitle_layer.setObjectName('player_subtitle_layer')
 
-    self.player_subtitle_textedit = QTextEdit(parent=self.player_widget_area)
-    self.player_subtitle_textedit.setVisible(False)
-    self.player_subtitle_textedit.setObjectName('player_subtitle_textedit')
-    self.player_subtitle_textedit.textChanged.connect(lambda: player_subtitle_textedit_changed(self))
+    # self.player_subtitle_textedit = QTextEdit(parent=self.player_widget_area)
+    # self.player_subtitle_textedit.setVisible(False)
+    # self.player_subtitle_textedit.setObjectName('player_subtitle_textedit')
+    # self.player_subtitle_textedit.textChanged.connect(lambda: player_subtitle_textedit_changed(self))
 
     self.videoinfo_label = QLabel(parent=self)
     self.videoinfo_label.setObjectName('videoinfo_label')
@@ -113,13 +134,13 @@ def resized(self):
     resize_player_widget(self)
 
 
-def player_subtitle_textedit_changed(self):
-    old_selected_subtitle = self.selected_subtitle
-    counter = self.subtitles_list.index(old_selected_subtitle)
-    self.subtitles_list[counter][2] = self.player_subtitle_textedit.toPlainText()
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
-    self.timeline.update(self)
-    update_subtitle_layer(self)
+# def player_subtitle_textedit_changed(self):
+#     old_selected_subtitle = self.selected_subtitle
+#     counter = self.subtitles_list.index(old_selected_subtitle)
+#     self.subtitles_list[counter][2] = self.player_subtitle_textedit.toPlainText()
+#     self.subtitleslist.update_subtitles_list_qlistwidget(self)
+#     self.timeline.update(self)
+#     update_subtitle_layer(self)
 
 
 def playpause(self):
@@ -150,4 +171,4 @@ def resize_player_widget(self):
         self.player_widget.setGeometry((self.player_widget_area.width()*.5)-((width_proportion*self.video_metadata.get('width', 640))*.5), 3, self.video_metadata.get('width', 640)*width_proportion, self.player_widget_area.height()-6)
     self.player_border.setGeometry(self.player_widget.x()-3, self.player_widget.y()-3, self.player_widget.width()+6, self.player_widget.height()+6)
     self.player_subtitle_layer.setGeometry(self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height())
-    self.player_subtitle_textedit.setGeometry(self.player_widget.x()+(self.player_widget.width()*.1), self.player_widget.y()+(self.player_widget.height()*.5), self.player_widget.width()*.8, self.player_widget.height()*.4)
+    # self.player_subtitle_textedit.setGeometry(self.player_widget.x()+(self.player_widget.width()*.1), self.player_widget.y()+(self.player_widget.height()*.5), self.player_widget.width()*.8, self.player_widget.height()*.4)
