@@ -7,7 +7,6 @@ import numpy
 import pycaption
 import subprocess
 import pysubs2
-from cleantext import clean
 
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -214,6 +213,8 @@ def import_file(filename=False, format=False, fit_to_length=False, length=.01, d
     final_subtitles = []
     if filename:
         if filename.lower().endswith(('.txt')):
+            from cleantext import clean
+            
             format = 'TXT'
             with open(filename) as txt_file:
                 '''clean("some input",

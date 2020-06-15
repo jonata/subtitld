@@ -11,7 +11,7 @@ a = Analysis(['subtitld.py'],
         ( 'ffmpeg-latest-win64-static/bin/ffmpeg.exe', '.'),
         ( 'ffmpeg-latest-win64-static/bin/ffprobe.exe', '.'),
     ],
-    hiddenimports=['_cffi_backend'],
+    hiddenimports=['_cffi_backend', 'cleantext'],
     hookspath=[],
     runtime_hooks=[] )
 
