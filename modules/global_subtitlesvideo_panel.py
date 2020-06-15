@@ -224,7 +224,7 @@ def global_subtitlesvideo_video_burn_convert_clicked(self):
     if generated_video_filepath:
         file_io.save_file(os.path.join(path_tmp, 'subtitle.srt'), self.subtitles_list, format='SRT', language='en')
 
-        vf_string = 'subtitles=filename=' + os.path.join(path_tmp, 'subtitle.srt') + ":force_style='"
+        vf_string = 'subtitles=filename=' + os.path.join(path_tmp, 'subtitle.srt').replace('\\', '\\\\\\\\').replace(':', '\\\:') + ":force_style='"
         vf_string += 'FontName=' + self.global_subtitlesvideo_video_burn_fontname.currentText() + ','
         vf_string += 'FontSize=' + str(self.global_subtitlesvideo_video_burn_fontsize.value()) + ','
         vf_string += 'Shadow=' + str(self.global_subtitlesvideo_video_burn_shadowdistance.value()) + ','
