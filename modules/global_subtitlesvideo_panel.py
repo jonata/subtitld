@@ -1,17 +1,52 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import os
+import subprocess
 
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
+from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal
+from PyQt5.QtGui import QFontDatabase
 
-from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS
+from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
 from modules import file_io
 
 list_of_supported_import_extensions = []
 for type in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS.keys():
     for ext in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS[type]['extensions']:
         list_of_supported_import_extensions.append(ext)
+
+
+def convert_ffmpeg_timecode_to_seconds(timecode):
+    if timecode:
+        final_value = float(timecode.split(':')[-1])
+        final_value += int(timecode.split(':')[-2])*60.0
+        final_value += int(timecode.split(':')[-3])*3600.0
+        return final_value
+    else:
+        return False
+
+
+class thread_generated_burned_video(QThread):
+    response = pyqtSignal(str)
+    commands = []
+
+    def run(self):
+        if self.commands:
+            p = subprocess.Popen(self.commands, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, startupinfo=STARTUPINFO, bufsize=4096)
+            number_of_steps = 0.001
+            current_step = 0.0
+            while p.poll() is None:
+                #for output in p.stdout.read().decode().split('\n'):
+                output = p.stdout.readline()
+                if 'Duration: ' in output:
+                    duration = int(convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))
+                    if duration > number_of_steps:
+                        number_of_steps = duration
+                if output[:6] == 'frame=':
+                    current_step = int(convert_ffmpeg_timecode_to_seconds(output.split('time=', 1)[1].split(' ', 1)[0]))
+
+                self.response.emit(str(current_step) + '|' + str(number_of_steps))
+            self.response.emit('end')
 
 
 def load(self, PATH_SUBTITLD_GRAPHICS):
@@ -47,6 +82,79 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_export_button.setObjectName('button')
     self.global_subtitlesvideo_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
 
+    self.global_subtitlesvideo_video_burn_label = QLabel('EXPORT BURNED VIDEO', parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_label.setStyleSheet('QLabel { font-size:14px; font-weight:bold; }')
+
+    self.global_subtitlesvideo_video_burn_fontname_label = QLabel('FONT NAME', parent=self.global_subtitlesvideo_panel_widget)
+
+    fonts = QFontDatabase().families()
+    self.global_subtitlesvideo_video_burn_fontname = QComboBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_fontname.addItems(fonts)
+    # self.global_subtitlesvideo_video_burn_fontname.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
+
+    self.global_subtitlesvideo_video_burn_fontsize_label = QLabel('FONT SIZE', parent=self.global_subtitlesvideo_panel_widget)
+
+    self.global_subtitlesvideo_video_burn_fontsize = QSpinBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_fontsize.setMinimum(8)
+    self.global_subtitlesvideo_video_burn_fontsize.setMaximum(200)
+    self.global_subtitlesvideo_video_burn_fontsize.setValue(20)
+
+    self.global_subtitlesvideo_video_burn_shadowdistance_label = QLabel('SHADOW DISTANCE', parent=self.global_subtitlesvideo_panel_widget)
+
+    self.global_subtitlesvideo_video_burn_shadowdistance = QSpinBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_shadowdistance.setMinimum(0)
+    self.global_subtitlesvideo_video_burn_shadowdistance.setMaximum(20)
+    self.global_subtitlesvideo_video_burn_shadowdistance.setValue(1)
+
+    self.global_subtitlesvideo_video_burn_outline_label = QLabel('OUTLINE', parent=self.global_subtitlesvideo_panel_widget)
+
+    self.global_subtitlesvideo_video_burn_outline = QSpinBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_outline.setMinimum(0)
+    self.global_subtitlesvideo_video_burn_outline.setMaximum(20)
+    self.global_subtitlesvideo_video_burn_outline.setValue(2)
+
+    self.global_subtitlesvideo_video_burn_marvinv_label = QLabel('MARGIN FROM BOTTOM', parent=self.global_subtitlesvideo_panel_widget)
+
+    self.global_subtitlesvideo_video_burn_marvinv = QSpinBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_marvinv.setMinimum(0)
+    self.global_subtitlesvideo_video_burn_marvinv.setMaximum(500)
+    self.global_subtitlesvideo_video_burn_marvinv.setValue(20)
+
+    self.global_subtitlesvideo_video_burn_marvinl_label = QLabel('MARGIN FROM LEFT', parent=self.global_subtitlesvideo_panel_widget)
+
+    self.global_subtitlesvideo_video_burn_marvinl = QSpinBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_marvinl.setMinimum(0)
+    self.global_subtitlesvideo_video_burn_marvinl.setMaximum(500)
+    self.global_subtitlesvideo_video_burn_marvinl.setValue(50)
+
+    self.global_subtitlesvideo_video_burn_marvinr_label = QLabel('MARGIN FROM RIGHT', parent=self.global_subtitlesvideo_panel_widget)
+
+    self.global_subtitlesvideo_video_burn_marvinr = QSpinBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_marvinr.setMinimum(0)
+    self.global_subtitlesvideo_video_burn_marvinr.setMaximum(500)
+    self.global_subtitlesvideo_video_burn_marvinr.setValue(50)
+
+    self.global_subtitlesvideo_video_burn_pcolor_selected_color = ''
+
+    self.global_subtitlesvideo_video_burn_pcolor_label = QLabel('FONT COLOR', parent=self.global_subtitlesvideo_panel_widget)
+
+    self.global_subtitlesvideo_video_burn_pcolor = QPushButton(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_pcolor.clicked.connect(lambda: global_subtitlesvideo_video_burn_pcolor_clicked(self))
+    self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
+
+    self.global_subtitlesvideo_video_burn_convert = QPushButton('GENERATE VIDEO', parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_video_burn_convert.setObjectName('button_dark')
+    self.global_subtitlesvideo_video_burn_convert.clicked.connect(lambda: global_subtitlesvideo_video_burn_convert_clicked(self))
+
+    def thread_generated_burned_video_ended(response):
+        if '|' in response:
+            self.global_subtitlesvideo_video_burn_convert.setText('GENERATING... (' + str(int((float(response.split('|')[0]) / float(response.split('|')[1])) * 100)) + '%)')
+        elif 'end' in response:
+            self.global_subtitlesvideo_video_burn_convert.setText('GENERATE VIDEO')
+            self.global_subtitlesvideo_video_burn_convert.setEnabled(True)
+
+    self.thread_generated_burned_video = thread_generated_burned_video(self)
+    self.thread_generated_burned_video.response.connect(thread_generated_burned_video_ended)
 
 def resized(self):
     if (self.subtitles_list or self.video_metadata):
@@ -67,6 +175,26 @@ def resized(self):
     # self.global_subtitlesvideo_import_panel.setGeometry(20, 110, self.global_subtitlesvideo_panel_left.width()-40, 100)
     self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width()-40, 30)
 
+    self.global_subtitlesvideo_video_burn_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, 200, 20)
+    self.global_subtitlesvideo_video_burn_fontname_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 50, 200, 20)
+    self.global_subtitlesvideo_video_burn_fontname.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 70, 300, 30)
+
+    self.global_subtitlesvideo_video_burn_fontsize_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 110, 150, 20)
+    self.global_subtitlesvideo_video_burn_fontsize.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 130, 150, 30)
+    self.global_subtitlesvideo_video_burn_shadowdistance_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+10, 110, 150, 20)
+    self.global_subtitlesvideo_video_burn_shadowdistance.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+10, 130, 150, 30)
+    self.global_subtitlesvideo_video_burn_outline_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+150+20, 110, 150, 20)
+    self.global_subtitlesvideo_video_burn_outline.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+150+20, 130, 150, 30)
+    self.global_subtitlesvideo_video_burn_marvinv_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 170, 150, 20)
+    self.global_subtitlesvideo_video_burn_marvinv.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 190, 150, 30)
+    self.global_subtitlesvideo_video_burn_marvinl_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+10, 170, 150, 20)
+    self.global_subtitlesvideo_video_burn_marvinl.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+10, 190, 150, 30)
+    self.global_subtitlesvideo_video_burn_marvinr_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+150+20, 170, 150, 20)
+    self.global_subtitlesvideo_video_burn_marvinr.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+150+20, 190, 150, 30)
+    self.global_subtitlesvideo_video_burn_pcolor_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+150+20+150+10, 170, 150, 20)
+    self.global_subtitlesvideo_video_burn_pcolor.setGeometry(self.global_subtitlesvideo_panel_right.x()+20+150+150+20+150+10, 190, 150, 30)
+    self.global_subtitlesvideo_video_burn_convert.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 240, 200, 40)
+
 
 def show_global_subtitlesvideo_panel(self):
     self.generate_effect(self.global_subtitlesvideo_panel_widget_animation, 'geometry', 700, [self.global_subtitlesvideo_panel_widget.x(), self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()], [0, self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()])
@@ -83,6 +211,51 @@ def global_subtitlesvideo_import_button_clicked(self):
     file_to_open = QFileDialog.getOpenFileName(self, "Select the file to import", os.path.expanduser("~"), supported_import_files)[0]
     if file_to_open:
         self.subtitles_list += file_io.import_file(filename=file_to_open)[0]
+
+
+def global_subtitlesvideo_video_burn_convert_clicked(self):
+    suggested_path = os.path.dirname(self.video_metadata['filepath'])
+    ext = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
+    save_formats = 'Video file (.' + ext + ')'
+    suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + ext
+
+    generated_video_filepath = QFileDialog.getSaveFileName(self, "Select the subtitle file", os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)[0]
+
+    if generated_video_filepath:
+        file_io.save_file(os.path.join(path_tmp, 'subtitle.srt'), self.subtitles_list, format='SRT', language='en')
+
+        vf_string = 'subtitles=filename=' + os.path.join(path_tmp, 'subtitle.srt') + ":force_style='"
+        vf_string += 'FontName=' + self.global_subtitlesvideo_video_burn_fontname.currentText() + ','
+        vf_string += 'FontSize=' + str(self.global_subtitlesvideo_video_burn_fontsize.value()) + ','
+        vf_string += 'Shadow=' + str(self.global_subtitlesvideo_video_burn_shadowdistance.value()) + ','
+        vf_string += 'Outline=' + str(self.global_subtitlesvideo_video_burn_outline.value()) + ','
+        vf_string += 'MarginV=' + str(self.global_subtitlesvideo_video_burn_marvinv.value()) + ','
+        vf_string += 'MarginL=' + str(self.global_subtitlesvideo_video_burn_marvinl.value()) + ','
+        vf_string += 'MarginR=' + str(self.global_subtitlesvideo_video_burn_marvinr.value()) + ','
+        pcolor = self.global_subtitlesvideo_video_burn_pcolor_selected_color.replace('#', '&H')
+        pcolor = pcolor[:2] + pcolor[-2:] + pcolor[-4:-2] + pcolor[-6:-4]
+        vf_string += 'PrimaryColour=' + pcolor + "'"
+
+        commands = [
+            FFMPEG_EXECUTABLE,
+            '-i', self.video_metadata['filepath'],
+            '-y',
+            '-vf',
+            vf_string,
+            generated_video_filepath
+            ]
+
+        self.thread_generated_burned_video.commands = commands
+        self.thread_generated_burned_video.start()
+        self.global_subtitlesvideo_video_burn_convert.setEnabled(False)
+
+
+def global_subtitlesvideo_video_burn_pcolor_clicked(self):
+    color = QColorDialog().getColor()
+    if color.isValid():
+        self.global_subtitlesvideo_video_burn_pcolor_selected_color = color.name()
+    self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
+    print(self.global_subtitlesvideo_video_burn_pcolor_selected_color)
 
 
 def global_subtitlesvideo_export_button_clicked(self):
