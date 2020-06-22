@@ -17,7 +17,7 @@ staging:amd64:
   #- cp /etc/apt/sources.list /etc/apt/sources.list~
   #- sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
   #- apt-get update -qy
-  - apt-get install -y python3-pip libglu1-mesa snapcraft libmpv1 ffmpeg
+  - apt-get install -y python3-pip libglu1-mesa snapcraft libmpv1 ffmpeg libmpv-dev
   # git python
   # python devscripts equivs pkg-config libfreetype6-dev libfribidi-dev libfontconfig1-dev yasm xorg-dev
   #- apt-get -y build-dep libmpv1 ffmpeg
@@ -65,7 +65,8 @@ windows-nsis:
   type: deploy
   script:
   - apt-get update -qy
-  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full
+  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full libmpv-dev winetricks
+  - winetricks vcrun2015
   - wine pip3 install -r requirements.txt
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
   - unzip ffmpeg-latest-win64-static.zip
