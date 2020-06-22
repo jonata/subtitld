@@ -55,7 +55,7 @@ def resized(self):
     self.properties_textedit.setGeometry(20, self.properties_widget.height()-self.playercontrols_widget.height()-35-180, self.properties_widget.width()-40, 200)
     self.send_text_to_last_subtitle_button.setGeometry(self.properties_textedit.x(), self.properties_textedit.y()-40, self.properties_textedit.width()*.5, 40)
     self.send_text_to_next_subtitle_button.setGeometry(self.send_text_to_last_subtitle_button.x()+self.send_text_to_last_subtitle_button.width(), self.send_text_to_last_subtitle_button.y(), self.properties_textedit.width()*.5, 40)
-    self.properties_information.setGeometry(20, 20, self.properties_widget.width()-40, 400)
+    self.properties_information.setGeometry(30, 20, self.properties_widget.width()-40, 100)
 
     if (self.subtitles_list or self.video_metadata):
         self.properties_toggle_button.setGeometry(self.properties_widget.x()+5, 0, 25, 80)

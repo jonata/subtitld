@@ -259,18 +259,17 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def playercontrols_stop_button_clicked(self):
-    self.player_widget.mpv.pause = True
-    self.player_widget.mpv.wait_for_property('seekable')
-    self.player_widget.mpv.seek(0, reference='absolute')
-    self.repeat_duration_tmp = []
-    self.mediaplayer_is_playing = False
+    playercontrols_playpause_button_clicked(self)
+    self.player_widget.stop()
     self.playercontrols_playpause_button.setChecked(False)
     self.timeline.update_scrollbar(self)
     playercontrols_playpause_button_update(self)
 
 
 def playercontrols_playpause_button_clicked(self):
-    self.player.playpause(self)
+    self.player_widget.pause()
+    if self.repeat_activated:
+        self.repeat_duration_tmp = []
     playercontrols_playpause_button_update(self)
 
 
@@ -377,7 +376,7 @@ def zoomout_button_clicked(self):
 def zoom_buttons_update(self):
     self.zoomout_button.setEnabled(True if self.mediaplayer_zoom - 5.0 > 0.0 else False)
     self.zoomin_button.setEnabled(True if self.mediaplayer_zoom + 5.0 < 500.0 else False)
-    proportion = ((self.current_timeline_position*self.timeline_widget.width_proportion)-self.timeline_scroll.horizontalScrollBar().value())/self.timeline_scroll.width()
+    proportion = ((self.player_widget.position*self.timeline_widget.width_proportion)-self.timeline_scroll.horizontalScrollBar().value())/self.timeline_scroll.width()
     self.timeline_widget.setGeometry(0, 0, int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)), self.timeline_scroll.height()-20)
     # self.timeline.zoom_update_waveform(self)
     self.timeline.update_scrollbar(self, position=proportion)
@@ -455,26 +454,24 @@ def update_grid_buttons(self):
 
 def playercontrols_play_from_last_start_button_clicked(self):
     subt = [item[0] for item in self.subtitles_list]
-    last_subtitle = self.subtitles_list[bisect(subt, self.current_timeline_position)-1]
-    self.current_timeline_position = last_subtitle[0]
-    self.player_widget.mpv.wait_for_property('seekable')
-    self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')
+    last_subtitle = self.subtitles_list[bisect(subt, self.player_widget.position)-1]
+    self.player_widget.seek(last_subtitle[0])
+    self.player_widget.play()
     self.timeline.update_scrollbar(self)
     self.timeline.update(self)
 
 
 def playercontrols_play_from_next_start_button_clicked(self):
     subt = [item[0] for item in self.subtitles_list]
-    last_subtitle = self.subtitles_list[bisect(subt, self.current_timeline_position)]
-    self.current_timeline_position = last_subtitle[0]
-    self.player_widget.mpv.wait_for_property('seekable')
-    self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')
+    last_subtitle = self.subtitles_list[bisect(subt, self.player_widget.position)]
+    self.player_widget.seek(last_subtitle[0])
+    self.player_widget.play()
     self.timeline.update_scrollbar(self)
     self.timeline.update(self)
 
 
 def add_subtitle_button_clicked(self):
-    self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.current_timeline_position, duration=self.default_new_subtitle_duration)
+    self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.player_widget.position, duration=self.default_new_subtitle_duration)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
@@ -498,7 +495,7 @@ def slice_selected_subtitle_button_clicked(self):
         pos = self.properties_textedit.textCursor().position()
         last_text = self.properties_textedit.toPlainText()[:pos]
         next_text = self.properties_textedit.toPlainText()[pos:]
-        self.selected_subtitle = subtitles.slice_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, position=self.current_timeline_position, next_text=next_text, last_text=last_text)
+        self.selected_subtitle = subtitles.slice_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, position=self.player_widget.position, next_text=next_text, last_text=last_text)
         self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
@@ -527,7 +524,7 @@ def merge_next_selected_subtitle_button_clicked(self):
 
 
 def next_start_to_current_position_button_clicked(self):
-    subtitles.next_start_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    subtitles.next_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
@@ -536,7 +533,7 @@ def next_start_to_current_position_button_clicked(self):
 
 
 def last_end_to_current_position_button_clicked(self):
-    subtitles.last_end_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    subtitles.last_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
@@ -545,7 +542,7 @@ def last_end_to_current_position_button_clicked(self):
 
 
 def last_start_to_current_position_button_clicked(self):
-    subtitles.last_start_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    subtitles.last_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
@@ -554,7 +551,7 @@ def last_start_to_current_position_button_clicked(self):
 
 
 def next_end_to_current_position_button_clicked(self):
-    subtitles.next_end_to_current_position(subtitles=self.subtitles_list, position=self.current_timeline_position)
+    subtitles.next_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
