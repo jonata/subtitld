@@ -5,7 +5,7 @@ import sys
 import time
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import Qt, QTimer, QRect, QPropertyAnimation
+from PyQt5.QtCore import Qt, QRect, QPropertyAnimation
 
 from modules.paths import PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
 from modules.history import history_redo, history_undo
@@ -37,10 +37,7 @@ class subtitld(QWidget):
         self.mediaplayer_opacity = .5
         self.video_length = 0.01
         self.mediaplayer_current_position = 0.0
-        self.mediaplayer_is_playing = False
         self.mediaplayer_view_mode = 'verticalform'
-        self.mediaplayer_is_playing = False
-        self.current_timeline_position = 0.0
         self.timeline_snap = True
         self.timeline_snap_value = .1
         self.timeline_snap_limits = True
@@ -127,11 +124,6 @@ class subtitld(QWidget):
         self.properties.update_properties_widget(self)
         self.player.update(self)
 
-        self.timer = QTimer(self)
-        self.timer.setInterval(self.update_accuracy)
-        self.timer.timeout.connect(lambda: self.update_things())
-        self.timer.start()
-
     def dragEnterEvent(widget, event):
         if event.mimeData().hasUrls and len(event.mimeData().urls()) > 0:
             if sys.platform == 'darwin':
@@ -197,7 +189,7 @@ class subtitld(QWidget):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space:
-            self.player.playpause(self)
+            self.player_widget.pause()
             self.playercontrols_playpause_button.setChecked(not self.playercontrols_playpause_button.isChecked())
             self.playercontrols.playercontrols_playpause_button_update(self)
 
@@ -217,155 +209,6 @@ class subtitld(QWidget):
             self.update_things()
             self.properties.update_properties_widget(self)
             self.timeline.update(self)
-        #
-        # if event.key() == Qt.Key_Slash:
-        #     self.player_controls.play_button_selection.setChecked(not self.player_controls.play_button_selection.isChecked())
-        #
-        # if event.key() == Qt.Key_9:
-        #     self.player_controls.new_back(self)
-        #
-        # if event.key() == Qt.Key_8:
-        #     self.player_controls.note_above(self)
-        #
-        # if event.key() == Qt.Key_2:
-        #     self.player_controls.note_below(self)
-        #
-        # if event.key() == Qt.Key_6:
-        #     self.player_controls.note_ends_forward(self)
-        #
-        # if event.key() == Qt.Key_4:
-        #     self.player_controls.note_starts_back(self)
-        #
-        # if event.key() == Qt.Key_1:
-        #     self.player_controls.note_starts_forward(self)
-        #
-        # if event.key() == Qt.Key_3:
-        #     self.player_controls.note_ends_back(self)
-        #
-        # if event.key() in [Qt.Key_Asterisk]:
-        #     self.player_controls.golden_note(self)
-        #
-        # if event.key() in [Qt.Key_5]:
-        #     self.player_controls.freestyle_note(self)
-        #
-        # if event.key() in [Qt.Key_Comma, Qt.Key_Period]:
-        #     self.player_controls.line_break(self)
-        #
-        # if event.key() in [Qt.Key_Delete, Qt.Key_Backspace]:
-        #     self.player_controls.note_remove(self)
-        #
-        # if event.key() == Qt.Key_Plus:
-        #     self.timeline.zoomin_button_clicked(self)
-        #
-        # if event.key() == Qt.Key_Minus:
-        #     self.timeline.zoomout_button_clicked(self)
-        #
-        # if event.key() == Qt.Key_Q:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'F3'
-        #         frequency = 174.6141 #F3
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        #
-        # #if event.key() == Qt.Key_2:
-        # #    frequency = 184.9972 #F#3
-        # #    time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        # #    sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_W:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'G3'
-        #         frequency = 195.9977 #G3
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # #if event.key() == Qt.Key_3:
-        # #    frequency = 207.6523 #G#3
-        # #    time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        # #    sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_E:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'A4'
-        #         frequency = 220.0000 #A3
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # #if event.key() == Qt.Key_4:
-        # #    frequency = 233.0819 #A#3
-        # #    time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        # #    sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_R:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'B4'
-        #         frequency = 246.9417 #B3
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_T:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'C4'
-        #         frequency = 261.6256 #C4
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # #if event.key() == Qt.Key_6:
-        # #    frequency = 277.1826 #C#4
-        # #    time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        # #    sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_Y:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'D4'
-        #         frequency = 293.6648 #D4
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # #if event.key() == Qt.Key_7:
-        # #    frequency = 311.1270 #D#4
-        # #    time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        # #    sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_U:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'E4'
-        #         frequency = 329.6276 #E4
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_I:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'F4'
-        #         frequency = 349.2282 #F4
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # #if event.key() == Qt.Key_9:
-        # #    frequency = 369.9944 #F#4
-        # #    time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        # #    sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_O:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'G4'
-        #         frequency = 391.9954 #G4
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # #if event.key() == Qt.Key_0:
-        # #    frequency = 415.3047 #G#4
-        # #    time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        # #    sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
-        # if event.key() == Qt.Key_P:
-        #     if self.player_controls.listen_note_preview.isChecked():
-        #         self.now_previewing_note = 'A5'
-        #         frequency = 440.0000 #A4
-        #         time = 0.5#self.lyrics_metadata['bpm'] / 60000.0
-        #         sounddevice.play(numpy.array((10000 * numpy.sin(2 * numpy.pi * frequency * (numpy.arange(44100 * time) / 44100.0))), dtype=numpy.int16))
-        #
 
     def live_recording_note_thread_updated(self, result):
         self.recording_note = result
@@ -379,20 +222,6 @@ class subtitld(QWidget):
             widget.setStartValue(startValue)
             widget.setEndValue(endValue)
         widget.start()
-
-    def update_things(self):
-        if self.mediaplayer_is_playing:
-            self.timeline.update(self)
-            if self.repeat_activated and not self.repeat_duration_tmp:
-                self.repeat_duration_tmp = [[self.current_timeline_position, self.current_timeline_position + self.repeat_duration] for i in range(self.repeat_times)]
-            if self.repeat_activated and self.repeat_duration_tmp and self.current_timeline_position > self.repeat_duration_tmp[0][1]:
-                self.current_timeline_position = self.repeat_duration_tmp[0][0]
-                self.player_widget.mpv.wait_for_property('seekable')
-                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')
-                pos = self.repeat_duration_tmp.pop(0)
-                self.repeat_duration_tmp.append([pos[1], pos[1] + self.repeat_duration])
-
-        self.player.update_subtitle_layer(self)
 
 
 def edit_syllable_returnpressed(self):

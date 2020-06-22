@@ -98,9 +98,8 @@ def open_filepath(self, file_to_open=False):
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
 
         self.player.update(self)
-        self.player_widget.mpv.play(self.video_metadata['filepath'])
-        self.player_widget.mpv.wait_for_property('seekable')
-        self.player_widget.mpv.pause = True
+        self.player_widget.open(self.video_metadata['filepath'])
+        #self.player_widget.stop()
         self.player.resize_player_widget(self)
 
         if not self.actual_subtitle_file:
@@ -179,7 +178,7 @@ def process_subtitles_file(subtitle_file=False, format=False):
                 final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
 
     elif subtitle_file.lower().endswith(('.ass', '.ssa')):
-        fomat = 'ASS'
+        format = 'ASS'
         with open(subtitle_file) as f:
             ssafile = pysubs2.SSAFile.from_string(f.read())
             for event in ssafile.events:
@@ -214,7 +213,7 @@ def import_file(filename=False, format=False, fit_to_length=False, length=.01, d
     if filename:
         if filename.lower().endswith(('.txt')):
             from cleantext import clean
-            
+
             format = 'TXT'
             with open(filename) as txt_file:
                 '''clean("some input",

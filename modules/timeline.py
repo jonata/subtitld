@@ -176,9 +176,10 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                     if x >= scroll_position and x <= (scroll_position + self.timeline_scroll.width()):
                         painter.drawLine(x, 0, x, widget.height())
 
-            painter.setPen(QPen(QColor.fromRgb(255, 0, 0, 200), 2, Qt.SolidLine))
-            cursor_pos = self.current_timeline_position * widget.width_proportion
-            painter.drawLine(cursor_pos, 0, cursor_pos, widget.height())
+            if self.player_widget.position is not None:
+                painter.setPen(QPen(QColor.fromRgb(255, 0, 0, 200), 2, Qt.SolidLine))
+                cursor_pos = self.player_widget.position * widget.width_proportion
+                painter.drawLine(cursor_pos, 0, cursor_pos, widget.height())
 
             painter.end()
 
@@ -202,9 +203,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                     break
 
             if not (widget.subtitle_end_is_clicked or widget.subtitle_start_is_clicked or widget.subtitle_is_clicked):
-                self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
-                self.player_widget.mpv.wait_for_property('seekable')
-                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')
+                self.player_widget.seek((event.pos().x() / widget.width())*self.video_metadata['duration'])
                 update_timecode_label(self)
 
             self.properties.update_properties_widget(self)
@@ -302,9 +301,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             else:
                 widget.show_limiters = False
             if widget.is_cursor_pressing and not (widget.subtitle_start_is_clicked or widget.subtitle_end_is_clicked or widget.subtitle_is_clicked):
-                self.current_timeline_position = (event.pos().x() / widget.width())*self.video_metadata['duration']
-                self.player_widget.mpv.wait_for_property('seekable')
-                self.player_widget.mpv.seek(self.current_timeline_position, reference='absolute')
+                self.player_widget.seek((event.pos().x() / widget.width())*self.video_metadata['duration'])
                 update_timecode_label(self)
             widget.update()
 
@@ -360,18 +357,26 @@ def update_scrollbar(self, position=0):
         offset = self.timeline_scroll.width()*position
     elif type(position) == int:
         offset = position
-    self.timeline_scroll.horizontalScrollBar().setValue(self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01)) - offset)
+    # self.timeline_scroll.horizontalScrollBar().setValue(self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01)) - offset)
+    self.timeline_scroll.horizontalScrollBar().setValue(self.player_widget.position * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01)) - offset)
 
 
 def update_timecode_label(self):
-    self.playercontrols_timecode_label.setText(str(timecode.Timecode('1000', start_seconds=self.current_timeline_position, fractional=True)))
+    self.playercontrols_timecode_label.setText(str(timecode.Timecode('1000', start_seconds=self.player_widget.position, fractional=True)))
 
 
 def update(self):
-    if self.player_widget.mpv.time_pos and self.mediaplayer_is_playing:
-        self.current_timeline_position = self.player_widget.mpv.time_pos
-        if (self.player_widget.mpv.time_pos * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
-            update_scrollbar(self)
+    self.player.update_subtitle_layer(self)
+    if self.repeat_activated and not self.repeat_duration_tmp:
+        self.repeat_duration_tmp = [[self.player_widget.position, self.player_widget.position + self.repeat_duration] for i in range(self.repeat_times)]
+    if self.repeat_activated and self.repeat_duration_tmp and self.player_widget.position > self.repeat_duration_tmp[0][1]:
+        self.player_widget.position = self.repeat_duration_tmp[0][0]
+        self.player_widget.mpv.wait_for_property('seekable')
+        self.player_widget.mpv.seek(self.player_widget.position, reference='absolute')
+        pos = self.repeat_duration_tmp.pop(0)
+        self.repeat_duration_tmp.append([pos[1], pos[1] + self.repeat_duration])
+    if (self.player_widget.position * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
+        update_scrollbar(self)
     update_timecode_label(self)
     self.timeline_widget.update()
 
