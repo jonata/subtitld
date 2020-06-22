@@ -1,5 +1,5 @@
 PyQt5
-pympv
+pympv2
 pyopengl
 PyInstaller
 numpy
