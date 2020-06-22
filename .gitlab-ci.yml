@@ -65,7 +65,7 @@ windows-nsis:
   type: deploy
   script:
   - apt-get update -qy
-  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full libmpv-dev
+  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full
   - winetricks vcrun2015
   - wine pip3 install -r requirements.txt
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
