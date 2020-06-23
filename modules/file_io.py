@@ -151,7 +151,7 @@ def process_subtitles_file(subtitle_file=False, format=False):
     elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
         format = 'VTT'
         print('vtt 1')
-        with open(subtitle_file) as vtt_file:
+        with open(subtitle_file, 'rb') as vtt_file:
             print('vtt 2')
             vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
             print('vtt 3')
