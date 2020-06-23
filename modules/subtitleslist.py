@@ -109,13 +109,11 @@ def subtitles_list_qlistwidget_item_clicked(self):
 
     if self.selected_subtitle:
         if not (self.player_widget.position > self.selected_subtitle[0] and self.player_widget.position < self.selected_subtitle[0] + self.selected_subtitle[1]):
-            self.player_widget.position = self.selected_subtitle[0] + (self.selected_subtitle[1]*.5)
-            self.player_widget.seek(self.player_widget.position)
+            self.player_widget.seek(self.selected_subtitle[0] + (self.selected_subtitle[1]*.5))
 
     self.properties.update_properties_widget(self)
     self.timeline.update(self)
     self.timeline.update_scrollbar(self, position='middle')
-    self.update_things()
 
 
 def show(self):
