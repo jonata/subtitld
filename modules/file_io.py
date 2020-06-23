@@ -116,8 +116,8 @@ def open_filepath(self, file_to_open=False):
 
 def process_subtitles_file(subtitle_file=False, format=False):
     final_subtitles = []
-    
-    if subtitle_file:
+
+    if subtitle_file and os.path.isfile(subtitle_file):
         if subtitle_file.lower().endswith('.srt'):
             format = 'SRT'
             with open(subtitle_file) as srt_file:
