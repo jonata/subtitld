@@ -74,7 +74,7 @@ def ffmpeg_extract_subtitle(filepath, index):
         filepath,
         '-map',
         '0:' + str(index),
-        os.path.join(path_tmp, 'subtitle.vtt')]
+        os.path.join(path_tmp, 'subtitle.vtt').replace('\\', '\\\\\\\\').replace(':', '\\\:')]
     subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
 
     return os.path.join(path_tmp, 'subtitle.vtt')
