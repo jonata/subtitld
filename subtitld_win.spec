@@ -11,7 +11,7 @@ a = Analysis(['subtitld.py'],
         ( 'ffmpeg-latest-win64-static/bin/ffmpeg.exe', '.'),
         ( 'ffmpeg-latest-win64-static/bin/ffprobe.exe', '.'),
     ],
-    hiddenimports=['_cffi_backend', 'cleantext'],
+    hiddenimports=['_cffi_backend', 'cleantext', 'scc2srt'],
     hookspath=[],
     runtime_hooks=[] )
 
@@ -23,8 +23,8 @@ exe = EXE(pyz,
     name='Subtitld.exe',
     strip=False,
     upx=True,
-    console=True,
-    debug=True,
+    console=False,
+    debug=False,
     icon='graphics/subtitld.ico' )
 
 coll = COLLECT( exe,
