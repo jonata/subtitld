@@ -96,7 +96,7 @@ def open_filepath(self, file_to_open=False):
         self.videoinfo_label.setText('Extracting audio...')
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
         self.player.update(self)
-        self.player_widget.open(self.video_metadata['filepath'])
+        self.player_widget.loadfile(self.video_metadata['filepath'])
         self.player.resize_player_widget(self)
         if not self.actual_subtitle_file:
             if self.video_metadata.get('subttiles', ''):

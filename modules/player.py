@@ -175,7 +175,7 @@ class MpvWidget(QOpenGLWidget):
         self.mpv.command('show-text', msg, duration * 1000, level)
 
     @pyqtSlot(str, name='ewewf', )
-    def open(self, filepath) -> None:
+    def loadfile(self, filepath) -> None:
         if os.path.isfile(filepath):
             self.mpv.command('loadfile', filepath, 'replace')
         self.property('pause', True)
