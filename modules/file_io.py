@@ -99,7 +99,6 @@ def open_filepath(self, file_to_open=False):
 
         self.player.update(self)
         self.player_widget.open(self.video_metadata['filepath'])
-        #self.player_widget.stop()
         self.player.resize_player_widget(self)
 
         if not self.actual_subtitle_file:
@@ -202,7 +201,9 @@ def process_video_file(video_file=False):
             video_metadata['height'] = int(stream.get('height', 480))
             video_metadata['framerate'] = int(stream.get('time_base', '1/30').split('/', 1)[-1])
         elif stream.get('codec_type', '') == 'subtitle':
+            print('subtitle 1')
             video_metadata['subttiles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
+            print('subtitle 2')
     video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
     return video_metadata
