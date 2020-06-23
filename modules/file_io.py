@@ -153,7 +153,7 @@ def process_subtitles_file(subtitle_file=False, format=False):
         print('vtt 1')
         print(subtitle_file)
         #with open(subtitle_file) as vtt_file:
-        vtt_file = open(subtitle_file)
+        vtt_file = open(subtitle_file, 'r')
         print('vtt 2')
         vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
         print('vtt 3')
