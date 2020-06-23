@@ -41,6 +41,7 @@ staging:amd64:
   - python3 -m pip install -r requirements.txt
   #- python3 -m pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
   - python3 -m pip uninstall -y enum34
+  - python3 -m pip install -y PyInstaller
   - python3 -m PyInstaller subtitld_linux.spec
   - mv dist .dist
   - mv snap .snap
@@ -73,7 +74,6 @@ windows-nsis:
   - wget --no-check-certificate https://mpv.srsfckn.biz/mpv-dev-latest.7z
   - 7z x -ompv mpv-dev-latest.7z
   - wine pip uninstall -y enum34
-  - wine pip install --upgrade PyInstaller
   - wine PyInstaller subtitld_win.spec
   - makensis subtitld_win.nsi
   - export SSHPASS=$USER_PASS

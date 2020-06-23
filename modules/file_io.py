@@ -89,47 +89,29 @@ def open_filepath(self, file_to_open=False):
         file_to_open = QFileDialog.getOpenFileName(self, "Select the video file", os.path.expanduser("~"), supported_video_files)[0]
         if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
             self.video_metadata = process_video_file(file_to_open)
-            print('videometadata 1')
 
     if self.video_metadata:
-        print('videometadata 2')
         self.actual_video_file = file_to_open
-        print('videometadata 3')
         self.thread_extract_waveform.filepath = self.video_metadata['filepath']
-        print('videometadata 4')
         self.thread_extract_waveform.start()
-        print('videometadata 5')
         self.videoinfo_label.setText('Extracting audio...')
-        print('videometadata 6')
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
-        print('videometadata 7')
         self.player.update(self)
-        print('videometadata 8')
         self.player_widget.open(self.video_metadata['filepath'])
-        print('videometadata 9')
         self.player.resize_player_widget(self)
-        print('videometadata 10')
         if not self.actual_subtitle_file:
             if self.video_metadata.get('subttiles', ''):
                 self.subtitles_list, self.format_to_save = process_subtitles_file(self.video_metadata['subttiles'])
-        print('videometadata 11')
         self.subtitleslist.update_subtitles_list_widget(self)
-        print('videometadata 12')
         self.timeline.update_timeline(self)
-        print('videometadata 13')
         self.startscreen.hide(self)
-        print('videometadata 14')
         self.playercontrols.show(self)
-        print('videometadata 15')
         self.properties.show(self)
-        print('videometadata 16')
         self.subtitleslist.show(self)
         # if self.advanced_mode:
         #    self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
         #    self.global_properties_panel.hide_global_properties_panel(self)
-        print('videometadata 17')
         self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
-    print('videometadata 18')
     self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
 
@@ -150,16 +132,10 @@ def process_subtitles_file(subtitle_file=False, format=False):
 
     elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
         format = 'VTT'
-        print('vtt 1')
-        print(subtitle_file)
-        #with open(subtitle_file) as vtt_file:
-        vtt_file = open(subtitle_file, 'r')
-        print('vtt 2')
-        vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
-        print('vtt 3')
-        for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
-            print('vtt 4')
-            final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+        with open(subtitle_file) as vtt_file:
+            vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
+            for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
+                final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
     elif subtitle_file.lower().endswith(('.ttml', '.dfxp')):
         format = 'DFXP'
@@ -171,9 +147,10 @@ def process_subtitles_file(subtitle_file=False, format=False):
     elif subtitle_file.lower().endswith(('.sbv')):
         format = 'SBV'
         from captionstransformer.sbv import Reader as sbv_reader
-        captions = sbv_reader(open(subtitle_file)).read()
-        for caption in captions:
-            final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text])
+        with open(subtitle_file) as sbv_file:
+            captions = sbv_reader(sbv_file).read()
+            for caption in captions:
+                final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text])
 
     elif subtitle_file.lower().endswith(('.smi', '.sami')):
         format = 'SAMI'
@@ -192,9 +169,10 @@ def process_subtitles_file(subtitle_file=False, format=False):
         if '<transcript>' in open(subtitle_file).read():
             from captionstransformer.transcript import Reader as transcript_reader
             import html
-            captions = transcript_reader(open(subtitle_file)).read()
-            for caption in captions:
-                final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
+            with open(subtitle_file) as xml_file:
+                captions = transcript_reader(xml_file).read()
+                for caption in captions:
+                    final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
 
     elif subtitle_file.lower().endswith(('.ass', '.ssa')):
         format = 'ASS'
@@ -205,7 +183,6 @@ def process_subtitles_file(subtitle_file=False, format=False):
                 duration = event.duration / 1000.0
                 text = event.plaintext
                 final_subtitles.append([start, duration, text])
-    print('vtt 5')
     return final_subtitles, format
 
 
