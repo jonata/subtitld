@@ -151,13 +151,15 @@ def process_subtitles_file(subtitle_file=False, format=False):
     elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
         format = 'VTT'
         print('vtt 1')
-        with open(subtitle_file, 'rb') as vtt_file:
-            print('vtt 2')
-            vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
-            print('vtt 3')
-            for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
-                print('vtt 4')
-                final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+        print(subtitle_file)
+        #with open(subtitle_file) as vtt_file:
+        vtt_file = open(subtitle_file)
+        print('vtt 2')
+        vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
+        print('vtt 3')
+        for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
+            print('vtt 4')
+            final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
     elif subtitle_file.lower().endswith(('.ttml', '.dfxp')):
         format = 'DFXP'
