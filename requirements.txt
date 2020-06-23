@@ -1,7 +1,6 @@
 PyQt5
 pympv2
 pyopengl
-PyInstaller
 numpy
 bcrypt
 sip
