@@ -120,7 +120,7 @@ def process_subtitles_file(subtitle_file=False, format=False):
     if subtitle_file and os.path.isfile(subtitle_file):
         if subtitle_file.lower().endswith(('.srt')):
             format = 'SRT'
-            with open(subtitle_file) as srt_file:
+            with open(subtitle_file, encoding='utf-8') as srt_file:
                 srt_content = srt_file.read()
 
                 if ' -> ' in srt_content:
@@ -132,44 +132,39 @@ def process_subtitles_file(subtitle_file=False, format=False):
 
         elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
             format = 'VTT'
-            with open(subtitle_file) as vtt_file:
+            with open(subtitle_file, encoding='utf-8') as vtt_file:
                 vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
                 for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
                     final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.ttml', '.dfxp')):
             format = 'DFXP'
-            with open(subtitle_file) as dfxp_file:
+            with open(subtitle_file, encoding='utf-8') as dfxp_file:
                 dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
                 for caption in dfxp_reader.get_captions(list(dfxp_reader._captions.keys())[0]):
+                    final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+
+        elif subtitle_file.lower().endswith(('.smi', '.sami')):
+            format = 'SAMI'
+            with open(subtitle_file, encoding='utf-8') as sami_file:
+                sami_reader = pycaption.SAMIReader().read(sami_file.read())
+                for caption in sami_reader.get_captions(list(sami_reader._captions.keys())[0]):
                     final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.sbv')):
             format = 'SBV'
             from captionstransformer.sbv import Reader as sbv_reader
-            with open(subtitle_file) as sbv_file:
+            with open(subtitle_file, encoding='utf-8') as sbv_file:
                 captions = sbv_reader(sbv_file).read()
                 for caption in captions:
                     final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text])
-
-        elif subtitle_file.lower().endswith(('.smi', '.sami')):
-            format = 'SAMI'
-            with open(subtitle_file) as sami_file:
-                sami_reader = pycaption.SAMIReader().read(sami_file.read())
-                for caption in sami_reader.get_captions(list(sami_reader._captions.keys())[0]):
-                    final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
-
-        elif subtitle_file.lower().endswith(('.scc')):
-            format = 'SCC'
-            import scc2srt
-            final_subtitles = scc2srt.get_list_of_captions(subtitle_file)
 
         elif subtitle_file.lower().endswith(('.xml')):
             format = 'XML'
             if '<transcript>' in open(subtitle_file).read():
                 from captionstransformer.transcript import Reader as transcript_reader
                 import html
-                with open(subtitle_file) as xml_file:
+                with open(subtitle_file, encoding='utf-8') as xml_file:
                     captions = transcript_reader(xml_file).read()
                     for caption in captions:
                         final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
@@ -177,13 +172,19 @@ def process_subtitles_file(subtitle_file=False, format=False):
         elif subtitle_file.lower().endswith(('.ass', '.ssa')):
             format = 'ASS'
             import pysubs2
-            with open(subtitle_file) as f:
+            with open(subtitle_file, encoding='utf-8') as f:
                 ssafile = pysubs2.SSAFile.from_string(f.read())
                 for event in ssafile.events:
                     start = event.start / 1000.0
                     duration = event.duration / 1000.0
                     text = event.plaintext
                     final_subtitles.append([start, duration, text])
+
+        elif subtitle_file.lower().endswith(('.scc')):
+            format = 'SCC'
+            import scc2srt
+            final_subtitles = scc2srt.get_list_of_captions(subtitle_file)
+
     return final_subtitles, format
 
 
