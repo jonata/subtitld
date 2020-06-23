@@ -475,7 +475,6 @@ def add_subtitle_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.update_things()
     self.properties.update_properties_widget(self)
     self.properties_textedit.setFocus(Qt.TabFocusReason)
 
@@ -486,7 +485,6 @@ def remove_selected_subtitle_button_clicked(self):
     self.selected_subtitle = False
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.update_things()
     self.properties.update_properties_widget(self)
 
 
@@ -499,7 +497,6 @@ def slice_selected_subtitle_button_clicked(self):
         self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.update_things()
         self.properties.update_properties_widget(self)
 
 
@@ -509,7 +506,6 @@ def merge_back_selected_subtitle_button_clicked(self):
         self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.update_things()
         self.properties.update_properties_widget(self)
 
 
@@ -519,7 +515,6 @@ def merge_next_selected_subtitle_button_clicked(self):
         self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.update_things()
         self.properties.update_properties_widget(self)
 
 
@@ -528,7 +523,6 @@ def next_start_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.update_things()
     self.properties.update_properties_widget(self)
 
 
@@ -537,7 +531,6 @@ def last_end_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.update_things()
     self.properties.update_properties_widget(self)
 
 
@@ -546,7 +539,6 @@ def last_start_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.update_things()
     self.properties.update_properties_widget(self)
 
 
@@ -555,7 +547,6 @@ def next_end_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.update_things()
     self.properties.update_properties_widget(self)
 
 
