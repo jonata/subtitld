@@ -41,7 +41,7 @@ staging:amd64:
   - python3 -m pip install -r requirements.txt
   #- python3 -m pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
   - python3 -m pip uninstall -y enum34
-  - python3 -m pip install -y PyInstaller
+  - python3 -m pip install PyInstaller
   - python3 -m PyInstaller subtitld_linux.spec
   - mv dist .dist
   - mv snap .snap
