@@ -110,8 +110,7 @@ def subtitles_list_qlistwidget_item_clicked(self):
     if self.selected_subtitle:
         if not (self.player_widget.position > self.selected_subtitle[0] and self.player_widget.position < self.selected_subtitle[0] + self.selected_subtitle[1]):
             self.player_widget.position = self.selected_subtitle[0] + (self.selected_subtitle[1]*.5)
-            # self.player_widget.mpv.wait_for_property('seekable')
-            self.player_widget.mpv.seek(self.player_widget.position, reference='absolute', precision='exact')
+            self.player_widget.seek(self.player_widget.position)
 
     self.properties.update_properties_widget(self)
     self.timeline.update(self)
