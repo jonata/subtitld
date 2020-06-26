@@ -134,7 +134,6 @@ def send_text_to_next_subtitle_button_clicked(self):
     subtitles.send_text_to_next_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, last_text=last_text, next_text=next_text)
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.update_things()
     self.properties.update_properties_widget(self)
 
 
@@ -145,5 +144,4 @@ def send_text_to_last_subtitle_button_clicked(self):
     subtitles.send_text_to_last_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, last_text=last_text, next_text=next_text)
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.update_things()
     self.properties.update_properties_widget(self)

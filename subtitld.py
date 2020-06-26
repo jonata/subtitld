@@ -206,7 +206,6 @@ class subtitld(QWidget):
                 history_undo(actual_subtitles=self.subtitles_list)
             self.selected_subtitle = False
             self.subtitleslist.update_subtitles_list_qlistwidget(self)
-            self.update_things()
             self.properties.update_properties_widget(self)
             self.timeline.update(self)
 
