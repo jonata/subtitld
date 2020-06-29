@@ -75,7 +75,7 @@ def open_filepath(self, file_to_open=False):
     supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*.{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
     supported_video_files = "Video files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
     if not file_to_open:
-        file_to_open = QFileDialog.getOpenFileName(self, "Select the video or subtitle file", os.path.expanduser("~"), supported_subtitle_files + ';;' + supported_video_files)[0]
+        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption="Select the video or subtitle file", directory=os.path.expanduser("~"), filter=supported_subtitle_files + ';;' + supported_video_files)[0]
 
     if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(tuple(list_of_supported_subtitle_extensions)):
         self.subtitles_list, self.format_to_save = process_subtitles_file(file_to_open)
@@ -85,7 +85,7 @@ def open_filepath(self, file_to_open=False):
         self.video_metadata = process_video_file(file_to_open)
 
     if not self.video_metadata:
-        file_to_open = QFileDialog.getOpenFileName(self, "Select the video file", os.path.expanduser("~"), supported_video_files)[0]
+        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption="Select the video file", directory=os.path.expanduser("~"), filter=supported_video_files)[0]
         if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
             self.video_metadata = process_video_file(file_to_open)
 
