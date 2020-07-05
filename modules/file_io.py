@@ -130,6 +130,7 @@ def process_subtitles_file(subtitle_file=False, format='SRT'):
                     final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
+            print(subtitle_file)
             format = 'VTT'
             with open(subtitle_file, encoding='utf-8') as vtt_file:
                 vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
