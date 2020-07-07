@@ -39,4 +39,4 @@ coll = COLLECT( exe,
                 upx=True,
                 name='Subtitld')
 
-open('dist/Subtitld/current_version', mode='w', encoding='utf-8').write(VERSION)
+open('dist/subtitld/current_version', mode='w', encoding='utf-8').write(VERSION)
