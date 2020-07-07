@@ -1,5 +1,9 @@
 # -*- mode: python -*-
 
+VERSION = '20.07.0.0'
+if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
+    VERSION = os.environ['VERSION_NUMBER']
+
 block_cipher = None
 
 a = Analysis(['subtitld.py'],
@@ -33,3 +37,5 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                name='subtitld')
+
+open('dist/Subtitld/current_version', mode='w', encoding='utf-8').write(VERSION)

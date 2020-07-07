@@ -5,6 +5,7 @@ staging:amd64:
   script:
   #- cp /etc/apt/sources.list /etc/apt/sources.list~
   #- sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
   - apt-get install -y software-properties-common
   - add-apt-repository ppa:mc3man/bionic-media -y
@@ -65,6 +66,7 @@ windows-nsis:
   image: schnouki/pyinstaller-windows-ci:python3
   type: deploy
   script:
+  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full
   #- winetricks vcrun2015
