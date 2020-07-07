@@ -8,7 +8,8 @@
 #!define MUI_HEADERIMAGE
 #!define MUI_HEADERIMAGE_BITMAP "graphics\installer_bar.bmp"
 #!define MUI_VERSION "$%OKP_VERSION%"
-!define /date MUI_VERSION "%y.%m.%d.%H%M"
+#!define /date MUI_VERSION "%y.%m.%d.%H%M"
+!define MUI_VERSION $%VERSION_NUMBER%
 
 Name "${MUI_PRODUCT} - Installer"
 Outfile "${MUI_PRODUCT} ${MUI_VERSION} Installer.exe"

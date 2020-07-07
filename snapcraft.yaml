@@ -1,6 +1,6 @@
 name: subtitld
-version: "18.08.2"
-version-script: date +%y.%m.%d.%H%M
+version: "20.07.2"
+version-script: echo $VERSION_NUMBER # date +%y.%m.%d.%H%M
 summary: Subtitld
 description: |
  Subtitld is a software to create and edit subtitles. Visit http://subtitld.jonata.org/ for more information.

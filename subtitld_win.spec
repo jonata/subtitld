@@ -1,5 +1,9 @@
 # -*- mode: python -*-
 
+VERSION = '20.07.0.0'
+if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
+    VERSION = os.environ['VERSION_NUMBER']
+
 a = Analysis(['subtitld.py'],
     pathex=['/Users/admin/Documents/subtitld', 'C:\Python36\Lib\site-packages\scipy\extra-dll'],
     binaries=[
@@ -34,3 +38,5 @@ coll = COLLECT( exe,
                 strip=False,
                 upx=True,
                 name='Subtitld')
+
+open('dist/Subtitld/current_version', mode='w', encoding='utf-8').write(VERSION)
