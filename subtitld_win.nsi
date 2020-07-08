@@ -1,8 +1,7 @@
-
+!include "MUI2.nsh"
 
 !define MUI_PRODUCT "Subtitld"
 !define MUI_BRANDINGTEXT "Subtitld"
-
 !define MUI_ICON  "graphics\subtitld_installer.ico"
 !define MUI_UNICON  "graphics\subtitld_installer.ico"
 !define MUI_HEADERIMAGE
@@ -10,12 +9,11 @@
 !define MUI_HEADERIMAGE_UNBITMAP "graphics\installer_bar.bmp"
 !define MUI_HEADERIMAGE_RIGHT
 !define MUI_BGCOLOR 2E3E4C
-!define MUI_TEXTCOLOR B8CEE0
+!define MUI_TEXTCOLOR FFFFFF
 !define MUI_WELCOMEFINISHPAGE_BITMAP "graphics\installer_welcome.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "graphics\installer_uninstall.bmp"
 !define MUI_COMPONENTSPAGE_NODESC
 !define MUI_VERSION $%VERSION_NUMBER%
-!include "MUI2.nsh"
 
 Name "${MUI_PRODUCT} - Installer"
 Outfile "${MUI_PRODUCT} ${MUI_VERSION} Installer.exe"
