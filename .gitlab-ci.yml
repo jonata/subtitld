@@ -80,7 +80,7 @@ windows-nsis:
   - makensis subtitld_win.nsi
   - export SSHPASS=$USER_PASS
   - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
-  - curl -d "{\"number\":\"$VERSION_NUMBER\", \"is_stable\":\"False\"\}" -H "Content-Type: application/json" -X POST https://api2.jonata.org/subtitld/windows_version
+  - curl -d '{ \"number\":\"'\"$VERSION_NUMBER\"'\", \"is_stable\":\"False\" }' -H \"Content-Type: application/json\" -X POST https://api2.jonata.org/subtitld/windows_version
   artifacts:
     paths:
     - Subtitld*Installer.exe
