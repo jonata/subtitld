@@ -8,7 +8,7 @@ from PyQt5.QtCore import QPropertyAnimation, Qt, QThread, pyqtSignal
 
 from modules import file_io
 from modules import authentication
-from modules.paths import ACTUAL_OS
+from modules.paths import ACTUAL_OS, VERSION_NUMBER
 
 
 class thread_verify_user_and_machineid(QThread):
@@ -76,8 +76,7 @@ def load(self):
     self.start_screen_adver_label_details.setObjectName('start_screen_adver_label_details')
 
     days = authentication.get_days_to_expiry_date(auth_dict=self.settings['authentication'].get('codes', {}).get(ACTUAL_OS, {}))
-
-    self.start_screen_adver_label_details.setText(str('You have more %s days to use<br>the Advanced version. If you<br>need some more information,<br>visit <b>subtitld.jonata.org</b>.' % days) if self.advanced_mode else 'If you need more features,<br>enable the advanced version.<br>Visit <b>subtitld.jonata.org</b> for<br>more information.')
+    self.start_screen_adver_label_details.setText(str('You have more %s days to use<br>the Advanced version. If you<br>need some more information,<br>visit <b>subtitld.jonata.org</b>.<br><br>%s' % (days, VERSION_NUMBER)) if self.advanced_mode else 'If you need more features,<br>enable the advanced version.<br>Visit <b>subtitld.jonata.org</b> for<br>more information.')
 
     self.start_screen_adver_label_show_machineid_button = QPushButton('SHOW ADVANCED INFO', parent=self.start_screen_adver_holder)
     self.start_screen_adver_label_show_machineid_button.clicked.connect(lambda: start_screen_adver_label_show_machineid_button_clicked(self))
@@ -176,7 +175,7 @@ def resized(self):
     self.start_screen_recent_alert.setGeometry((self.start_screen.width()*.5)-155, 50, 310, self.start_screen.height()-50-20)
     self.start_screen_adver_label.setGeometry((self.start_screen.width()*.5)+195, 20, self.start_screen_adver_panel.width(), 20)
 
-    self.start_screen_adver_holder.setGeometry((self.start_screen.width()*.5)+195, 30, self.start_screen.width() - ((self.start_screen.width()*.5)+195), self.start_screen.height()-20)
+    self.start_screen_adver_holder.setGeometry((self.start_screen.width()*.5)+195, 30, self.start_screen.width() - ((self.start_screen.width()*.5)+195), self.start_screen.height()-30)
     self.start_screen_adver_label_details.setGeometry(0, 20, self.start_screen_adver_holder.width(),  self.start_screen_adver_holder.height())
     self.start_screen_adver_label_show_machineid_button.setGeometry(self.start_screen_adver_label_details.x(),  self.start_screen_adver_label_details.y(),  200,  40)
     s = [600, 300]

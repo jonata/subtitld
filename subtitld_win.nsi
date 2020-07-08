@@ -3,12 +3,17 @@
 !define MUI_PRODUCT "Subtitld"
 !define MUI_BRANDINGTEXT "Subtitld"
 
-#!define MUI_ICON  "graphics\subtitld_installer.ico"
-#!define MUI_UNICON  "graphics\subtitld_installer.ico"
-#!define MUI_HEADERIMAGE
-#!define MUI_HEADERIMAGE_BITMAP "graphics\installer_bar.bmp"
-#!define MUI_VERSION "$%OKP_VERSION%"
-#!define /date MUI_VERSION "%y.%m.%d.%H%M"
+!define MUI_ICON  "graphics\subtitld_installer.ico"
+!define MUI_UNICON  "graphics\subtitld_installer.ico"
+!define MUI_HEADERIMAGE
+!define MUI_HEADERIMAGE_BITMAP "graphics\installer_bar.bmp"
+!define MUI_HEADERIMAGE_UNBITMAP "graphics\installer_bar.bmp"
+!define MUI_HEADERIMAGE_RIGHT
+!define MUI_BGCOLOR 2E3E4C
+!define MUI_TEXTCOLOR 304251
+!define MUI_WELCOMEFINISHPAGE_BITMAP "graphics\installer_welcome.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "graphics\installer_uninstall.bmp"
+!define MUI_COMPONENTSPAGE_NODESC
 !define MUI_VERSION $%VERSION_NUMBER%
 
 Name "${MUI_PRODUCT} - Installer"
@@ -22,7 +27,7 @@ InstallDirRegKey HKCU "Software\${MUI_PRODUCT}" ""
 
 !define MUI_ABORTWARNING
 
-!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_INSTFILES
 
 !insertmacro MUI_UNPAGE_CONFIRM
