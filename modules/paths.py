@@ -68,6 +68,10 @@ def get_graphics_path(filename):
     return final_path
 
 
+VERSION_NUMBER = '20.07.0.0'
+if os.path.isfile(os.path.join(PATH_SUBTITLD, 'current_version')):
+    VERSION_NUMBER = open(os.path.join(PATH_SUBTITLD, 'current_version')).read().strip()
+
 LIST_OF_SUPPORTED_VIDEO_EXTENSIONS = (('.mp4', '.mkv', '.mov', '.mpg', '.webm', '.ogv'))
 
 LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
