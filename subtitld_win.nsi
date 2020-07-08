@@ -10,7 +10,7 @@
 !define MUI_HEADERIMAGE_UNBITMAP "graphics\installer_bar.bmp"
 !define MUI_HEADERIMAGE_RIGHT
 !define MUI_BGCOLOR 2E3E4C
-!define MUI_TEXTCOLOR B8CEE0
+!define MUI_TEXTCOLOR b8cee0
 !define MUI_WELCOMEFINISHPAGE_BITMAP "graphics\installer_welcome.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "graphics\installer_uninstall.bmp"
 !define MUI_COMPONENTSPAGE_NODESC
