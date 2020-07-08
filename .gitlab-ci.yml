@@ -68,7 +68,7 @@ windows-nsis:
   script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
-  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full
+  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl
   #- winetricks vcrun2015
   - wine pip3 install -r requirements.txt
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
