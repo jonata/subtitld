@@ -68,6 +68,28 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.playercontrols_play_from_next_start_button.setIconSize(QSize(24, 24))
     self.playercontrols_play_from_next_start_button.clicked.connect(lambda: playercontrols_play_from_next_start_button_clicked(self))
 
+    self.gap_add_subtitle_button = QPushButton(parent=self.playercontrols_widget)
+    self.gap_add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'gap_add_icon.png')))
+    self.gap_add_subtitle_button.setIconSize(QSize(20, 20))
+    self.gap_add_subtitle_button.setObjectName('button_dark')
+    self.gap_add_subtitle_button.setStyleSheet('QPushButton { border-right:0; border-bottom:0;}')
+    self.gap_add_subtitle_button.clicked.connect(lambda: gap_add_subtitle_button_clicked(self))
+
+    self.gap_add_subtitle_fake_button = QPushButton(parent=self.playercontrols_widget)
+    self.gap_add_subtitle_fake_button.setObjectName('button_dark')
+    self.gap_add_subtitle_fake_button.setStyleSheet('QPushButton { border-left:0; border-right:0; border-bottom:0;}')
+
+    self.gap_add_subtitle_duration = QDoubleSpinBox(parent=self.gap_add_subtitle_fake_button)
+    self.gap_add_subtitle_duration.setMinimum(.1)
+    self.gap_add_subtitle_duration.setMaximum(60.)
+
+    self.gap_remove_subtitle_button = QPushButton(parent=self.playercontrols_widget)
+    self.gap_remove_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'gap_remove_icon.png')))
+    self.gap_remove_subtitle_button.setIconSize(QSize(20, 20))
+    self.gap_remove_subtitle_button.setObjectName('button_dark')
+    self.gap_remove_subtitle_button.setStyleSheet('QPushButton { border-left:0; border-bottom:0;}')
+    self.gap_remove_subtitle_button.clicked.connect(lambda: gap_remove_subtitle_button_clicked(self))
+
     self.add_subtitle_button = QPushButton('ADD', parent=self.playercontrols_widget)
     self.add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_subtitle_icon.png')))
     self.add_subtitle_button.setIconSize(QSize(20, 20))
@@ -304,6 +326,11 @@ def resized(self):
     self.add_subtitle_duration.setGeometry(68, 8, 46, self.add_subtitle_button.height()-14)
     self.remove_selected_subtitle_button.setGeometry(self.add_subtitle_button.x() + self.add_subtitle_button.width(), self.add_subtitle_button.y(), 100, 40)
 
+    self.gap_add_subtitle_button.setGeometry(self.add_subtitle_button.x()-136, 44, 40, 40)
+    self.gap_add_subtitle_fake_button.setGeometry(self.gap_add_subtitle_button.x()+40, 44, 46, self.gap_add_subtitle_button.height())
+    self.gap_add_subtitle_duration.setGeometry(2, 7, self.gap_add_subtitle_fake_button.width()-4, self.gap_add_subtitle_fake_button.height()-14)
+    self.gap_remove_subtitle_button.setGeometry(self.gap_add_subtitle_button.x()+86, 44, 46, self.gap_add_subtitle_button.height())
+
     self.merge_back_selected_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() + self.remove_selected_subtitle_button.width() + 5, 44, 40, 40)
     self.slice_selected_subtitle_button.setGeometry(self.merge_back_selected_subtitle_button.x() + self.merge_back_selected_subtitle_button.width(), self.merge_back_selected_subtitle_button.y(), 40, 40)
     self.merge_next_selected_subtitle_button.setGeometry(self.slice_selected_subtitle_button.x() + self.slice_selected_subtitle_button.width(), self.merge_back_selected_subtitle_button.y(), 40, 40)
@@ -406,6 +433,18 @@ def snap_value_changed(self):
 def add_subtitle_duration_changed(self):
     self.default_new_subtitle_duration = self.add_subtitle_duration.value()
 
+
+def gap_add_subtitle_button_clicked(self):
+    subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=self.gap_add_subtitle_duration.value())
+    self.unsaved = True
+    self.selected_subtitle = False
+    self.timeline.update(self)
+
+def gap_remove_subtitle_button_clicked(self):
+    subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=-(self.gap_add_subtitle_duration.value()))
+    self.unsaved = True
+    self.selected_subtitle = False
+    self.timeline.update(self)
 
 def update_snap_buttons(self):
     self.snap_button.setChecked(bool(self.timeline_snap))
