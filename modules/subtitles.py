@@ -129,3 +129,9 @@ def send_text_to_last_subtitle(subtitles=[], selected_subtitle=False, last_text=
         index = subtitles.index(selected_subtitle)
         subtitles[index][2] = next_text
         subtitles[index-1][2] += ' ' + last_text
+
+
+def set_gap(subtitles=[], position=0.0, gap=0.0):
+    for subtitle in subtitles:
+        if subtitle[0] > position:
+            subtitle[0] += gap
