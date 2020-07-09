@@ -373,6 +373,7 @@ def show(self):
     update_grid_buttons(self)
     update_playback_speed_buttons(self)
     self.add_subtitle_duration.setValue(self.default_new_subtitle_duration)
+    self.gap_add_subtitle_duration.setValue(2.0)
     self.repeat_playback_duration.setValue(self.repeat_duration)
     self.repeat_playback_times.setValue(self.repeat_times)
 
