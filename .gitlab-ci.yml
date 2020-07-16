@@ -72,9 +72,40 @@ windows-nsis:
   - apt-get update -qy
   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev
   #- winetricks -q vcrun2015
-  - wine pip3 install -U setuptools
+  - wine pip3 install -U setuptools pip
   - wine pip3 install -r requirements.txt
   - wine pip3 install aeneas
+  #- wine pip3 install git+https://github.com/BingLingGroup/autosub.git@origin
+  #- wget https://github.com/sillsdev/aeneas-installer/releases/download/v1.7.3.0_2/aeneas-windows-setup-1.7.3.0_2.exe
+  #- wine aeneas-windows-setup-1.7.3.0_2.exe /S
+  - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
+  - unzip ffmpeg-latest-win64-static.zip
+  - wget --no-check-certificate https://mpv.srsfckn.biz/mpv-dev-latest.7z
+  - 7z x -ompv mpv-dev-latest.7z
+  - wine pip uninstall -y enum34
+  - wine PyInstaller subtitld_win.spec
+  - makensis subtitld_win.nsi
+  - export SSHPASS=$USER_PASS
+  - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
+  - "curl -d '{ \"number\":\"'\"$VERSION_NUMBER\"'\", \"is_stable\":\"False\" }' -H \"Content-Type: application/json\" -X POST https://api2.jonata.org/subtitld/windows_version\n"
+  artifacts:
+    paths:
+    - Subtitld*Installer.exe
+    expire_in: 1 week
+  only:
+  - master
+
+windows-python3.8.4:
+  image: python:3.8.4-windowsservercore-ltsc2016
+  type: deploy
+  script:
+  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+  #- apt-get update -qy
+  #- apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev
+  #- winetricks -q vcrun2015
+  - pip3 install -U setuptools pip
+  - pip3 install -r requirements.txt
+  - pip3 install aeneas
   #- wine pip3 install git+https://github.com/BingLingGroup/autosub.git@origin
   #- wget https://github.com/sillsdev/aeneas-installer/releases/download/v1.7.3.0_2/aeneas-windows-setup-1.7.3.0_2.exe
   #- wine aeneas-windows-setup-1.7.3.0_2.exe /S
