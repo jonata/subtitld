@@ -298,6 +298,7 @@ def global_subtitlesvideo_autosync_button_clicked(self):
         self.timeline.update(self)
         self.properties.update_properties_widget(self)
 
+
 def global_subtitlesvideo_export_button_clicked(self):
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.txt'
