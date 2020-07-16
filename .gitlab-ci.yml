@@ -71,7 +71,7 @@ windows-nsis:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev
-  - xvfb-run wineserver -w 		&& \
+  - xvfb-run wineserver -w 
   - xvfb-run winetricks -q vcrun2015
   #- winetricks -q vcrun2015
   - wine pip3 install -U setuptools pip
