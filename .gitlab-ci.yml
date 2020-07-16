@@ -71,7 +71,7 @@ windows-nsis:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev
-  - winetricks -q vcrun2015
+  #- winetricks -q vcrun2015
   - wine pip3 install -r requirements.txt
   #- wine pip3 install aeneas
   #- wine pip3 install git+https://github.com/BingLingGroup/autosub.git@origin
