@@ -74,6 +74,7 @@ windows-nsis:
   - xvfb-run wineserver -w
   - xvfb-run winetricks -q vcrun2015
   #- winetricks -q vcrun2015
+  - wine python3 -m pip install -U pip
   - wine pip3 install -U setuptools pip
   - wine pip3 install -r requirements.txt
   - wine pip3 install aeneas
