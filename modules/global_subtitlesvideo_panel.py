@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog
+from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QMessageBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal
 from PyQt5.QtGui import QFontDatabase
 
@@ -81,6 +81,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_export_button = QPushButton(u'EXPORT', parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_export_button.setObjectName('button')
     self.global_subtitlesvideo_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
+
+    self.global_subtitlesvideo_autosync_lang_combobox = QComboBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_autosync_lang_combobox.addItems(['AFR', 'ARA', 'BUL', 'CAT', 'CYM', 'CES', 'DAN', 'DEU', 'ELL', 'ENG', 'EPO', 'EST', 'FAS', 'FIN', 'FRA', 'GLE', 'GRC', 'HRV', 'HUN', 'ISL', 'ITA', 'JPN', 'LAT', 'LAV', 'LIT', 'NLD', 'NOR', 'RON', 'RUS', 'POL', 'POR', 'SLK', 'SPA', 'SRP', 'SWA', 'SWE', 'TUR', 'UKR'])
+
+    self.global_subtitlesvideo_autosync_button = QPushButton(u'AUTOSYNC', parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_autosync_button.setObjectName('button')
+    self.global_subtitlesvideo_autosync_button.clicked.connect(lambda: global_subtitlesvideo_autosync_button_clicked(self))
 
     self.global_subtitlesvideo_video_burn_label = QLabel('EXPORT BURNED VIDEO', parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_video_burn_label.setStyleSheet('QLabel { font-size:14px; font-weight:bold; }')
@@ -174,6 +181,8 @@ def resized(self):
     self.global_subtitlesvideo_import_button.setGeometry(20, 80, self.global_subtitlesvideo_panel_left.width()-40, 30)
     # self.global_subtitlesvideo_import_panel.setGeometry(20, 110, self.global_subtitlesvideo_panel_left.width()-40, 100)
     self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width()-40, 30)
+    self.global_subtitlesvideo_autosync_lang_combobox.setGeometry(20, 160, 75, 30)
+    self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
 
     self.global_subtitlesvideo_video_burn_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, 200, 20)
     self.global_subtitlesvideo_video_burn_fontname_label.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 50, 200, 20)
@@ -257,6 +266,37 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
     self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
     print(self.global_subtitlesvideo_video_burn_pcolor_selected_color)
 
+
+def global_subtitlesvideo_autosync_button_clicked(self):
+    are_you_sure_message = QMessageBox(self)
+    are_you_sure_message.setWindowTitle("Are you sure?")
+    are_you_sure_message.setText('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?')
+    are_you_sure_message.addButton("Yes", QMessageBox.AcceptRole)
+    are_you_sure_message.addButton("No", QMessageBox.RejectRole)
+    ret = are_you_sure_message.exec_()
+
+    if ret == QMessageBox.AcceptRole:
+        file_io.export_file(filename=os.path.join(path_tmp, 'subtitle.txt'), subtitles_list=self.subtitles_list, format='TXT', options={'new_line': True})
+
+        from aeneas.executetask import ExecuteTask
+        from aeneas.task import Task
+
+        config_string = 'task_language=' + self.global_subtitlesvideo_autosync_lang_combobox.currentText().lower() + '|is_text_type=plain|os_task_file_format=srt'
+        task = Task(config_string=config_string)
+        task.audio_file_path_absolute = self.video_metadata['filepath']
+        task.text_file_path_absolute = os.path.join(path_tmp, 'subtitle.txt')
+        task.sync_map_file_path_absolute = os.path.join(path_tmp, 'subtitle.srt')
+
+        ExecuteTask(task).execute()
+        task.output_sync_map_file()
+
+        self.subtitles_list = file_io.process_subtitles_file(subtitle_file=os.path.join(path_tmp, 'subtitle.srt'), format='SRT')[0]
+
+        self.unsaved = True
+        self.selected_subtitle = False
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.timeline.update(self)
+        self.properties.update_properties_widget(self)
 
 def global_subtitlesvideo_export_button_clicked(self):
     suggested_path = os.path.dirname(self.video_metadata['filepath'])

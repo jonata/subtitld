@@ -214,27 +214,27 @@ def import_file(filename=False, format=False, fit_to_length=False, length=.01, d
 
             format = 'TXT'
             with open(filename) as txt_file:
-                '''clean("some input",
-                    fix_unicode=True,               # fix various unicode errors
-                    to_ascii=True,                  # transliterate to closest ASCII representation
-                    lower=True,                     # lowercase text
-                    no_line_breaks=False,           # fully strip line breaks as opposed to only normalizing them
-                    no_urls=False,                  # replace all URLs with a special token
-                    no_emails=False,                # replace all email addresses with a special token
-                    no_phone_numbers=False,         # replace all phone numbers with a special token
-                    no_numbers=False,               # replace all numbers with a special token
-                    no_digits=False,                # replace all digits with a special token
-                    no_currency_symbols=False,      # replace all currency symbols with a special token
-                    no_punct=False,                 # fully remove punctuation
-                    replace_with_url="<URL>",
-                    replace_with_email="<EMAIL>",
-                    replace_with_phone_number="<PHONE>",
-                    replace_with_number="<NUMBER>",
-                replace_with_digit="0",
-                replace_with_currency_symbol="<CUR>",
-                lang="en"                       # set to 'de' for German special handling
-                )
-'''
+                # clean("some input",
+                #     fix_unicode=True,               # fix various unicode errors
+                #     to_ascii=True,                  # transliterate to closest ASCII representation
+                #     lower=True,                     # lowercase text
+                #     no_line_breaks=False,           # fully strip line breaks as opposed to only normalizing them
+                #     no_urls=False,                  # replace all URLs with a special token
+                #     no_emails=False,                # replace all email addresses with a special token
+                #     no_phone_numbers=False,         # replace all phone numbers with a special token
+                #     no_numbers=False,               # replace all numbers with a special token
+                #     no_digits=False,                # replace all digits with a special token
+                #     no_currency_symbols=False,      # replace all currency symbols with a special token
+                #     no_punct=False,                 # fully remove punctuation
+                #     replace_with_url="<URL>",
+                #     replace_with_email="<EMAIL>",
+                #     replace_with_phone_number="<PHONE>",
+                #     replace_with_number="<NUMBER>",
+                # replace_with_digit="0",
+                # replace_with_currency_symbol="<CUR>",
+                # lang="en"                       # set to 'de' for German special handling
+                # )
+
                 txt_content = clean(txt_file.read())
                 pos = 0.0
                 for phrase in txt_content.split('. '):
@@ -243,12 +243,17 @@ def import_file(filename=False, format=False, fit_to_length=False, length=.01, d
     return final_subtitles, format
 
 
-def export_file(filename=False, subtitles_list=False, format='TXT'):
+def export_file(filename=False, subtitles_list=False, format='TXT', options=False):
     if subtitles_list and filename:
         if format == 'TXT':
             final_txt = ''
             for sub in subtitles_list:
                 final_txt += sub[2].replace('\n', ' ') + ' '
+            if options:
+                if options.get('new_line', False):
+                    final_txt = final_txt.replace('. ', '.\n')
+                    final_txt = final_txt.replace('! ', '!\n')
+                    final_txt = final_txt.replace('? ', '?\n')
             with open(filename, 'w') as txt_file:
                 txt_file.write(final_txt)
 
