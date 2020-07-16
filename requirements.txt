@@ -12,3 +12,4 @@ pysubs2
 lxml
 clean-text[gpl]
 html5lib==1.0b8
+aeneas
