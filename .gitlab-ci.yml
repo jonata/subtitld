@@ -72,7 +72,7 @@ windows-nsis:
   - apt-get update -qy
   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev xvfb
   - wget -c https://aka.ms/vs/15/release/vs_BuildTools.exe
-  - xvfb-run wine vs_BuildTools.exe --passive --wait --norestart --nocache --installPath C:\\BuildTools --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.140 --add Microsoft.VisualStudio.Component.WinXP
+  - xvfb-run wine vs_BuildTools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.140 --add Microsoft.VisualStudio.Component.WinXP
   #- xvfb-run wineserver -w
   #- xvfb-run winetricks -q vcrun2015
   #- winetricks -q vcrun2015
