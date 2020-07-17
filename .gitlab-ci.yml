@@ -103,12 +103,12 @@ windows-nsis:
 
 
 windowsnative-nsis:
-  image: python:windowsservercore-ltsc2016
+  image: python:3.8.4
   tags:
   - windows
   type: deploy
   script:
-  - $VERSION_NUMBER=(get-date -format "YYYYMMdd")
+  - $VERSION_NUMBER=(get-date -format "YYYY.MM.dd.hhmm")
   #- apt-get update -qy
   #- apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev xvfb
   #- wget -c https://aka.ms/vs/15/release/vs_BuildTools.exe
@@ -122,13 +122,13 @@ windowsnative-nsis:
   - pip3 install aeneas
   #- wine pip3 install git+https://github.com/BingLingGroup/autosub.git@origin
   - wget https://github.com/sillsdev/aeneas-installer/releases/download/v1.7.3.0_2/aeneas-windows-setup-1.7.3.0_2.exe
-  - xvfb-run wine aeneas-windows-setup-1.7.3.0_2.exe /S
+  #- xvfb-run wine aeneas-windows-setup-1.7.3.0_2.exe /S
   - wget https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
   - unzip ffmpeg-latest-win64-static.zip
   - wget --no-check-certificate https://mpv.srsfckn.biz/mpv-dev-latest.7z
   - 7z x -ompv mpv-dev-latest.7z
-  - wine pip uninstall -y enum34
-  - wine PyInstaller subtitld_win.spec
+  #- wine pip uninstall -y enum34
+  - PyInstaller subtitld_win.spec
   - makensis subtitld_win.nsi
   - export SSHPASS=$USER_PASS
   - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
