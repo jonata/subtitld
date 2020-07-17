@@ -104,6 +104,8 @@ windows-nsis:
 
 windowsnative-nsis:
   image: python:windowsservercore-ltsc2016
+  tags:
+  - windows
   type: deploy
   script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
