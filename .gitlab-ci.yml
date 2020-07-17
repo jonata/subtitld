@@ -108,19 +108,18 @@ windowsnative-nsis:
   - windows
   type: deploy
   script:
-  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-  - apt-get update -qy
-  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev xvfb
-  - wget -c https://aka.ms/vs/15/release/vs_BuildTools.exe
+  - $VERSION_NUMBER=(get-date -format "YYYYMMdd")
+  #- apt-get update -qy
+  #- apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev xvfb
+  #- wget -c https://aka.ms/vs/15/release/vs_BuildTools.exe
   #- xvfb-run wineserver -w
   #- xvfb-run winetricks -q dotnet462
   #- xvfb-run wine vs_BuildTools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.140 --add Microsoft.VisualStudio.Component.WinXP
   #- xvfb-run winetricks -q vcrun2015
   #- winetricks -q vcrun2015
-  - wine python -m pip install -U pip
-  - wine pip3 install -U setuptools
-  - wine pip3 install -r requirements.txt
-  #- wine pip3 install aeneas
+  - python -m pip install -U pip
+  - pip3 install -r requirements.txt
+  - pip3 install aeneas
   #- wine pip3 install git+https://github.com/BingLingGroup/autosub.git@origin
   - wget https://github.com/sillsdev/aeneas-installer/releases/download/v1.7.3.0_2/aeneas-windows-setup-1.7.3.0_2.exe
   - xvfb-run wine aeneas-windows-setup-1.7.3.0_2.exe /S
