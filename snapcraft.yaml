@@ -11,7 +11,7 @@ base: core18
 
 apps:
   subtitld:
-    command: desktop-launch snapcraft-preload $SNAP/subtitld/subtitld
+    command: desktop-launch $SNAP/subtitld/subtitld
     environment:
         LC_ALL: C.UTF-8
         #DISABLE_WAYLAND: 1
@@ -62,10 +62,3 @@ parts:
       #- qt5-gtk-platformtheme
     after:
       - desktop-qt5
-
-  snapcraft-preload:
-    source: https://github.com/diddledan/snapcraft-preload.git
-    plugin: cmake
-    build-packages:
-      - gcc-multilib
-      - g++-multilib
