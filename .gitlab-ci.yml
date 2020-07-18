@@ -70,7 +70,7 @@ windows-nsis:
   script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
-  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev xvfb
+  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev xvfb espeak-data
   - wget -c https://aka.ms/vs/15/release/vs_BuildTools.exe
   #- xvfb-run wineserver -w
   #- xvfb-run winetricks -q dotnet462
