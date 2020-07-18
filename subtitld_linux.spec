@@ -6,6 +6,8 @@ if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
 
 block_cipher = None
 
+#                     ( '/usr/local/lib/python3.6/dist-packages/ftfy/char_classes.dat', 'ftfy' ),
+
 a = Analysis(['subtitld.py'],
              pathex=['/home/jonata/Projetos/subtitld'],
              binaries=[],
@@ -13,7 +15,7 @@ a = Analysis(['subtitld.py'],
                      ( 'graphics/*.png', 'graphics' ),
                      ( 'graphics/*.ttf', 'graphics' ),
                  ],
-             hiddenimports=['sip', '_cffi_backend', 'cleantext', 'scc2srt', 'pysubs2', 'aeneas'],
+             hiddenimports=['sip', '_cffi_backend', 'cleantext', 'scc2srt', 'pysubs2', 'aeneas', 'ftfy'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
