@@ -240,6 +240,7 @@ def import_file(filename=False, format=False, fit_to_length=False, length=.01, d
                 for phrase in txt_content.split('. '):
                     final_subtitles.append([pos, 5.0, phrase + '.'])
                     pos += 5.0
+
     return final_subtitles, format
 
 
