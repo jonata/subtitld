@@ -268,14 +268,22 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
 
 
 def global_subtitlesvideo_autosync_button_clicked(self):
-    are_you_sure_message = QMessageBox(self)
-    are_you_sure_message.setWindowTitle("Are you sure?")
-    are_you_sure_message.setText('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?')
-    are_you_sure_message.addButton("Yes", QMessageBox.AcceptRole)
-    are_you_sure_message.addButton("No", QMessageBox.RejectRole)
-    ret = are_you_sure_message.exec_()
+    run_command = False
 
-    if ret == QMessageBox.AcceptRole:
+    if bool(self.subtitles_list):
+        are_you_sure_message = QMessageBox(self)
+        are_you_sure_message.setWindowTitle("Are you sure?")
+        are_you_sure_message.setText('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?')
+        are_you_sure_message.addButton("Yes", QMessageBox.AcceptRole)
+        are_you_sure_message.addButton("No", QMessageBox.RejectRole)
+        ret = are_you_sure_message.exec_()
+
+        if ret == QMessageBox.AcceptRole:
+            run_command = True
+    else:
+        run_command = True
+
+    if run_command:
         file_io.export_file(filename=os.path.join(path_tmp, 'subtitle.txt'), subtitles_list=self.subtitles_list, format='TXT', options={'new_line': True})
 
         from aeneas.executetask import ExecuteTask

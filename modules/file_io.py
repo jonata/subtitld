@@ -254,7 +254,7 @@ def export_file(filename=False, subtitles_list=False, format='TXT', options=Fals
                     final_txt = final_txt.replace('. ', '.\n')
                     final_txt = final_txt.replace('! ', '!\n')
                     final_txt = final_txt.replace('? ', '?\n')
-            with open(filename, 'w') as txt_file:
+            with open(filename, mode='w', encoding='utf-8') as txt_file:
                 txt_file.write(final_txt)
 
 
@@ -273,15 +273,15 @@ def save_file(final_file, subtitles_list, format='SRT', language='en'):
             caption_set = pycaption.CaptionSet({language: captions})
 
             if format == 'SRT':
-                open(final_file, 'w').write(pycaption.SRTWriter().write(caption_set))
+                open(final_file, mode='w', encoding='utf-8').write(pycaption.SRTWriter().write(caption_set))
             elif format == 'DFXP':
-                open(final_file, 'w').write(pycaption.DFXPWriter().write(caption_set))
+                open(final_file, mode='w', encoding='utf-8').write(pycaption.DFXPWriter().write(caption_set))
             elif format == 'SAMI':
-                open(final_file, 'w').write(pycaption.SAMIWriter().write(caption_set))
+                open(final_file, mode='w', encoding='utf-8').write(pycaption.SAMIWriter().write(caption_set))
             elif format == 'SCC':
-                open(final_file, 'w').write(pycaption.SCCWriter().write(caption_set))
+                open(final_file, mode='w', encoding='utf-8').write(pycaption.SCCWriter().write(caption_set))
             elif format == 'VTT':
-                open(final_file, 'w').write(pycaption.WebVTTWriter().write(caption_set))
+                open(final_file, mode='w', encoding='utf-8').write(pycaption.WebVTTWriter().write(caption_set))
 
         elif format in ['ASS', 'SBV', 'XML']:
             if format == 'ASS':
