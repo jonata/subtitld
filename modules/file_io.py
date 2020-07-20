@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from modules import waveform
-from modules.paths import STARTUPINFO, FFMPEG_EXECUTABLE, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS
+from modules.paths import STARTUPINFO, FFMPEG_EXECUTABLE, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
 
 
 list_of_supported_subtitle_extensions = []
@@ -130,7 +130,6 @@ def process_subtitles_file(subtitle_file=False, format='SRT'):
                     final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
-            print(subtitle_file)
             format = 'VTT'
             with open(subtitle_file, encoding='utf-8') as vtt_file:
                 vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
