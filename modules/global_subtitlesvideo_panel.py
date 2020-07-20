@@ -2,12 +2,15 @@
 # -*- coding: utf-8 -*-
 import os
 import subprocess
+import hashlib
+import requests
+import json
 
 from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QMessageBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal
 from PyQt5.QtGui import QFontDatabase
 
-from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
+from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp, ACTUAL_OS
 from modules import file_io
 
 list_of_supported_import_extensions = []
@@ -83,7 +86,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
 
     self.global_subtitlesvideo_autosync_lang_combobox = QComboBox(parent=self.global_subtitlesvideo_panel_widget)
-    self.global_subtitlesvideo_autosync_lang_combobox.addItems(['AFR', 'ARA', 'BUL', 'CAT', 'CYM', 'CES', 'DAN', 'DEU', 'ELL', 'ENG', 'EPO', 'EST', 'FAS', 'FIN', 'FRA', 'GLE', 'GRC', 'HRV', 'HUN', 'ISL', 'ITA', 'JPN', 'LAT', 'LAV', 'LIT', 'NLD', 'NOR', 'RON', 'RUS', 'POL', 'POR', 'SLK', 'SPA', 'SRP', 'SWA', 'SWE', 'TUR', 'UKR'])
+    self.global_subtitlesvideo_autosync_lang_combobox.addItems(['afr', 'amh', 'ara', 'arg', 'asm', 'aze', 'ben', 'bos', 'bul', 'cat', 'ces', 'cmn', 'cym', 'dan', 'deu', 'ell', 'eng', 'epo', 'est', 'eus', 'fas', 'fin', 'fra', 'gla', 'gle', 'glg', 'grc', 'grn', 'guj', 'heb', 'hin', 'hrv', 'hun', 'hye', 'ina', 'ind', 'isl', 'ita', 'jbo', 'jpn', 'kal', 'kan', 'kat', 'kir', 'kor', 'kur', 'lat', 'lav', 'lfn', 'lit', 'mal', 'mar', 'mkd', 'mlt', 'msa', 'mya', 'nah', 'nep', 'nld', 'nor', 'ori', 'orm', 'pan', 'pap', 'pol', 'por', 'ron', 'rus', 'sin', 'slk', 'slv', 'spa', 'sqi', 'srp', 'swa', 'swe', 'tam', 'tat', 'tel', 'tha', 'tsn', 'tur', 'ukr', 'urd', 'vie', 'yue', 'zho'])
 
     self.global_subtitlesvideo_autosync_button = QPushButton(u'AUTOSYNC', parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_autosync_button.setObjectName('button')
@@ -162,6 +165,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     self.thread_generated_burned_video = thread_generated_burned_video(self)
     self.thread_generated_burned_video.response.connect(thread_generated_burned_video_ended)
+
 
 def resized(self):
     if (self.subtitles_list or self.video_metadata):
@@ -265,11 +269,11 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
     if color.isValid():
         self.global_subtitlesvideo_video_burn_pcolor_selected_color = color.name()
     self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
-    print(self.global_subtitlesvideo_video_burn_pcolor_selected_color)
 
 
 def global_subtitlesvideo_autosync_button_clicked(self):
     run_command = False
+    file_processed = False
 
     if bool(self.subtitles_list):
         are_you_sure_message = QMessageBox(self)
@@ -285,21 +289,57 @@ def global_subtitlesvideo_autosync_button_clicked(self):
         run_command = True
 
     if run_command:
-        file_io.export_file(filename=os.path.join(path_tmp, 'subtitle.txt'), subtitles_list=self.subtitles_list, format='TXT', options={'new_line': True})
+        audio_uuid = hashlib.md5(open(self.video_metadata['filepath'], 'rb').read()).hexdigest()
 
-        from aeneas.executetask import ExecuteTask
-        from aeneas.task import Task
+        file_io.export_file(filename=os.path.join(path_tmp, 'subtitle.txt'), subtitles_list=self.subtitles_list, format='TXT')
 
-        config_string = 'task_language=' + self.global_subtitlesvideo_autosync_lang_combobox.currentText().lower() + '|is_text_type=plain|os_task_file_format=srt'
-        task = Task(config_string=config_string)
-        task.audio_file_path_absolute = self.video_metadata['filepath']
-        task.text_file_path_absolute = os.path.join(path_tmp, 'subtitle.txt')
-        task.sync_map_file_path_absolute = os.path.join(path_tmp, 'subtitle.srt')
+        url = 'https://api.jonata.org/subtitld/process_autosync'
 
-        ExecuteTask(task).execute()
-        task.output_sync_map_file()
+        content = {'email': self.settings['authentication'].get('email', ''),
+                   'machineid': self.machine_id,
+                   'os': ACTUAL_OS,
+                   'audio_uuid': audio_uuid
+                   }
 
-        self.subtitles_list = file_io.process_subtitles_file(subtitle_file=os.path.join(path_tmp, 'subtitle.srt'), format='SRT')[0]
+        r = requests.get(url, params=content)
+        r_json = r.json()
+
+        if r_json.get('status', '') and r_json['status'] == 'ok':
+            file_processed = True
+
+        if not file_processed:
+            content['text'] = open(os.path.join(path_tmp, 'subtitle.txt')).read()
+            content['language'] = self.global_subtitlesvideo_autosync_lang_combobox.currentText().lower()
+
+            command = [
+                FFMPEG_EXECUTABLE,
+                '-y',
+                '-f', 'f32le',
+                '-ac', '1',
+                '-ar', '48000',
+                '-i', '-',
+                '-vn',
+                os.path.join(path_tmp, 'subtitle.opus')]
+
+            audio_out = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, startupinfo=STARTUPINFO)
+            audio_out.stdin.write(self.video_metadata['audio'].tobytes())
+            audio_out.stdin.close()
+            audio_out.wait()
+
+            files = [
+                ('document', (os.path.join(path_tmp, 'subtitle.opus'), open(os.path.join(path_tmp, 'subtitle.opus'), 'rb'), 'application/octet')),
+                ('content', ('content', json.dumps(content), 'application/json')),
+            ]
+
+            r = requests.post(url, files=files)
+            r_json = r.json()
+            if r_json.get('status', '') and r_json['status'] == 'ok':
+                file_processed = True
+
+        if file_processed:
+            subtitles = r_json.get('subtitles', [])
+            if subtitles:
+                self.subtitles_list = subtitles
 
         self.unsaved = True
         self.selected_subtitle = False
