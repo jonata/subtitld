@@ -39,7 +39,7 @@ class thread_generated_burned_video(QThread):
             number_of_steps = 0.001
             current_step = 0.0
             while p.poll() is None:
-                #for output in p.stdout.read().decode().split('\n'):
+                # for output in p.stdout.read().decode().split('\n'):
                 output = p.stdout.readline()
                 if 'Duration: ' in output:
                     duration = int(convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))

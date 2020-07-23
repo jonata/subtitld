@@ -3,12 +3,38 @@
 
 from bisect import bisect
 import timecode
-from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont
+from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap
 from PyQt5.QtWidgets import QWidget, QScrollArea
 from PyQt5.QtCore import Qt, QRect, QPointF, QThread, pyqtSignal
 
 from modules import waveform
 from modules import history
+
+
+class draw_qpixmap(QPixmap):
+    waveform_up = []
+    waveform_down = []
+    x_offset = 0
+    waveformsize = .7
+
+    def paintEvent(widget, paintEvent):
+        painter = QPainter(widget)
+        painter.setRenderHint(QPainter.Antialiasing)
+
+        painter.setPen(QPen(QColor.fromRgb(21, 52, 80, 255), 1, Qt.SolidLine))
+        painter.setBrush(QColor.fromRgb(21, 52, 80, alpha=200))
+
+        x_position = 0
+        polygon = QPolygonF()
+        for point in widget.waveform_up:
+            polygon.append(QPointF(x_position, (widget.height()*.5) + (point*(widget.waveformsize*100))))
+            x_position += 1
+        for point in reversed(widget.waveform_down):
+            polygon.append(QPointF(x_position, (widget.height()*.5) + (point*(widget.waveformsize*100))))
+            x_position -= 1
+        painter.drawPolygon(polygon)
+
+        painter.end()
 
 
 class thread_get_waveform(QThread):
@@ -20,7 +46,30 @@ class thread_get_waveform(QThread):
     height = False
 
     def run(self):
-        self.command.emit([self.zoom, waveform.generate_waveform_zoom(zoom=self.zoom, duration=self.duration, waveform=self.audio)])
+        positive_values, negative_values, blah = waveform.generate_waveform_zoom(zoom=self.zoom, duration=self.duration, waveform=self.audio)
+        self.command.emit([self.zoom, [positive_values, negative_values]])
+
+
+class thread_get_qimages(QThread):
+    command = pyqtSignal(list)
+    values_list = []
+    zoom = 100.0
+
+    def run(self):
+        final_list = []
+        parser = 0
+        while True:
+            qpixmap = draw_qpixmap(32767, 124)
+            qpixmap.fill(QColor(0, 0, 0, 0))
+            qpixmap.waveform_up = self.values_list[0][parser:parser+32767]
+            qpixmap.waveform_down = self.values_list[1][parser:parser+32767]
+            qpixmap.paintEvent(qpixmap)
+            final_list.append(qpixmap.toImage())                # qpixmap.save('/tmp/teste.png')
+            parser += 32767
+            if parser > len(self.values_list[0]):
+                break
+        print(final_list)
+        self.command.emit([self.zoom, final_list])
 
 
 def get_timeline_time_str(seconds):
@@ -45,6 +94,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
         subtitle_height = 50
         subtitle_y = 55
         offset = 0.0
+        y_waveform = 22
+        h_waveform = 124
         show_limiters = False
         is_cursor_pressing = False
         waveformsize = .7
@@ -67,23 +118,30 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                             available_zoom = sorted(self.video_metadata['waveform'].keys())[0]
                             x_factor = self.mediaplayer_zoom/available_zoom
 
-                        w_factor = (self.video_metadata.get('duration', 0.01)*available_zoom)/len(self.video_metadata['waveform'][available_zoom][0])
+                        w_factor = (self.video_metadata.get('duration', 0.01)*available_zoom)/len(self.video_metadata['waveform'][available_zoom]['points'][0])
 
-                        painter.setPen(QPen(QColor.fromRgb(21, 52, 80, 255), 1, Qt.SolidLine))
-                        painter.setBrush(QColor.fromRgb(21, 52, 80, alpha=200))
+                        if self.video_metadata['waveform'][available_zoom].get('qimages', []):
+                            x = 0
+                            for qimage in self.video_metadata['waveform'][available_zoom]['qimages']:
+                                painter.drawImage(QRect(x, widget.y_waveform, 32767*w_factor*x_factor, widget.h_waveform), qimage)
+                                x += (32767*w_factor*x_factor)
 
-                        x_position = 0
-                        polygon = QPolygonF()
+                        elif self.video_metadata['waveform'][available_zoom].get('points', []):
+                            painter.setPen(QPen(QColor.fromRgb(21, 52, 80, 255), 1, Qt.SolidLine))
+                            painter.setBrush(QColor.fromRgb(21, 52, 80, alpha=200))
 
-                        for point in self.video_metadata['waveform'][available_zoom][0][int(scroll_position/(x_factor*w_factor)):int((scroll_position+scroll_width)/(x_factor*w_factor))]:
-                            polygon.append(QPointF((x_position+scroll_position), ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
-                            x_position += (x_factor*w_factor)
+                            x_position = 0
+                            polygon = QPolygonF()
 
-                        for point in reversed(self.video_metadata['waveform'][available_zoom][1][int(scroll_position/(x_factor*w_factor)):int((scroll_position+scroll_width)/(x_factor*w_factor))]):
-                            polygon.append(QPointF((x_position+scroll_position), ((widget.height()-40)*.5) + 40 + (point*(widget.waveformsize*100))))
-                            x_position -= (x_factor*w_factor)
+                            for point in self.video_metadata['waveform'][available_zoom]['points'][0][int(scroll_position/(x_factor*w_factor)):int((scroll_position+scroll_width)/(x_factor*w_factor))]:
+                                polygon.append(QPointF((x_position+scroll_position), widget.y_waveform + (widget.h_waveform*.5) + (point*(widget.waveformsize*100))))
+                                x_position += (x_factor*w_factor)
 
-                        painter.drawPolygon(polygon)
+                            for point in reversed(self.video_metadata['waveform'][available_zoom]['points'][1][int(scroll_position/(x_factor*w_factor)):int((scroll_position+scroll_width)/(x_factor*w_factor))]):
+                                polygon.append(QPointF((x_position+scroll_position), widget.y_waveform + (widget.h_waveform*.5) + (point*(widget.waveformsize*100))))
+                                x_position -= (x_factor*w_factor)
+
+                            painter.drawPolygon(polygon)
 
             if self.subtitles_list:
                 painter.setOpacity(1)
@@ -333,16 +391,28 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.timeline_scroll.setWidget(self.timeline_widget)
 
     def thread_get_waveform_ended(command):
-        self.video_metadata['waveform'][command[0]] = command[1]
+        self.video_metadata['waveform'][command[0]] = {'points': command[1], 'qimages': []}
         self.videoinfo_label.setText('Waveform updated')
         self.timeline_widget.update()
+        self.thread_get_qimages.values_list = command[1]
+        self.thread_get_qimages.zoom = command[0]
+        self.thread_get_qimages.start(QThread.IdlePriority)
 
     self.thread_get_waveform = thread_get_waveform(self)
     self.thread_get_waveform.command.connect(thread_get_waveform_ended)
 
+    def thread_get_qimages_ended(command):
+        self.video_metadata['waveform'][command[0]]['qimages'] = command[1]
+        self.videoinfo_label.setText('Waveform optimized')
+        self.timeline_widget.update()
+
+    self.thread_get_qimages = thread_get_qimages(self)
+    self.thread_get_qimages.command.connect(thread_get_qimages_ended)
+
 
 def resized(self):
     self.timeline_scroll.setGeometry(0, self.playercontrols_widget_central_bottom_background.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()-self.playercontrols_widget_central_bottom_background.y())
+    print(self.timeline_scroll.height())
     update_timeline(self)
 
 
