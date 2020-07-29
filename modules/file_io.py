@@ -6,6 +6,7 @@ import datetime
 import numpy
 import pycaption
 import subprocess
+import chardet
 
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -168,16 +169,23 @@ def process_subtitles_file(subtitle_file=False, format='SRT'):
                     for caption in captions:
                         final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
 
-        elif subtitle_file.lower().endswith(('.ass', '.ssa')):
-            format = 'ASS'
+        elif subtitle_file.lower().endswith(('.ass', '.ssa', '.sub')):
             import pysubs2
-            with open(subtitle_file, encoding='utf-8') as f:
-                ssafile = pysubs2.SSAFile.from_string(f.read())
-                for event in ssafile.events:
-                    start = event.start / 1000.0
-                    duration = event.duration / 1000.0
-                    text = event.plaintext
-                    final_subtitles.append([start, duration, text])
+
+            if subtitle_file.lower().endswith(('.ass', '.ssa')):
+                format = 'ASS'
+                with open(subtitle_file, encoding='utf-8') as f:
+                    subfile = pysubs2.SSAFile.from_string(f.read())
+            elif subtitle_file.lower().endswith(('.sub')):
+                format = 'SUB'
+                enc = chardet.detect(open(subtitle_file, 'rb').read())['encoding']
+                subfile = pysubs2.SSAFile.from_string(open(subtitle_file, mode='rb').read().decode(enc, 'ignore'))
+
+            for event in subfile.events:
+                start = event.start / 1000.0
+                duration = event.duration / 1000.0
+                text = event.plaintext
+                final_subtitles.append([start, duration, text])
 
         elif subtitle_file.lower().endswith(('.scc')):
             format = 'SCC'
@@ -283,14 +291,17 @@ def save_file(final_file, subtitles_list, format='SRT', language='en'):
             elif format == 'VTT':
                 open(final_file, mode='w', encoding='utf-8').write(pycaption.WebVTTWriter().write(caption_set))
 
-        elif format in ['ASS', 'SBV', 'XML']:
-            if format == 'ASS':
+        elif format in ['ASS', 'SBV', 'XML', 'SUB']:
+            if format in ['ASS', 'SUB']:
                 import pysubs2
                 assfile = pysubs2.SSAFile()
                 index = 0
                 for sub in subtitles_list:
                     assfile.insert(index, pysubs2.SSAEvent(start=int(sub[0]*1000), duration=int(sub[1]*1000), text=sub[2]))
-                assfile.save(final_file)
+                if format == 'SUB':
+                    assfile.save(final_file, format='microdvd')
+                else:
+                    assfile.save(final_file)
             else:
                 from captionstransformer.core import Caption, get_date
 

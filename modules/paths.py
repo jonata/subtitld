@@ -82,6 +82,7 @@ LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
     'VTT': {'description': 'Subtitle format', 'extensions': ['webvtt', 'vtt']},
     'ASS': {'description': 'SubStation Alpha Subtitle format', 'extensions': ['ass', 'ssa']},
     'SBV': {'description': 'Subtitle format', 'extensions': ['sbv']},
+    'SUB': {'description': 'MicroDVD Subtitle format', 'extensions': ['sub']},
     'XML': {'description': 'Subtitle format', 'extensions': ['xml']}
 }
 
