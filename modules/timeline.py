@@ -54,21 +54,21 @@ class thread_get_qimages(QThread):
     command = pyqtSignal(list)
     values_list = []
     zoom = 100.0
+    width = 32767
 
     def run(self):
         final_list = []
         parser = 0
         while True:
-            qpixmap = draw_qpixmap(32767, 124)
+            qpixmap = draw_qpixmap(self.width, 124)
             qpixmap.fill(QColor(0, 0, 0, 0))
-            qpixmap.waveform_up = self.values_list[0][parser:parser+32767]
-            qpixmap.waveform_down = self.values_list[1][parser:parser+32767]
+            qpixmap.waveform_up = self.values_list[0][parser:parser+self.width]
+            qpixmap.waveform_down = self.values_list[1][parser:parser+self.width]
             qpixmap.paintEvent(qpixmap)
             final_list.append(qpixmap.toImage())                # qpixmap.save('/tmp/teste.png')
-            parser += 32767
+            parser += self.width
             if parser > len(self.values_list[0]):
                 break
-        print(final_list)
         self.command.emit([self.zoom, final_list])
 
 
@@ -123,8 +123,10 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                         if self.video_metadata['waveform'][available_zoom].get('qimages', []):
                             x = 0
                             for qimage in self.video_metadata['waveform'][available_zoom]['qimages']:
-                                painter.drawImage(QRect(x, widget.y_waveform, 32767*w_factor*x_factor, widget.h_waveform), qimage)
-                                x += (32767*w_factor*x_factor)
+                                w = qimage.width()*w_factor*x_factor
+                                if not x > scroll_position + scroll_width and not x + w < scroll_position:
+                                    painter.drawImage(QRect(x, widget.y_waveform, w, widget.h_waveform), qimage)
+                                x += w
 
                         elif self.video_metadata['waveform'][available_zoom].get('points', []):
                             painter.setPen(QPen(QColor.fromRgb(21, 52, 80, 255), 1, Qt.SolidLine))
@@ -396,6 +398,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
         self.timeline_widget.update()
         self.thread_get_qimages.values_list = command[1]
         self.thread_get_qimages.zoom = command[0]
+        self.thread_get_qimages.width = self.timeline_scroll.width()
         self.thread_get_qimages.start(QThread.IdlePriority)
 
     self.thread_get_waveform = thread_get_waveform(self)
@@ -412,7 +415,6 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 def resized(self):
     self.timeline_scroll.setGeometry(0, self.playercontrols_widget_central_bottom_background.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()-self.playercontrols_widget_central_bottom_background.y())
-    print(self.timeline_scroll.height())
     update_timeline(self)
 
 
