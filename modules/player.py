@@ -270,29 +270,6 @@ class MpvWidget(QOpenGLWidget):
         self.parent.seekSlider.wheelEvent(event)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def load(self):
     class player_widget_area(QWidget):
         def enterEvent(widget, event):

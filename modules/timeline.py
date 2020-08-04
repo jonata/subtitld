@@ -386,6 +386,9 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
         def wheelEvent(widget, event):
             self.timeline_scroll.horizontalScrollBar().setValue(self.timeline_scroll.horizontalScrollBar().value() + event.angleDelta().y())
 
+        def keyPressEvent(widget, event):
+            self.keyPressEvent(event)
+
     self.timeline_scroll = timeline_scroll(parent=self.playercontrols_widget)
     self.timeline_scroll.setObjectName('timeline_scroll')
     self.timeline_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)

@@ -209,6 +209,12 @@ class subtitld(QWidget):
             self.properties.update_properties_widget(self)
             self.timeline.update(self)
 
+        if event.key() == Qt.Key_Left:
+            self.player_widget.frameBackStep()
+
+        if event.key() == Qt.Key_Right:
+            self.player_widget.frameStep()
+
     def live_recording_note_thread_updated(self, result):
         self.recording_note = result
 
