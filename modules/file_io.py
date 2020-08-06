@@ -5,7 +5,6 @@ import os
 import datetime
 import numpy
 import pycaption
-import subprocess
 import chardet
 
 from PyQt5.QtWidgets import QFileDialog
@@ -14,6 +13,10 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from modules import waveform
 from modules.paths import STARTUPINFO, FFMPEG_EXECUTABLE, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
 
+from scenedetect.video_manager import VideoManager
+from scenedetect.scene_manager import SceneManager
+from scenedetect.stats_manager import StatsManager
+from scenedetect.detectors import ContentDetector
 
 list_of_supported_subtitle_extensions = []
 for type in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS.keys():
@@ -28,17 +31,20 @@ class thread_extract_scene_time_positions(QThread):
     def run(self):
         if self.filepath:
             result = []
-            command = [
-                FFMPEG_EXECUTABLE,
-                '-i', self.filepath,
-                '-vf', "select='gt(scene,0.4)',showinfo",
-                '-f', 'null',
-                '-']
-            p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
-            for line in p.stdout.read().decode().split('\n'):
-                if line.startswith(('[')) and 'pts_time:' in line:
-                    result.append(float(line.split('pts_time:', 1)[-1].split(' ', 1)[0]))
-
+            video_manager = VideoManager([self.filepath])
+            stats_manager = StatsManager()
+            scene_manager = SceneManager(stats_manager)
+            scene_manager.add_detector(ContentDetector())
+            base_timecode = video_manager.get_base_timecode()
+            try:
+                video_manager.set_downscale_factor()
+                video_manager.start()
+                scene_manager.detect_scenes(frame_source=video_manager, show_progress=False)
+                scene_list = scene_manager.get_scene_list(base_timecode)
+                for i, scene in enumerate(scene_list):
+                    result.append(scene[0].get_seconds())
+            finally:
+                video_manager.release()
             self.command.emit(result)
 
 
@@ -96,6 +102,7 @@ def open_filepath(self, file_to_open=False):
         self.thread_extract_waveform.start()
         self.videoinfo_label.setText('Extracting audio...')
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
+        self.thread_extract_scene_time_positions.start()
         self.player.update(self)
         self.player_widget.loadfile(self.video_metadata['filepath'])
         self.player.resize_player_widget(self)
