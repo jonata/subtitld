@@ -441,11 +441,13 @@ def gap_add_subtitle_button_clicked(self):
     self.selected_subtitle = False
     self.timeline.update(self)
 
+
 def gap_remove_subtitle_button_clicked(self):
     subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=-(self.gap_add_subtitle_duration.value()))
     self.unsaved = True
     self.selected_subtitle = False
     self.timeline.update(self)
+
 
 def update_snap_buttons(self):
     self.snap_button.setChecked(bool(self.timeline_snap))
