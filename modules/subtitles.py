@@ -74,6 +74,24 @@ def merge_next_subtitle(subtitles=[], selected_subtitle=False):
         return subtitles[index]
 
 
+def move_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
+    if selected_subtitle:
+        history.history_append(subtitles)
+        selected_subtitle[0] += amount
+
+
+def move_start_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
+    if selected_subtitle:
+        history.history_append(subtitles)
+        selected_subtitle[0] += amount
+        selected_subtitle[1] -= amount
+
+def move_end_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
+    if selected_subtitle:
+        history.history_append(subtitles)
+        selected_subtitle[1] += amount
+
+
 def next_start_to_current_position(subtitles=[], position=0.0):
     history.history_append(subtitles)
     subt = [item[0] for item in subtitles]
