@@ -5,7 +5,7 @@ from bisect import bisect
 import timecode
 from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap
 from PyQt5.QtWidgets import QWidget, QScrollArea
-from PyQt5.QtCore import Qt, QRect, QPointF, QThread, pyqtSignal
+from PyQt5.QtCore import Qt, QRect, QPointF, QThread, pyqtSignal, QMargins
 
 from modules import waveform
 from modules import history
@@ -174,7 +174,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                         else:
                             painter.setPen(QColor.fromRgb(48, 66, 81, alpha=255))
 
-                        painter.drawText(subtitle_rect, Qt.AlignCenter | Qt.TextWrapAnywhere, subtitle[2])
+                        subtitle_rect -= QMargins(22, 2, 22, 2)
+                        painter.drawText(subtitle_rect, Qt.AlignCenter | Qt.TextWordWrap, subtitle[2])
 
                         if widget.show_limiters and (subtitle[1] * widget.width_proportion) > 40:
                             painter.setPen(Qt.NoPen)
@@ -221,14 +222,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                         painter.setPen(grid_pen)
                         painter.drawLine(x, 0, x, widget.height())
                 x += widget.width_proportion
-
             if self.timeline_show_grid and self.timeline_grid_type == 'frames':
                 painter.setPen(grid_pen)
-                x = 0
+                x = 0.0
                 for fr in range(int(self.video_metadata['duration']*self.video_metadata['framerate'])):
                     if x >= scroll_position and x <= (scroll_position + self.timeline_scroll.width()):
                         painter.drawLine(x, 0, x, widget.height())
-                    x += int(widget.width_proportion/self.video_metadata['framerate'])
+                    x += widget.width_proportion/self.video_metadata['framerate']
             elif self.timeline_show_grid and self.timeline_grid_type == 'scenes' and self.video_metadata['scenes']:
                 painter.setPen(grid_pen)
                 for scene in self.video_metadata['scenes']:
