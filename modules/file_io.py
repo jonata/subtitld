@@ -212,7 +212,7 @@ def process_video_file(video_file=False):
         if stream.get('codec_type', '') == 'video' and not stream.get('codec_name', 'png') == 'png':
             video_metadata['width'] = int(stream.get('width', 640))
             video_metadata['height'] = int(stream.get('height', 480))
-            video_metadata['framerate'] = int(stream.get('time_base', '1/30').split('/', 1)[-1])
+            video_metadata['framerate'] = int(stream.get('r_frame_rate', '1/30').split('/', 1)[0])/int(stream.get('r_frame_rate', '1/30').split('/', 1)[-1])
         elif stream.get('codec_type', '') == 'subtitle':
             video_metadata['subttiles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
     video_metadata['filepath'] = video_file
