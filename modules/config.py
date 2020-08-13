@@ -18,6 +18,9 @@ def load(config_file_path=False):
     if not config.get('authentication', False):
         config['authentication'] = {}
 
+    if not config.get('shortcuts', False):
+        config['shortcuts'] = {}
+
     return config
 
 
