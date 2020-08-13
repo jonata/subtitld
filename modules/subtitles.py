@@ -62,6 +62,7 @@ def merge_back_subtitle(subtitles=[], selected_subtitle=False):
 
 
 def merge_next_subtitle(subtitles=[], selected_subtitle=False):
+    result = False
     if selected_subtitle and subtitles.index(selected_subtitle) < len(subtitles) - 1:
         history.history_append(subtitles)
 
@@ -71,7 +72,8 @@ def merge_next_subtitle(subtitles=[], selected_subtitle=False):
 
         remove_subtitle(subtitles=subtitles, selected_subtitle=subtitles[index+1])
 
-        return subtitles[index]
+        result = subtitles[index]
+    return result
 
 
 def move_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
@@ -85,6 +87,7 @@ def move_start_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
         history.history_append(subtitles)
         selected_subtitle[0] += amount
         selected_subtitle[1] -= amount
+
 
 def move_end_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
     if selected_subtitle:

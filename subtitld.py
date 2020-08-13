@@ -118,6 +118,10 @@ class subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
 
+        from modules import shortcuts
+        self.shortcuts = shortcuts
+        self.shortcuts.load(self, self.settings['shortcuts'])
+
         self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
 
         self.subtitleslist.update_subtitles_list_widget(self)
