@@ -314,7 +314,7 @@ def global_subtitlesvideo_panel_tabwidget_shortkeys_table_update(self):
     for item in shortcuts_dict:
         item_name = QTableWidgetItem(shortcuts_dict[item])
         self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setItem(i,0,item_name)
-        item_name = QTableWidgetItem(self.settings['shortcuts'].get(inverted_shortcuts_dict[shortcuts_dict[item]], ''))
+        item_name = QTableWidgetItem(self.settings['shortcuts'].get(inverted_shortcuts_dict[shortcuts_dict[item]], '')[0])
         self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setItem(i,1,item_name)
         i += 1
 
@@ -334,7 +334,7 @@ def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel_clicked(self)
 
 def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm_clicked(self):
     inverted_shortcuts_dict = {value: key for key, value in shortcuts_dict.items()}
-    self.settings['shortcuts'][inverted_shortcuts_dict[self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.item(self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.currentRow(), 0).text()]] = self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.text()
+    self.settings['shortcuts'][inverted_shortcuts_dict[self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.item(self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.currentRow(), 0).text()]] = [self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.text()]
     global_subtitlesvideo_panel_tabwidget_shortkeys_table_update(self)
     global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel_clicked(self)
 
