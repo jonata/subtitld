@@ -118,15 +118,15 @@ class subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
 
-        from modules import shortcuts
-        self.shortcuts = shortcuts
-        self.shortcuts.load(self, self.settings['shortcuts'])
-
         self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
 
         self.subtitleslist.update_subtitles_list_widget(self)
         self.properties.update_properties_widget(self)
         self.player.update(self)
+
+        from modules import shortcuts
+        self.shortcuts = shortcuts
+        self.shortcuts.load(self, self.settings['shortcuts'])
 
     def dragEnterEvent(widget, event):
         if event.mimeData().hasUrls and len(event.mimeData().urls()) > 0:

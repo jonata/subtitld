@@ -6,135 +6,14 @@ import hashlib
 import requests
 import json
 
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QMessageBox, QTabWidget, QWidget
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal
-from PyQt5.QtGui import QFontDatabase
+from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QMessageBox, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
+from PyQt5.QtGui import QFontDatabase, QKeySequence
 
 from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp, ACTUAL_OS
 from modules import file_io
-
-LANGUAGE_DICT_LIST = {
-    'Afrikaans (South Africa)':'af-za',
-    'Amharic (Ethiopia)':'am-et',
-    'Arabic (United Arab Emirates)':'ar-ae',
-    'Arabic (Bahrain)':'ar-bh',
-    'Arabic (Algeria)':'ar-dz',
-    'Arabic (Egypt)':'ar-eg',
-    'Arabic (Israel)':'ar-il',
-    'Arabic (Iraq)':'ar-iq',
-    'Arabic (Jordan)':'ar-jo',
-    'Arabic (Kuwait)':'ar-kw',
-    'Arabic (Lebanon)':'ar-lb',
-    'Arabic (Morocco)':'ar-ma',
-    'Arabic (Oman)':'ar-om',
-    'Arabic (State of Palestine)':'ar-ps',
-    'Arabic (Qatar)':'ar-qa',
-    'Arabic (Saudi Arabia)':'ar-sa',
-    'Arabic (Tunisia)':'ar-tn',
-    'Azerbaijani (Azerbaijan)':'az-az',
-    'Bulgarian (Bulgaria)':'bg-bg',
-    'Bengali (Bangladesh)':'bn-bd',
-    'Bengali (India)':'bn-in',
-    'Catalan (Spain)':'ca-es',
-    'Chinese, Mandarin (Simplified, China)':'cmn-hans-cn',
-    'Chinese, Mandarin (Simplified, Hong Kong)':'cmn-hans-hk',
-    'Chinese, Mandarin (Traditional, Taiwan)':'cmn-hant-tw',
-    'Czech (Czech Republic)':'cs-cz',
-    'Danish (Denmark)':'da-dk',
-    'German (Germany)':'de-de',
-    'Greek (Greece)':'el-gr',
-    'English (Australia)':'en-au',
-    'English (Canada)':'en-ca',
-    'English (United Kingdom)':'en-gb',
-    'English (Ghana)':'en-gh',
-    'English (Ireland)':'en-ie',
-    'English (India)':'en-in',
-    'English (Kenya)':'en-ke',
-    'English (Nigeria)':'en-ng',
-    'English (New Zealand)':'en-nz',
-    'English (Philippines)':'en-ph',
-    'English (Singapore)':'en-sg',
-    'English (Tanzania)':'en-tz',
-    'English (United States)':'en-us',
-    'English (South Africa)':'en-za',
-    'Spanish (Argentina)':'es-ar',
-    'Spanish (Bolivia)':'es-bo',
-    'Spanish (Chile)':'es-cl',
-    'Spanish (Colombia)':'es-co',
-    'Spanish (Costa Rica)':'es-cr',
-    'Spanish (Dominican Republic)':'es-do',
-    'Spanish (Ecuador)':'es-ec',
-    'Spanish (Spain)':'es-es',
-    'Spanish (Guatemala)':'es-gt',
-    'Spanish (Honduras)':'es-hn',
-    'Spanish (Mexico)':'es-mx',
-    'Spanish (Nicaragua)':'es-ni',
-    'Spanish (Panama)':'es-pa',
-    'Spanish (Peru)':'es-pe',
-    'Spanish (Puerto Rico)':'es-pr',
-    'Spanish (Paraguay)':'es-py',
-    'Spanish (El Salvador)':'es-sv',
-    'Spanish (United States)':'es-us',
-    'Spanish (Uruguay)':'es-uy',
-    'Spanish (Venezuela)':'es-ve',
-    'Basque (Spain)':'eu-es',
-    'Persian (Iran)':'fa-ir',
-    'Finnish (Finland)':'fi-fi',
-    'Filipino (Philippines)':'fil-ph',
-    'French (Canada)':'fr-ca',
-    'French (France)':'fr-fr',
-    'Galician (Spain)':'gl-es',
-    'Gujarati (India)':'gu-in',
-    'Hebrew (Israel)':'he-il',
-    'Hindi (India)':'hi-in',
-    'Croatian (Croatia)':'hr-hr',
-    'Hungarian (Hungary)':'hu-hu',
-    'Armenian (Armenia)':'hy-am',
-    'Indonesian (Indonesia)':'id-id',
-    'Icelandic (Iceland)':'is-is',
-    'Italian (Italy)':'it-it',
-    'Japanese (Japan)':'ja-jp',
-    'Javanese (Indonesia)':'jv-id',
-    'Georgian (Georgia)':'ka-ge',
-    'Khmer (Cambodia)':'km-kh',
-    'Kannada (India)':'kn-in',
-    'Korean (South Korea)':'ko-kr',
-    'Lao (Laos)':'lo-la',
-    'Lithuanian (Lithuania)':'lt-lt',
-    'Latvian (Latvia)':'lv-lv',
-    'Malayalam (India)':'ml-in',
-    'Marathi (India)':'mr-in',
-    'Malay (Malaysia)':'ms-my',
-    'Norwegian Bokmal (Norway)':'nb-no',
-    'Nepali (Nepal)':'ne-np',
-    'Dutch (Netherlands)':'nl-nl',
-    'Polish (Poland)':'pl-pl',
-    'Portuguese (Brazil)':'pt-br',
-    'Portuguese (Portugal)':'pt-pt',
-    'Romanian (Romania)':'ro-ro',
-    'Russian (Russia)':'ru-ru',
-    'Sinhala (Sri Lanka)':'si-lk',
-    'Slovak (Slovakia)':'sk-sk',
-    'Slovenian (Slovenia)':'sl-si',
-    'Serbian (Serbia)':'sr-rs',
-    'Sundanese (Indonesia)':'su-id',
-    'Swedish (Sweden)':'sv-se',
-    'Swahili (Kenya)':'sw-ke',
-    'Swahili (Tanzania)':'sw-tz',
-    'Tamil (India)':'ta-in',
-    'Tamil (Sri Lanka)':'ta-lk',
-    'Tamil (Malaysia)':'ta-my',
-    'Tamil (Singapore)':'ta-sg',
-    'Telugu (India)':'te-in',
-    'Thai (Thailand)':'th-th',
-    'Turkish (Turkey)':'tr-tr',
-    'Ukrainian (Ukraine)':'uk-ua',
-    'Urdu (India)':'ur-in',
-    'Urdu (Pakistan)':'ur-pk',
-    'Vietnamese (Vietnam)':'vi-vn',
-    'Chinese, Cantonese (Traditional, Hong Kong)':'yue-hant-hk',
-    'Zulu (South Africa)':'zu-za'
-}
+from modules.shortcuts import shortcuts_dict
+from modules.paths import LANGUAGE_DICT_LIST
 
 LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
 
@@ -301,6 +180,73 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     self.global_subtitlesvideo_panel_tabwidget.addTab(self.global_subtitlesvideo_panel_tabwidget_export_panel, 'EXPORT BURNED-IN SUBTITLES')
 
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel = QWidget()
+
+    class global_subtitlesvideo_panel_tabwidget_shortkeys_editbox(QLineEdit):
+        # def __init__(self, keySequence, *args):
+        #     super(global_subtitlesvideo_panel_tabwidget_shortkeys_editbox, self).__init__(*args)
+        #
+        #     self.keySequence = keySequence
+        #     self.setKeySequence(keySequence)
+
+        def setKeySequence(self, keySequence):
+            self.keySequence = keySequence
+            self.setText(self.keySequence.toString(QKeySequence.NativeText))
+
+        def keyPressEvent(self, e):
+            if e.type() == QEvent.KeyPress:
+                key = e.key()
+
+                if key == Qt.Key_unknown:
+                    return
+
+                if(key == Qt.Key_Control
+                   or key == Qt.Key_Shift
+                   or key == Qt.Key_Alt
+                   or key == Qt.Key_Meta):
+                    return
+
+                modifiers = e.modifiers()
+                # keyText = e.text()
+
+                if modifiers & Qt.ShiftModifier:
+                    key += Qt.SHIFT
+                if modifiers & Qt.ControlModifier:
+                    key += Qt.CTRL
+                if modifiers & Qt.AltModifier:
+                    key += Qt.ALT
+                if modifiers & Qt.MetaModifier:
+                    key += Qt.META
+
+                self.setKeySequence(QKeySequence(key))
+
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox = global_subtitlesvideo_panel_tabwidget_shortkeys_editbox(parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.setStyleSheet('QLineEdit { background-color:rgb(255, 255, 255); border: 1px solid silver; border-radius: 5px; padding: 5px 5px 5px 5px; font-size:16px; color:black; qproperty-alignment: "AlignCenter";}')
+
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm = QPushButton('CONFIRM', parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.setObjectName('button_dark')
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.clicked.connect(lambda: global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm_clicked(self))
+
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel = QPushButton('CANCEL', parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.setObjectName('button_dark')
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.clicked.connect(lambda: global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel_clicked(self))
+
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table = QTableWidget(parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setColumnCount(2)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.verticalHeader().setVisible(False)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.horizontalHeader().setVisible(False)
+    #self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setShowGrid(False)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+    #self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.clicked.connect(lambda:project_new_panel_info_panel_options_pmaterials_panel_files_clicked(self))
+    global_subtitlesvideo_panel_tabwidget_shortkeys_table_update(self)
+
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button = QPushButton('SET SHORTCUT', parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    #self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setCheckable(True)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setObjectName('button_dark')
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.clicked.connect(lambda: global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self))
+
+    self.global_subtitlesvideo_panel_tabwidget.addTab(self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel, 'KEYBOARD SHORTCUTS')
+
 
 def resized(self):
     if (self.subtitles_list or self.video_metadata):
@@ -324,7 +270,7 @@ def resized(self):
     self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
     self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
 
-    self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, self.global_subtitlesvideo_panel_right.width()-40, self.global_subtitlesvideo_panel_right.height()-50)
+    self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, self.global_subtitlesvideo_panel_right.width()-50, self.global_subtitlesvideo_panel_right.height()-50)
 
     self.global_subtitlesvideo_video_burn_label.setGeometry(20, 20, 200, 20)
     self.global_subtitlesvideo_video_burn_fontname_label.setGeometry(20, 50, 200, 20)
@@ -346,10 +292,51 @@ def resized(self):
     self.global_subtitlesvideo_video_burn_pcolor.setGeometry(20+150+150+20+150+10, 190, 150, 30)
     self.global_subtitlesvideo_video_burn_convert.setGeometry(20, 240, 200, 40)
 
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.setGeometry(0, 0, self.global_subtitlesvideo_panel_tabwidget.width(), self.global_subtitlesvideo_panel_tabwidget.height())
+
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.setGeometry((self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.width()*.5)-100, (self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.height()*.5)-50, 200, 60)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.setGeometry(self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.x() + 20, self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.y()+self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.height(), 80, 40)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.setGeometry(self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.x() + (self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.width()*.5), self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.y()+self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.height(), 80, 40)
+
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setGeometry(20, 20, self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.width()-40, self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.height()-100)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setGeometry(20+(self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.width()*.5)-40, 20+self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.height()+5, 80, 30)
+
 
 def show_global_subtitlesvideo_panel(self):
     self.generate_effect(self.global_subtitlesvideo_panel_widget_animation, 'geometry', 700, [self.global_subtitlesvideo_panel_widget.x(), self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()], [0, self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()])
 
+
+def global_subtitlesvideo_panel_tabwidget_shortkeys_table_update(self):
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.clear()
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setRowCount(len(shortcuts_dict))
+    inverted_shortcuts_dict = {value: key for key, value in shortcuts_dict.items()}
+    i = 0
+    for item in shortcuts_dict:
+        item_name = QTableWidgetItem(shortcuts_dict[item])
+        self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setItem(i,0,item_name)
+        item_name = QTableWidgetItem(self.settings['shortcuts'].get(inverted_shortcuts_dict[shortcuts_dict[item]], ''))
+        self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setItem(i,1,item_name)
+        i += 1
+
+
+def global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self):
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setVisible(not self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.isVisible())
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.setVisible(not self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.isVisible())
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.setVisible(not self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.isVisible())
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.setVisible(not self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.isVisible())
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setVisible(self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.isVisible())
+
+
+def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel_clicked(self):
+    #self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setVisible(True)
+    global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self)
+
+
+def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm_clicked(self):
+    inverted_shortcuts_dict = {value: key for key, value in shortcuts_dict.items()}
+    self.settings['shortcuts'][inverted_shortcuts_dict[self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.item(self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.currentRow(), 0).text()]] = self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.text()
+    global_subtitlesvideo_panel_tabwidget_shortkeys_table_update(self)
+    global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel_clicked(self)
 
 def global_subtitlesvideo_import_button_clicked(self):
     # if self.global_subtitlesvideo_import_button.isChecked():
@@ -485,6 +472,7 @@ def global_subtitlesvideo_autosync_button_clicked(self):
         self.timeline.update(self)
         self.properties.update_properties_widget(self)
 
+
 def global_subtitlesvideo_autosub_button_clicked(self):
     run_command = False
     file_processed = False
@@ -515,7 +503,6 @@ def global_subtitlesvideo_autosub_button_clicked(self):
                    }
 
         r = requests.get(url, params=content)
-        print(r)
         r_json = r.json()
 
 
@@ -562,6 +549,7 @@ def global_subtitlesvideo_autosub_button_clicked(self):
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
         self.properties.update_properties_widget(self)
+
 
 def global_subtitlesvideo_export_button_clicked(self):
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
