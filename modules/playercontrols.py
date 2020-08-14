@@ -237,7 +237,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.change_playback_speed_decrease.setStyleSheet('QPushButton {border-top:5px; padding-left:5px; border-right:0;}')
     self.change_playback_speed_decrease.clicked.connect(lambda: change_playback_speed_decrease_clicked(self))
 
-    self.change_playback_speed_slider = QSlider(orientation=Qt.Horizontal, parent=self.change_playback_speed)
+    self.change_playback_speed_slider = QSlider(Qt.Horizontal, parent=self.change_playback_speed)
     self.change_playback_speed_slider.setMinimum(5)
     self.change_playback_speed_slider.setMaximum(300)
     self.change_playback_speed_slider.setPageStep(10)

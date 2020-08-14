@@ -1,7 +1,8 @@
 
 #!/usr/bin/env python3
 
-from PySide2.QtGui import QKeySequence
+from PyQt5.QtWidgets import QShortcut
+from PyQt5.QtGui import QKeySequence
 
 shortcuts_dict = {
                     'playpause': 'Play/Pause'
@@ -11,4 +12,12 @@ shortcuts_dict = {
 def load(self, shortcut_commands):
     for command in shortcut_commands.keys():
         if command == 'playpause':
-            self.playercontrols.playercontrols_playpause_button.setShortcut(QKeySequence.fromString(shortcut_commands[command]))
+            #self.shcut = QShortcut(QKeySequence(shortcut_commands[command]), self)
+            #self.shcut.activated.connect(self.playercontrols.playercontrols_playpause_button_clicked)
+            #self.shcut = QShortcut(QKeySequence('Ctrl+O'), self)
+            #self.shcut.activated.connect(lambda: self.playercontrols.playercontrols_playpause_button_clicked(self))
+            #self.playercontrols_playpause_button.setShortcut(QKeySequence.fromString(shortcut_commands[command]))
+            #self.playercontrols_playpause_button.setShortcut(QKeySequence.fromString('Shift+0'))
+            self.playercontrols_playpause_button.setShortcut(QKeySequence(shortcut_commands[command]))
+            #self.playercontrols_playpause_button.setShortcut(shortcut_commands[command])
+            print(shortcut_commands[command])
