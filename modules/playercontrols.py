@@ -199,29 +199,39 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.next_start_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'next_start_to_current_position_icon.png')))
     self.next_start_to_current_position_button.setIconSize(QSize(20, 20))
     self.next_start_to_current_position_button.setObjectName('button_dark')
-    self.next_start_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0;}')
+    self.next_start_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0; padding-right:10px;}')
     self.next_start_to_current_position_button.clicked.connect(lambda: next_start_to_current_position_button_clicked(self))
 
     self.last_start_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
     self.last_start_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'last_start_to_current_position_icon.png')))
     self.last_start_to_current_position_button.setIconSize(QSize(20, 20))
     self.last_start_to_current_position_button.setObjectName('button_dark')
-    self.last_start_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0; border-left:0;}')
+    self.last_start_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0; border-left:0; padding-left:10px;}')
     self.last_start_to_current_position_button.clicked.connect(lambda: last_start_to_current_position_button_clicked(self))
 
-    self.last_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
-    self.last_end_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'last_end_to_current_position_icon.png')))
-    self.last_end_to_current_position_button.setIconSize(QSize(20, 20))
-    self.last_end_to_current_position_button.setObjectName('button_dark')
-    self.last_end_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0;}')
-    self.last_end_to_current_position_button.clicked.connect(lambda: last_end_to_current_position_button_clicked(self))
+    self.subtitle_start_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
+    self.subtitle_start_to_current_position_button.setObjectName('button_dark')
+    self.subtitle_start_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0;}')
+    self.subtitle_start_to_current_position_button.clicked.connect(lambda: subtitle_start_to_current_position_button_clicked(self))
 
     self.next_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
     self.next_end_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'next_end_to_current_position_icon.png')))
     self.next_end_to_current_position_button.setIconSize(QSize(20, 20))
     self.next_end_to_current_position_button.setObjectName('button_dark')
-    self.next_end_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0; border-right:0;}')
+    self.next_end_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0; border-right:0; padding-right:10px;}')
     self.next_end_to_current_position_button.clicked.connect(lambda: next_end_to_current_position_button_clicked(self))
+
+    self.last_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
+    self.last_end_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'last_end_to_current_position_icon.png')))
+    self.last_end_to_current_position_button.setIconSize(QSize(20, 20))
+    self.last_end_to_current_position_button.setObjectName('button_dark')
+    self.last_end_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0; padding-left:10px;}')
+    self.last_end_to_current_position_button.clicked.connect(lambda: last_end_to_current_position_button_clicked(self))
+
+    self.subtitle_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
+    self.subtitle_end_to_current_position_button.setObjectName('button_dark')
+    self.subtitle_end_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0;}')
+    self.subtitle_end_to_current_position_button.clicked.connect(lambda: subtitle_end_to_current_position_button_clicked(self))
 
     self.change_playback_speed = QPushButton(parent=self.playercontrols_widget)
     self.change_playback_speed.setObjectName('button')
@@ -394,10 +404,12 @@ def resized(self):
     self.slice_selected_subtitle_button.setGeometry(self.merge_back_selected_subtitle_button.x() + self.merge_back_selected_subtitle_button.width(), self.merge_back_selected_subtitle_button.y(), 40, 40)
     self.merge_next_selected_subtitle_button.setGeometry(self.slice_selected_subtitle_button.x() + self.slice_selected_subtitle_button.width(), self.merge_back_selected_subtitle_button.y(), 40, 40)
 
-    self.next_start_to_current_position_button.setGeometry(self.merge_next_selected_subtitle_button.x()+self.merge_next_selected_subtitle_button.width()+5, 44, 40, 40)
-    self.last_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+self.next_start_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 40, 40)
-    self.next_end_to_current_position_button.setGeometry(self.last_start_to_current_position_button.x()+self.last_start_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 40, 40)
-    self.last_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x()+self.next_end_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 40, 40)
+    self.next_start_to_current_position_button.setGeometry(self.merge_next_selected_subtitle_button.x()+self.merge_next_selected_subtitle_button.width()+5, 44, 50, 40)
+    self.subtitle_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+40, 50, 20, 34)
+    self.last_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+self.next_start_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
+    self.next_end_to_current_position_button.setGeometry(self.last_start_to_current_position_button.x()+self.last_start_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
+    self.subtitle_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x()+40, 50, 20, 34)
+    self.last_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x()+self.next_end_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
 
     self.change_playback_speed.setGeometry(self.playercontrols_widget_central_top.x()-182, 7, 180, 36)
     self.change_playback_speed_icon_label.setGeometry(0, 0, self.change_playback_speed.height(), self.change_playback_speed.height())
@@ -601,6 +613,33 @@ def slice_selected_subtitle_button_clicked(self):
         self.properties.update_properties_widget(self)
 
 
+def select_subtitle_in_current_position(self):
+    subtitle = subtitles.subtitle_under_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
+    if subtitle:
+        self.selected_subtitle = subtitle
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.timeline.update(self)
+        self.properties.update_properties_widget(self)
+
+
+def select_next_subtitle_over_current_position(self):
+    subtitle = subtitles.next_subtitle_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
+    if subtitle:
+        self.selected_subtitle = subtitle
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.timeline.update(self)
+        self.properties.update_properties_widget(self)
+
+
+def select_last_subtitle_over_current_position(self):
+    subtitle = subtitles.last_subtitle_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
+    if subtitle:
+        self.selected_subtitle = subtitle
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.timeline.update(self)
+        self.properties.update_properties_widget(self)
+
+
 def merge_back_selected_subtitle_button_clicked(self):
     if self.selected_subtitle:
         self.selected_subtitle = subtitles.merge_back_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
@@ -687,6 +726,22 @@ def last_end_to_current_position_button_clicked(self):
 
 def last_start_to_current_position_button_clicked(self):
     subtitles.last_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
+    self.unsaved = True
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.properties.update_properties_widget(self)
+
+
+def subtitle_start_to_current_position_button_clicked(self):
+    subtitles.subtitle_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
+    self.unsaved = True
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.properties.update_properties_widget(self)
+
+
+def subtitle_end_to_current_position_button_clicked(self):
+    subtitles.subtitle_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)

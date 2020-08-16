@@ -123,4 +123,12 @@ def set_stylesheet(self):
         stylesheet_text += '#' + button_color + ':hover                          { font-size:10px; border-left:5px; border-top:2px; border-right:2px; border-bottom:2px; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 2 2 2 5 stretch stretch; outline: none; } '
         stylesheet_text += '#' + button_color + ':disabled                       { font-size:10px; border-left:5px; border-top:2px; border-right:2px; border-bottom:2px; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 2 2 2 5 stretch stretch; outline: none; color:rgba(0,0,0,100); }'
 
+    for button_color in ['keyboard_key']:
+        stylesheet_text += '#' + button_color + '                                { font-size:10px; border-left:8px; border-top:5px; border-right:8px; border-bottom:11px; border-image: url("' + get_graphics_path(button_color + '_normal.png') + '") 5 8 11 5 stretch stretch; outline: none; color:rgba(48,66,81,255); text-align:left; font-weight:bold;} '
+        stylesheet_text += '#' + button_color + ':hover:pressed                  { font-size:10px; border-left:8px; border-top:5px; border-right:8px; border-bottom:11px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 8 11 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':checked                        { font-size:10px; border-left:8px; border-top:5px; border-right:8px; border-bottom:11px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 8 11 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':hover:checked                  { font-size:10px; border-left:8px; border-top:5px; border-right:8px; border-bottom:11px; border-image: url("' + get_graphics_path(button_color + '_pressed.png') + '") 5 8 11 5 stretch stretch; outline: none;  } '
+        stylesheet_text += '#' + button_color + ':hover                          { font-size:10px; border-left:8px; border-top:5px; border-right:8px; border-bottom:11px; border-image: url("' + get_graphics_path(button_color + '_hover.png') + '") 5 8 11 5 stretch stretch; outline: none; } '
+        stylesheet_text += '#' + button_color + ':disabled                       { font-size:10px; border-left:8px; border-top:5px; border-right:8px; border-bottom:11px; border-image: url("' + get_graphics_path(button_color + '_disabled.png') + '") 5 8 11 5 stretch stretch; outline: none; color:rgba(0,0,0,100); }'
+
     self.setStyleSheet(stylesheet_text)

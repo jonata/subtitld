@@ -107,6 +107,59 @@ def next_start_to_current_position(subtitles=[], position=0.0):
         last_end_to_current_position(subtitles=subtitles, position=position - 0.001)
 
 
+def subtitle_start_to_current_position(subtitles=[], position=0.0):
+    history.history_append(subtitles)
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    if index and position < (subtitles[index-1][0] + subtitles[index-1][1]):
+        end = subtitles[index-1][0] + subtitles[index-1][1]
+        subtitles[index-1][0] = position
+        subtitles[index-1][1] = end - position
+    else:
+        end = subtitles[index][0] + subtitles[index][1]
+        subtitles[index][0] = position
+        subtitles[index][1] = end - position
+
+
+def subtitle_end_to_current_position(subtitles=[], position=0.0):
+    history.history_append(subtitles)
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    if index:
+        if position < (subtitles[index-1][0] + subtitles[index-1][1]):
+            subtitles[index-1][1] = position - subtitles[index-1][0]
+        else:
+            subtitles[index-1][1] = position - subtitles[index-1][0]
+
+
+def subtitle_under_current_position(subtitles=[], position=0.0):
+    current_subtitle = False
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    if position > subtitles[index-1][0] and position < (subtitles[index-1][0] + subtitles[index-1][1]):
+        current_subtitle = subtitles[index-1]
+    return current_subtitle
+
+
+def last_subtitle_current_position(subtitles=[], position=0.0):
+    last_subtitle = False
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    if index:
+        if position > (subtitles[index-1][0] + subtitles[index-1][1]):
+            last_subtitle = subtitles[index-1]
+    return last_subtitle
+
+
+def next_subtitle_current_position(subtitles=[], position=0.0):
+    next_subtitle = False
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+    if index < len(subt):
+        next_subtitle = subtitles[index]
+    return next_subtitle
+
+
 def next_end_to_current_position(subtitles=[], position=0.0):
     history.history_append(subtitles)
     subt = [item[0] for item in subtitles]
