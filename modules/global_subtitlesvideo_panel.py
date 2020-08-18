@@ -6,7 +6,7 @@ import hashlib
 import requests
 import json
 
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QMessageBox, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem
+from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QMessageBox, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
 from PyQt5.QtGui import QFontDatabase, QKeySequence
 
@@ -235,6 +235,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setColumnCount(2)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.verticalHeader().setVisible(False)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.horizontalHeader().setVisible(False)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
     #self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setShowGrid(False)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setSelectionBehavior(QAbstractItemView.SelectRows)
     #self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.clicked.connect(lambda:project_new_panel_info_panel_options_pmaterials_panel_files_clicked(self))
@@ -299,7 +300,7 @@ def resized(self):
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.setGeometry(self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.x() + (self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.width()*.5), self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.y()+self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.height(), 80, 40)
 
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setGeometry(20, 20, self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.width()-40, self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.height()-100)
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setGeometry(20+(self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.width()*.5)-40, 20+self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.height()+5, 80, 30)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setGeometry(20+(self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.width()*.5)-80, 20+self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.height()+5, 160, 30)
 
 
 def show_global_subtitlesvideo_panel(self):
