@@ -15,6 +15,11 @@ from modules import authentication
 if ACTUAL_OS == 'darwin':
     from modules.paths import NSURL
 
+list_of_supported_subtitle_extensions = []
+for type in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS.keys():
+    for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[type]['extensions']:
+        list_of_supported_subtitle_extensions.append(ext)
+list_of_supported_subtitle_extensions = tuple(list_of_supported_subtitle_extensions)
 
 class subtitld(QWidget):
     def __init__(self):
@@ -135,7 +140,7 @@ class subtitld(QWidget):
             else:
                 filename = event.mimeData().urls()[0].toLocalFile()
 
-            if filename.lower().endswith(('.subtitld')) or filename.lower().endswith(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS) or filename.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
+            if filename.lower().endswith(('.subtitld')) or filename.lower().endswith(list_of_supported_subtitle_extensions) or filename.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
                 event.accept()
 
     def dropEvent(widget, event):
@@ -144,7 +149,7 @@ class subtitld(QWidget):
         else:
             filename = event.mimeData().urls()[0].toLocalFile()
 
-        if filename.lower().endswith(('.subtitld')) or filename.lower().endswith(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS) or filename.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
+        if filename.lower().endswith(('.subtitld')) or filename.lower().endswith(list_of_supported_subtitle_extensions) or filename.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
             if filename.lower().endswith(('.subtitld')):
                 authentication.append_authentication_keys(config=widget.settings, dict=authentication.load_subtitld_codes_file(path=filename))
             else:
