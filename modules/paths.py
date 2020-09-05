@@ -87,7 +87,8 @@ LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
 }
 
 LIST_OF_SUPPORTED_IMPORT_EXTENSIONS = {
-    'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']}
+    'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']},
+    'SRT': {'description': 'SubRip Subtitle format', 'extensions': ['srt']}
 }
 
 LANGUAGE_DICT_LIST = {
