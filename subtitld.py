@@ -19,7 +19,7 @@ list_of_supported_subtitle_extensions = []
 for type in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS.keys():
     for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[type]['extensions']:
         list_of_supported_subtitle_extensions.append(ext)
-list_of_supported_subtitle_extensions = tuple(list_of_supported_subtitle_extensions)
+list_of_supported_subtitle_extensions = tuple()
 
 class subtitld(QWidget):
     def __init__(self):
