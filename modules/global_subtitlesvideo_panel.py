@@ -72,6 +72,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
         list_of_subtitle_extensions.append(ext + ' - ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[ext]['description'])
     self.global_subtitlesvideo_save_as_combobox = QComboBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_save_as_combobox.setObjectName('button')
     self.global_subtitlesvideo_save_as_combobox.addItems(list_of_subtitle_extensions)
     self.global_subtitlesvideo_save_as_combobox.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
 
@@ -90,6 +91,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
 
     self.global_subtitlesvideo_autosync_lang_combobox = QComboBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_autosync_lang_combobox.setObjectName('button')
     self.global_subtitlesvideo_autosync_lang_combobox.addItems(LANGUAGE_DESCRIPTIONS)
 
     self.global_subtitlesvideo_autosync_button = QPushButton(u'AUTOSYNC', parent=self.global_subtitlesvideo_panel_widget)
@@ -111,6 +113,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     fonts = QFontDatabase().families()
     self.global_subtitlesvideo_video_burn_fontname = QComboBox(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_fontname.setObjectName('button')
     self.global_subtitlesvideo_video_burn_fontname.addItems(fonts)
     # self.global_subtitlesvideo_video_burn_fontname.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
 

@@ -97,6 +97,10 @@ def set_stylesheet(self):
                             QMessageBox                                         { background-color:rgb(26,35,43); }
                             QMessageBox QLabel                                  { color: rgb(106, 116, 131); }
                             QMessageBox QPushButton                             { background-color: rgb(106, 116, 131); }
+                            QComboBox                                           { padding-left: 4px; color: white;}
+                            QComboBox::drop-down                                { border: 0px; }
+                            QComboBox::down-arrow                               { image: url("''' + get_graphics_path('combobox_arrow.png') + '''"); width: 10px; height: 5px; }
+                            QComboBox QAbstractItemView                         { border: 1px solid #304251; border-radius: 3px; background-color: #3e5363; selection-background-color: #6a7483; }
                             '''
 
     for button_color in ['button', 'button_dark', 'button_red', 'button_green']:
