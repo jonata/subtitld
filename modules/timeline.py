@@ -397,7 +397,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     def thread_get_waveform_ended(command):
         self.video_metadata['waveform'][command[0]] = {'points': command[1], 'qimages': []}
-        self.videoinfo_label.setText('Waveform updated')
+        self.videoinfo_label.setText(self.tr('Waveform updated'))
         self.timeline_widget.update()
         self.thread_get_qimages.values_list = command[1]
         self.thread_get_qimages.zoom = command[0]
@@ -409,7 +409,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     def thread_get_qimages_ended(command):
         self.video_metadata['waveform'][command[0]]['qimages'] = command[1]
-        self.videoinfo_label.setText('Waveform optimized')
+        self.videoinfo_label.setText(self.tr('Waveform optimized'))
         self.timeline_widget.update()
 
     self.thread_get_qimages = thread_get_qimages(self)
@@ -458,7 +458,7 @@ def update(self):
 
 def zoom_update_waveform(self):
     if not type(self.video_metadata['audio']) == bool and self.mediaplayer_zoom not in self.video_metadata['waveform'].keys():
-        self.videoinfo_label.setText('Generating waveform...')
+        self.videoinfo_label.setText(self.tr('Generating waveform...'))
         self.thread_get_waveform.audio = self.video_metadata['audio']
         self.thread_get_waveform.zoom = self.mediaplayer_zoom
         self.thread_get_waveform.duration = self.video_metadata.get('duration', 0.01)

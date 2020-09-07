@@ -5,9 +5,9 @@ import sys
 import time
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import Qt, QRect, QPropertyAnimation
+from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTranslator
 
-from modules.paths import PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
+from modules.paths import PATH_LOCALE, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
 from modules.history import history_redo, history_undo
 from modules import config
 from modules import authentication
@@ -178,12 +178,12 @@ class subtitld(QWidget):
         if self.unsaved:
             save_message_box = QMessageBox(self)
 
-            save_message_box.setWindowTitle("Unsaved changes")
+            save_message_box.setWindowTitle(self.tr('Unsaved changes'))
             save_message_box.setText(
-                "Do you want to save the changes you made on the subtitles?"
+                self.tr('Do you want to save the changes you made on the subtitles?')
             )
-            save_message_box.addButton("Save", QMessageBox.AcceptRole)
-            save_message_box.addButton("Don't save", QMessageBox.RejectRole)
+            save_message_box.addButton(self.tr('Save'), QMessageBox.AcceptRole)
+            save_message_box.addButton(self.tr("Don't save"), QMessageBox.RejectRole)
             ret = save_message_box.exec_()
 
             if ret == QMessageBox.AcceptRole:
@@ -259,6 +259,10 @@ def viewnotesout_button_clicked(self):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    if os.path.isfile(os.path.join(PATH_LOCALE, 'en_US.qm')):
+        translator = QTranslator()
+        translator.load(os.path.join(PATH_LOCALE, 'en_US.qm'))
+        app.installTranslator(translator)
     # app.setDesktopSettingsAware(False)
     app.setStyle("plastique")
     app.setApplicationName("Subtitld")

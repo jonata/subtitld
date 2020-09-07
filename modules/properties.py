@@ -21,14 +21,14 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.properties_textedit.setObjectName('properties_textedit')
     self.properties_textedit.textChanged.connect(lambda: properties_textedit_changed(self))
 
-    self.send_text_to_next_subtitle_button = QPushButton('Send to next'.upper(), parent=self.properties_widget)
+    self.send_text_to_next_subtitle_button = QPushButton(self.tr('Send to next').upper(), parent=self.properties_widget)
     self.send_text_to_next_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'send_text_to_next_subtitle_icon.png')))
     self.send_text_to_next_subtitle_button.setIconSize(QSize(20, 20))
     self.send_text_to_next_subtitle_button.setObjectName('button_dark')
     self.send_text_to_next_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0;padding-bottom:3px;}')
     self.send_text_to_next_subtitle_button.clicked.connect(lambda: send_text_to_next_subtitle_button_clicked(self))
 
-    self.send_text_to_last_subtitle_button = QPushButton('Send to last'.upper(), parent=self.properties_widget)
+    self.send_text_to_last_subtitle_button = QPushButton(self.tr('Send to last').upper(), parent=self.properties_widget)
     self.send_text_to_last_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'send_text_to_last_subtitle_icon.png')))
     self.send_text_to_last_subtitle_button.setIconSize(QSize(20, 20))
     self.send_text_to_last_subtitle_button.setObjectName('button_dark')
@@ -79,13 +79,13 @@ def properties_toggle_button_to_end(self):
 
 def save_button_clicked(self):
     if not self.actual_subtitle_file:
-        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, "Select the srt file", os.path.join(os.environ.get('HOME', None), 'final.srt'), "SRT file (*.srt)")[0]
+        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, self.tr('Select the srt file'), os.path.join(os.environ.get('HOME', None), 'final.srt'), "SRT file (*.srt)")[0]
     if self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.properties)
 
 
 def open_button_clicked(self):
-    file_to_open = QFileDialog.getOpenFileName(self, "Select the subtitle or video file", os.path.expanduser("~"), "SRT file (*.srt);;MP4 file (*.mp4)")[0]
+    file_to_open = QFileDialog.getOpenFileName(self, self.tr('Select the subtitle or video file'), os.path.expanduser("~"), "SRT file (*.srt);;MP4 file (*.mp4)")[0]
     if file_to_open and os.path.isfile(file_to_open):
         self.properties = file_io.open_file(file_to_open)
         update_properties_widget(self)
@@ -94,7 +94,7 @@ def open_button_clicked(self):
 def update_properties_widget(self):
     text = ''
     if self.selected_subtitle:
-        self.properties_information.setText('<small>WORDS:</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))) + '</b></big><br><br><small>CHARACTERS:</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))) + '</b></big>')
+        self.properties_information.setText('<small>' + self.tr('Words').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))) + '</b></big><br><br><small>' + self.tr('Characters').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))) + '</b></big>')
         text = self.selected_subtitle[2]
 
     self.properties_information.setVisible(bool(self.selected_subtitle))

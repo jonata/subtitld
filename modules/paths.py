@@ -8,6 +8,7 @@ import subprocess
 
 PATH_SUBTITLD = os.path.abspath(os.path.dirname(sys.argv[0]))
 PATH_SUBTITLD_GRAPHICS = os.path.join(PATH_SUBTITLD, 'graphics')
+PATH_LOCALE = os.path.join(PATH_SUBTITLD, 'locale')
 
 PATH_HOME = os.path.expanduser("~")
 REAL_PATH_HOME = PATH_HOME

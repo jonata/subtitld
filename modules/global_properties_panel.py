@@ -13,7 +13,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_properties_panel_background = QLabel(parent=self.global_properties_panel_widget)
     self.global_properties_panel_background.setObjectName('global_properties_panel')
 
-    self.global_properties_panel_show_margins = QCheckBox('Show safety margins', parent=self.global_properties_panel_widget)
+    self.global_properties_panel_show_margins = QCheckBox(self.tr('Show safety margins'), parent=self.global_properties_panel_widget)
     self.global_properties_panel_show_margins.clicked.connect(lambda: global_properties_panel_show_margins_clicked(self))
 
 

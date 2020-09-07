@@ -66,7 +66,7 @@ def load(self):
     def thread_extract_waveform_ended(command):
         self.video_metadata['audio'] = command
         self.timeline.zoom_update_waveform(self)
-        self.videoinfo_label.setText('Audio extracted')
+        self.videoinfo_label.setText(self.tr('Audio extracted'))
 
     self.thread_extract_waveform = thread_extract_waveform(self)
     self.thread_extract_waveform.command.connect(thread_extract_waveform_ended)
@@ -79,10 +79,10 @@ def load(self):
 
 
 def open_filepath(self, file_to_open=False):
-    supported_subtitle_files = "Subtitle files ({})".format(" ".join(["*.{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
-    supported_video_files = "Video files ({})".format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
+    supported_subtitle_files = self.tr('Subtitle files') + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
+    supported_video_files = self.tr('Video files') + ' ({})'.format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
     if not file_to_open:
-        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption="Select the video or subtitle file", directory=os.path.expanduser("~"), filter=supported_subtitle_files + ';;' + supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
+        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video or subtitle file'), directory=os.path.expanduser("~"), filter=supported_subtitle_files + ';;' + supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
 
     if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(tuple(list_of_supported_subtitle_extensions)):
         self.subtitles_list, self.format_to_save = process_subtitles_file(file_to_open)
@@ -92,7 +92,7 @@ def open_filepath(self, file_to_open=False):
         self.video_metadata = process_video_file(file_to_open)
 
     if not self.video_metadata:
-        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption="Select the video file", directory=os.path.expanduser("~"), filter=supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
+        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=os.path.expanduser("~"), filter=supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
         if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
             self.video_metadata = process_video_file(file_to_open)
 
@@ -100,7 +100,7 @@ def open_filepath(self, file_to_open=False):
         self.actual_video_file = file_to_open
         self.thread_extract_waveform.filepath = self.video_metadata['filepath']
         self.thread_extract_waveform.start()
-        self.videoinfo_label.setText('Extracting audio...')
+        self.videoinfo_label.setText(self.tr('Extracting audio...'))
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
         self.thread_extract_scene_time_positions.start()
         self.player.update(self)

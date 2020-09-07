@@ -23,6 +23,7 @@ shortcuts_dict = {
     'select_last_subtitle_over_current_position': 'Select last subtitle over current position',
 }
 
+
 default_shortcuts_dict = {
     'playpause': ['Space'],
     'subtitle_start_to_current_position': ['0'],
