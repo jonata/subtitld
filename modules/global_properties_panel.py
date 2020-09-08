@@ -13,8 +13,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_properties_panel_background = QLabel(parent=self.global_properties_panel_widget)
     self.global_properties_panel_background.setObjectName('global_properties_panel')
 
-    self.global_properties_panel_show_margins = QCheckBox(self.tr('Show safety margins'), parent=self.global_properties_panel_widget)
-    self.global_properties_panel_show_margins.clicked.connect(lambda: global_properties_panel_show_margins_clicked(self))
+    self.global_properties_panel_show_action_safe_margins = QCheckBox(self.tr('Action safe margins'), parent=self.global_properties_panel_widget)
+    self.global_properties_panel_show_action_safe_margins.clicked.connect(lambda: global_properties_panel_show_action_safe_margins_clicked(self))
+
+    self.global_properties_panel_show_title_safe_margins = QCheckBox(self.tr('Title safe margins'), parent=self.global_properties_panel_widget)
+    self.global_properties_panel_show_title_safe_margins.clicked.connect(lambda: global_properties_panel_show_title_safe_margins_clicked(self))
+
+    update_safety_margins_checkboxes(self)
 
 
 def resized(self):
@@ -27,7 +32,8 @@ def resized(self):
         self.global_properties_panel_widget.setGeometry(self.width(), 0, (self.width()*.2), self.height()-self.playercontrols_widget.height()+20)
     self.global_properties_panel_background.setGeometry(0, 0, self.global_properties_panel_widget.width(), self.global_properties_panel_widget.height())
 
-    self.global_properties_panel_show_margins.setGeometry(35, 20, self.global_properties_panel_widget.width()-55, 25)
+    self.global_properties_panel_show_action_safe_margins.setGeometry(35, 20, self.global_properties_panel_widget.width()-55, 25)
+    self.global_properties_panel_show_title_safe_margins.setGeometry(35, 45, self.global_properties_panel_widget.width()-55, 25)
 
 
 def global_properties_panel_toggle_button_clicked(self):
@@ -37,11 +43,14 @@ def global_properties_panel_toggle_button_clicked(self):
         hide_global_properties_panel(self)
 
 
-def global_properties_panel_show_margins_clicked(self):
-    if self.global_properties_panel_show_margins.isChecked():
-        self.player_widget.show_margins = [.05, .05]
-    else:
-        self.player_widget.show_margins = False
+def global_properties_panel_show_action_safe_margins_clicked(self):
+    self.settings['safety_margins']['show_action_safe_margins'] = bool(self.global_properties_panel_show_action_safe_margins.isChecked())
+    self.player.update_safety_margins_subtitle_layer(self)  
+
+
+def global_properties_panel_show_title_safe_margins_clicked(self):
+    self.settings['safety_margins']['show_title_safe_margins'] = bool(self.global_properties_panel_show_title_safe_margins.isChecked())
+    self.player.update_safety_margins_subtitle_layer(self)
 
 
 def show_global_properties_panel(self):
@@ -50,3 +59,7 @@ def show_global_properties_panel(self):
 
 def hide_global_properties_panel(self):
     self.generate_effect(self.global_properties_panel_widget_animation, 'geometry', 700, [self.global_properties_panel_widget.x(), self.global_properties_panel_widget.y(), self.global_properties_panel_widget.width(), self.global_properties_panel_widget.height()], [int((self.width()*.8)+18), self.global_properties_panel_widget.y(), self.global_properties_panel_widget.width(), self.global_properties_panel_widget.height()])
+
+def update_safety_margins_checkboxes(self):
+    self.global_properties_panel_show_action_safe_margins.setChecked(self.settings['safety_margins'].get('show_action_safe_margins', False))
+    self.global_properties_panel_show_title_safe_margins.setChecked(self.settings['safety_margins'].get('show_title_safe_margins', False))

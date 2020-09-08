@@ -259,6 +259,7 @@ def viewnotesout_button_clicked(self):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    # command to update ts files: pylupdate5 subtitld.py modules/*.py -ts locale/en_US.ts
     if os.path.isfile(os.path.join(PATH_LOCALE, 'en_US.qm')):
         translator = QTranslator()
         translator.load(os.path.join(PATH_LOCALE, 'en_US.qm'))
