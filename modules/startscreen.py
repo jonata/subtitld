@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import os
+import sys
 import webbrowser
 from datetime import datetime
-from PyQt5.QtWidgets import QPushButton, QLabel, QWidget, QGraphicsOpacityEffect, QListWidget, QApplication, QLineEdit
-from PyQt5.QtCore import QPropertyAnimation, Qt, QThread, pyqtSignal
+from PyQt5.QtWidgets import QPushButton, QLabel, QWidget, QGraphicsOpacityEffect, QListWidget, QApplication, QLineEdit, QListWidgetItem
+from PyQt5.QtGui import QIcon, QScreen
+from PyQt5.QtCore import QPropertyAnimation, Qt, QThread, pyqtSignal, QSize
 
 from modules import file_io
 from modules import authentication
@@ -160,6 +163,8 @@ def load(self):
     self.thread_verify_user_and_machineid = thread_verify_user_and_machineid(self)
     self.thread_verify_user_and_machineid.command.connect(thread_verify_user_and_machineid_ended)
 
+    self.start_screen_temp_recent_files_list = []
+
     update_start_screen_adver_panel(self)
 
 
@@ -193,13 +198,32 @@ def resized(self):
 
 def show(self):
     if self.settings['recent_files']:
+        inv_rf = {v: k for k, v in self.settings['recent_files'].items()}
+        for item in reversed(sorted(inv_rf)):
+            if os.path.isfile(inv_rf[item]):
+                for f in self.start_screen_temp_recent_files_list:
+                    if inv_rf[item] == f[-1]:
+                        continue
+                        continue
+                iteml = QListWidgetItem()
+                iteml.setSizeHint(QSize(iteml.sizeHint().width(),42))
+                if len(item) < 12:
+                    lastopened = datetime.strptime(item, '%Y%m%d').strftime('%d/%m/%Y') + ' - '
+                else:
+                    lastopened = datetime.strptime(item, '%Y%m%d%H%M%S').strftime('%d/%m/%Y - %H:%M:%S') + ' - '
+                path = inv_rf[item]
+                if (sys.platform == 'win32' or os.name == 'nt') :
+                    path = path.replace('/', '\\')
+                label = QLabel('<font style="font-size:12px; color:#6a7483;">' + os.path.basename(inv_rf[item]) + '</font><br><font style="font-size:10px; color:#3e5363;">' + lastopened + path.replace('\\\\', '\\') + '</font>')
+                label.setStyleSheet('QLabel {padding:1px}')
+                
+                self.start_screen_temp_recent_files_list.append([iteml, label, inv_rf[item]])
+                
+    if self.start_screen_temp_recent_files_list:
+        for item in self.start_screen_temp_recent_files_list:
+            self.start_screen_recent_listwidget.addItem(item[0])
+            self.start_screen_recent_listwidget.setItemWidget(item[0], item[1])
         self.start_screen_recent_alert.setVisible(False)
-        hist_list = []
-        for filename in self.settings['recent_files'].keys():
-            hist_list.append([self.settings['recent_files'][filename], filename])
-
-        for date in reversed(sorted(hist_list)):
-            self.start_screen_recent_listwidget.addItem(date[1])
     else:
         self.start_screen_recent_listwidget.setVisible(False)
     self.generate_effect(self.start_screen_transparency_animation, 'opacity', 2000, 0.0, 1.0)
@@ -221,7 +245,7 @@ def start_screen_open_button_clicked(self):
 
 
 def start_screen_recent_listwidget_item_clicked(self):
-    file_to_open = self.start_screen_recent_listwidget.currentItem().text()
+    file_to_open = self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]
     file_io.open_filepath(self, file_to_open)
 
 
