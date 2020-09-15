@@ -118,7 +118,7 @@ def open_filepath(self, file_to_open=False):
         # if self.advanced_mode:
         #    self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
         #    self.global_properties_panel.hide_global_properties_panel(self)
-        self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d")
+        self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
 
