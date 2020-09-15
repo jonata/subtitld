@@ -345,8 +345,24 @@ def load(self):
                                                 widget.width()*(widget.action_safe_margin),
                                                 widget.height()*(widget.action_safe_margin)
                                                 )
-                painter.setPen(QPen(QColor.fromRgb(255, 255, 0, 240), 1, Qt.SolidLine))
+                painter.setPen(QPen(QColor.fromRgb(103, 255, 77, 240), 1, Qt.SolidLine))
                 painter.drawRect(action_safe_margin_qrect)
+                painter.drawLine(widget.width()*.5,
+                                 action_safe_margin_qrect.y(),
+                                 widget.width()*.5,
+                                 action_safe_margin_qrect.y() + (widget.height()*.025))
+                painter.drawLine(widget.width()*.5,
+                                 action_safe_margin_qrect.y() + action_safe_margin_qrect.height(),
+                                 widget.width()*.5,
+                                 action_safe_margin_qrect.y() + action_safe_margin_qrect.height() - (widget.height()*.025))
+                painter.drawLine(action_safe_margin_qrect.x(),
+                                 widget.height()*.5,
+                                 action_safe_margin_qrect.x() + (widget.width()*.025),
+                                 widget.height()*.5)
+                painter.drawLine(action_safe_margin_qrect.x() + action_safe_margin_qrect.width(),
+                                 widget.height()*.5,
+                                 action_safe_margin_qrect.x() + action_safe_margin_qrect.width() - (widget.width()*.025),
+                                 widget.height()*.5)
 
             if widget.show_title_safe_margin:
                 painter.setPen(QPen(QColor.fromRgb(255, 0, 0, 240), 1, Qt.SolidLine))
@@ -385,8 +401,9 @@ def resized(self):
 
 
 def update_safety_margins_subtitle_layer(self):
-    self.player_subtitle_layer.show_action_safe_margin = self.settings['safety_margins'].get('show_action_safe_margins', False)
-    self.player_subtitle_layer.show_title_safe_margin = self.settings['safety_margins'].get('show_title_safe_margins', False)
+    if self.advanced_mode:
+        self.player_subtitle_layer.show_action_safe_margin = self.settings['safety_margins'].get('show_action_safe_margins', False)
+        self.player_subtitle_layer.show_title_safe_margin = self.settings['safety_margins'].get('show_title_safe_margins', False)
     self.player_subtitle_layer.update()
 
 # def player_subtitle_textedit_changed(self):
