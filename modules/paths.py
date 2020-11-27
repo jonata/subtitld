@@ -8,7 +8,6 @@ import subprocess
 
 PATH_SUBTITLD = os.path.abspath(os.path.dirname(sys.argv[0]))
 PATH_SUBTITLD_GRAPHICS = os.path.join(PATH_SUBTITLD, 'graphics')
-PATH_LOCALE = os.path.join(PATH_SUBTITLD, 'locale')
 
 PATH_HOME = os.path.expanduser("~")
 REAL_PATH_HOME = PATH_HOME
@@ -88,8 +87,7 @@ LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
 }
 
 LIST_OF_SUPPORTED_IMPORT_EXTENSIONS = {
-    'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']},
-    'SRT': {'description': 'SubRip Subtitle format', 'extensions': ['srt']}
+    'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']}
 }
 
 LANGUAGE_DICT_LIST = {

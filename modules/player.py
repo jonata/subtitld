@@ -5,9 +5,9 @@ import sys
 
 from OpenGL import GL
 
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QEvent, QTimer, QRect, QMargins
-from PyQt5.QtGui import QKeyEvent, QMouseEvent, QWheelEvent, QPainter, QPen, QColor
-from PyQt5.QtWidgets import QOpenGLWidget, QLabel, QWidget, QGraphicsDropShadowEffect
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QEvent, QTimer
+from PyQt5.QtGui import QKeyEvent, QMouseEvent, QWheelEvent, QPainter
+from PyQt5.QtWidgets import QOpenGLWidget, QLabel, QWidget
 
 import mpv
 
@@ -67,7 +67,7 @@ class MpvWidget(QOpenGLWidget):
             try:
                 self.option(opt.replace('_', '-'), _istr(val))
             except mpv.MPVError:
-                print(self.tr('error setting MPV option "%s" to value "%s"' % (opt, val)))
+                print('error setting MPV option "%s" to value "%s"' % (opt, val))
                 #self.logger.warning('error setting MPV option "%s" to value "%s"' % (opt, val))
 
         self.mpv.initialize()
@@ -316,65 +316,14 @@ def load(self):
     self.player_widget.positionChanged.connect(lambda: self.timeline.update(self))
 
     class player_subtitle_layer(QLabel):
-        def __init__(widget, parent=None):
-            super().__init__(parent)
-            widget.subtitle_text =  ''
-            widget.action_safe_margin = .9
-            widget.title_safe_margin = .8
-            widget.show_action_safe_margin = False
-            widget.show_title_safe_margin = False
-
         def paintEvent(widget, paintEvent):
             painter = QPainter(widget)
-            painter.setRenderHint(QPainter.Antialiasing)
-            if widget.show_title_safe_margin or widget.subtitle_text:
-                title_safe_margin_qrect = QRect(widget.width()*((1.0-widget.title_safe_margin)*.5),
-                                                widget.height()*((1.0-widget.title_safe_margin)*.5),
-                                                widget.width()*(widget.title_safe_margin),
-                                                widget.height()*(widget.title_safe_margin)
-                                                )
-            if widget.subtitle_text:
-                painter.setPen(QPen(QColor.fromRgb(0, 0, 0, 200)))
-                painter.drawText(title_safe_margin_qrect - QMargins(2, 2, -2, -2), Qt.AlignCenter | Qt.AlignBottom | Qt.TextWordWrap, widget.subtitle_text)
-                painter.setPen(QPen(QColor.fromRgb(255, 255, 255)))
-                painter.drawText(title_safe_margin_qrect, Qt.AlignCenter | Qt.AlignBottom | Qt.TextWordWrap, widget.subtitle_text)
-            
-            if widget.show_action_safe_margin:
-                action_safe_margin_qrect = QRect(widget.width()*((1.0-widget.action_safe_margin)*.5),
-                                                widget.height()*((1.0-widget.action_safe_margin)*.5),
-                                                widget.width()*(widget.action_safe_margin),
-                                                widget.height()*(widget.action_safe_margin)
-                                                )
-                painter.setPen(QPen(QColor.fromRgb(103, 255, 77, 240), 1, Qt.SolidLine))
-                painter.drawRect(action_safe_margin_qrect)
-                painter.drawLine(widget.width()*.5,
-                                 action_safe_margin_qrect.y(),
-                                 widget.width()*.5,
-                                 action_safe_margin_qrect.y() + (widget.height()*.025))
-                painter.drawLine(widget.width()*.5,
-                                 action_safe_margin_qrect.y() + action_safe_margin_qrect.height(),
-                                 widget.width()*.5,
-                                 action_safe_margin_qrect.y() + action_safe_margin_qrect.height() - (widget.height()*.025))
-                painter.drawLine(action_safe_margin_qrect.x(),
-                                 widget.height()*.5,
-                                 action_safe_margin_qrect.x() + (widget.width()*.025),
-                                 widget.height()*.5)
-                painter.drawLine(action_safe_margin_qrect.x() + action_safe_margin_qrect.width(),
-                                 widget.height()*.5,
-                                 action_safe_margin_qrect.x() + action_safe_margin_qrect.width() - (widget.width()*.025),
-                                 widget.height()*.5)
-
-            if widget.show_title_safe_margin:
-                painter.setPen(QPen(QColor.fromRgb(255, 0, 0, 240), 1, Qt.SolidLine))
-                painter.drawRect(title_safe_margin_qrect)
-            
+            # painter.setRenderHint(QPainter.Antialiasing)
+            painter.setCompositionMode(26)
+            painter.drawRect(10, 10, 200, 200)
             painter.end()
-        
-        def setSubtitleText(widget, text):
-            widget.subtitle_text = text
-            
 
-    self.player_subtitle_layer = player_subtitle_layer(parent=self.player_widget_area)
+    self.player_subtitle_layer = QLabel(parent=self.player_widget_area)
     # self.player_subtitle_layer = player_subtitle_layer(parent=self.player_widget_area)
     self.player_subtitle_layer.setWordWrap(True)
     self.player_subtitle_layer.setObjectName('player_subtitle_layer')
@@ -391,7 +340,6 @@ def load(self):
 def update(self):
     self.player_widget_area.setVisible(bool(self.video_metadata))
     self.player_border.setVisible(bool(self.video_metadata))
-    update_safety_margins_subtitle_layer(self)
 
 
 def resized(self):
@@ -399,12 +347,6 @@ def resized(self):
     self.videoinfo_label.setGeometry(self.player_widget_area.x(), 20, self.player_widget_area.width(), 50)
     resize_player_widget(self)
 
-
-def update_safety_margins_subtitle_layer(self):
-    if self.advanced_mode:
-        self.player_subtitle_layer.show_action_safe_margin = self.settings['safety_margins'].get('show_action_safe_margins', False)
-        self.player_subtitle_layer.show_title_safe_margin = self.settings['safety_margins'].get('show_title_safe_margins', False)
-    self.player_subtitle_layer.update()
 
 # def player_subtitle_textedit_changed(self):
 #     old_selected_subtitle = self.selected_subtitle
@@ -430,8 +372,7 @@ def update_subtitle_layer(self):
             text = subtitle[2]
             break
 
-    self.player_subtitle_layer.setSubtitleText(text)
-    self.player_subtitle_layer.update()
+    self.player_subtitle_layer.setText(text)
 
 
 def resize_player_widget(self):
