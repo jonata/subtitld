@@ -1,13 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os
-import sys
 import webbrowser
 from datetime import datetime
-from PyQt5.QtWidgets import QPushButton, QLabel, QWidget, QGraphicsOpacityEffect, QListWidget, QApplication, QLineEdit, QListWidgetItem
-from PyQt5.QtGui import QIcon, QScreen
-from PyQt5.QtCore import QPropertyAnimation, Qt, QThread, pyqtSignal, QSize
+from PyQt5.QtWidgets import QPushButton, QLabel, QWidget, QGraphicsOpacityEffect, QListWidget, QApplication, QLineEdit
+from PyQt5.QtCore import QPropertyAnimation, Qt, QThread, pyqtSignal
 
 from modules import file_io
 from modules import authentication
@@ -39,14 +36,14 @@ def load(self):
     self.start_screen_top_shadow = QLabel(parent=self.start_screen)
     self.start_screen_top_shadow.setObjectName('start_screen_top_shadow')
 
-    self.start_screen_open_label = QLabel(self.tr('Open a subtitle or a video').upper(), parent=self.start_screen)
+    self.start_screen_open_label = QLabel('OPEN A SUBTITLE OR A VIDEO', parent=self.start_screen)
     self.start_screen_open_label.setObjectName('start_screen_open_label')
 
-    self.start_screen_open_button = QPushButton(self.tr('Open').upper(), parent=self.start_screen)
+    self.start_screen_open_button = QPushButton('OPEN', parent=self.start_screen)
     self.start_screen_open_button.clicked.connect(lambda: start_screen_open_button_clicked(self))
     self.start_screen_open_button.setObjectName('button_dark')
 
-    self.start_screen_recent_label = QLabel(self.tr('Recent subtitles').upper(), parent=self.start_screen)
+    self.start_screen_recent_label = QLabel('RECENT SUBTITLES', parent=self.start_screen)
     self.start_screen_recent_label.setObjectName('start_screen_recent_label')
 
     self.start_screen_recent_listwidget = QListWidget(parent=self.start_screen)
@@ -55,13 +52,13 @@ def load(self):
     self.start_screen_recent_listwidget.setFocusPolicy(Qt.NoFocus)
     self.start_screen_recent_listwidget.itemDoubleClicked.connect(lambda: start_screen_recent_listwidget_item_clicked(self))
 
-    self.start_screen_recent_alert = QLabel(self.tr('There is no recent file history.'), parent=self.start_screen)
+    self.start_screen_recent_alert = QLabel('There is no recent file history.', parent=self.start_screen)
     self.start_screen_recent_alert.setWordWrap(True)
     self.start_screen_recent_alert.setObjectName('start_screen_recent_alert')
 
     self.start_screen_adver_label = QLabel(parent=self.start_screen)
     self.start_screen_adver_label.setObjectName('start_screen_adver_label')
-    self.start_screen_adver_label.setText(self.tr('Advanced version').upper() if self.advanced_mode else self.tr('Basic version').upper())
+    self.start_screen_adver_label.setText('ADVANCED VERSION' if self.advanced_mode else 'BASIC VERSION')
 
     class start_screen_adver_holder(QWidget):
         def enterEvent(widget, event):
@@ -79,9 +76,9 @@ def load(self):
     self.start_screen_adver_label_details.setObjectName('start_screen_adver_label_details')
 
     days = authentication.get_days_to_expiry_date(auth_dict=self.settings['authentication'].get('codes', {}).get(ACTUAL_OS, {}))
-    self.start_screen_adver_label_details.setText(str(self.tr('You have more {0} days to use<br>the Advanced version. If you<br>need some more information,<br>visit <b>subtitld.jonata.org</b>.<br><br>{1}').format(days, VERSION_NUMBER)) if self.advanced_mode else self.tr('If you need more features,<br>enable the advanced version.<br>Visit <b>subtitld.jonata.org</b> for<br>more information.'))
+    self.start_screen_adver_label_details.setText(str('You have more %s days to use<br>the Advanced version. If you<br>need some more information,<br>visit <b>subtitld.jonata.org</b>.<br><br>%s' % (days, VERSION_NUMBER)) if self.advanced_mode else 'If you need more features,<br>enable the advanced version.<br>Visit <b>subtitld.jonata.org</b> for<br>more information.')
 
-    self.start_screen_adver_label_show_machineid_button = QPushButton(self.tr('Show advanced info').upper(), parent=self.start_screen_adver_holder)
+    self.start_screen_adver_label_show_machineid_button = QPushButton('SHOW ADVANCED INFO', parent=self.start_screen_adver_holder)
     self.start_screen_adver_label_show_machineid_button.clicked.connect(lambda: start_screen_adver_label_show_machineid_button_clicked(self))
     self.start_screen_adver_label_show_machineid_button.setCheckable(True)
     self.start_screen_adver_label_show_machineid_button.setVisible(False)
@@ -91,10 +88,10 @@ def load(self):
     self.start_screen_adver_panel.setObjectName('start_screen_adver_panel')
     self.start_screen_adver_panel.setVisible(False)
 
-    self.start_screen_adver_panel_label = QLabel(self.tr('Advanced version').upper(), parent=self.start_screen_adver_panel)
+    self.start_screen_adver_panel_label = QLabel('ADVANCED VERSION', parent=self.start_screen_adver_panel)
     self.start_screen_adver_panel_label.setObjectName('start_screen_adver_panel_label')
 
-    self.start_screen_adver_label_machineid_label = QLabel(self.tr('Your machine ID is:').upper(), parent=self.start_screen_adver_panel)
+    self.start_screen_adver_label_machineid_label = QLabel('YOUR MACHINE ID IS:', parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_machineid_label.setObjectName('start_screen_recent_label')
 
     class start_screen_adver_label_machineid(QLabel):
@@ -107,7 +104,7 @@ def load(self):
     self.start_screen_adver_label_machineid = start_screen_adver_label_machineid(self.machine_id, parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_machineid.setObjectName('start_screen_adver_label_machineid')
 
-    self.start_screen_adver_label_machineid_copy = QPushButton(self.tr('Copy').upper(), parent=self.start_screen_adver_label_machineid)
+    self.start_screen_adver_label_machineid_copy = QPushButton('COPY', parent=self.start_screen_adver_label_machineid)
     self.start_screen_adver_label_machineid_copy.clicked.connect(lambda: start_screen_adver_label_machineid_copy_clicked(self))
     self.start_screen_adver_label_machineid_copy.setObjectName('button')
     self.start_screen_adver_label_machineid_copy_transparency = QGraphicsOpacityEffect()
@@ -115,7 +112,7 @@ def load(self):
     self.start_screen_adver_label_machineid_copy_transparency_animation = QPropertyAnimation(self.start_screen_adver_label_machineid_copy_transparency, b'opacity')
     self.start_screen_adver_label_machineid_copy_transparency.setOpacity(0)
 
-    self.start_screen_adver_label_email_label = QLabel(self.tr('Your email is:').upper(), parent=self.start_screen_adver_panel)
+    self.start_screen_adver_label_email_label = QLabel('YOUR EMAIL IS:', parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_email_label.setObjectName('start_screen_recent_label')
 
     self.start_screen_adver_label_email = QLineEdit(parent=self.start_screen_adver_panel)
@@ -127,18 +124,18 @@ def load(self):
     self.start_screen_adver_label_status = QLabel(parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_status.setObjectName('start_screen_adver_label_status')
     if self.advanced_mode:
-        text = self.tr('You are using the advanced version.')
+        text = 'You are using the advanced version.'
     else:
-        text = self.tr('You are usign the basic version.')
-    text += str(str('<br><small style="color:#3e5363;" >' + self.tr('Last checked').upper() + ': ' + datetime.strptime(self.settings['authentication']['last_checked'], '%Y%m%d%H%M%S').strftime("%d/%m/%Y - %H:%M:%S")) if self.settings['authentication'].get('last_checked', '') else str(''))
+        text = 'You are usign the basic version.'
+    text += str(str('<br><small style="color:#3e5363;" >LAST CHECKED: ' + datetime.strptime(self.settings['authentication']['last_checked'], '%Y%m%d%H%M%S').strftime("%d/%m/%Y - %H:%M:%S")) if self.settings['authentication'].get('last_checked', '') else str(''))
     self.start_screen_adver_label_status.setText(text)
 
-    self.start_screen_adver_label_machineid_verify = QPushButton(self.tr('Verify').upper(), parent=self.start_screen_adver_panel)
+    self.start_screen_adver_label_machineid_verify = QPushButton('VERIFY', parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_machineid_verify.clicked.connect(lambda: start_screen_adver_label_machineid_verify_clicked(self))
     self.start_screen_adver_label_machineid_verify.setObjectName('button')
     self.start_screen_adver_label_machineid_verify.setStyleSheet('QPushButton {border-right:0}')
 
-    self.start_screen_adver_label_machineid_register = QPushButton(self.tr('Register').upper(), parent=self.start_screen_adver_panel)
+    self.start_screen_adver_label_machineid_register = QPushButton('REGISTER', parent=self.start_screen_adver_panel)
     self.start_screen_adver_label_machineid_register.clicked.connect(lambda: start_screen_adver_label_machineid_register_clicked(self))
     self.start_screen_adver_label_machineid_register.setObjectName('button_dark')
     self.start_screen_adver_label_machineid_register.setStyleSheet('QPushButton {border-left:0}')
@@ -148,13 +145,13 @@ def load(self):
 
         self.settings['authentication']['last_checked'] = datetime.now().strftime("%Y%m%d%H%M%S")
         if command.get('is_valid', False):
-            text = self.tr('You can use Subtitld Advanced features until {0}.').format(command['expiry_date'])
+            text = 'You can use Subtitld Advanced features until ' + command['expiry_date'] + str('.')
             if command.get('authentication_keys', '') and command['authentication_keys'].get(ACTUAL_OS, ''):
                 authentication.append_authentication_keys(config=self.settings, dict=command['authentication_keys'][ACTUAL_OS])
             self.advanced_mode = True
         else:
-            text = self.tr('You cannot use Subtitld Advanced features. Click on Register for more information.')
-        text = text + str(str('<br><small style="color:#3e5363;" >' + self.tr('Last checked').upper() + ': ' + datetime.strptime(self.settings['authentication']['last_checked'], '%Y%m%d%H%M%S').strftime("%d/%m/%Y - %H:%M:%S")) if self.settings['authentication'].get('last_checked', '') else str(''))
+            text = 'You cannot use Subtitld Advanced features. Click on Register for more information.'
+        text = text + str(str('<br><small style="color:#3e5363;" >LAST CHECKED: ' + datetime.strptime(self.settings['authentication']['last_checked'], '%Y%m%d%H%M%S').strftime("%d/%m/%Y - %H:%M:%S")) if self.settings['authentication'].get('last_checked', '') else str(''))
         self.start_screen_adver_label_status.setText(text)
 
         if command.get('register_url', ''):
@@ -162,8 +159,6 @@ def load(self):
 
     self.thread_verify_user_and_machineid = thread_verify_user_and_machineid(self)
     self.thread_verify_user_and_machineid.command.connect(thread_verify_user_and_machineid_ended)
-
-    self.start_screen_temp_recent_files_list = []
 
     update_start_screen_adver_panel(self)
 
@@ -198,32 +193,13 @@ def resized(self):
 
 def show(self):
     if self.settings['recent_files']:
-        inv_rf = {v: k for k, v in self.settings['recent_files'].items()}
-        for item in reversed(sorted(inv_rf)):
-            if os.path.isfile(inv_rf[item]):
-                for f in self.start_screen_temp_recent_files_list:
-                    if inv_rf[item] == f[-1]:
-                        continue
-                        continue
-                iteml = QListWidgetItem()
-                iteml.setSizeHint(QSize(iteml.sizeHint().width(),42))
-                if len(item) < 12:
-                    lastopened = datetime.strptime(item, '%Y%m%d').strftime('%d/%m/%Y') + ' - '
-                else:
-                    lastopened = datetime.strptime(item, '%Y%m%d%H%M%S').strftime('%d/%m/%Y - %H:%M:%S') + ' - '
-                path = inv_rf[item]
-                if (sys.platform == 'win32' or os.name == 'nt') :
-                    path = path.replace('/', '\\')
-                label = QLabel('<font style="font-size:12px; color:#6a7483;">' + os.path.basename(inv_rf[item]) + '</font><br><font style="font-size:10px; color:#3e5363;">' + lastopened + path.replace('\\\\', '\\') + '</font>')
-                label.setStyleSheet('QLabel {padding:1px}')
-                
-                self.start_screen_temp_recent_files_list.append([iteml, label, inv_rf[item]])
-                
-    if self.start_screen_temp_recent_files_list:
-        for item in self.start_screen_temp_recent_files_list:
-            self.start_screen_recent_listwidget.addItem(item[0])
-            self.start_screen_recent_listwidget.setItemWidget(item[0], item[1])
         self.start_screen_recent_alert.setVisible(False)
+        hist_list = []
+        for filename in self.settings['recent_files'].keys():
+            hist_list.append([self.settings['recent_files'][filename], filename])
+
+        for date in reversed(sorted(hist_list)):
+            self.start_screen_recent_listwidget.addItem(date[1])
     else:
         self.start_screen_recent_listwidget.setVisible(False)
     self.generate_effect(self.start_screen_transparency_animation, 'opacity', 2000, 0.0, 1.0)
@@ -245,7 +221,7 @@ def start_screen_open_button_clicked(self):
 
 
 def start_screen_recent_listwidget_item_clicked(self):
-    file_to_open = self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]
+    file_to_open = self.start_screen_recent_listwidget.currentItem().text()
     file_io.open_filepath(self, file_to_open)
 
 

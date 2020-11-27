@@ -148,10 +148,10 @@ def toppanel_save_button_clicked(self):
                     save_formats += ';;' + format + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['extensions']]))
             suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
         else:
-            save_formats = self.tr('SRT file') + ' (.srt)'
+            save_formats = 'SRT file (.srt)'
             suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.srt'
         # tem que reportar o bug que não retorna o selectedFilter se o dialogo for nativo
-        filedialog = QFileDialog.getSaveFileName(self, self.tr('Select the subtitle file'), os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)
+        filedialog = QFileDialog.getSaveFileName(self, "Select the subtitle file", os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)
 
         if filedialog[0] and filedialog[1]:
             filename = filedialog[0]
@@ -178,12 +178,12 @@ def toppanel_open_button_clicked(self):
     if self.unsaved:
         save_message_box = QMessageBox(self)
 
-        save_message_box.setWindowTitle(self.tr('Unsaved changes'))
+        save_message_box.setWindowTitle("Unsaved changes")
         save_message_box.setText(
-            self.tr('Do you want to save the changes you made on the subtitles?')
+            "Do you want to save the changes you made on the subtitles?"
         )
-        save_message_box.addButton(self.tr('Save'), QMessageBox.AcceptRole)
-        save_message_box.addButton(self.tr("Don't save"), QMessageBox.RejectRole)
+        save_message_box.addButton("Save", QMessageBox.AcceptRole)
+        save_message_box.addButton("Don't save", QMessageBox.RejectRole)
         ret = save_message_box.exec_()
 
         if ret == QMessageBox.AcceptRole:
@@ -192,7 +192,7 @@ def toppanel_open_button_clicked(self):
 
 
 def update_toppanel_subtitle_file_info_label(self):
-    text = self.tr('Actual video does not have saved subtitle file.')
+    text = 'Actual video does not have saved subtitle file.'
     if self.actual_subtitle_file:
-        text = '<b><snall>' + self.tr('Actual project').upper() + '</small></b><br><big>' + os.path.basename(self.actual_subtitle_file) + '</big>'
+        text = '<b><snall>ACTUAL PROJECT</small></b><br><big>' + os.path.basename(self.actual_subtitle_file) + '</big>'
     self.toppanel_subtitle_file_info_label.setText(text)
