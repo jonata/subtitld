@@ -72,19 +72,23 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.gap_add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'gap_add_icon.png')))
     self.gap_add_subtitle_button.setIconSize(QSize(20, 20))
     self.gap_add_subtitle_button.setObjectName('button_dark')
-    self.gap_add_subtitle_button.setStyleSheet('QPushButton { border-right:0; border-bottom:0; padding-right:26px; }')
+    self.gap_add_subtitle_button.setStyleSheet('QPushButton { border-right:0; border-bottom:0;}')
     self.gap_add_subtitle_button.clicked.connect(lambda: gap_add_subtitle_button_clicked(self))
+
+    self.gap_add_subtitle_fake_button = QPushButton(parent=self.playercontrols_widget)
+    self.gap_add_subtitle_fake_button.setObjectName('button_dark')
+    self.gap_add_subtitle_fake_button.setStyleSheet('QPushButton { border-left:0; border-right:0; border-bottom:0;}')
+
+    self.gap_add_subtitle_duration = QDoubleSpinBox(parent=self.gap_add_subtitle_fake_button)
+    self.gap_add_subtitle_duration.setMinimum(.1)
+    self.gap_add_subtitle_duration.setMaximum(60.)
 
     self.gap_remove_subtitle_button = QPushButton(parent=self.playercontrols_widget)
     self.gap_remove_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'gap_remove_icon.png')))
     self.gap_remove_subtitle_button.setIconSize(QSize(20, 20))
     self.gap_remove_subtitle_button.setObjectName('button_dark')
-    self.gap_remove_subtitle_button.setStyleSheet('QPushButton { border-left:0; border-bottom:0; padding-left:26px; }')
+    self.gap_remove_subtitle_button.setStyleSheet('QPushButton { border-left:0; border-bottom:0;}')
     self.gap_remove_subtitle_button.clicked.connect(lambda: gap_remove_subtitle_button_clicked(self))
-
-    self.gap_subtitle_duration = QDoubleSpinBox(parent=self.playercontrols_widget)
-    self.gap_subtitle_duration.setMinimum(.1)
-    self.gap_subtitle_duration.setMaximum(60.)
 
     self.add_subtitle_button = QPushButton('ADD', parent=self.playercontrols_widget)
     self.add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_subtitle_icon.png')))
@@ -380,9 +384,10 @@ def resized(self):
     self.add_subtitle_duration.setGeometry(68, 8, 46, self.add_subtitle_button.height()-14)
     self.remove_selected_subtitle_button.setGeometry(self.add_subtitle_button.x() + self.add_subtitle_button.width(), self.add_subtitle_button.y(), 100, 40)
 
-    self.gap_add_subtitle_button.setGeometry(self.add_subtitle_button.x()-131, 44, 63, 40)
-    self.gap_remove_subtitle_button.setGeometry(self.gap_add_subtitle_button.x()+self.gap_add_subtitle_button.width(), 44, 63, self.gap_add_subtitle_button.height())
-    self.gap_subtitle_duration.setGeometry(self.gap_add_subtitle_button.x()+40, 51, 46, self.gap_add_subtitle_button.height()-14)
+    self.gap_add_subtitle_button.setGeometry(self.add_subtitle_button.x()-136, 44, 40, 40)
+    self.gap_add_subtitle_fake_button.setGeometry(self.gap_add_subtitle_button.x()+40, 44, 46, self.gap_add_subtitle_button.height())
+    self.gap_add_subtitle_duration.setGeometry(2, 7, self.gap_add_subtitle_fake_button.width()-4, self.gap_add_subtitle_fake_button.height()-14)
+    self.gap_remove_subtitle_button.setGeometry(self.gap_add_subtitle_button.x()+86, 44, 46, self.gap_add_subtitle_button.height())
 
     self.move_backward_subtitle.setGeometry((self.playercontrols_widget.width()*.5)-107, 61, 25, 23)
     self.move_start_back_subtitle.setGeometry((self.playercontrols_widget.width()*.5)-159, 61, 25, 23)
@@ -439,7 +444,7 @@ def show(self):
     update_grid_buttons(self)
     update_playback_speed_buttons(self)
     self.add_subtitle_duration.setValue(self.default_new_subtitle_duration)
-    self.gap_subtitle_duration.setValue(2.0)
+    self.gap_add_subtitle_duration.setValue(2.0)
     self.repeat_playback_duration.setValue(self.repeat_duration)
     self.repeat_playback_times.setValue(self.repeat_times)
 
@@ -502,14 +507,14 @@ def add_subtitle_duration_changed(self):
 
 
 def gap_add_subtitle_button_clicked(self):
-    subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=self.gap_subtitle_duration.value())
+    subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=self.gap_add_subtitle_duration.value())
     self.unsaved = True
     self.selected_subtitle = False
     self.timeline.update(self)
 
 
 def gap_remove_subtitle_button_clicked(self):
-    subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=-(self.gap_subtitle_duration.value()))
+    subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=-(self.gap_add_subtitle_duration.value()))
     self.unsaved = True
     self.selected_subtitle = False
     self.timeline.update(self)

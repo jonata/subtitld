@@ -21,9 +21,6 @@ def load(config_file_path=False):
     if not config.get('shortcuts', False):
         config['shortcuts'] = {}
 
-    if not config.get('safety_margins', False):
-        config['safety_margins'] = {}
-
     return config
 
 
