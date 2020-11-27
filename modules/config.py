@@ -15,11 +15,11 @@ def load(config_file_path=False):
     if not config.get('recent_files', False):
         config['recent_files'] = {}
 
-    if not config.get('authentication', False):
-        config['authentication'] = {}
-
     if not config.get('shortcuts', False):
         config['shortcuts'] = {}
+
+    if not config.get('safety_margins', False):
+        config['safety_margins'] = {}
 
     return config
 

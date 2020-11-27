@@ -1,5 +1,5 @@
 PyQt5
-pympv2
+python-mpv
 pyopengl
 numpy
 bcrypt

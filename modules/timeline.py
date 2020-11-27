@@ -263,7 +263,10 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                     break
 
             if not (widget.subtitle_end_is_clicked or widget.subtitle_start_is_clicked or widget.subtitle_is_clicked):
-                self.player_widget.seek((event.pos().x() / widget.width())*self.video_metadata['duration'])
+                self.player_widget.position = (event.pos().x() / widget.width())*self.video_metadata['duration']
+                self.player_widget.seek(self.player_widget.position)
+                if self.repeat_activated:
+                    self.repeat_duration_tmp = []
                 update_timecode_label(self)
 
             self.properties.update_properties_widget(self)
@@ -362,6 +365,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
                 widget.show_limiters = False
             if widget.is_cursor_pressing and not (widget.subtitle_start_is_clicked or widget.subtitle_end_is_clicked or widget.subtitle_is_clicked):
                 self.player_widget.seek((event.pos().x() / widget.width())*self.video_metadata['duration'])
+                # if self.repeat_activated:
+                #     self.repeat_duration_tmp = []
                 update_timecode_label(self)
             widget.update()
 
@@ -397,7 +402,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     def thread_get_waveform_ended(command):
         self.video_metadata['waveform'][command[0]] = {'points': command[1], 'qimages': []}
-        self.videoinfo_label.setText('Waveform updated')
+        self.videoinfo_label.setText(self.tr('Waveform updated'))
         self.timeline_widget.update()
         self.thread_get_qimages.values_list = command[1]
         self.thread_get_qimages.zoom = command[0]
@@ -409,7 +414,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     def thread_get_qimages_ended(command):
         self.video_metadata['waveform'][command[0]]['qimages'] = command[1]
-        self.videoinfo_label.setText('Waveform optimized')
+        self.videoinfo_label.setText(self.tr('Waveform optimized'))
         self.timeline_widget.update()
 
     self.thread_get_qimages = thread_get_qimages(self)
@@ -442,14 +447,18 @@ def update_timecode_label(self):
 
 def update(self):
     self.player.update_subtitle_layer(self)
-    if self.repeat_activated and not self.repeat_duration_tmp:
-        self.repeat_duration_tmp = [[self.player_widget.position, self.player_widget.position + self.repeat_duration] for i in range(self.repeat_times)]
-    if self.repeat_activated and self.repeat_duration_tmp and self.player_widget.position > self.repeat_duration_tmp[0][1]:
-        self.player_widget.position = self.repeat_duration_tmp[0][0]
-        self.player_widget.mpv.wait_for_property('seekable')
-        self.player_widget.mpv.seek(self.player_widget.position, reference='absolute')
-        pos = self.repeat_duration_tmp.pop(0)
-        self.repeat_duration_tmp.append([pos[1], pos[1] + self.repeat_duration])
+    if self.repeat_activated:
+        # self.player_widget.position = self.repeat_duration_tmp[0][0]
+        if not self.repeat_duration_tmp:
+            self.repeat_duration_tmp = [[self.player_widget.position, self.player_widget.position + self.repeat_duration] for i in range(self.repeat_times)]
+        else:
+            if self.player_widget.position > self.repeat_duration_tmp[0][1]:
+                self.player_widget.position = self.repeat_duration_tmp[0][0]
+                # self.player_widget.mpv.wait_for_property('seekable')
+                self.player_widget.seek(self.player_widget.position)
+                # self.player_widget.mpv.seek(self.player_widget.position, reference='absolute')
+                pos = self.repeat_duration_tmp.pop(0)
+                self.repeat_duration_tmp.append([pos[1], pos[1] + self.repeat_duration])
     if (self.player_widget.position * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
         update_scrollbar(self)
     update_timecode_label(self)
@@ -458,7 +467,7 @@ def update(self):
 
 def zoom_update_waveform(self):
     if not type(self.video_metadata['audio']) == bool and self.mediaplayer_zoom not in self.video_metadata['waveform'].keys():
-        self.videoinfo_label.setText('Generating waveform...')
+        self.videoinfo_label.setText(self.tr('Generating waveform...'))
         self.thread_get_waveform.audio = self.video_metadata['audio']
         self.thread_get_waveform.zoom = self.mediaplayer_zoom
         self.thread_get_waveform.duration = self.video_metadata.get('duration', 0.01)

@@ -5,12 +5,11 @@ import sys
 import time
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import Qt, QRect, QPropertyAnimation
+from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTranslator, QTimer
 
-from modules.paths import PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
+from modules.paths import PATH_LOCALE, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
 from modules.history import history_redo, history_undo
 from modules import config
-from modules import authentication
 
 if ACTUAL_OS == 'darwin':
     from modules.paths import NSURL
@@ -20,6 +19,7 @@ for type in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS.keys():
     for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[type]['extensions']:
         list_of_supported_subtitle_extensions.append(ext)
 list_of_supported_subtitle_extensions = tuple(list_of_supported_subtitle_extensions)
+
 
 class subtitld(QWidget):
     def __init__(self):
@@ -63,10 +63,6 @@ class subtitld(QWidget):
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 
-        self.machine_id = authentication.get_machine_id()
-
-        self.advanced_mode = authentication.check_authentication(auth_dict=self.settings['authentication'].get('codes', {}).get(ACTUAL_OS, {}), email=self.settings['authentication'].get('email', ''), machineid=self.machine_id)
-
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')
 
@@ -95,11 +91,6 @@ class subtitld(QWidget):
         self.startscreen.load(self)
         self.startscreen.show(self)
 
-        # The mpv video player
-        from modules import player
-        self.player = player
-        self.player.load(self)
-
         from modules import global_subtitlesvideo_panel
         self.global_subtitlesvideo_panel = global_subtitlesvideo_panel
         self.global_subtitlesvideo_panel.load(self, PATH_SUBTITLD_GRAPHICS)
@@ -123,6 +114,11 @@ class subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
 
+        # The mpv video player
+        from modules import player
+        self.player = player
+        self.player.load(self)
+
         self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
 
         self.subtitleslist.update_subtitles_list_widget(self)
@@ -132,6 +128,10 @@ class subtitld(QWidget):
         from modules import shortcuts
         self.shortcuts = shortcuts
         self.shortcuts.load(self, self.settings['shortcuts'])
+
+        self.update_timeline = QTimer(self)
+        self.update_timeline.setInterval(int(1000/24))
+        self.update_timeline.timeout.connect(lambda: self.timeline.update(self))
 
     def dragEnterEvent(widget, event):
         if event.mimeData().hasUrls and len(event.mimeData().urls()) > 0:
@@ -144,17 +144,11 @@ class subtitld(QWidget):
                 event.accept()
 
     def dropEvent(widget, event):
-        if sys.platform == 'darwin':
-            filename = str(NSURL.alloc().initWithString_(event.mimeData().urls()[0].toString()).fileSystemRepresentation())
-        else:
-            filename = event.mimeData().urls()[0].toLocalFile()
-
-        if filename.lower().endswith(('.subtitld')) or filename.lower().endswith(list_of_supported_subtitle_extensions) or filename.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
-            if filename.lower().endswith(('.subtitld')):
-                authentication.append_authentication_keys(config=widget.settings, dict=authentication.load_subtitld_codes_file(path=filename))
-            else:
-                widget.file_io.open_filepath(widget, file_to_open=filename)
-            event.accept()
+        None
+        # if sys.platform == 'darwin':
+        #     filename = str(NSURL.alloc().initWithString_(event.mimeData().urls()[0].toString()).fileSystemRepresentation())
+        # else:
+        #     filename = event.mimeData().urls()[0].toLocalFile()
 
     def resizeEvent(self, event):
         self.background_label.setGeometry(0, 0, self.width(), self.height())
@@ -178,12 +172,12 @@ class subtitld(QWidget):
         if self.unsaved:
             save_message_box = QMessageBox(self)
 
-            save_message_box.setWindowTitle("Unsaved changes")
+            save_message_box.setWindowTitle(self.tr('Unsaved changes'))
             save_message_box.setText(
-                "Do you want to save the changes you made on the subtitles?"
+                self.tr('Do you want to save the changes you made on the subtitles?')
             )
-            save_message_box.addButton("Save", QMessageBox.AcceptRole)
-            save_message_box.addButton("Don't save", QMessageBox.RejectRole)
+            save_message_box.addButton(self.tr('Save'), QMessageBox.AcceptRole)
+            save_message_box.addButton(self.tr("Don't save"), QMessageBox.RejectRole)
             ret = save_message_box.exec_()
 
             if ret == QMessageBox.AcceptRole:
@@ -191,6 +185,9 @@ class subtitld(QWidget):
 
         config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)
         self.thread_get_waveform.quit()
+        self.thread_get_qimages.quit()
+        self.thread_extract_scene_time_positions.quit()
+        self.thread_generated_burned_video.quit()
         self.thread_extract_waveform.quit()
         self.player_widget.close()
         time.sleep(.1)
@@ -259,6 +256,11 @@ def viewnotesout_button_clicked(self):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    # command to update ts files: pylupdate5 subtitld.py modules/*.py -ts locale/en_US.ts
+    if os.path.isfile(os.path.join(PATH_LOCALE, 'en_US.qm')):
+        translator = QTranslator()
+        translator.load(os.path.join(PATH_LOCALE, 'en_US.qm'))
+        app.installTranslator(translator)
     # app.setDesktopSettingsAware(False)
     app.setStyle("plastique")
     app.setApplicationName("Subtitld")

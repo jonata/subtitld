@@ -8,6 +8,7 @@ import subprocess
 
 PATH_SUBTITLD = os.path.abspath(os.path.dirname(sys.argv[0]))
 PATH_SUBTITLD_GRAPHICS = os.path.join(PATH_SUBTITLD, 'graphics')
+PATH_LOCALE = os.path.join(PATH_SUBTITLD, 'locale')
 
 PATH_HOME = os.path.expanduser("~")
 REAL_PATH_HOME = PATH_HOME
@@ -45,7 +46,6 @@ else:
     PATH_SUBTITLD_USER_CONFIG = os.path.join(PATH_HOME, '.config', 'subtitld')
 
 PATH_SUBTITLD_DATA_BACKUP = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'backup')
-PATH_SUBTITLD_DATA_AUTH = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'authentications')
 
 os.mkdir(path_tmp)
 
@@ -54,9 +54,6 @@ if not os.path.isdir(PATH_SUBTITLD_USER_CONFIG):
 
 if not os.path.isdir(PATH_SUBTITLD_DATA_BACKUP):
     os.mkdir(PATH_SUBTITLD_DATA_BACKUP)
-
-if not os.path.isdir(PATH_SUBTITLD_DATA_AUTH):
-    os.mkdir(PATH_SUBTITLD_DATA_AUTH)
 
 PATH_SUBTITLD_USER_CONFIG_FILE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'subtitld.config')
 
@@ -87,7 +84,8 @@ LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
 }
 
 LIST_OF_SUPPORTED_IMPORT_EXTENSIONS = {
-    'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']}
+    'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']},
+    'SRT': {'description': 'SubRip Subtitle format', 'extensions': ['srt']}
 }
 
 LANGUAGE_DICT_LIST = {

@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 import os
 import subprocess
-import hashlib
-import requests
-import json
 
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QMessageBox, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
 from PyQt5.QtGui import QFontDatabase, QKeySequence
 
-from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp, ACTUAL_OS
+from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
 from modules import file_io
 from modules.shortcuts import shortcuts_dict
 from modules.paths import LANGUAGE_DICT_LIST
@@ -66,12 +63,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_panel_right = QLabel(parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_panel_right.setObjectName('global_subtitlesvideo_panel_right')
 
-    self.global_subtitlesvideo_save_as_label = QLabel(u'DEFAULT FORMAT TO SAVE:', parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_save_as_label = QLabel(self.tr('Default format to save:').upper(), parent=self.global_subtitlesvideo_panel_widget)
 
     list_of_subtitle_extensions = []
     for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
         list_of_subtitle_extensions.append(ext + ' - ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[ext]['description'])
     self.global_subtitlesvideo_save_as_combobox = QComboBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_save_as_combobox.setObjectName('button')
     self.global_subtitlesvideo_save_as_combobox.addItems(list_of_subtitle_extensions)
     self.global_subtitlesvideo_save_as_combobox.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
 
@@ -85,71 +83,73 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     # self.global_subtitlesvideo_import_panel_radiobox = QRadioBox(parent=self.global_subtitlesvideo_import_panel)
 
-    self.global_subtitlesvideo_export_button = QPushButton(u'EXPORT', parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_export_button = QPushButton(self.tr('Export').upper(), parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_export_button.setObjectName('button')
     self.global_subtitlesvideo_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
 
     self.global_subtitlesvideo_autosync_lang_combobox = QComboBox(parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_autosync_lang_combobox.setObjectName('button')
     self.global_subtitlesvideo_autosync_lang_combobox.addItems(LANGUAGE_DESCRIPTIONS)
 
-    self.global_subtitlesvideo_autosync_button = QPushButton(u'AUTOSYNC', parent=self.global_subtitlesvideo_panel_widget)
-    self.global_subtitlesvideo_autosync_button.setObjectName('button')
-    self.global_subtitlesvideo_autosync_button.clicked.connect(lambda: global_subtitlesvideo_autosync_button_clicked(self))
-
-    self.global_subtitlesvideo_autosub_button = QPushButton(u'AUTO SUBTITLE', parent=self.global_subtitlesvideo_panel_widget)
-    self.global_subtitlesvideo_autosub_button.setObjectName('button')
-    self.global_subtitlesvideo_autosub_button.clicked.connect(lambda: global_subtitlesvideo_autosub_button_clicked(self))
+    # self.global_subtitlesvideo_autosync_button = QPushButton(self.tr('AutoSync').upper(), parent=self.global_subtitlesvideo_panel_widget)
+    # self.global_subtitlesvideo_autosync_button.setObjectName('button')
+    # self.global_subtitlesvideo_autosync_button.clicked.connect(lambda: global_subtitlesvideo_autosync_button_clicked(self))
+    #
+    # self.global_subtitlesvideo_autosub_button = QPushButton(self.tr('Auto Subtitle').upper(), parent=self.global_subtitlesvideo_panel_widget)
+    # self.global_subtitlesvideo_autosub_button.setObjectName('button')
+    # self.global_subtitlesvideo_autosub_button.clicked.connect(lambda: global_subtitlesvideo_autosub_button_clicked(self))
 
     self.global_subtitlesvideo_panel_tabwidget = QTabWidget(parent=self.global_subtitlesvideo_panel_widget)
 
     self.global_subtitlesvideo_panel_tabwidget_export_panel = QWidget()
 
-    self.global_subtitlesvideo_video_burn_label = QLabel('EXPORT BURNED VIDEO', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_label = QLabel(self.tr('Export burned video').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_label.setStyleSheet('QLabel { font-size:14px; font-weight:bold; }')
 
-    self.global_subtitlesvideo_video_burn_fontname_label = QLabel('FONT NAME', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_fontname_label = QLabel(self.tr('Font name').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
 
     fonts = QFontDatabase().families()
     self.global_subtitlesvideo_video_burn_fontname = QComboBox(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_fontname.setObjectName('button')
     self.global_subtitlesvideo_video_burn_fontname.addItems(fonts)
     # self.global_subtitlesvideo_video_burn_fontname.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
 
-    self.global_subtitlesvideo_video_burn_fontsize_label = QLabel('FONT SIZE', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_fontsize_label = QLabel(self.tr('Font size').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
 
     self.global_subtitlesvideo_video_burn_fontsize = QSpinBox(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_fontsize.setMinimum(8)
     self.global_subtitlesvideo_video_burn_fontsize.setMaximum(200)
     self.global_subtitlesvideo_video_burn_fontsize.setValue(20)
 
-    self.global_subtitlesvideo_video_burn_shadowdistance_label = QLabel('SHADOW DISTANCE', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_shadowdistance_label = QLabel(self.tr('Shadow distance').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
 
     self.global_subtitlesvideo_video_burn_shadowdistance = QSpinBox(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_shadowdistance.setMinimum(0)
     self.global_subtitlesvideo_video_burn_shadowdistance.setMaximum(20)
     self.global_subtitlesvideo_video_burn_shadowdistance.setValue(1)
 
-    self.global_subtitlesvideo_video_burn_outline_label = QLabel('OUTLINE', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_outline_label = QLabel(self.tr('Outline').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
 
     self.global_subtitlesvideo_video_burn_outline = QSpinBox(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_outline.setMinimum(0)
     self.global_subtitlesvideo_video_burn_outline.setMaximum(20)
     self.global_subtitlesvideo_video_burn_outline.setValue(2)
 
-    self.global_subtitlesvideo_video_burn_marvinv_label = QLabel('MARGIN FROM BOTTOM', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_marvinv_label = QLabel(self.tr('Margin from bottom').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
 
     self.global_subtitlesvideo_video_burn_marvinv = QSpinBox(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_marvinv.setMinimum(0)
     self.global_subtitlesvideo_video_burn_marvinv.setMaximum(500)
     self.global_subtitlesvideo_video_burn_marvinv.setValue(20)
 
-    self.global_subtitlesvideo_video_burn_marvinl_label = QLabel('MARGIN FROM LEFT', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_marvinl_label = QLabel(self.tr('Margin from left').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
 
     self.global_subtitlesvideo_video_burn_marvinl = QSpinBox(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_marvinl.setMinimum(0)
     self.global_subtitlesvideo_video_burn_marvinl.setMaximum(500)
     self.global_subtitlesvideo_video_burn_marvinl.setValue(50)
 
-    self.global_subtitlesvideo_video_burn_marvinr_label = QLabel('MARGIN FROM RIGHT', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_marvinr_label = QLabel(self.tr('Margin from right').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
 
     self.global_subtitlesvideo_video_burn_marvinr = QSpinBox(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_marvinr.setMinimum(0)
@@ -158,13 +158,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     self.global_subtitlesvideo_video_burn_pcolor_selected_color = '#ffffff'
 
-    self.global_subtitlesvideo_video_burn_pcolor_label = QLabel('FONT COLOR', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_pcolor_label = QLabel(self.tr('Font color').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
 
     self.global_subtitlesvideo_video_burn_pcolor = QPushButton(parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_pcolor.clicked.connect(lambda: global_subtitlesvideo_video_burn_pcolor_clicked(self))
     self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
 
-    self.global_subtitlesvideo_video_burn_convert = QPushButton('GENERATE VIDEO', parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_burn_convert = QPushButton(self.tr('Generate video').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_convert.setObjectName('button_dark')
     self.global_subtitlesvideo_video_burn_convert.clicked.connect(lambda: global_subtitlesvideo_video_burn_convert_clicked(self))
 
@@ -172,13 +172,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
         if '|' in response:
             self.global_subtitlesvideo_video_burn_convert.setText('GENERATING... (' + str(int((float(response.split('|')[0]) / float(response.split('|')[1])) * 100)) + '%)')
         elif 'end' in response:
-            self.global_subtitlesvideo_video_burn_convert.setText('GENERATE VIDEO')
+            self.global_subtitlesvideo_video_burn_convert.setText(self.tr('Generate video').upper())
             self.global_subtitlesvideo_video_burn_convert.setEnabled(True)
 
     self.thread_generated_burned_video = thread_generated_burned_video(self)
     self.thread_generated_burned_video.response.connect(thread_generated_burned_video_ended)
 
-    self.global_subtitlesvideo_panel_tabwidget.addTab(self.global_subtitlesvideo_panel_tabwidget_export_panel, 'EXPORT BURNED-IN SUBTITLES')
+    self.global_subtitlesvideo_panel_tabwidget.addTab(self.global_subtitlesvideo_panel_tabwidget_export_panel, self.tr('Export burned-in subtitles').upper())
 
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel = QWidget()
 
@@ -223,11 +223,11 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox = global_subtitlesvideo_panel_tabwidget_shortkeys_editbox(parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.setStyleSheet('QLineEdit { background-color:rgb(255, 255, 255); border: 1px solid silver; border-radius: 5px; padding: 5px 5px 5px 5px; font-size:16px; color:black; qproperty-alignment: "AlignCenter";}')
 
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm = QPushButton('CONFIRM', parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm = QPushButton(self.tr('Confirm').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.setObjectName('button_dark')
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.clicked.connect(lambda: global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm_clicked(self))
 
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel = QPushButton('CANCEL', parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel = QPushButton(self.tr('Cancel').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.setObjectName('button_dark')
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.clicked.connect(lambda: global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel_clicked(self))
 
@@ -236,17 +236,17 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.verticalHeader().setVisible(False)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.horizontalHeader().setVisible(False)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-    #self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setShowGrid(False)
+    # self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setShowGrid(False)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setSelectionBehavior(QAbstractItemView.SelectRows)
-    #self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.clicked.connect(lambda:project_new_panel_info_panel_options_pmaterials_panel_files_clicked(self))
+    # self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.clicked.connect(lambda:project_new_panel_info_panel_options_pmaterials_panel_files_clicked(self))
     global_subtitlesvideo_panel_tabwidget_shortkeys_table_update(self)
 
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button = QPushButton('SET SHORTCUT', parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
-    #self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setCheckable(True)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button = QPushButton(self.tr('Set shortcut').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    # self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setCheckable(True)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setObjectName('button_dark')
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.clicked.connect(lambda: global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self))
 
-    self.global_subtitlesvideo_panel_tabwidget.addTab(self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel, 'KEYBOARD SHORTCUTS')
+    self.global_subtitlesvideo_panel_tabwidget.addTab(self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel, self.tr('Keyboard shortcuts').upper())
 
 
 def resized(self):
@@ -268,8 +268,8 @@ def resized(self):
     # self.global_subtitlesvideo_import_panel.setGeometry(20, 110, self.global_subtitlesvideo_panel_left.width()-40, 100)
     self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width()-40, 30)
     self.global_subtitlesvideo_autosync_lang_combobox.setGeometry(20, 160, 75, 30)
-    self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
-    self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    # self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    # self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
 
     self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, self.global_subtitlesvideo_panel_right.width()-50, self.global_subtitlesvideo_panel_right.height()-50)
 
@@ -329,7 +329,7 @@ def global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self):
 
 
 def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel_clicked(self):
-    #self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setVisible(True)
+    # self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setVisible(True)
     global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self)
 
 
@@ -348,8 +348,8 @@ def global_subtitlesvideo_import_button_clicked(self):
     #     self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width()-40, 30)
     # self.global_subtitlesvideo_import_panel.setVisible(self.global_subtitlesvideo_import_button.isChecked())
 
-    supported_import_files = "Text files ({})".format(" ".join(["*.{}".format(fo) for fo in list_of_supported_import_extensions]))
-    file_to_open = QFileDialog.getOpenFileName(self, "Select the file to import", os.path.expanduser("~"), supported_import_files, options=QFileDialog.DontUseNativeDialog)[0]
+    supported_import_files = self.tr('Text files') + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in list_of_supported_import_extensions]))
+    file_to_open = QFileDialog.getOpenFileName(self, self.tr('Select the file to import'), os.path.expanduser("~"), supported_import_files, options=QFileDialog.DontUseNativeDialog)[0]
     if file_to_open:
         self.subtitles_list += file_io.import_file(filename=file_to_open)[0]
         self.subtitles_list.sort()
@@ -358,10 +358,10 @@ def global_subtitlesvideo_import_button_clicked(self):
 def global_subtitlesvideo_video_burn_convert_clicked(self):
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
     ext = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
-    save_formats = 'Video file (.' + ext + ')'
+    save_formats = self.tr('Video file') + ' (.' + ext + ')'
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + ext
 
-    generated_video_filepath = QFileDialog.getSaveFileName(self, "Select the subtitle file", os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)[0]
+    generated_video_filepath = QFileDialog.getSaveFileName(self, self.tr('Select the subtitle file'), os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)[0]
 
     if generated_video_filepath:
         file_io.save_file(os.path.join(path_tmp, 'subtitle.srt'), self.subtitles_list, format='SRT', language='en')
@@ -399,167 +399,12 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
     self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
 
 
-def global_subtitlesvideo_autosync_button_clicked(self):
-    run_command = False
-    file_processed = False
-
-    if bool(self.subtitles_list):
-        are_you_sure_message = QMessageBox(self)
-        are_you_sure_message.setWindowTitle("Are you sure?")
-        are_you_sure_message.setText('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?')
-        are_you_sure_message.addButton("Yes", QMessageBox.AcceptRole)
-        are_you_sure_message.addButton("No", QMessageBox.RejectRole)
-        ret = are_you_sure_message.exec_()
-
-        if ret == QMessageBox.AcceptRole:
-            run_command = True
-    else:
-        run_command = True
-
-    if run_command:
-        audio_uuid = hashlib.md5(open(self.video_metadata['filepath'], 'rb').read()).hexdigest()
-
-        file_io.export_file(filename=os.path.join(path_tmp, 'subtitle.txt'), subtitles_list=self.subtitles_list, format='TXT')
-
-        url = 'https://api.jonata.org/subtitld/process_autosync'
-
-        content = {'email': self.settings['authentication'].get('email', ''),
-                   'machineid': self.machine_id,
-                   'os': ACTUAL_OS,
-                   'audio_uuid': audio_uuid
-                   }
-
-        r = requests.get(url, params=content)
-        r_json = r.json()
-
-        if r_json.get('status', '') and r_json['status'] == 'ok':
-            file_processed = True
-
-        if not file_processed:
-            content['text'] = open(os.path.join(path_tmp, 'subtitle.txt')).read()
-            content['language'] = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()]
-
-            command = [
-                FFMPEG_EXECUTABLE,
-                '-y',
-                '-f', 'f32le',
-                '-ac', '1',
-                '-ar', '48000',
-                '-i', '-',
-                '-vn',
-                os.path.join(path_tmp, 'subtitle.opus')]
-
-            audio_out = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, startupinfo=STARTUPINFO)
-            audio_out.stdin.write(self.video_metadata['audio'].tobytes())
-            audio_out.stdin.close()
-            audio_out.wait()
-
-            files = [
-                ('document', (os.path.join(path_tmp, 'subtitle.opus'), open(os.path.join(path_tmp, 'subtitle.opus'), 'rb'), 'application/octet')),
-                ('content', ('content', json.dumps(content), 'application/json')),
-            ]
-
-            r = requests.post(url, files=files)
-            r_json = r.json()
-            if r_json.get('status', '') and r_json['status'] == 'ok':
-                file_processed = True
-
-        if file_processed:
-            subtitles = r_json.get('subtitles', [])
-            if subtitles:
-                self.subtitles_list = subtitles
-
-        self.unsaved = True
-        self.selected_subtitle = False
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
-        self.timeline.update(self)
-        self.properties.update_properties_widget(self)
-
-
-def global_subtitlesvideo_autosub_button_clicked(self):
-    run_command = False
-    file_processed = False
-
-    if bool(self.subtitles_list):
-        are_you_sure_message = QMessageBox(self)
-        are_you_sure_message.setWindowTitle("Are you sure?")
-        are_you_sure_message.setText('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?')
-        are_you_sure_message.addButton("Yes", QMessageBox.AcceptRole)
-        are_you_sure_message.addButton("No", QMessageBox.RejectRole)
-        ret = are_you_sure_message.exec_()
-
-        if ret == QMessageBox.AcceptRole:
-            run_command = True
-    else:
-        run_command = True
-
-    if run_command:
-        audio_uuid = hashlib.md5(open(self.video_metadata['filepath'], 'rb').read()).hexdigest()
-
-        url = 'https://api.jonata.org/subtitld/process_autosub'
-
-        content = {'email': self.settings['authentication'].get('email', ''),
-                   'machineid': self.machine_id,
-                   'os': ACTUAL_OS,
-                   'audio_uuid': audio_uuid,
-                   'language': LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()]
-                   }
-
-        r = requests.get(url, params=content)
-        r_json = r.json()
-
-
-        if r_json.get('status', '') and r_json['status'] == 'ok':
-            file_processed = True
-
-        if not file_processed:
-            #content['text'] = open(os.path.join(path_tmp, 'subtitle.txt')).read()
-
-
-            command = [
-                FFMPEG_EXECUTABLE,
-                '-y',
-                '-f', 'f32le',
-                '-ac', '1',
-                '-ar', '48000',
-                '-i', '-',
-                '-vn',
-                os.path.join(path_tmp, 'subtitle.opus')]
-
-            audio_out = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, startupinfo=STARTUPINFO)
-            audio_out.stdin.write(self.video_metadata['audio'].tobytes())
-            audio_out.stdin.close()
-            audio_out.wait()
-
-            files = [
-                ('document', (os.path.join(path_tmp, 'subtitle.opus'), open(os.path.join(path_tmp, 'subtitle.opus'), 'rb'), 'application/octet')),
-                ('content', ('content', json.dumps(content), 'application/json')),
-            ]
-
-            r = requests.post(url, files=files)
-            r_json = r.json()
-
-            if r_json.get('status', '') and r_json['status'] == 'ok':
-                file_processed = True
-
-        if file_processed:
-            subtitles = r_json.get('subtitles', [])
-            if subtitles:
-                self.subtitles_list = subtitles
-
-        self.unsaved = True
-        self.selected_subtitle = False
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
-        self.timeline.update(self)
-        self.properties.update_properties_widget(self)
-
-
 def global_subtitlesvideo_export_button_clicked(self):
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.txt'
-    save_formats = 'TXT file (.txt)'
+    save_formats = self.tr('TXT file') + ' (.txt)'
 
-    filedialog = QFileDialog.getSaveFileName(self, "Export to file", os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)
+    filedialog = QFileDialog.getSaveFileName(self, self.tr('Export to file'), os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)
 
     if filedialog[0] and filedialog[1]:
         filename = filedialog[0]
