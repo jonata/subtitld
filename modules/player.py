@@ -83,7 +83,7 @@ class MpvWidget(QOpenGLWidget):
         #
         self.mpv.observe_property('time-pos', self.position_changed)
         #self.mpv.observe_property('duration')
-        #self.mpv.observe_property('eof-reached')
+        #self.mpv.observe_property('eof-reached', self.eof_reached)
         # self.mpv.set_wakeup_callback(self.eventHandler)
         #
         # if file is not None:
@@ -212,6 +212,11 @@ class MpvWidget(QOpenGLWidget):
             self.position = pos
         if pos is not None:
             self.parent.parent().timeline.update(self.parent.parent())
+    # #
+    #
+    # def eof_reached(self, property_change_event, eof):
+    #     print(self.mpv.filename)
+    #     self.stop()
     #
     # def showText(self, msg: str, duration: int=5, level: int=0):
     #     self.mpv.command('show-text', msg, duration * 1000, level)
@@ -221,6 +226,7 @@ class MpvWidget(QOpenGLWidget):
         if os.path.isfile(filepath):
             self.mpv.command('loadfile', filepath, 'replace')
         self.mpv.pause = True
+        self.mpv.keep_open = True
 
     def frameStep(self) -> None:
         self.mpv.command('frame-step')
