@@ -31,7 +31,7 @@ def ffmpeg_load_audio(filepath, sr=48000, mono=True, normalize=True, in_type=num
         '-ar', str(sr),
         '-ac', str(channels),
         '-']
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=STARTUPINFO)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
     # bytes_per_sample = numpy.dtype(in_type).itemsize
     # frame_size = bytes_per_sample * channels
     # chunk_size = frame_size * sr

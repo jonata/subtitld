@@ -32,7 +32,17 @@ exe = EXE(pyz,
     debug=False,
     icon='graphics/subtitld.ico' )
 
-coll = COLLECT( exe,
+exe_cmd = EXE(pyz,
+    a.scripts,
+    exclude_binaries=True,
+    name='Subtitldc.exe',
+    strip=False,
+    upx=True,
+    console=True,
+    debug=True,
+    icon='graphics/subtitld.ico' )
+
+coll = COLLECT( exe, exe_cmd,
                 a.binaries,
                 a.zipfiles,
                 a.datas,
