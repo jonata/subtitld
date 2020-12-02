@@ -91,6 +91,11 @@ class subtitld(QWidget):
         self.startscreen.load(self)
         self.startscreen.show(self)
 
+        # The mpv video player{
+        from modules import player
+        self.player = player
+        self.player.load(self)
+
         from modules import global_subtitlesvideo_panel
         self.global_subtitlesvideo_panel = global_subtitlesvideo_panel
         self.global_subtitlesvideo_panel.load(self, PATH_SUBTITLD_GRAPHICS)
@@ -114,10 +119,6 @@ class subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
 
-        # The mpv video player
-        from modules import player
-        self.player = player
-        self.player.load(self)
 
         self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
 

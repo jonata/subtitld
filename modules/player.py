@@ -210,7 +210,8 @@ class MpvWidget(QOpenGLWidget):
     def position_changed(self, property_change_event, pos):
         if pos:
             self.position = pos
-        self.parent.parent().timeline.update(self.parent.parent())
+        if pos is not None:
+            self.parent.parent().timeline.update(self.parent.parent())
     #
     # def showText(self, msg: str, duration: int=5, level: int=0):
     #     self.mpv.command('show-text', msg, duration * 1000, level)
