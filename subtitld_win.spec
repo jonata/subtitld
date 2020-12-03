@@ -23,7 +23,8 @@ a = Analysis(['subtitld.py'],
                    'ftfy',
                    'autosub',
                    'googleapiclient',
-                   'ffsubsync'],
+                   'pkg_resources.py2_warn',
+                   'apiclient'],
     hookspath=[],
     runtime_hooks=[] )
 
