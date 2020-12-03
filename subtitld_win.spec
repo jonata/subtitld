@@ -1,6 +1,7 @@
 # -*- mode: python -*-
 
 from PyInstaller.utils.hooks import copy_metadata
+print(copy_metadata('google-api-python-client'))
 
 VERSION = '20.07.0.0'
 if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
