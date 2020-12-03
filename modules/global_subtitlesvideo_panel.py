@@ -4,6 +4,7 @@ import os
 import subprocess
 import autosub
 import json
+import multiprocessing
 
 from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QMessageBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
@@ -13,6 +14,8 @@ from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORT
 from modules import file_io
 from modules.shortcuts import shortcuts_dict
 from modules.paths import LANGUAGE_DICT_LIST
+
+multiprocessing.freeze_support()
 
 LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
 
