@@ -91,13 +91,13 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_autosync_lang_combobox.setObjectName('button')
     self.global_subtitlesvideo_autosync_lang_combobox.addItems(LANGUAGE_DESCRIPTIONS)
 
-    # self.global_subtitlesvideo_autosync_button = QPushButton(self.tr('AutoSync').upper(), parent=self.global_subtitlesvideo_panel_widget)
-    # self.global_subtitlesvideo_autosync_button.setObjectName('button')
-    # self.global_subtitlesvideo_autosync_button.clicked.connect(lambda: global_subtitlesvideo_autosync_button_clicked(self))
-    #
-    # self.global_subtitlesvideo_autosub_button = QPushButton(self.tr('Auto Subtitle').upper(), parent=self.global_subtitlesvideo_panel_widget)
-    # self.global_subtitlesvideo_autosub_button.setObjectName('button')
-    # self.global_subtitlesvideo_autosub_button.clicked.connect(lambda: global_subtitlesvideo_autosub_button_clicked(self))
+    self.global_subtitlesvideo_autosync_button = QPushButton(self.tr('AutoSync').upper(), parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_autosync_button.setObjectName('button')
+    self.global_subtitlesvideo_autosync_button.clicked.connect(lambda: global_subtitlesvideo_autosync_button_clicked(self))
+
+    self.global_subtitlesvideo_autosub_button = QPushButton(self.tr('Auto Subtitle').upper(), parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_autosub_button.setObjectName('button')
+    self.global_subtitlesvideo_autosub_button.clicked.connect(lambda: global_subtitlesvideo_autosub_button_clicked(self))
 
     self.global_subtitlesvideo_panel_tabwidget = QTabWidget(parent=self.global_subtitlesvideo_panel_widget)
 
@@ -268,8 +268,8 @@ def resized(self):
     # self.global_subtitlesvideo_import_panel.setGeometry(20, 110, self.global_subtitlesvideo_panel_left.width()-40, 100)
     self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width()-40, 30)
     self.global_subtitlesvideo_autosync_lang_combobox.setGeometry(20, 160, 75, 30)
-    # self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
-    # self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
 
     self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, self.global_subtitlesvideo_panel_right.width()-50, self.global_subtitlesvideo_panel_right.height()-50)
 
@@ -429,3 +429,79 @@ def update_global_subtitlesvideo_save_as_combobox(self):
 
 def global_subtitlesvideo_save_as_combobox_activated(self):
     self.format_to_save = self.global_subtitlesvideo_save_as_combobox.currentText().split(' ', 1)[0]
+
+
+def global_subtitlesvideo_autosub_button_clicked(self):
+    run_command = False
+    file_processed = False
+
+    if bool(self.subtitles_list):
+        are_you_sure_message = QMessageBox(self)
+        are_you_sure_message.setWindowTitle(self.tr('Are you sure?'))
+        are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?'))
+        are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
+        are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
+        ret = are_you_sure_message.exec_()
+
+        if ret == QMessageBox.AcceptRole:
+            run_command = True
+    else:
+        run_command = True
+
+    if run_command:
+        def read_json_subtitles(filename='', transcribed=False):
+            final_subtitles = []
+            if filename:
+                with open(filename, encoding='utf-8') as json_file:
+                    data = json.loads(json_file.read())
+                    if transcribed:
+                        for fragment in data:
+                            subtitle = []
+                            subtitle.append(float(fragment['start']))
+                            subtitle.append(float(fragment['end']) - subtitle[0])
+                            subtitle.append(str(fragment['content']))
+                            final_subtitles.append(subtitle)
+                    else:
+                        for fragment in data['fragments']:
+                            subtitle = []
+                            subtitle.append(float(fragment['begin']))
+                            subtitle.append(float(fragment['end']) - float(fragment['begin']))
+                            # subtitle.append(codecs.decode(fragment['lines'][0], 'unicode-escape'))
+                            # print(fragment['lines'][0])
+                            subtitle.append(str(fragment['lines'][0]))
+                            final_subtitles.append(subtitle)
+
+            return final_subtitles
+
+        import autosub
+        import json
+
+        language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()]
+
+        command = [
+            FFMPEG_EXECUTABLE,
+            '-y',
+            '-f', 'f32le',
+            '-ac', '1',
+            '-ar', '48000',
+            '-i', '-',
+            '-vn',
+            os.path.join(path_tmp, 'subtitle.opus')]
+
+        audio_out = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, startupinfo=STARTUPINFO)
+        audio_out.stdin.write(self.video_metadata['audio'].tobytes())
+        audio_out.stdin.close()
+        audio_out.wait()
+
+        autosub.generate_subtitles(os.path.join(path_tmp, 'subtitle.opus'), output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
+
+        if os.path.isfile(os.path.join(path_tmp, 'subtitle.json')):
+            final_subtitles = read_json_subtitles(filename=os.path.join(path_tmp, 'subtitle.json'), transcribed=True)
+            if final_subtitles:
+                self.subtitles_list = final_subtitles
+
+        self.unsaved = True
+        self.selected_subtitle = False
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.timeline.update(self)
+        self.properties.update_properties_widget(self)
