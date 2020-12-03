@@ -22,7 +22,7 @@ a = Analysis(['subtitld.py'],
                             'scc2srt',
                             'pysubs2',
                             'autosub',
-                            'google-api-python-client'
+                            'googleapiclient'
                             'ffsubsync'],
              hookspath=[],
              runtime_hooks=[],
