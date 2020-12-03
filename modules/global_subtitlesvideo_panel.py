@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import os
 import subprocess
+import autosub
+import json
 
 from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QMessageBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
@@ -509,8 +511,6 @@ def global_subtitlesvideo_autosub_button_clicked(self):
 
             return final_subtitles
 
-        import autosub
-        import json
 
         language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()]
         #
