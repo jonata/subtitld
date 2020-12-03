@@ -14,5 +14,5 @@ clean-text[gpl]
 html5lib==1.0b8
 scenedetect
 opencv-python
-google-api-python-client
+google-api-python-client==1.8.0
 autosub3
