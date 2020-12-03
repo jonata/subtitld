@@ -335,7 +335,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def playercontrols_stop_button_clicked(self):
-    #self.player_widget.position = 0.0
+    # self.player_widget.position = 0.0
     # self.update_timeline.stop()
     playercontrols_playpause_button_clicked(self)
     self.player_widget.stop()
@@ -346,7 +346,6 @@ def playercontrols_stop_button_clicked(self):
 
 
 def playercontrols_playpause_button_clicked(self):
-    #self.update_timeline.start()
     self.player_widget.pause()
     if self.repeat_activated:
         self.repeat_duration_tmp = []
@@ -446,19 +445,6 @@ def show(self):
     self.gap_subtitle_duration.setValue(2.0)
     self.repeat_playback_duration.setValue(self.repeat_duration)
     self.repeat_playback_times.setValue(self.repeat_times)
-    #
-    # if not self.advanced_mode:
-    #     self.change_playback_speed.setVisible(False)
-    #     self.change_playback_speed_icon_label.setVisible(False)
-    #     self.change_playback_speed_decrease.setVisible(False)
-    #     self.change_playback_speed_slider.setVisible(False)
-    #     self.change_playback_speed_increase.setVisible(False)
-    #
-    #     self.repeat_playback.setVisible(False)
-    #     self.repeat_playback_icon_label.setVisible(False)
-    #     self.repeat_playback_duration.setVisible(False)
-    #     self.repeat_playback_x_label.setVisible(False)
-    #     self.repeat_playback_times.setVisible(False)
 
 
 def zoomin_button_clicked(self):

@@ -1,24 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import os
-import sys
 
-from OpenGL import GL
-
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QEvent, QTimer, QRect, QMargins, QMetaObject
-from PyQt5.QtGui import QKeyEvent, QMouseEvent, QWheelEvent, QPainter, QPen, QColor
-from PyQt5.QtWidgets import QOpenGLWidget, QLabel, QWidget, QGraphicsDropShadowEffect
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QRect, QMargins, QMetaObject
+from PyQt5.QtGui import QPainter, QPen, QColor
+from PyQt5.QtWidgets import QOpenGLWidget, QLabel, QWidget
 from PyQt5.QtOpenGL import QGLContext
 
 from mpv import MPV, _mpv_get_sub_api, _mpv_opengl_cb_set_update_callback, _mpv_opengl_cb_init_gl, OpenGlCbGetProcAddrFn, _mpv_opengl_cb_draw, _mpv_opengl_cb_report_flip, MpvSubApi, OpenGlCbUpdateFn, _mpv_opengl_cb_uninit_gl
-
-if sys.platform == 'win32':
-    from PyQt5.QtOpenGL import QGLContext
-elif sys.platform == 'darwin':
-    from OpenGL.GLUT import glutGetProcAddress
-else:
-    from OpenGL.platform import PLATFORM
-    from ctypes import c_char_p, c_void_p
 
 
 def get_proc_addr(_, name):
@@ -54,53 +43,17 @@ class MpvWidget(QOpenGLWidget):
         self.frameSwapped.connect(self.swapped, Qt.DirectConnection)
 
         self.position = 0.0
-        # self.mpv = mpv.MPV()
-        # print(dir(self.mpv))
-        # self.mpv.command('no-osd')
-        # self.mpv.autosub = False
-        # self.mpv.sid = 'no'
 
-        # self.option('msg-level', self.msglevel)
-        # self.setLogLevel('terminal-default')
-        # self.option('config', 'no')
-
-        # def _istr(o):
-        #     return ('yes' if o else 'no') if isinstance(o, bool) else str(o)
-        #
-        # # do not break on non-existant properties/options
-        # for opt, val in mpv_opts.items():
-        #     try:
-        #         self.option(opt.replace('_', '-'), _istr(val))
-        #     except mpv.MPVError:
-        #         print(self.tr('error setting MPV option "%s" to value "%s"' % (opt, val)))
-        #         #self.logger.warning('error setting MPV option "%s" to value "%s"' % (opt, val))
-        #
-        # self.mpv.initialize()
-        #
-        # self.opengl = self.mpv.opengl_cb_api()
-        # self.opengl.set_update_callback(self.updateHandler)
-        #
-        # if sys.platform == 'win32':
-        #     try:
-        #         self.option('gpu-context', 'angle')
-        #     except mpv.MPVError:
-        #         self.option('opengl-backend', 'angle')
-        #
-        # self.frameSwapped.connect(self.swapped, Qt.DirectConnection)
-        #
         self.mpv.observe_property('time-pos', self.position_changed)
-        #self.mpv.observe_property('duration')
-        #self.mpv.observe_property('eof-reached', self.eof_reached)
-        # self.mpv.set_wakeup_callback(self.eventHandler)
-        #
-        # if file is not None:
-        #     self.initialized.connect(self.play)
+        # self.mpv.observe_property('duration')
+        # self.mpv.observe_property('eof-reached', self.eof_reached)
+
     def initializeGL(self):
         _mpv_opengl_cb_init_gl(self.mpv_gl, None, self.get_proc_addr_c, None)
 
     def paintGL(self):
         # compatible with HiDPI display
-        ratio = 1#self.parent.windowHandle().devicePixelRatio()
+        ratio = self.parent.parent().windowHandle().devicePixelRatio()
         w = int(self.width() * ratio)
         h = int(self.height() * ratio)
         _mpv_opengl_cb_draw(self.mpv_gl, self.defaultFramebufferObject(), w, -h)
@@ -117,9 +70,6 @@ class MpvWidget(QOpenGLWidget):
             self.update()
 
     def on_update(self, ctx=None):
-        # maybe_update method should run on the thread that creates the OpenGLContext,
-        # which in general is the main thread. QMetaObject.invokeMethod can
-        # do this trick.
         QMetaObject.invokeMethod(self, 'maybe_update')
 
     def on_update_fake(self, ctx=None):
@@ -134,101 +84,13 @@ class MpvWidget(QOpenGLWidget):
             _mpv_opengl_cb_set_update_callback(self.mpv_gl, self.on_update_fake_c, None)
         _mpv_opengl_cb_uninit_gl(self.mpv_gl)
         self.mpv.terminate()
-    # @property
-    # def msglevel(self):
-    #     if os.getenv('DEBUG', False) or getattr(self.parent, 'verboseLogs', False):
-    #         return 'all=v'
-    #     else:
-    #         return 'all=error'
-    #
-    # def setLogLevel(self, loglevel):
-    #     self.mpv.set_log_level(loglevel)
-    #
-    # def shutdown(self):
-    #     self.makeCurrent()
-    #     if self.opengl:
-    #         self.opengl.set_update_callback(None)
-    #     self.opengl.uninit_gl()
-    #     self.mpv.command('quit')
-    #
-    # def initializeGL(self):
-    #     if self.opengl:
-    #         self.opengl.init_gl(None, getProcAddress)
-    #         if self.filename is not None:
-    #             self.initialized.emit(self.filename)
-    #
-    # def paintGL(self):
-    #     if self.opengl:
-    #         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
-    #         self.opengl.draw(self.defaultFramebufferObject(), self.width(), -self.height())
-    #
-    # @pyqtSlot()
-    # def swapped(self):
-    #     if self.opengl:
-    #         self.opengl.report_flip(0)
-    #
-    # def updateHandler(self):
-    #     # if self.window().isMinimized():
-    #     #     self.makeCurrent()
-    #     #     self.paintGL()
-    #     #     self.context().swapBuffers(self.context().surface())
-    #     #     self.swapped()
-    #     #     self.doneCurrent()
-    #     # else:
-    #     self.update()
-    #
-    # def eventHandler(self):
-    #     while self.mpv:
-    #         try:
-    #             event = self.mpv.wait_event(.01)
-    #             if event.id in {self.mpv.Events.none, self.mpv.Events.shutdown}:
-    #                 break
-    #             elif event.id == self.mpv.Events.log_message:
-    #                 event_log = event.data
-    #                 log_msg = '[%s] %s' % (event_log.prefix, event_log.text.strip())
-    #                 if event_log.level in (self.mpv.LogLevels.fatal, self.mpv.LogLevels.error):
-    #                     # self.logger.critical(log_msg)
-    #                     if event_log.level == self.mpv.LogLevels.fatal or 'file format' in event_log.text:
-    #                         self.parent.errorOccurred.emit(log_msg)
-    #                         self.parent.initMediaControls(False)
-    #                 else:
-    #                     print(log_msg)
-    #                     # self.logger.info(log_msg)
-    #             elif event.id == self.mpv.Events.property_change:
-    #                 event_prop = event.data
-    #                 if event_prop.name == 'eof-reached' and event_prop.data:
-    #                     # self.parent.setPlayButton(False)
-    #                     # self.parent.setPosition(0)
-    #                     self.parent.parent().playercontrols.playercontrols_stop_button_clicked(self.parent.parent())
-    #                     # self.durationChanged.emit(event_prop.data, self.property('estimated-frame-count'))
-    #                 elif event_prop.name == 'time-pos':
-    #                     # if os.getenv('DEBUG', False) or getattr(self.parent, 'verboseLogs', False):
-    #                     #     self.logger.info('time-pos property event')
-    #                     self.position = event_prop.data
-    #                     self.positionChanged.emit(event_prop.data, self.property('estimated-frame-number'))
-    #                 elif event_prop.name == 'duration':
-    #                     # if os.getenv('DEBUG', False) or getattr(self.parent, 'verboseLogs', False):
-    #                     #     self.logger.info('duration property event')
-    #                     self.durationChanged.emit(event_prop.data, self.property('estimated-frame-count'))
-    #         except self.mpv.MPVError as e:
-    #             if e.code != -10:
-    #                 raise e
 
     def position_changed(self, property_change_event, pos):
         if pos:
             self.position = pos
         if pos is not None:
             self.parent.parent().timeline.update(self.parent.parent())
-    # #
-    #
-    # def eof_reached(self, property_change_event, eof):
-    #     print(self.mpv.filename)
-    #     self.stop()
-    #
-    # def showText(self, msg: str, duration: int=5, level: int=0):
-    #     self.mpv.command('show-text', msg, duration * 1000, level)
-    #
-    #@pyqtSlot(str, name='ewewf', )
+
     def loadfile(self, filepath) -> None:
         if os.path.isfile(filepath):
             self.mpv.command('loadfile', filepath, 'replace')
@@ -373,7 +235,7 @@ def load(self):
     class player_subtitle_layer(QLabel):
         def __init__(widget, parent=None):
             super().__init__(parent)
-            widget.subtitle_text =  ''
+            widget.subtitle_text = ''
             widget.action_safe_margin = .9
             widget.title_safe_margin = .8
             widget.show_action_safe_margin = False
@@ -396,10 +258,10 @@ def load(self):
 
             if widget.show_action_safe_margin:
                 action_safe_margin_qrect = QRect(widget.width()*((1.0-widget.action_safe_margin)*.5),
-                                                widget.height()*((1.0-widget.action_safe_margin)*.5),
-                                                widget.width()*(widget.action_safe_margin),
-                                                widget.height()*(widget.action_safe_margin)
-                                                )
+                                                 widget.height()*((1.0-widget.action_safe_margin)*.5),
+                                                 widget.width()*(widget.action_safe_margin),
+                                                 widget.height()*(widget.action_safe_margin)
+                                                 )
                 painter.setPen(QPen(QColor.fromRgb(103, 255, 77, 240), 1, Qt.SolidLine))
                 painter.drawRect(action_safe_margin_qrect)
                 painter.drawLine(widget.width()*.5,
@@ -428,7 +290,6 @@ def load(self):
         def setSubtitleText(widget, text):
             widget.subtitle_text = text
 
-
     self.player_subtitle_layer = player_subtitle_layer(parent=self.player_widget_area)
     # self.player_subtitle_layer = player_subtitle_layer(parent=self.player_widget_area)
     self.player_subtitle_layer.setWordWrap(True)
@@ -456,9 +317,8 @@ def resized(self):
 
 
 def update_safety_margins_subtitle_layer(self):
-    # if self.advanced_mode:
-    #     self.player_subtitle_layer.show_action_safe_margin = self.settings['safety_margins'].get('show_action_safe_margins', False)
-    #     self.player_subtitle_layer.show_title_safe_margin = self.settings['safety_margins'].get('show_title_safe_margins', False)
+    self.player_subtitle_layer.show_action_safe_margin = self.settings['safety_margins'].get('show_action_safe_margins', False)
+    self.player_subtitle_layer.show_title_safe_margin = self.settings['safety_margins'].get('show_title_safe_margins', False)
     self.player_subtitle_layer.update()
 
 # def player_subtitle_textedit_changed(self):
@@ -468,7 +328,6 @@ def update_safety_margins_subtitle_layer(self):
 #     self.subtitleslist.update_subtitles_list_qlistwidget(self)
 #     self.timeline.update(self)
 #     update_subtitle_layer(self)
-
 
 # def playpause(self):
 #     self.player_widget.pause = not self.player_widget.pause

@@ -42,6 +42,9 @@ def global_properties_panel_show_margins_clicked(self):
         self.player_widget.show_margins = [.05, .05]
     else:
         self.player_widget.show_margins = False
+    self.settings['safety_margins']['show_action_safe_margins'] = self.global_properties_panel_show_margins.isChecked()
+    self.settings['safety_margins']['show_title_safe_margins'] = self.global_properties_panel_show_margins.isChecked()
+    self.player.update_safety_margins_subtitle_layer(self)
 
 
 def show_global_properties_panel(self):

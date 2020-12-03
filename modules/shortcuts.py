@@ -46,12 +46,9 @@ default_shortcuts_dict = {
 
 
 def load(self, shortcut_commands):
-    #if not self.advanced_mode:
-    shortcut_commands = default_shortcuts_dict
-    # else:
-    #     for item in default_shortcuts_dict:
-    #         if not item in shortcut_commands:
-    #             shortcut_commands[item] = default_shortcuts_dict[item]
+    for item in default_shortcuts_dict:
+        if not item in shortcut_commands:
+            shortcut_commands[item] = default_shortcuts_dict[item]
 
     for command in shortcut_commands.keys():
         if command == 'playpause':

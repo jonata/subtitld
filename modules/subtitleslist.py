@@ -122,9 +122,6 @@ def show(self):
     self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
     update_toppanel_subtitle_file_info_label(self)
 
-    # if not self.advanced_mode:
-    #     self.subtitles_list_toggle_button.setEnabled(False)
-
 
 def hide(self):
     self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()], [-int(self.width()*.2), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()])
@@ -140,16 +137,13 @@ def toppanel_save_button_clicked(self):
 
     if not actual_subtitle_file:
         suggested_path = os.path.dirname(self.video_metadata['filepath'])
-        if self.advanced_mode:
-            save_formats = self.format_to_save + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']]))
+        save_formats = self.format_to_save + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']]))
 
-            for format in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
-                if not format == self.format_to_save:
-                    save_formats += ';;' + format + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['extensions']]))
-            suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
-        else:
-            save_formats = self.tr('SRT file') + ' (.srt)'
-            suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.srt'
+        for format in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+            if not format == self.format_to_save:
+                save_formats += ';;' + format + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['extensions']]))
+        suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
+
         # tem que reportar o bug que não retorna o selectedFilter se o dialogo for nativo
         filedialog = QFileDialog.getSaveFileName(self, self.tr('Select the subtitle file'), os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)
 

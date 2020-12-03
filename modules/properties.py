@@ -109,9 +109,6 @@ def show(self):
     self.generate_effect(self.properties_toggle_button_animation, 'geometry', 700, [self.properties_toggle_button.x(), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()], [int((self.width()*.8)+18), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()])
     self.global_properties_panel.hide_global_properties_panel(self)
 
-    # if not self.advanced_mode:
-    #     self.properties_toggle_button.setEnabled(False)
-
 
 def hide(self):
     self.generate_effect(self.properties_widget_animation, 'geometry', 700, [self.properties_widget.x(), self.properties_widget.y(), self.properties_widget.width(), self.properties_widget.height()], [int(self.width()), self.properties_widget.y(), self.properties_widget.width(), self.properties_widget.height()])
