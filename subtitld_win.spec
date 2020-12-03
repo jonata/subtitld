@@ -1,5 +1,7 @@
 # -*- mode: python -*-
 
+from PyInstaller.utils.hooks import copy_metadata
+
 VERSION = '20.07.0.0'
 if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
     VERSION = os.environ['VERSION_NUMBER']
@@ -10,6 +12,7 @@ a = Analysis(['subtitld.py'],
         ( 'mpv/x86_64/mpv-1.dll', '.')
     ],
     datas=[
+        copy_metadata('google-api-python-client'),
         ( 'graphics/*.png', 'graphics' ),
         ( 'graphics/*.ttf', 'graphics' ),
         ( 'ffmpeg-*/bin/ffmpeg.exe', '.'),
@@ -21,10 +24,7 @@ a = Analysis(['subtitld.py'],
                    'scc2srt',
                    'pysubs2',
                    'ftfy',
-                   'autosub',
-                   'googleapiclient',
-                   'pkg_resources.py2_warn',
-                   'apiclient'],
+                   'autosub'],
     hookspath=[],
     runtime_hooks=[] )
 
