@@ -245,6 +245,7 @@ class MpvWidget(QOpenGLWidget):
 
     def stop(self) -> None:
         self.mpv.pause = True
+        self.position = 0.0
         self.seek()
 
     def pause(self) -> None:

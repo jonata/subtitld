@@ -335,12 +335,14 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def playercontrols_stop_button_clicked(self):
-    #self.update_timeline.stop()
+    #self.player_widget.position = 0.0
+    # self.update_timeline.stop()
     playercontrols_playpause_button_clicked(self)
     self.player_widget.stop()
     self.playercontrols_playpause_button.setChecked(False)
-    self.timeline.update_scrollbar(self)
     playercontrols_playpause_button_update(self)
+    # self.timeline.update_scrollbar(self)
+    self.timeline.update(self)
 
 
 def playercontrols_playpause_button_clicked(self):
