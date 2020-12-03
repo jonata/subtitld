@@ -17,3 +17,4 @@ opencv-python
 google-api-python-client
 autosub3
 ffsubsync
+webrtcvad
