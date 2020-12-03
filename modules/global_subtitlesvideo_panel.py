@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QMessageBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
 from PyQt5.QtGui import QFontDatabase, QKeySequence
 
@@ -431,9 +431,45 @@ def global_subtitlesvideo_save_as_combobox_activated(self):
     self.format_to_save = self.global_subtitlesvideo_save_as_combobox.currentText().split(' ', 1)[0]
 
 
+def global_subtitlesvideo_autosync_button_clicked(self):
+    run_command = False
+
+    if bool(self.subtitles_list):
+        are_you_sure_message = QMessageBox(self)
+        are_you_sure_message.setWindowTitle(self.tr('Are you sure?'))
+        are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?'))
+        are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
+        are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
+        ret = are_you_sure_message.exec_()
+
+        if ret == QMessageBox.AcceptRole:
+            run_command = True
+    else:
+        run_command = True
+
+    if run_command:
+        from ffsubsync import ffsubsync
+
+        file_io.save_file(os.path.join(path_tmp, 'subtitle_original.srt'), self.subtitles_list, 'SRT')
+        sub = os.path.join(path_tmp, 'subtitle_final.srt')
+
+        unparsed_args = [self.video_metadata['filepath'], "-i", os.path.join(path_tmp, 'subtitle_original.srt'), "-o", sub]
+
+        parser = ffsubsync.make_parser()
+        args = parser.parse_args(unparsed_args)
+
+        ffsubsync.run(args)
+
+        if os.path.isfile(sub):
+            self.subtitles_list = file_io.process_subtitles_file(sub)[0]
+            self.unsaved = True
+            self.selected_subtitle = False
+            self.subtitleslist.update_subtitles_list_qlistwidget(self)
+            self.timeline.update(self)
+            self.properties.update_properties_widget(self)
+
 def global_subtitlesvideo_autosub_button_clicked(self):
     run_command = False
-    file_processed = False
 
     if bool(self.subtitles_list):
         are_you_sure_message = QMessageBox(self)
@@ -477,23 +513,24 @@ def global_subtitlesvideo_autosub_button_clicked(self):
         import json
 
         language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()]
+        #
+        # command = [
+        #     FFMPEG_EXECUTABLE,
+        #     '-y',
+        #     '-f', 'f32le',
+        #     '-ac', '1',
+        #     '-ar', '48000',
+        #     '-i', '-',
+        #     '-vn',
+        #     os.path.join(path_tmp, 'subtitle.opus')]
+        #
+        # audio_out = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, startupinfo=STARTUPINFO)
+        # audio_out.stdin.write(self.video_metadata['audio'].tobytes())
+        # audio_out.stdin.close()
+        # audio_out.wait()
 
-        command = [
-            FFMPEG_EXECUTABLE,
-            '-y',
-            '-f', 'f32le',
-            '-ac', '1',
-            '-ar', '48000',
-            '-i', '-',
-            '-vn',
-            os.path.join(path_tmp, 'subtitle.opus')]
-
-        audio_out = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, startupinfo=STARTUPINFO)
-        audio_out.stdin.write(self.video_metadata['audio'].tobytes())
-        audio_out.stdin.close()
-        audio_out.wait()
-
-        autosub.generate_subtitles(os.path.join(path_tmp, 'subtitle.opus'), output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
+        # autosub.generate_subtitles(os.path.join(path_tmp, 'subtitle.opus'), output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
+        autosub.generate_subtitles(self.video_metadata['filepath'], output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
 
         if os.path.isfile(os.path.join(path_tmp, 'subtitle.json')):
             final_subtitles = read_json_subtitles(filename=os.path.join(path_tmp, 'subtitle.json'), transcribed=True)

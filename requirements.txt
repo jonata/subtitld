@@ -15,3 +15,4 @@ html5lib==1.0b8
 scenedetect
 opencv-python
 autosub3
+ffsubsync
