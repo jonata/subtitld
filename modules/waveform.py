@@ -31,7 +31,7 @@ def ffmpeg_load_audio(filepath, sr=48000, mono=True, normalize=True, in_type=num
         '-ar', str(sr),
         '-ac', str(channels),
         '-']
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=STARTUPINFO)
     # bytes_per_sample = numpy.dtype(in_type).itemsize
     # frame_size = bytes_per_sample * channels
     # chunk_size = frame_size * sr
@@ -75,7 +75,7 @@ def ffmpeg_extract_subtitle(filepath, index):
         '-map',
         '0:' + str(index),
         os.path.join(path_tmp, 'subtitle.vtt')]
-    subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO).wait()
+    subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=STARTUPINFO).wait()
 
     return os.path.join(path_tmp, 'subtitle.vtt')
 

@@ -38,7 +38,14 @@ class MpvWidget(QOpenGLWidget):
         super(MpvWidget, self).__init__(parent)
         self.parent = parent
         self.filename = file
-        self.mpv = MPV(vo='opengl-cb', ytdl=True)
+        self.mpv = MPV(vo='opengl-cb',
+                       ytdl=True,
+                       osd_level=0,
+                       sub_auto=False,
+                       sub_ass=False,
+                       sub_visibility=False,
+                       keep_open=True,
+                       )
         self.mpv_gl = _mpv_get_sub_api(self.mpv.handle, MpvSubApi.MPV_SUB_API_OPENGL_CB)
         self.on_update_c = OpenGlCbUpdateFn(self.on_update)
         self.on_update_fake_c = OpenGlCbUpdateFn(self.on_update_fake)
@@ -226,7 +233,6 @@ class MpvWidget(QOpenGLWidget):
         if os.path.isfile(filepath):
             self.mpv.command('loadfile', filepath, 'replace')
         self.mpv.pause = True
-        self.mpv.keep_open = True
 
     def frameStep(self) -> None:
         self.mpv.command('frame-step')

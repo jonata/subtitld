@@ -66,7 +66,7 @@ def load(self):
     def thread_extract_waveform_ended(command):
         self.video_metadata['audio'] = command
         self.timeline.zoom_update_waveform(self)
-        self.videoinfo_label.setText(self.tr('Audio extracted'))
+        self.videoinfo_label.setText(self.tr('Audio ffmpeg_extract_subtitleed'))
 
     self.thread_extract_waveform = thread_extract_waveform(self)
     self.thread_extract_waveform.command.connect(thread_extract_waveform_ended)
@@ -213,7 +213,7 @@ def process_video_file(video_file=False):
             video_metadata['width'] = int(stream.get('width', 640))
             video_metadata['height'] = int(stream.get('height', 480))
             video_metadata['framerate'] = int(stream.get('r_frame_rate', '1/30').split('/', 1)[0])/int(stream.get('r_frame_rate', '1/30').split('/', 1)[-1])
-        elif stream.get('codec_type', '') == 'subtitle':
+        elif stream.get('codec_type', '') in ['subtitle']:
             video_metadata['subttiles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
     video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
