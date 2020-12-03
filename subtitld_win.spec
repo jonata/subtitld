@@ -9,6 +9,7 @@ if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
 
 a = Analysis(['subtitld.py'],
     pathex=['/Users/admin/Documents/subtitld', 'C:\Python36\Lib\site-packages\scipy\extra-dll'],
+    excludes=['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter'],
     binaries=[
         ( 'mpv/x86_64/mpv-1.dll', '.')
     ],
