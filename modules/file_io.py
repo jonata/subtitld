@@ -202,13 +202,14 @@ def process_subtitles_file(subtitle_file=False, format='SRT'):
 
 
 def process_video_file(video_file=False):
+    print('process')
     video_metadata = {}
     json_result = waveform.ffmpeg_load_metadata(video_file)
     video_metadata['audio'] = False
     video_metadata['waveform'] = {}
     video_metadata['duration'] = float(json_result.get('format', {}).get('duration', '0.01'))
     for stream in json_result.get('streams', []):
-        if stream.get('codec_type', '') == 'video' and not stream.get('codec_name', 'png') == 'png':
+        if stream.get('codec_type', '') == 'video' and not stream.get('codec_name', 'png') in ['png', 'mjpeg']:
             video_metadata['width'] = int(stream.get('width', 640))
             video_metadata['height'] = int(stream.get('height', 480))
             video_metadata['framerate'] = int(stream.get('r_frame_rate', '1/30').split('/', 1)[0])/int(stream.get('r_frame_rate', '1/30').split('/', 1)[-1])
