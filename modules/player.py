@@ -28,13 +28,23 @@ class MpvWidget(QOpenGLWidget):
         self.parent = parent
         self.filename = file
         self.mpv = MPV(vo='opengl-cb',
-                       ytdl=True,
+                       ytdl=False,
                        osd_level=0,
                        sub_auto=False,
                        sub_ass=False,
                        sub_visibility=False,
                        keep_open=True,
-                       )
+                       idle=True,
+                       cursor_autohide=False,
+                       input_cursor=False,
+                       input_default_bindings=False,
+                       stop_playback_on_init_failure=False,
+                       input_vo_keyboard=False,
+                       sid=False,
+                       video_sync='display-vdrop',
+                       audio_file_auto=False,
+                       quiet=True,
+                       hwdec=('auto'))
         self.mpv_gl = _mpv_get_sub_api(self.mpv.handle, MpvSubApi.MPV_SUB_API_OPENGL_CB)
         self.on_update_c = OpenGlCbUpdateFn(self.on_update)
         self.on_update_fake_c = OpenGlCbUpdateFn(self.on_update_fake)
@@ -123,69 +133,6 @@ class MpvWidget(QOpenGLWidget):
     def volume(self, vol: int) -> None:
         self.property('volume', vol)
 
-    # def codec(self, stream: str='video') -> str:
-    #     return self.property('{}-codec'.format(stream))
-    #
-    # def format(self, stream: str='video') -> str:
-    #     return self.property('audio-codec-name' if stream == 'audio' else 'video-format')
-    #
-    # def version(self) -> str:
-    #     ver = self.mpv.api_version
-    #     return '{0}.{1}'.format(ver[0], ver[1])
-    #
-    # def option(self, option: str, val):
-    #     if isinstance(val, bool):
-    #         val = 'yes' if val else 'no'
-    #     return self.mpv.set_option(option, val)
-    #
-    # def property(self, prop: str, val=None):
-    #     if val is None:
-    #         return self.mpv.get_property(prop)
-    #     else:
-    #         if isinstance(val, bool):
-    #             val = 'yes' if val else 'no'
-    #         return self.mpv.set_property(prop, val)
-    #
-    # def changeEvent(self, event: QEvent) -> None:
-    #     if event.type() == QEvent.WindowStateChange and self.isFullScreen():
-    #         self.option('osd-align-x', 'center')
-    #         self.showText('Press ESC or double mouse click to exit full screen')
-    #         QTimer.singleShot(5000, self.resetOSD)
-    #
-    # def resetOSD(self) -> None:
-    #     self.showText('')
-    #     self.option('osd-align-x', 'left')
-    #
-    # def keyPressEvent(self, event: QKeyEvent) -> None:
-    #     if event.key() in {Qt.Key_F, Qt.Key_Escape}:
-    #         event.accept()
-    #         if self.parent is None:
-    #             self.originalParent.toggleFullscreen()
-    #         else:
-    #             self.parent.toggleFullscreen()
-    #     elif self.isFullScreen():
-    #         self.originalParent.keyPressEvent(event)
-    #     else:
-    #         super(MpvWidget, self).keyPressEvent(event)
-    #
-    # def mousePressEvent(self, event: QMouseEvent) -> None:
-    #     event.accept()
-    #     if event.button() == Qt.LeftButton:
-    #         if self.parent is None:
-    #             self.originalParent.playMedia()
-    #         else:
-    #             self.parent.playMedia()
-    #
-    # def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
-    #     event.accept()
-    #     if self.parent is None:
-    #         self.originalParent.toggleFullscreen()
-    #     else:
-    #         self.parent.toggleFullscreen()
-    #
-    # def wheelEvent(self, event: QWheelEvent) -> None:
-    #     self.parent.seekSlider.wheelEvent(event)
-
 
 def load(self):
     class player_widget_area(QWidget):
@@ -200,36 +147,8 @@ def load(self):
     self.player_border = QLabel(self.player_widget_area)
     self.player_border.setObjectName('player_border')
 
-    self.player_widget = MpvWidget(
-            parent=self.player_widget_area,
-            # file=file,
-            vo='opengl-cb',
-            # pause=pause,
-            # start=start,
-            # mute=mute,
-            keep_open='always',
-            idle=True,
-            # osd_font=self._osdfont,
-            # osd_level=0,
-            # osd_align_x='left',
-            # osd_align_y='top',
-            cursor_autohide=False,
-            input_cursor=False,
-            input_default_bindings=False,
-            stop_playback_on_init_failure=False,
-            input_vo_keyboard=False,
-            sub_auto=False,
-            sid=False,
-            video_sync='display-vdrop',
-            audio_file_auto=False,
-            quiet=True,
-            # volume=volume if volume is not None else self.parent.startupvol,
-            # opengl_pbo=self.enablePBO,
-            # keepaspect=self.keepRatio,
-            #  if self.hardwareDecoding else 'no'))
-            hwdec=('auto'))
+    self.player_widget = MpvWidget(parent=self.player_widget_area)
 
-    # self.player_widget = MpvWidget(parent=self.player_widget_area)
     self.player_widget.positionChanged.connect(lambda: self.timeline.update(self))
 
     class player_subtitle_layer(QLabel):
