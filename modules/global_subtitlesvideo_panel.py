@@ -99,6 +99,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_autosync_button = QPushButton(self.tr('AutoSync').upper(), parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_autosync_button.setObjectName('button')
     self.global_subtitlesvideo_autosync_button.clicked.connect(lambda: global_subtitlesvideo_autosync_button_clicked(self))
+    self.global_subtitlesvideo_autosync_button.setVisible(False)
 
     self.global_subtitlesvideo_autosub_button = QPushButton(self.tr('Auto Subtitle').upper(), parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_autosub_button.setObjectName('button')
@@ -272,8 +273,8 @@ def resized(self):
     self.global_subtitlesvideo_import_button.setGeometry(20, 80, self.global_subtitlesvideo_panel_left.width()-40, 30)
     # self.global_subtitlesvideo_import_panel.setGeometry(20, 110, self.global_subtitlesvideo_panel_left.width()-40, 100)
     self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width()-40, 30)
-    self.global_subtitlesvideo_autosync_lang_combobox.setGeometry(20, 160, 75, 30)
-    self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    self.global_subtitlesvideo_autosync_lang_combobox.setGeometry(20, 160, self.global_subtitlesvideo_panel_left.width()-40, 30)
+    # self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
     self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
 
     self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, self.global_subtitlesvideo_panel_right.width()-50, self.global_subtitlesvideo_panel_right.height()-50)
