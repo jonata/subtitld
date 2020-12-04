@@ -119,7 +119,9 @@ class subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
 
-        self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
+        # Maybe implement saving window position...? Useful?
+        # self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
+        self.showMaximized()
 
         self.subtitleslist.update_subtitles_list_widget(self)
         self.properties.update_properties_widget(self)
