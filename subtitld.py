@@ -3,11 +3,12 @@
 import os
 import sys
 import time
-from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
+import datetime
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTranslator, QTimer
 
-from modules.paths import PATH_LOCALE, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
+from modules.paths import PATH_LOCALE, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
 from modules.history import history_redo, history_undo
 from modules import config
 
@@ -131,9 +132,9 @@ class subtitld(QWidget):
         self.shortcuts = shortcuts
         self.shortcuts.load(self, self.settings['shortcuts'])
 
-        self.update_timeline = QTimer(self)
-        self.update_timeline.setInterval(int(1000/24))
-        self.update_timeline.timeout.connect(lambda: self.timeline.update(self))
+        self.autosave_timer = QTimer(self)
+        self.autosave_timer.setInterval(int(self.settings['autosave'].get('interval', 300000)))
+        self.autosave_timer.timeout.connect(lambda: autosave_timer_timeout(self))
 
     def dragEnterEvent(widget, event):
         if event.mimeData().hasUrls and len(event.mimeData().urls()) > 0:
@@ -235,6 +236,13 @@ class subtitld(QWidget):
             widget.setStartValue(startValue)
             widget.setEndValue(endValue)
         widget.start()
+
+
+def autosave_timer_timeout(self):
+    filename = os.path.basename(self.actual_subtitle_file).rsplit('.', 1)[0]
+    if not filename:
+        filename = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
+    self.file_io.save_file(os.path.join(PATH_SUBTITLD_DATA_BACKUP, filename + '_' + datetime.datetime.now().strftime("%Y%m%d%H%M%S") + '.srt'), self.subtitles_list, 'SRT')
 
 
 def edit_syllable_returnpressed(self):

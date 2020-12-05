@@ -4,7 +4,7 @@
 import os
 import sys
 from datetime import datetime
-from PyQt5.QtWidgets import QPushButton, QLabel, QWidget, QGraphicsOpacityEffect, QListWidget, QApplication, QLineEdit, QListWidgetItem
+from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsOpacityEffect, QListWidget, QApplication, QListWidgetItem
 from PyQt5.QtCore import QPropertyAnimation, Qt, QSize
 
 from modules import file_io
@@ -123,7 +123,6 @@ def start_screen_adver_label_show_machineid_button_clicked(self):
 
 
 def update_start_screen_adver_panel(self):
-    #self.start_screen_adver_panel.setVisible(self.start_screen_adver_label_show_machineid_button.isChecked())
     update_start_screen_adver_label_machineid_verify(self)
 
 

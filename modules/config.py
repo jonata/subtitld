@@ -21,6 +21,9 @@ def load(config_file_path=False):
     if not config.get('safety_margins', False):
         config['safety_margins'] = {}
 
+    if not config.get('autosave', False):
+        config['autosave'] = {}
+
     return config
 
 
