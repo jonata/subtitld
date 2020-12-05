@@ -202,7 +202,6 @@ def process_subtitles_file(subtitle_file=False, format='SRT'):
 
 
 def process_video_file(video_file=False):
-    print('process')
     video_metadata = {}
     json_result = waveform.ffmpeg_load_metadata(video_file)
     video_metadata['audio'] = False
