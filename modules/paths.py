@@ -47,6 +47,8 @@ else:
 
 PATH_SUBTITLD_DATA_BACKUP = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'backup')
 
+PATH_SUBTITLD_DATA_UPDATE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'update')
+
 os.mkdir(path_tmp)
 
 if not os.path.isdir(PATH_SUBTITLD_USER_CONFIG):
@@ -54,6 +56,9 @@ if not os.path.isdir(PATH_SUBTITLD_USER_CONFIG):
 
 if not os.path.isdir(PATH_SUBTITLD_DATA_BACKUP):
     os.mkdir(PATH_SUBTITLD_DATA_BACKUP)
+
+if not os.path.isdir(PATH_SUBTITLD_DATA_UPDATE):
+    os.mkdir(PATH_SUBTITLD_DATA_UPDATE)
 
 PATH_SUBTITLD_USER_CONFIG_FILE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'subtitld.config')
 

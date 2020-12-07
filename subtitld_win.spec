@@ -22,7 +22,8 @@ a = Analysis(['subtitld.py'],
                    'scc2srt',
                    'pysubs2',
                    'ftfy',
-                   'autosub'],
+                   'autosub',
+                   'winreg'],
     hookspath=[],
     runtime_hooks=[] )
 
