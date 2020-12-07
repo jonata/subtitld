@@ -14,8 +14,6 @@ apps:
     command: desktop-launch $SNAP/subtitld/subtitld
     environment:
         LC_ALL: C.UTF-8
-        #DISABLE_WAYLAND: 1
-        #QT_QPA_PLATFORMTHEME: gtk3
         GSETTINGS_SCHEMA_DIR: $SNAP/usr/share/glib-2.0/schemas
     plugs:
       - audio-playback
