@@ -50,7 +50,10 @@ def set_run_key(key, value):
             winreg.DeleteValue(reg_key, key)
         else:
             if '%' in value:
-                var_type = winreg.REG_EXPAND_SZ
+                try:
+                    var_type = winreg.REG_EXPAND_SZ
+                except Exception:
+                    pass
             else:
                 var_type = winreg.REG_SZ
             winreg.SetValueEx(reg_key, key, 0, var_type, value)
