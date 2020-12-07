@@ -85,12 +85,12 @@ class subtitld(QWidget):
         from modules import file_io
         self.file_io = file_io
         self.file_io.load(self)
-
-        if ACTUAL_OS == 'windows':
-            # The windows update system
-            from modules import update
-            self.update = update
-            self.update.load(self)
+        #
+        # if ACTUAL_OS == 'windows':
+        #     # The windows update system
+        #     from modules import update
+        #     self.update = update
+        #     self.update.load(self)
 
         # The start screen
         from modules import startscreen
