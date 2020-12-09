@@ -253,7 +253,7 @@ def update_safety_margins_subtitle_layer(self):
 
 
 def update_speed(self):
-    self.player_widget.property('speed', self.playback_speed)
+    self.player_widget.mpv.speed = self.playback_speed
 
 
 def update_subtitle_layer(self):
