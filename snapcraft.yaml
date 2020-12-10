@@ -66,8 +66,8 @@ parts:
       #- qt5-gtk-platformtheme
     after:
       - desktop-qt5
-      - desktop-gtk3
-
+      - desktop-glib-only
+      
   snapcraft-preload:
           source: https://github.com/sergiusens/snapcraft-preload.git
           plugin: cmake
