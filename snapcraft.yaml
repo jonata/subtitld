@@ -55,6 +55,7 @@ parts:
     stage-packages:
       - ffmpeg
       - espeak-data
+      - gsettings-desktop-schemas
       #- desktop-gnome-platform
       #- libmpv1
       # gtk-common-themes support
