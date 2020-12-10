@@ -14,7 +14,7 @@ apps:
     command: desktop-launch snapcraft-preload $SNAP/subtitld/subtitld
     environment:
         LC_ALL: C.UTF-8
-        # GSETTINGS_SCHEMA_DIR: $SNAP/usr/share/glib-2.0/schemas
+        GSETTINGS_SCHEMA_DIR: $SNAP/usr/share/glib-2.0/schemas
     plugs:
       - audio-playback
       - gsettings
@@ -59,7 +59,7 @@ parts:
     stage-packages:
       - ffmpeg
       - espeak-data
-      # - gsettings-desktop-schemas
+      - gsettings-desktop-schemas
       #- desktop-gnome-platform
       #- libmpv1
       # gtk-common-themes support
