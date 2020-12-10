@@ -5,6 +5,7 @@ import os
 import datetime
 import numpy
 import pycaption
+from pycaption.exceptions import CaptionReadSyntaxError
 import chardet
 
 from PyQt5.QtWidgets import QFileDialog
@@ -154,9 +155,23 @@ def process_subtitles_file(subtitle_file=False, format='SRT'):
         elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
             format = 'VTT'
             with open(subtitle_file, encoding='utf-8') as vtt_file:
-                vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
-                for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
-                    final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+                try:
+                    vtt_reader = pycaption.WebVTTReader().read(vtt_file.read())
+                    for caption in vtt_reader.get_captions(list(vtt_reader._captions.keys())[0]):
+                        final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+                except CaptionReadSyntaxError:
+                    import pysubs2
+                    with open(subtitle_file, encoding='utf-8') as f:
+                        subfile = pysubs2.SSAFile.from_string(f.read())
+
+                    for event in subfile.events:
+                        start = event.start / 1000.0
+                        duration = event.duration / 1000.0
+                        text = event.plaintext
+                        final_subtitles.append([start, duration, text])
+
+                    # error_message = QMessageBox()
+                    # error_message.setWindowTitle(self.tr('There is a problem with this file and can not be opened.'))
 
         elif subtitle_file.lower().endswith(('.ttml', '.dfxp')):
             format = 'DFXP'
@@ -321,8 +336,8 @@ def save_file(final_file, subtitles_list, format='SRT', language='en'):
                 import pysubs2
                 assfile = pysubs2.SSAFile()
                 index = 0
-                for sub in subtitles_list:
-                    assfile.insert(index, pysubs2.SSAEvent(start=int(sub[0]*1000), duration=int(sub[1]*1000), text=sub[2]))
+                for sub in reversed(sorted(subtitles_list)):
+                    assfile.insert(index, pysubs2.SSAEvent(start=int(sub[0]*1000), end=int((sub[0]*1000)+(sub[1]*1000)), text=sub[2].replace('\n', ' ')))
                 if format == 'SUB':
                     assfile.save(final_file, format='microdvd')
                 else:
