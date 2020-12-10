@@ -18,7 +18,6 @@ apps:
     plugs:
       - audio-playback
       - gsettings
-      - account-control
       - home
       - network
       - network-bind
@@ -28,7 +27,6 @@ apps:
       - optical-drive
       - wayland
       - desktop
-      - desktop-legacy
       - opengl
       - removable-media
       - mount-observe

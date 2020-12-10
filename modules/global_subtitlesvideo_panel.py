@@ -399,7 +399,7 @@ def global_subtitlesvideo_video_burn_convert_clicked(self):
 
 
 def global_subtitlesvideo_video_burn_pcolor_clicked(self):
-    color = QColorDialog().getColor()
+    color = QColorDialog().getColor(options=QColorDialog.DontUseNativeDialog)
     if color.isValid():
         self.global_subtitlesvideo_video_burn_pcolor_selected_color = color.name()
     self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
