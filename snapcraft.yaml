@@ -65,7 +65,7 @@ parts:
       # gtk-common-themes support
       #- qt5-gtk-platformtheme
     after:
-      - desktop-glib-only
+      - desktop-gtk3
 
   snapcraft-preload:
           source: https://github.com/sergiusens/snapcraft-preload.git
