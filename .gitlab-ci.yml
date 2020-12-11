@@ -5,7 +5,7 @@ staging:amd64:
   script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
-  - apt-get install -y software-properties-common
+  - apt-get install -y software-properties-common wget
   - add-apt-repository ppa:mc3man/bionic-media -y
   - apt-get update -qy
   - apt-get install -y python3-pip libglu1-mesa snapcraft libmpv1 ffmpeg libmpv-dev libespeak-dev
