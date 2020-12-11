@@ -33,6 +33,10 @@ staging:amd64:
   - mv dist/subtitld AppDir
   - cp AppDir/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
   - mv .AppImageBuilder.yml AppImageBuilder.yml
+  - apt-get install -y fuse
+  - modprobe fuse
+  - groupadd fuse
+  - usermod -a -G fuse "$(whoami)"
   - appimage-builder --skip-test
   artifacts:
     paths:
