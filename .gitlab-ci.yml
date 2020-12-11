@@ -30,7 +30,6 @@ staging:amd64:
   - chmod +x /usr/local/bin/appimagetool
   - python3 -m pip install --ignore-installed appimage-builder
   - mv dist/subtitld AppDir
-  - mkdir /usr/share/icons/hicolor/512x512/
   - cp AppDir/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
   - appimage-builder --skip-test
   artifacts:
