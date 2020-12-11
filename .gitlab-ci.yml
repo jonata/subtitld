@@ -17,6 +17,7 @@ staging:amd64:
   - mv dist .dist
   - mv snap .snap
   - mv snapcraft.yaml .snapcraft.yaml
+  - mv AppImageBuilder.yml .AppImageBuilder.yml
   - mv * /tmp/
   - mv .dist dist
   - mv .snap snap
@@ -31,6 +32,7 @@ staging:amd64:
   - python3 -m pip install --ignore-installed appimage-builder
   - mv dist/subtitld AppDir
   - cp AppDir/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
+  - mv .AppImageBuilder.yml AppImageBuilder.yml
   - appimage-builder --skip-test
   artifacts:
     paths:
