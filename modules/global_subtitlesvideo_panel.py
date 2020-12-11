@@ -474,6 +474,7 @@ def global_subtitlesvideo_autosync_button_clicked(self):
             self.timeline.update(self)
             self.properties.update_properties_widget(self)
 
+
 def global_subtitlesvideo_autosub_button_clicked(self):
     run_command = False
 
@@ -515,7 +516,6 @@ def global_subtitlesvideo_autosub_button_clicked(self):
 
             return final_subtitles
 
-
         language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()]
         #
         # command = [
@@ -534,7 +534,7 @@ def global_subtitlesvideo_autosub_button_clicked(self):
         # audio_out.wait()
 
         # autosub.generate_subtitles(os.path.join(path_tmp, 'subtitle.opus'), output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
-        test = autosub.generate_subtitles(self.video_metadata['filepath'], output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
+        autosub.generate_subtitles(self.video_metadata['filepath'], output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
 
         if os.path.isfile(os.path.join(path_tmp, 'subtitle.json')):
             final_subtitles = read_json_subtitles(filename=os.path.join(path_tmp, 'subtitle.json'), transcribed=True)
