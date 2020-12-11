@@ -1,7 +1,7 @@
 PyQt5
 python-mpv
 pyopengl
-numpy
+numpy==1.19.3
 bcrypt
 sip
 cffi
