@@ -561,11 +561,13 @@ def playercontrols_play_from_last_start_button_clicked(self):
 
 def playercontrols_play_from_next_start_button_clicked(self):
     subt = [item[0] for item in self.subtitles_list]
-    last_subtitle = self.subtitles_list[bisect(subt, self.player_widget.position)]
-    self.player_widget.seek(last_subtitle[0])
-    self.player_widget.play()
-    self.timeline.update_scrollbar(self)
-    self.timeline.update(self)
+    i = bisect(subt, self.player_widget.position)
+    if i < len(self.subtitles_list):
+        last_subtitle = self.subtitles_list[i]
+        self.player_widget.seek(last_subtitle[0])
+        self.player_widget.play()
+        self.timeline.update_scrollbar(self)
+        self.timeline.update(self)
 
 
 def add_subtitle_button_clicked(self):
