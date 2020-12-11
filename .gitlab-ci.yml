@@ -28,7 +28,7 @@ staging:amd64:
   - apt-get install -y python3-pip python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot
   - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
   - chmod +x /usr/local/bin/appimagetool
-  - python3 -m pip install appimage-builder
+  - python3 -m pip install --ignore-installed appimage-builder
   - mv dist/subtitld AppDir
   - cp AppDir/graphics/subtitld.png ./usr/share/icons/hicolor/512x512/.
   - appimage-builder --skip-test
