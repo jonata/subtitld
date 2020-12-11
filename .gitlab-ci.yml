@@ -47,6 +47,8 @@ appimage-amd64:
     - python3 -m pip install pyinstaller==3.6
   script:
     - python3 -m PyInstaller subtitld_linux.spec
+    - mv dist/subtitld AppDir
+    - cp AppDir/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
     - appimage-builder --skip-test
   artifacts:
     paths:
