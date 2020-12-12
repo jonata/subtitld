@@ -142,8 +142,9 @@ def process_subtitles_file(subtitle_file=False, format='SRT'):
 
     if subtitle_file and os.path.isfile(subtitle_file):
         if subtitle_file.lower().endswith(('.srt')):
-            with open(subtitle_file, encoding='utf-8') as srt_file:
-                srt_content = srt_file.read()
+            enc = chardet.detect(open(subtitle_file, 'rb').read())['encoding']
+            with open(subtitle_file, mode='rb') as srt_file:
+                srt_content = srt_file.read().decode(enc, 'ignore')
 
                 if ' -> ' in srt_content:
                     srt_content = srt_content.replace(' -> ', ' --> ')
