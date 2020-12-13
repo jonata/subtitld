@@ -1,4 +1,4 @@
-staging:amd64:
+snap-amd64:
   image:
     name: ubuntu:18.04
   type: deploy
@@ -28,7 +28,7 @@ staging:amd64:
   - snapcraft push *.snap --release beta
   artifacts:
     paths:
-    - dist
+    - '*.snap'
     expire_in: 1 week
   only:
   - master
