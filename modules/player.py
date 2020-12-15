@@ -104,6 +104,7 @@ class MpvWidget(QOpenGLWidget):
     def loadfile(self, filepath) -> None:
         if os.path.isfile(filepath):
             self.mpv.command('loadfile', filepath, 'replace')
+            self.mpv.wait_for_property('seekable')
         self.mpv.pause = True
 
     def frameStep(self) -> None:
