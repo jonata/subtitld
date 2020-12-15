@@ -40,7 +40,10 @@ elif sys.platform == 'win32' or os.name == 'nt':
     STARTUPINFO.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     STARTUPINFO.wShowWindow = subprocess.SW_HIDE
 else:
-    REAL_PATH_HOME = subprocess.Popen(['getent', 'passwd', str(os.getuid())], stdout=subprocess.PIPE).stdout.read().decode().split(':')[5]
+    try:
+        REAL_PATH_HOME = subprocess.Popen(['getente', 'passwd', str(os.getuid())], stdout=subprocess.PIPE).stdout.read().decode().split(':')[5]
+    except FileNotFoundError:
+        pass
     if not os.path.isdir(os.path.join(PATH_HOME, '.config')):
         os.mkdir(os.path.join(PATH_HOME, '.config'))
     PATH_SUBTITLD_USER_CONFIG = os.path.join(PATH_HOME, '.config', 'subtitld')
