@@ -37,6 +37,8 @@ develop-eggs/
 AppDir/
 appimage-builder-cache/
 .installed.cfg
+.flatpak-builder/
+build-dir/
 
 # Installer logs
 pip-log.txt

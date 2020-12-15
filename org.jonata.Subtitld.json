@@ -1,0 +1,376 @@
+{
+  "app-id": "org.jonata.Subtitld",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "5.14",
+  "sdk": "org.kde.Sdk",
+  "command": "subtitld",
+  "finish-args": [
+    "--share=network",
+    "--socket=pulseaudio",
+    "--socket=x11"
+  ],
+  "cleanup": [
+    "/dist"
+  ],
+  "modules": [
+    {
+      "name": "libmpv",
+      "cleanup": ["/include", "/lib/pkgconfig"],
+      "buildsystem": "simple",
+      "build-commands": [
+        "python3 waf configure --prefix=${FLATPAK_DEST} --enable-libmpv-shared --disable-cplayer --disable-oss-audio --disable-alsa --disable-manpage-build --disable-debug-build",
+        "python3 waf build",
+        "python3 waf install"
+      ],
+      "sources": [{
+          "type": "archive",
+          "url": "https://github.com/mpv-player/mpv/archive/v0.32.0.tar.gz",
+          "sha256": "9163f64832226d22e24bbc4874ebd6ac02372cd717bef15c28a0aa858c5fe592"
+        },
+        {
+          "type": "file",
+          "url": "https://waf.io/waf-2.0.19",
+          "sha256": "ba63c90a865a9bcf46926c4e6776f9a3f73d29f33d49b7f61f96bc37b7397cef",
+          "dest-filename": "waf"
+        }
+      ],
+      "modules": [{
+          "name": "libass",
+          "cleanup": ["/include", "/lib/*.la", "/lib/pkgconfig"],
+          "config-opts": ["--disable-static"],
+          "sources": [{
+            "type": "archive",
+            "url": "https://github.com/libass/libass/releases/download/0.14.0/libass-0.14.0.tar.xz",
+            "sha256": "881f2382af48aead75b7a0e02e65d88c5ebd369fe46bc77d9270a94aa8fd38a2"
+          }],
+          "modules": [{
+            "name": "fribidi",
+            "cleanup": ["/bin", "/include", "/lib/pkgconfig", "/lib/*.la", "/share/man"],
+            "buildsystem": "simple",
+            "build-commands": [
+              "meson setup --prefix=${FLATPAK_DEST} --buildtype=release build -D docs=false",
+              "ninja -C build",
+              "ninja -C build install"
+            ],
+            "sources": [{
+              "type": "git",
+              "url": "https://github.com/fribidi/fribidi.git"
+            }]
+          }]
+        },
+        {
+          "name": "ffmpeg",
+          "cleanup": ["/include", "/lib/pkgconfig", "/share/ffmpeg/examples"],
+          "build-options": {
+            "arch": {
+              "aarch64": {
+                "config-opts": [
+                  "--enable-shared",
+                  "--disable-static",
+                  "--disable-debug",
+                  "--enable-gnutls",
+                  "--disable-doc",
+                  "--disable-ffplay",
+                  "--enable-gpl",
+                  "--enable-libass",
+                  "--enable-libfribidi",
+                  "--enable-libmp3lame",
+                  "--enable-libpulse",
+                  "--enable-libtheora",
+                  "--enable-libvorbis",
+                  "--enable-libvpx",
+                  "--enable-libx264",
+                  "--enable-libx265",
+                  "--enable-libxvid",
+                  "--enable-version3"
+                ]
+              },
+              "arm": {
+                "config-opts": [
+                  "--enable-shared",
+                  "--disable-static",
+                  "--disable-debug",
+                  "--enable-gnutls",
+                  "--disable-doc",
+                  "--disable-ffplay",
+                  "--enable-gpl",
+                  "--enable-libass",
+                  "--enable-libfribidi",
+                  "--enable-libmp3lame",
+                  "--enable-libpulse",
+                  "--enable-libtheora",
+                  "--enable-libvorbis",
+                  "--enable-libvpx",
+                  "--enable-libx264",
+                  "--enable-libx265",
+                  "--enable-libxvid",
+                  "--enable-version3"
+                ]
+              },
+              "i386": {
+                "config-opts": [
+                  "--enable-shared",
+                  "--disable-static",
+                  "--disable-debug",
+                  "--enable-gnutls",
+                  "--disable-doc",
+                  "--disable-ffplay",
+                  "--enable-gpl",
+                  "--enable-libass",
+                  "--enable-libfribidi",
+                  "--enable-libmp3lame",
+                  "--enable-libpulse",
+                  "--enable-libtheora",
+                  "--enable-libvorbis",
+                  "--enable-libvpx",
+                  "--enable-libx264",
+                  "--enable-libx265",
+                  "--enable-libxvid",
+                  "--enable-nvdec",
+                  "--enable-version3"
+                ]
+              },
+              "x86_64": {
+                "config-opts": [
+                  "--enable-shared",
+                  "--disable-static",
+                  "--disable-debug",
+                  "--enable-gnutls",
+                  "--disable-doc",
+                  "--disable-ffplay",
+                  "--enable-gpl",
+                  "--enable-libass",
+                  "--enable-libfribidi",
+                  "--enable-libmp3lame",
+                  "--enable-libpulse",
+                  "--enable-libtheora",
+                  "--enable-libvorbis",
+                  "--enable-libvpx",
+                  "--enable-libx264",
+                  "--enable-libx265",
+                  "--enable-libxvid",
+                  "--enable-nvdec",
+                  "--enable-version3"
+                ]
+              }
+            }
+          },
+          "sources": [{
+            "type": "archive",
+            "url": "http://ffmpeg.org/releases/ffmpeg-4.2.2.tar.xz",
+            "sha256": "cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c"
+          }],
+          "modules": [{
+              "name": "ffnvcodec",
+              "only-arches": ["i386", "x86_64"],
+              "buildsystem": "simple",
+              "build-commands": [
+                "make",
+                "make install PREFIX=${FLATPAK_DEST}"
+              ],
+              "sources": [{
+                "type": "git",
+                "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git"
+              }]
+            },
+            {
+              "name": "xvid",
+              "subdir": "build/generic",
+              "sources": [{
+                "type": "archive",
+                "url": "https://downloads.xvid.com/downloads/xvidcore-1.3.7.tar.gz",
+                "sha256": "abbdcbd39555691dd1c9b4d08f0a031376a3b211652c0d8b3b8aa9be1303ce2d"
+              }]
+            },
+            {
+              "name": "libvpx",
+              "config-opts": [
+                "--enable-runtime-cpu-detect",
+                "--enable-shared",
+                "--disable-static",
+                "--enable-pic",
+                "--disable-install-bins",
+                "--disable-install-docs",
+                "--disable-install-srcs",
+                "--enable-vp8",
+                "--enable-postproc",
+                "--enable-vp9",
+                "--enable-vp9-highbitdepth"
+              ],
+              "sources": [{
+                "type": "archive",
+                "url": "https://github.com/webmproject/libvpx/archive/v1.8.2.tar.gz",
+                "sha256": "8735d9fcd1a781ae6917f28f239a8aa358ce4864ba113ea18af4bb2dc8b474ac"
+              }]
+            },
+            {
+              "name": "x264",
+              "build-options": {
+                "arch": {
+                  "aarch64": {
+                    "cxxflags": "-fPIC",
+                    "config-opts": [
+                      "--prefix=${FLATPAK_DEST}",
+                      "--enable-shared",
+                      "--disable-cli",
+                      "--disable-lavf",
+                      "--enable-pic",
+                      "--disable-lto"
+                    ]
+                  },
+                  "arm": {
+                    "cxxflags": "-fPIC",
+                    "config-opts": [
+                      "--prefix=${FLATPAK_DEST}",
+                      "--enable-shared",
+                      "--disable-cli",
+                      "--disable-lavf",
+                      "--enable-pic",
+                      "--disable-lto",
+                      "--disable-asm"
+                    ]
+                  },
+                  "i386": {
+                    "config-opts": [
+                      "--prefix=${FLATPAK_DEST}",
+                      "--enable-shared",
+                      "--disable-cli",
+                      "--disable-lavf",
+                      "--enable-pic",
+                      "--disable-asm"
+                    ]
+                  },
+                  "x86_64": {
+                    "config-opts": [
+                      "--prefix=${FLATPAK_DEST}",
+                      "--enable-shared",
+                      "--disable-cli",
+                      "--disable-lavf",
+                      "--enable-pic",
+                      "--disable-asm"
+                    ]
+                  }
+                }
+              },
+              "post-install": [
+                "ln -srf ${FLATPAK_DEST}/lib/libx264.so.* ${FLATPAK_DEST}/lib/libx264.so"
+              ],
+              "sources": [{
+                "type": "git",
+                "commit": "1771b556ee45207f8711744ccbd5d42a3949b14c",
+                "url": "https://git.videolan.org/git/x264.git"
+              }]
+            },
+            {
+              "name": "x265_32",
+              "only-arches": ["i386"],
+              "buildsystem": "simple",
+              "build-options": {
+                "arch": {
+                  "arm": {
+                    "cxxflags": "-fPIC"
+                  },
+                  "aarch64": {
+                    "cxxflags": "-fPIC"
+                  }
+                }
+              },
+              "build-commands": [
+                "mkdir source/build-8 source/build-10 source/build-12",
+                "cd source/build-12 && cmake .. -DCMAKE_INSTALL_PREFIX=${FLATPAK_DEST} -DENABLE_ASSEMBLY='FALSE' -DHIGH_BIT_DEPTH='TRUE' -DMAIN12='TRUE' -DEXPORT_C_API='FALSE' -DENABLE_CLI='FALSE' -DENABLE_SHARED='FALSE'",
+                "cd source/build-12 && make",
+                "cd source/build-10 && cmake .. -DCMAKE_INSTALL_PREFIX=${FLATPAK_DEST} -DENABLE_ASSEMBLY='FALSE' -DHIGH_BIT_DEPTH='TRUE' -DEXPORT_C_API='FALSE' -DENABLE_CLI='FALSE' -DENABLE_SHARED='FALSE'",
+                "cd source/build-10 && make",
+                "ln -s ../build-10/libx265.a source/build-8/libx265_main10.a",
+                "ln -s ../build-12/libx265.a source/build-8/libx265_main12.a",
+                "cd source/build-8 && cmake .. -DCMAKE_INSTALL_PREFIX=${FLATPAK_DEST} -DENABLE_ASSEMBLY='FALSE' -DENABLE_SHARED='TRUE' -DENABLE_CLI='FALSE' -DENABLE_HDR10_PLUS='TRUE' -DEXTRA_LIB='x265_main10.a;x265_main12.a' -DEXTRA_LINK_FLAGS='-L.' -DLINKED_10BIT='TRUE' -DLINKED_12BIT='TRUE'",
+                "cd source/build-8 && make",
+                "cd source/build-8 && make install"
+              ],
+              "sources": [{
+                "type": "archive",
+                "url": "https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.3.tar.gz",
+                "sha256": "c6d744a87eda55560da715f56f878640554ddc06e2d0fcbd822fa330affc22cc"
+              }]
+            },
+            {
+              "name": "x265_64",
+              "skip-arches": ["i386"],
+              "buildsystem": "simple",
+              "build-options": {
+                "arch": {
+                  "arm": {
+                    "cxxflags": "-fPIC"
+                  },
+                  "aarch64": {
+                    "cxxflags": "-fPIC"
+                  }
+                }
+              },
+              "build-commands": [
+                "mkdir source/build-8 source/build-10 source/build-12",
+                "cd source/build-12 && cmake .. -DCMAKE_INSTALL_PREFIX=${FLATPAK_DEST} -DHIGH_BIT_DEPTH='TRUE' -DMAIN12='TRUE' -DEXPORT_C_API='FALSE' -DENABLE_CLI='FALSE' -DENABLE_SHARED='FALSE'",
+                "cd source/build-12 && make",
+                "cd source/build-10 && cmake .. -DCMAKE_INSTALL_PREFIX=${FLATPAK_DEST} -DHIGH_BIT_DEPTH='TRUE' -DEXPORT_C_API='FALSE' -DENABLE_CLI='FALSE' -DENABLE_SHARED='FALSE'",
+                "cd source/build-10 && make",
+                "ln -s ../build-10/libx265.a source/build-8/libx265_main10.a",
+                "ln -s ../build-12/libx265.a source/build-8/libx265_main12.a",
+                "cd source/build-8 && cmake .. -DCMAKE_INSTALL_PREFIX=${FLATPAK_DEST} -DENABLE_SHARED='TRUE' -DENABLE_CLI='FALSE' -DENABLE_HDR10_PLUS='TRUE' -DEXTRA_LIB='x265_main10.a;x265_main12.a' -DEXTRA_LINK_FLAGS='-L.' -DLINKED_10BIT='TRUE' -DLINKED_12BIT='TRUE'",
+                "cd source/build-8 && make",
+                "cd source/build-8 && make install"
+              ],
+              "sources": [{
+                "type": "archive",
+                "url": "https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.3.tar.gz",
+                "sha256": "c6d744a87eda55560da715f56f878640554ddc06e2d0fcbd822fa330affc22cc"
+              }]
+            },
+            {
+              "name": "fdkaac",
+              "config-opts": ["--disable-static"],
+              "sources": [{
+                "type": "archive",
+                "url": "https://github.com/mstorsjo/fdk-aac/archive/v2.0.1.tar.gz",
+                "sha256": "a4142815d8d52d0e798212a5adea54ecf42bcd4eec8092b37a8cb615ace91dc6"
+              }]
+            },
+            {
+              "name": "lame",
+              "cleanup": ["/share/doc"],
+              "config-opts": [
+                "--enable-shared",
+                "--disable-static",
+                "--disable-frontend",
+                "--enable-nasm"
+              ],
+              "sources": [{
+                "type": "archive",
+                "url": "https://downloads.sourceforge.net/lame/lame-3.100.tar.gz",
+                "sha256": "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e"
+              }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "subtitld",
+      "buildsystem": "simple",
+      "build-commands": [
+        "pip3 install --no-cache-dir --prefix=${FLATPAK_DEST} -r requirements.txt",
+        "pyinstaller subtitld_linux.spec"
+      ],
+      "build-options": {
+        "build-args": [ "--share=network" ]
+      },
+      "post-install": [
+        "cp -r dist/subtitld/* /app/bin/."
+      ],
+      "sources": [{
+        "type": "git",
+        "branch": "master",
+        "url": "https://gitlab.com/jonata/subtitld.git"
+      }]
+    }
+  ]
+}
