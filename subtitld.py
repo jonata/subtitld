@@ -29,6 +29,8 @@ class subtitld(QWidget):
         self.setWindowIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'subtitld.png')))
         self.setAcceptDrops(True)
 
+        self.setMinimumSize(860, 450)
+
         # Setting some default values
         self.update_accuracy = 200
         self.subtitles_list = []
