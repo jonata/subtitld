@@ -62,6 +62,8 @@ SectionEnd
 
 Section "Uninstall"
 
+    ExecWait "TaskKill /IM ${MUI_BRANDINGTEXT}.exe /F"
+
     DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\${MUI_PRODUCT}"
     DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}"
 
