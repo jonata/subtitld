@@ -15,6 +15,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
     self.global_properties_panel_show_margins = QCheckBox('Show safety margins', parent=self.global_properties_panel_widget)
     self.global_properties_panel_show_margins.clicked.connect(lambda: global_properties_panel_show_margins_clicked(self))
+    self.global_properties_panel_show_margins.setChecked(self.settings['safety_margins'].get('show_action_safe_margins', False))
 
 
 def resized(self):
