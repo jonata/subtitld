@@ -1,4 +1,11 @@
 #!/usr/bin/python3
+"""Subtitle - open source subtitle editor
+
+You can run Subtitld by just calling this file as a Python script, like this:
+
+    $ python subtitld.py
+
+"""
 
 import os
 import sys
@@ -16,13 +23,14 @@ if ACTUAL_OS == 'darwin':
     from modules.paths import NSURL
 
 list_of_supported_subtitle_extensions = []
-for type in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS.keys():
-    for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[type]['extensions']:
+for t in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+    for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[t]['extensions']:
         list_of_supported_subtitle_extensions.append(ext)
 list_of_supported_subtitle_extensions = tuple(list_of_supported_subtitle_extensions)
 
 
-class subtitld(QWidget):
+class Subtitld(QWidget):
+    """The main window (QWidget) class"""
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Subtitld')
@@ -144,7 +152,7 @@ class subtitld(QWidget):
         self.autosave_timer.setInterval(int(self.settings['autosave'].get('interval', 300000)))
         self.autosave_timer.timeout.connect(lambda: autosave_timer_timeout(self))
 
-    def dragEnterEvent(widget, event):
+    def dragEnterEvent(self, event):
         if event.mimeData().hasUrls and len(event.mimeData().urls()) > 0:
             if sys.platform == 'darwin':
                 filename = str(NSURL.alloc().initWithString_(event.mimeData().urls()[0].toString()).fileSystemRepresentation())
@@ -154,8 +162,8 @@ class subtitld(QWidget):
             if filename.lower().endswith(('.subtitld')) or filename.lower().endswith(list_of_supported_subtitle_extensions) or filename.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
                 event.accept()
 
-    def dropEvent(widget, event):
-        None
+    def dropEvent(self, event):
+        None #
         # if sys.platform == 'darwin':
         #     filename = str(NSURL.alloc().initWithString_(event.mimeData().urls()[0].toString()).fileSystemRepresentation())
         # else:
@@ -232,9 +240,6 @@ class subtitld(QWidget):
         if event.key() == Qt.Key_Right:
             self.player_widget.frameStep()
 
-    def live_recording_note_thread_updated(self, result):
-        self.recording_note = result
-
     def generate_effect(self, widget, effect_type, duration, startValue, endValue):
         widget.setDuration(duration)
         if effect_type == 'geometry':
@@ -251,25 +256,6 @@ def autosave_timer_timeout(self):
     if not filename:
         filename = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
     self.file_io.save_file(os.path.join(PATH_SUBTITLD_DATA_BACKUP, filename + '_' + datetime.datetime.now().strftime("%Y%m%d%H%M%S") + '.srt'), self.subtitles_list, 'SRT')
-
-
-def edit_syllable_returnpressed(self):
-    self.lyrics_notes[self.lyrics_notes.index(self.selected_note)][3] = self.player_controls.edit_sylable.text()
-    self.timeline_widget.update()
-
-
-def viewnotesin_button_clicked(self):
-    if self.mediaplayer_viewnotes[0] + 1 < 29 and self.mediaplayer_viewnotes[-1] - 1 > -29:
-        self.mediaplayer_viewnotes.insert(0, self.mediaplayer_viewnotes[0] + 1)
-        self.mediaplayer_viewnotes.append(self.mediaplayer_viewnotes[-1] - 1)
-    self.timeline_widget.update()
-
-
-def viewnotesout_button_clicked(self):
-    if len(self.mediaplayer_viewnotes) > 2:
-        del self.mediaplayer_viewnotes[0]
-        del self.mediaplayer_viewnotes[-1]
-    self.timeline_widget.update()
 
 
 if __name__ == '__main__':
@@ -300,7 +286,7 @@ if __name__ == '__main__':
     font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-Th.ttf'))
 
     app.setFont(QFont('Ubuntu', 10))
-    app.main = subtitld()
+    app.main = Subtitld()
     app.main.show()
 
     sys.exit(app.exec_())
