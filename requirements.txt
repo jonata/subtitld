@@ -2,7 +2,6 @@ PyQt5
 python-mpv
 pyopengl
 numpy==1.19.3
-bcrypt
 sip
 cffi
 requests
