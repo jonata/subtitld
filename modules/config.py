@@ -24,6 +24,9 @@ def load(config_file_path=False):
     if not config.get('autosave', False):
         config['autosave'] = {}
 
+    if not config.get('timeline', False):
+        config['timeline'] = {}
+
     return config
 
 

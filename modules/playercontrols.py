@@ -276,6 +276,27 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.repeat_playback_times.setMaximum(20)
     self.repeat_playback_times.valueChanged.connect(lambda: repeat_playback_times_changed(self))
 
+    self.timelinescrolling_none_button = QPushButton(parent=self.playercontrols_widget)
+    self.timelinescrolling_none_button.setObjectName('subbutton')
+    self.timelinescrolling_none_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
+    self.timelinescrolling_none_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'timelinescrolling_none_icon.svg')))
+    self.timelinescrolling_none_button.setCheckable(True)
+    self.timelinescrolling_none_button.clicked.connect(lambda: timelinescrolling_type_changed(self, 'none'))
+
+    self.timelinescrolling_page_button = QPushButton(parent=self.playercontrols_widget)
+    self.timelinescrolling_page_button.setObjectName('subbutton')
+    self.timelinescrolling_page_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
+    self.timelinescrolling_page_button.setCheckable(True)
+    self.timelinescrolling_page_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'timelinescrolling_page_icon.svg')))
+    self.timelinescrolling_page_button.clicked.connect(lambda: timelinescrolling_type_changed(self, 'page'))
+
+    self.timelinescrolling_follow_button = QPushButton(parent=self.playercontrols_widget)
+    self.timelinescrolling_follow_button.setObjectName('subbutton')
+    self.timelinescrolling_follow_button.setStyleSheet('QPushButton {border-top:0;}')
+    self.timelinescrolling_follow_button.setCheckable(True)
+    self.timelinescrolling_follow_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'timelinescrolling_follow_icon.svg')))
+    self.timelinescrolling_follow_button.clicked.connect(lambda: timelinescrolling_type_changed(self, 'follow'))
+
     self.grid_button = QPushButton('GRID', parent=self.playercontrols_widget)
     self.grid_button.setObjectName('subbutton')
     self.grid_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
@@ -435,12 +456,17 @@ def resized(self):
     self.grid_seconds_button.setGeometry(self.grid_frames_button.x()+self.grid_frames_button.width(), self.grid_button.y(), 30, self.grid_button.height())
     self.grid_scenes_button.setGeometry(self.grid_seconds_button.x()+self.grid_seconds_button.width(), self.grid_button.y(), 30, self.grid_button.height())
 
+    self.timelinescrolling_none_button.setGeometry(self.grid_button.x() - 95, 7, 30, self.grid_button.height())
+    self.timelinescrolling_page_button.setGeometry(self.grid_button.x() - 65, 7, 30, self.grid_button.height())
+    self.timelinescrolling_follow_button.setGeometry(self.grid_button.x() - 35, 7, 30, self.grid_button.height())
+
 
 def show(self):
     self.generate_effect(self.playercontrols_widget_animation, 'geometry', 1000, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
     update_snap_buttons(self)
     update_grid_buttons(self)
     update_playback_speed_buttons(self)
+    timelinescrolling_type_changed(self, self.settings['timeline'].get('scrolling', 'page'))
     self.add_subtitle_duration.setValue(self.default_new_subtitle_duration)
     self.gap_subtitle_duration.setValue(2.0)
     self.repeat_playback_duration.setValue(self.repeat_duration)
@@ -485,6 +511,13 @@ def snap_grid_button_clicked(self):
 
 def snap_value_changed(self):
     self.timeline_snap_value = self.snap_value.value() if self.snap_value.value() else .1
+
+
+def timelinescrolling_type_changed(self, scrollingtype='page'):
+    self.timelinescrolling_none_button.setChecked((scrollingtype == 'none'))
+    self.timelinescrolling_page_button.setChecked((scrollingtype == 'page'))
+    self.timelinescrolling_follow_button.setChecked((scrollingtype == 'follow'))
+    self.settings['timeline']['scrolling'] = scrollingtype
 
 
 def add_subtitle_duration_changed(self):

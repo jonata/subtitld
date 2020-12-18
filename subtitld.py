@@ -47,6 +47,8 @@ class Subtitld(QWidget):
         self.actual_subtitle_file = ''
         self.actual_video_file = ''
 
+        self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
+
         self.selected_subtitle = False
         self.mediaplayer_zoom = 100.0
         self.video_waveformsize = .7
@@ -71,8 +73,6 @@ class Subtitld(QWidget):
         self.unsaved = False
         self.format_to_save = 'SRT'
         self.selected_language = 'en'
-
-        self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
 
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')

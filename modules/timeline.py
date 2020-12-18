@@ -46,7 +46,7 @@ class thread_get_waveform(QThread):
     height = False
 
     def run(self):
-        positive_values, negative_values, blah = waveform.generate_waveform_zoom(zoom=self.zoom, duration=self.duration, waveform=self.audio)
+        positive_values, negative_values, gc = waveform.generate_waveform_zoom(zoom=self.zoom, duration=self.duration, waveform=self.audio)
         self.command.emit([self.zoom, [positive_values, negative_values]])
 
 
@@ -459,8 +459,12 @@ def update(self):
                 # self.player_widget.mpv.seek(self.player_widget.position, reference='absolute')
                 pos = self.repeat_duration_tmp.pop(0)
                 self.repeat_duration_tmp.append([pos[1], pos[1] + self.repeat_duration])
-    if (self.player_widget.position * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
+    if self.settings['timeline'].get('scrolling', 'page') == 'follow':
+        if (self.player_widget.position * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width()*.5 and (self.player_widget.position * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) < (self.timeline_widget.width() - (self.timeline_scroll.width()*.5)):
+            update_scrollbar(self, position='middle')
+    elif self.settings['timeline'].get('scrolling', 'page') == 'page' and (self.player_widget.position * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
         update_scrollbar(self)
+
     update_timecode_label(self)
     self.timeline_widget.update()
 
