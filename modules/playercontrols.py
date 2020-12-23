@@ -4,13 +4,14 @@
 
 import os
 from bisect import bisect
-from PyQt5.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpinBox
+from PyQt5.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpinBox, QComboBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 from PyQt5.QtGui import QIcon
 
 from modules import subtitles
 from modules.paths import PATH_SUBTITLD_GRAPHICS
 
+STEPS_LIST = ['Frames', 'Seconds']
 
 def load(self):
     """Function to load player control widgets"""
@@ -356,6 +357,21 @@ def load(self):
     self.snap_grid_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_grid_icon.png')))
     self.snap_grid_button.clicked.connect(lambda: snap_grid_button_clicked(self))
 
+    self.step_button = QPushButton('STEP', parent=self.playercontrols_widget)
+    self.step_button.setObjectName('subbutton')
+    self.step_button.setStyleSheet('QPushButton {border-top:0;}')
+    self.step_button.setCheckable(True)
+    self.step_button.clicked.connect(lambda: update_step_buttons(self))
+
+    self.step_value_f = QDoubleSpinBox(parent=self.step_button)
+    self.step_value_f.valueChanged.connect(lambda: step_value_changed(self))
+
+    self.step_value_i = QSpinBox(parent=self.step_button)
+    self.step_value_i.valueChanged.connect(lambda: step_value_changed(self))
+
+    self.step_unit = QComboBox(parent=self.step_button)
+    self.step_unit.insertItems(0, STEPS_LIST)
+    self.step_unit.activated.connect(lambda: step_value_changed(self))
 
 def playercontrols_stop_button_clicked(self):
     """Function to call when stop button is clicked"""
@@ -451,16 +467,21 @@ def resized(self):
     self.zoomout_button.setGeometry(self.last_end_to_current_position_button.x() + self.last_end_to_current_position_button.width() + 5, 44, 40, 40)
     self.zoomin_button.setGeometry(self.zoomout_button.x() + self.zoomout_button.width(), 44, 40, 40)
 
+    self.grid_button.setGeometry(self.change_playback_speed.x()-145, 7, 50, 24)
+    self.grid_frames_button.setGeometry(self.grid_button.x()+self.grid_button.width(), self.grid_button.y(), 30, self.grid_button.height())
+    self.grid_seconds_button.setGeometry(self.grid_frames_button.x()+self.grid_frames_button.width(), self.grid_button.y(), 30, self.grid_button.height())
+    self.grid_scenes_button.setGeometry(self.grid_seconds_button.x()+self.grid_seconds_button.width(), self.grid_button.y(), 30, self.grid_button.height())
+
     self.snap_button.setGeometry(self.repeat_playback.x()+self.repeat_playback.width()+5, 7, 100, 24)
     self.snap_value.setGeometry(self.snap_button.width()-50, 4, 46, self.snap_button.height()-8)
     self.snap_limits_button.setGeometry(self.snap_button.x()+self.snap_button.width(), self.snap_button.y(), 30, self.snap_button.height())
     self.snap_move_button.setGeometry(self.snap_limits_button.x()+self.snap_limits_button.width(), self.snap_button.y(), 30, self.snap_button.height())
     self.snap_grid_button.setGeometry(self.snap_move_button.x()+self.snap_move_button.width(), self.snap_button.y(), 30, self.snap_button.height())
 
-    self.grid_button.setGeometry(self.change_playback_speed.x()-145, 7, 50, 24)
-    self.grid_frames_button.setGeometry(self.grid_button.x()+self.grid_button.width(), self.grid_button.y(), 30, self.grid_button.height())
-    self.grid_seconds_button.setGeometry(self.grid_frames_button.x()+self.grid_frames_button.width(), self.grid_button.y(), 30, self.grid_button.height())
-    self.grid_scenes_button.setGeometry(self.grid_seconds_button.x()+self.grid_seconds_button.width(), self.grid_button.y(), 30, self.grid_button.height())
+    self.step_button.setGeometry(self.snap_grid_button.x()+self.snap_grid_button.width()+5, 7, 160, 24)
+    self.step_value_f.setGeometry(self.step_button.width()-112, 4, 46, self.step_button.height()-8)
+    self.step_value_i.setGeometry(self.step_button.width()-112, 4, 46, self.step_button.height()-8)
+    self.step_unit.setGeometry(self.step_button.width()-65, 4, 58, self.step_button.height()-8)
 
     self.timelinescrolling_none_button.setGeometry(self.grid_button.x() - 95, 7, 30, self.grid_button.height())
     self.timelinescrolling_page_button.setGeometry(self.grid_button.x() - 65, 7, 30, self.grid_button.height())
@@ -472,6 +493,7 @@ def show(self):
     self.generate_effect(self.playercontrols_widget_animation, 'geometry', 1000, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
     update_snap_buttons(self)
     update_grid_buttons(self)
+    update_step_buttons(self)
     update_playback_speed_buttons(self)
     timelinescrolling_type_changed(self, self.settings['timeline'].get('scrolling', 'page'))
     self.add_subtitle_duration.setValue(self.default_new_subtitle_duration)
@@ -526,6 +548,25 @@ def snap_grid_button_clicked(self):
 def snap_value_changed(self):
     """Function to call when snap value is changed"""
     self.timeline_snap_value = self.snap_value.value() if self.snap_value.value() else .1
+
+
+def step_value_changed(self):
+    """Function to set variables to settings"""
+    self.settings['timeline']['step_unit'] = self.step_unit.currentText()
+    self.settings['timeline']['step_value'] = self.step_value_f.value()
+    update_step_buttons(self)
+
+
+def update_step_buttons(self):
+    """Function to update step widgets"""
+    self.step_value_f.setEnabled(self.step_button.isChecked())
+    self.step_value_i.setEnabled(self.step_button.isChecked())
+    self.step_unit.setEnabled(self.step_button.isChecked())
+    self.step_unit.setCurrentIndex(STEPS_LIST.index(self.settings['timeline'].get('step_unit', 'Frames')))
+    self.step_value_f.setVisible(self.settings['timeline'].get('step_unit', 'Frames') == 'Seconds')
+    self.step_value_i.setVisible(self.settings['timeline'].get('step_unit', 'Frames') == 'Frames')
+    self.step_value_f.setValue(float(self.settings['timeline'].get('step_value', 1.0)))
+    self.step_value_i.setValue(int(self.settings['timeline'].get('step_value', 1)))
 
 
 def timelinescrolling_type_changed(self, scrollingtype='page'):
@@ -715,7 +756,13 @@ def merge_next_selected_subtitle_button_clicked(self):
 def move_backward_subtitle_clicked(self):
     """Function to move subtitle backward"""
     if self.selected_subtitle:
-        subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-(1.0 / self.video_metadata['framerate']))
+        amount = (1.0 / self.video_metadata['framerate'])
+        if self.step_button.isChecked():
+            if self.settings['timeline'].get('step_unit', 'Frames') == 'Frames':
+                amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
+            else:
+                amount = float(self.settings['timeline'].get('step_value', 1.0))
+        subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
         self.unsaved = True
         self.timeline.update(self)
 
@@ -723,7 +770,13 @@ def move_backward_subtitle_clicked(self):
 def move_forward_subtitle_clicked(self):
     """Function to move subtitle forward"""
     if self.selected_subtitle:
-        subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=(1.0 / self.video_metadata['framerate']))
+        amount = (1.0 / self.video_metadata['framerate'])
+        if self.step_button.isChecked():
+            if self.settings['timeline'].get('step_unit', 'Frames') == 'Frames':
+                amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
+            else:
+                amount = float(self.settings['timeline'].get('step_value', 1.0))
+        subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
         self.unsaved = True
         self.timeline.update(self)
 
@@ -731,7 +784,13 @@ def move_forward_subtitle_clicked(self):
 def move_start_back_subtitle_clicked(self):
     """Function to move starting position of selected subtitle backward"""
     if self.selected_subtitle:
-        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-(1.0 / self.video_metadata['framerate']))
+        amount = (1.0 / self.video_metadata['framerate'])
+        if self.step_button.isChecked():
+            if self.settings['timeline'].get('step_unit', 'Frames') == 'Frames':
+                amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
+            else:
+                amount = float(self.settings['timeline'].get('step_value', 1.0))
+        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
         self.unsaved = True
         self.timeline.update(self)
 
@@ -739,7 +798,13 @@ def move_start_back_subtitle_clicked(self):
 def move_start_forward_subtitle_clicked(self):
     """Function to move starting position of selected subtitle forward"""
     if self.selected_subtitle:
-        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=(1.0 / self.video_metadata['framerate']))
+        amount = (1.0 / self.video_metadata['framerate'])
+        if self.step_button.isChecked():
+            if self.settings['timeline'].get('step_unit', 'Frames') == 'Frames':
+                amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
+            else:
+                amount = float(self.settings['timeline'].get('step_value', 1.0))
+        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
         self.unsaved = True
         self.timeline.update(self)
 
@@ -747,7 +812,13 @@ def move_start_forward_subtitle_clicked(self):
 def move_end_back_subtitle_clicked(self):
     """Function to move ending position of selected subtitle backwards"""
     if self.selected_subtitle:
-        subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-(1.0 / self.video_metadata['framerate']))
+        amount = (1.0 / self.video_metadata['framerate'])
+        if self.step_button.isChecked():
+            if self.settings['timeline'].get('step_unit', 'Frames') == 'Frames':
+                amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
+            else:
+                amount = float(self.settings['timeline'].get('step_value', 1.0))
+        subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
         self.unsaved = True
         self.timeline.update(self)
 
@@ -755,7 +826,13 @@ def move_end_back_subtitle_clicked(self):
 def move_end_forward_subtitle_clicked(self):
     """Function to move ending position of selected subtitle forward"""
     if self.selected_subtitle:
-        subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=(1.0 / self.video_metadata['framerate']))
+        amount = (1.0 / self.video_metadata['framerate'])
+        if self.step_button.isChecked():
+            if self.settings['timeline'].get('step_unit', 'Frames') == 'Frames':
+                amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
+            else:
+                amount = float(self.settings['timeline'].get('step_value', 1.0))
+        subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
         self.unsaved = True
         self.timeline.update(self)
 

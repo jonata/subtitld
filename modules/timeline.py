@@ -422,9 +422,9 @@ def load(self):
             self.timeline_scroll.horizontalScrollBar().setValue(self.timeline_scroll.horizontalScrollBar().value() + event.angleDelta().y())
             event.accept()
 
-        def keyPressEvent(self, event):
-            """Function to call when keyboard press on timeline"""
-            self.keyPressEvent(event)
+        # def keyPressEvent(self, event):
+        #     """Function to call when keyboard press on timeline"""
+        #     self.keyPressEvent(event)
 
     self.timeline_scroll = TimelineScroll(parent=self.playercontrols_widget)
     self.timeline_scroll.setObjectName('timeline_scroll')
