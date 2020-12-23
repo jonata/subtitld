@@ -1,5 +1,6 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+"""Player control widgets.
+
+"""
 
 import os
 from bisect import bisect
@@ -11,13 +12,14 @@ from modules import subtitles
 from modules.paths import PATH_SUBTITLD_GRAPHICS
 
 
-def load(self, PATH_SUBTITLD_GRAPHICS):
+def load(self):
+    """Function to load player control widgets"""
     self.playercontrols_widget = QLabel(parent=self)
     self.playercontrols_widget.setObjectName('playercontrols_widget')
     self.playercontrols_widget_animation = QPropertyAnimation(self.playercontrols_widget, b'geometry')
     self.playercontrols_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
-    self.timeline.load(self, PATH_SUBTITLD_GRAPHICS)
+    self.timeline.load(self)
 
     self.playercontrols_widget_central_top_background = QLabel(parent=self.playercontrols_widget)
     self.playercontrols_widget_central_top_background.setObjectName('playercontrols_widget_central_top_background')
@@ -356,6 +358,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def playercontrols_stop_button_clicked(self):
+    """Function to call when stop button is clicked"""
     # self.player_widget.position = 0.0
     # self.update_timeline.stop()
     playercontrols_playpause_button_clicked(self)
@@ -367,6 +370,7 @@ def playercontrols_stop_button_clicked(self):
 
 
 def playercontrols_playpause_button_clicked(self):
+    """Function to call when play/pause button is clicked"""
     self.player_widget.pause()
     if self.repeat_activated:
         self.repeat_duration_tmp = []
@@ -374,10 +378,12 @@ def playercontrols_playpause_button_clicked(self):
 
 
 def playercontrols_playpause_button_update(self):
+    """Function to update things when stop button is clicked"""
     self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.png')) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')))
 
 
 def resized(self):
+    """Function to call when resizing widgets"""
     if self.subtitles_list or self.video_metadata:
         self.playercontrols_widget.setGeometry(0, self.height()-200, self.width(), 200)
     else:
@@ -462,6 +468,7 @@ def resized(self):
 
 
 def show(self):
+    """Function that shows the entire panel"""
     self.generate_effect(self.playercontrols_widget_animation, 'geometry', 1000, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
     update_snap_buttons(self)
     update_grid_buttons(self)
@@ -474,16 +481,19 @@ def show(self):
 
 
 def zoomin_button_clicked(self):
+    """Function to call when zoonin button is clicked"""
     self.mediaplayer_zoom += 10.0
     zoom_buttons_update(self)
 
 
 def zoomout_button_clicked(self):
+    """Function to call when zoonout button is clicked"""
     self.mediaplayer_zoom -= 10.0
     zoom_buttons_update(self)
 
 
 def zoom_buttons_update(self):
+    """Function to update zoom buttons"""
     self.zoomout_button.setEnabled(True if self.mediaplayer_zoom - 5.0 > 0.0 else False)
     self.zoomin_button.setEnabled(True if self.mediaplayer_zoom + 5.0 < 500.0 else False)
     proportion = ((self.player_widget.position*self.timeline_widget.width_proportion)-self.timeline_scroll.horizontalScrollBar().value())/self.timeline_scroll.width()
@@ -493,27 +503,33 @@ def zoom_buttons_update(self):
 
 
 def snap_button_clicked(self):
+    """Function to call when snap button is clicked"""
     self.timeline_snap = self.snap_button.isChecked()
     update_snap_buttons(self)
 
 
 def snap_move_button_clicked(self):
+    """Function to call when snap move button is clicked"""
     self.timeline_snap_moving = self.snap_move_button.isChecked()
 
 
 def snap_limits_button_clicked(self):
+    """Function to call when snap limits button is clicked"""
     self.timeline_snap_limits = self.snap_limits_button.isChecked()
 
 
 def snap_grid_button_clicked(self):
+    """Function to call when snap to grid button is clicked"""
     self.timeline_snap_grid = self.snap_grid_button.isChecked()
 
 
 def snap_value_changed(self):
+    """Function to call when snap value is changed"""
     self.timeline_snap_value = self.snap_value.value() if self.snap_value.value() else .1
 
 
 def timelinescrolling_type_changed(self, scrollingtype='page'):
+    """Function to call when timeline scrolling method is changed"""
     self.timelinescrolling_none_button.setChecked((scrollingtype == 'none'))
     self.timelinescrolling_page_button.setChecked((scrollingtype == 'page'))
     self.timelinescrolling_follow_button.setChecked((scrollingtype == 'follow'))
@@ -521,10 +537,12 @@ def timelinescrolling_type_changed(self, scrollingtype='page'):
 
 
 def add_subtitle_duration_changed(self):
+    """Function to call when subtitle default duration is changed"""
     self.default_new_subtitle_duration = self.add_subtitle_duration.value()
 
 
 def gap_add_subtitle_button_clicked(self):
+    """Function to call when add gap button is clicked"""
     subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=self.gap_subtitle_duration.value())
     self.unsaved = True
     self.selected_subtitle = False
@@ -532,6 +550,7 @@ def gap_add_subtitle_button_clicked(self):
 
 
 def gap_remove_subtitle_button_clicked(self):
+    """Function to call when remove gap button is clicked"""
     subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=-(self.gap_subtitle_duration.value()))
     self.unsaved = True
     self.selected_subtitle = False
@@ -539,6 +558,7 @@ def gap_remove_subtitle_button_clicked(self):
 
 
 def update_snap_buttons(self):
+    """Function to update snap buttons"""
     self.snap_button.setChecked(bool(self.timeline_snap))
     self.snap_limits_button.setEnabled(self.snap_button.isChecked())
     self.snap_limits_button.setChecked(bool(self.timeline_snap_limits))
@@ -552,6 +572,7 @@ def update_snap_buttons(self):
 
 
 def update_playback_speed_buttons(self):
+    """Function to update playback speed buttons"""
     self.change_playback_speed_icon_label.setEnabled(self.change_playback_speed.isChecked())
     self.change_playback_speed_decrease.setEnabled(self.change_playback_speed.isChecked())
     self.change_playback_speed_slider.setEnabled(self.change_playback_speed.isChecked())
@@ -561,18 +582,21 @@ def update_playback_speed_buttons(self):
 
 
 def grid_button_clicked(self):
+    """Function to call when grid button is clicked"""
     self.timeline_show_grid = self.grid_button.isChecked()
     if not self.timeline_grid_type:
         self.timeline_grid_type = 'seconds'
     update_grid_buttons(self)
 
 
-def grid_type_changed(self, type):
-    self.timeline_grid_type = type
+def grid_type_changed(self, gridtype):
+    """Function to call when grid type button is clicked"""
+    self.timeline_grid_type = gridtype
     update_grid_buttons(self)
 
 
 def update_grid_buttons(self):
+    """Function to update grid buttons"""
     self.grid_button.setChecked(self.timeline_show_grid)
     self.grid_frames_button.setEnabled(self.timeline_show_grid)
     self.grid_frames_button.setChecked(True if self.timeline_grid_type == 'frames' else False)
@@ -584,6 +608,7 @@ def update_grid_buttons(self):
 
 
 def playercontrols_play_from_last_start_button_clicked(self):
+    """Function to call when stop button is clicked"""
     subt = [item[0] for item in self.subtitles_list]
     last_subtitle = self.subtitles_list[bisect(subt, self.player_widget.position)-1]
     self.player_widget.seek(last_subtitle[0])
@@ -593,6 +618,7 @@ def playercontrols_play_from_last_start_button_clicked(self):
 
 
 def playercontrols_play_from_next_start_button_clicked(self):
+    """Function to call when play from next subtitle button is clicked"""
     subt = [item[0] for item in self.subtitles_list]
     i = bisect(subt, self.player_widget.position)
     if i < len(self.subtitles_list):
@@ -604,6 +630,7 @@ def playercontrols_play_from_next_start_button_clicked(self):
 
 
 def add_subtitle_button_clicked(self):
+    """Function to call when add subtitle button is clicked"""
     self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.player_widget.position, duration=self.default_new_subtitle_duration)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
@@ -613,6 +640,7 @@ def add_subtitle_button_clicked(self):
 
 
 def remove_selected_subtitle_button_clicked(self):
+    """Function to call when remove selected subtitle button is clicked"""
     subtitles.remove_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
     self.unsaved = True
     self.selected_subtitle = False
@@ -622,6 +650,7 @@ def remove_selected_subtitle_button_clicked(self):
 
 
 def slice_selected_subtitle_button_clicked(self):
+    """Function to call when slice selected subtitle button is clicked"""
     if self.selected_subtitle:
         pos = self.properties_textedit.textCursor().position()
         last_text = self.properties_textedit.toPlainText()[:pos]
@@ -634,6 +663,7 @@ def slice_selected_subtitle_button_clicked(self):
 
 
 def select_subtitle_in_current_position(self):
+    """Function to call when actual subtitle under cursor need to be selected"""
     subtitle = subtitles.subtitle_under_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     if subtitle:
         self.selected_subtitle = subtitle
@@ -643,6 +673,7 @@ def select_subtitle_in_current_position(self):
 
 
 def select_next_subtitle_over_current_position(self):
+    """Function to call when next subtitle under cursor need to be selected"""
     subtitle = subtitles.next_subtitle_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     if subtitle:
         self.selected_subtitle = subtitle
@@ -652,6 +683,7 @@ def select_next_subtitle_over_current_position(self):
 
 
 def select_last_subtitle_over_current_position(self):
+    """Function to call when last subtitle under cursor need to be selected"""
     subtitle = subtitles.last_subtitle_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     if subtitle:
         self.selected_subtitle = subtitle
@@ -661,6 +693,7 @@ def select_last_subtitle_over_current_position(self):
 
 
 def merge_back_selected_subtitle_button_clicked(self):
+    """Function to merge selected subtitle with the last subtitle"""
     if self.selected_subtitle:
         self.selected_subtitle = subtitles.merge_back_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
         self.unsaved = True
@@ -670,6 +703,7 @@ def merge_back_selected_subtitle_button_clicked(self):
 
 
 def merge_next_selected_subtitle_button_clicked(self):
+    """Function to merge selected subtitle with the next subtitle"""
     if self.selected_subtitle:
         self.selected_subtitle = subtitles.merge_next_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
         self.unsaved = True
@@ -679,6 +713,7 @@ def merge_next_selected_subtitle_button_clicked(self):
 
 
 def move_backward_subtitle_clicked(self):
+    """Function to move subtitle backward"""
     if self.selected_subtitle:
         subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-(1.0 / self.video_metadata['framerate']))
         self.unsaved = True
@@ -686,6 +721,7 @@ def move_backward_subtitle_clicked(self):
 
 
 def move_forward_subtitle_clicked(self):
+    """Function to move subtitle forward"""
     if self.selected_subtitle:
         subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=(1.0 / self.video_metadata['framerate']))
         self.unsaved = True
@@ -693,6 +729,7 @@ def move_forward_subtitle_clicked(self):
 
 
 def move_start_back_subtitle_clicked(self):
+    """Function to move starting position of selected subtitle backward"""
     if self.selected_subtitle:
         subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-(1.0 / self.video_metadata['framerate']))
         self.unsaved = True
@@ -700,6 +737,7 @@ def move_start_back_subtitle_clicked(self):
 
 
 def move_start_forward_subtitle_clicked(self):
+    """Function to move starting position of selected subtitle forward"""
     if self.selected_subtitle:
         subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=(1.0 / self.video_metadata['framerate']))
         self.unsaved = True
@@ -707,6 +745,7 @@ def move_start_forward_subtitle_clicked(self):
 
 
 def move_end_back_subtitle_clicked(self):
+    """Function to move ending position of selected subtitle backwards"""
     if self.selected_subtitle:
         subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-(1.0 / self.video_metadata['framerate']))
         self.unsaved = True
@@ -714,6 +753,7 @@ def move_end_back_subtitle_clicked(self):
 
 
 def move_end_forward_subtitle_clicked(self):
+    """Function to move ending position of selected subtitle forward"""
     if self.selected_subtitle:
         subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=(1.0 / self.video_metadata['framerate']))
         self.unsaved = True
@@ -721,14 +761,17 @@ def move_end_forward_subtitle_clicked(self):
 
 
 def timeline_cursor_back_frame_clicked(self):
+    """Function to move cursor one frame backward"""
     self.player_widget.frameBackStep()
 
 
 def timeline_cursor_next_frame_clicked(self):
+    """Function to move cursor one frame forward"""
     self.player_widget.frameStep()
 
 
 def next_start_to_current_position_button_clicked(self):
+    """Function to move cursor one frame backward"""
     subtitles.next_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
@@ -737,6 +780,7 @@ def next_start_to_current_position_button_clicked(self):
 
 
 def last_end_to_current_position_button_clicked(self):
+    """Function to move last ending position of selected subtitle to current cursor position"""
     subtitles.last_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
@@ -745,6 +789,7 @@ def last_end_to_current_position_button_clicked(self):
 
 
 def last_start_to_current_position_button_clicked(self):
+    """Function to move last starting position subtitle to current cursor position"""
     subtitles.last_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
@@ -753,6 +798,7 @@ def last_start_to_current_position_button_clicked(self):
 
 
 def subtitle_start_to_current_position_button_clicked(self):
+    """Function to move starting position subtitle to current cursor position"""
     subtitles.subtitle_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
@@ -761,6 +807,7 @@ def subtitle_start_to_current_position_button_clicked(self):
 
 
 def subtitle_end_to_current_position_button_clicked(self):
+    """Function to move ending position subtitle to current cursor position"""
     subtitles.subtitle_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
@@ -769,6 +816,7 @@ def subtitle_end_to_current_position_button_clicked(self):
 
 
 def next_end_to_current_position_button_clicked(self):
+    """Function to move next ending position to current cursor position"""
     subtitles.next_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
@@ -777,6 +825,7 @@ def next_end_to_current_position_button_clicked(self):
 
 
 def change_playback_speed_clicked(self):
+    """Function to call when playback speed button is clicked"""
     if not self.change_playback_speed.isChecked():
         self.playback_speed = 1.0
         self.player.update_speed(self)
@@ -784,6 +833,7 @@ def change_playback_speed_clicked(self):
 
 
 def change_playback_speed_decrease_clicked(self):
+    """Function to call when playback speed decrease button is clicked"""
     self.change_playback_speed_slider.setValue(self.change_playback_speed_slider.value()-10)
     self.playback_speed = self.change_playback_speed_slider.value()/100.0
     self.player.update_speed(self)
@@ -791,12 +841,14 @@ def change_playback_speed_decrease_clicked(self):
 
 
 def change_playback_speed_slider(self):
+    """Function to call when playback speed slider button is changed"""
     self.playback_speed = self.change_playback_speed_slider.value()/100.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
 
 
 def change_playback_speed_increase_clicked(self):
+    """Function to call when playback speed increase button is clicked"""
     self.change_playback_speed_slider.setValue(self.change_playback_speed_slider.value()+10)
     self.playback_speed = self.change_playback_speed_slider.value()/100.0
     self.player.update_speed(self)
@@ -804,12 +856,15 @@ def change_playback_speed_increase_clicked(self):
 
 
 def repeat_playback_clicked(self):
+    """Function to call when playback repeat button is clicked"""
     self.repeat_activated = self.repeat_playback.isChecked()
 
 
 def repeat_playback_duration_changed(self):
+    """Function to call when playback repeat duration is changed"""
     self.repeat_duration = self.repeat_playback_duration.value()
 
 
 def repeat_playback_times_changed(self):
+    """Function to call when playback repeat number of times is changed"""
     self.repeat_times = self.repeat_playback_times.value()

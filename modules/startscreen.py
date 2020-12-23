@@ -1,10 +1,11 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+"""starting screen module
+
+"""
 
 import os
 import sys
 from datetime import datetime
-from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsOpacityEffect, QListWidget, QApplication, QListWidgetItem
+from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsOpacityEffect, QListWidget, QListWidgetItem
 from PyQt5.QtCore import QPropertyAnimation, Qt, QSize
 
 from modules import file_io
@@ -12,6 +13,7 @@ from modules.paths import VERSION_NUMBER
 
 
 def load(self):
+    """Function to load all starting screen widgets"""
     self.start_screen = QLabel(parent=self)
     self.start_screen_transparency = QGraphicsOpacityEffect()
     self.start_screen.setGraphicsEffect(self.start_screen_transparency)
@@ -57,6 +59,7 @@ def load(self):
 
 
 def resized(self):
+    """Function to call when starting screen is resized"""
     self.start_screen.setGeometry(0, self.height()-200, self.width(), 200)
     self.start_screen_recentfiles_background.setGeometry((self.start_screen.width()*.5)-175, 0, 350, self.start_screen.height())
     self.start_screen_top_shadow.setGeometry(0, 0, self.start_screen.width(), 150)
@@ -72,13 +75,13 @@ def resized(self):
 
 
 def show(self):
+    """Function to show starting panel"""
     if self.settings['recent_files']:
         inv_rf = {v: k for k, v in self.settings['recent_files'].items()}
         for item in reversed(sorted(inv_rf)):
             if os.path.isfile(inv_rf[item]):
-                for f in self.start_screen_temp_recent_files_list:
-                    if inv_rf[item] == f[-1]:
-                        continue
+                for filename in self.start_screen_temp_recent_files_list:
+                    if inv_rf[item] == filename[-1]:
                         continue
                 iteml = QListWidgetItem()
                 iteml.setSizeHint(QSize(iteml.sizeHint().width(), 42))
@@ -105,37 +108,17 @@ def show(self):
 
 
 def hide(self):
+    """Function to hide starting panel"""
     self.generate_effect(self.start_screen_transparency_animation, 'opacity', 200, 1.0, 0.0)
     self.generate_effect(self.background_label2_transparency_animation, 'opacity', 500, 1.0, 0.0)
 
 
 def start_screen_open_button_clicked(self):
+    """Function to call when the open subtitle/video button of starting screen is clicked"""
     file_io.open_filepath(self)
 
 
 def start_screen_recent_listwidget_item_clicked(self):
+    """Function to call when item on recent files list is clicked"""
     file_to_open = self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]
     file_io.open_filepath(self, file_to_open)
-
-
-def start_screen_adver_label_show_machineid_button_clicked(self):
-    update_start_screen_adver_panel(self)
-
-
-def update_start_screen_adver_panel(self):
-    update_start_screen_adver_label_machineid_verify(self)
-
-
-def update_start_screen_adver_label_machineid_verify(self):
-    self.start_screen_adver_label_machineid_verify.setEnabled(bool('@' in self.start_screen_adver_label_email.text() and len(self.start_screen_adver_label_email.text().split('@', 1)[0]) > 0 and len(self.start_screen_adver_label_email.text().split('@', 1)[1].split('.')) > 1 and len(self.start_screen_adver_label_email.text().split('@', 1)[1].split('.', 1)[0]) > 1 and len(self.start_screen_adver_label_email.text().split('@', 1)[1].split('.', 1)[1]) > 1))
-
-
-def start_screen_adver_label_machineid_copy_clicked(self):
-    QApplication.clipboard().setText(self.start_screen_adver_label_machineid.text())
-
-
-def start_screen_adver_label_machineid_verify_clicked(self):
-    self.thread_verify_user_and_machineid.email = self.start_screen_adver_label_email.text()
-    self.thread_verify_user_and_machineid.machine_id = self.start_screen_adver_label_machineid.text()
-    self.thread_verify_user_and_machineid.start()
-    self.start_screen_adver_label_status.setText('<small style="color:#3e5363;" >Verifying...</small>')

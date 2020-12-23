@@ -1,17 +1,19 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+"""Module for subtitle list panel
+
+"""
 
 import os
-
-from modules import file_io
-from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QListWidget, QListView, QMessageBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 
+from modules import file_io
+from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, PATH_SUBTITLD_GRAPHICS
 
-def load(self, PATH_SUBTITLD_GRAPHICS):
+
+def load(self):
+    """Function to load subtitles list widgets"""
     self.subtitles_list_widget = QLabel(parent=self)
     self.subtitles_list_widget.setObjectName('subtitles_list_widget')
     self.subtitles_list_widget_animation = QPropertyAnimation(self.subtitles_list_widget, b'geometry')
@@ -52,6 +54,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def resized(self):
+    """Function to call when resizing subtitles list"""
     if self.subtitles_list or self.video_metadata:
         self.subtitles_list_widget.setGeometry(0, 0, (self.width()*.2)-15, self.height())
     else:
@@ -73,6 +76,7 @@ def resized(self):
 
 
 def subtitles_list_toggle_button_clicked(self):
+    """Function to call when clicking toggle button"""
     if self.subtitles_list_toggle_button.isChecked():
         subtitleslist_toggle_button_to_end(self)
         self.global_subtitlesvideo_panel.show_global_subtitlesvideo_panel(self)
@@ -83,15 +87,18 @@ def subtitles_list_toggle_button_clicked(self):
 
 
 def subtitleslist_toggle_button_to_end(self):
+    """Function to show subtitles list panel"""
     self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.global_subtitlesvideo_panel_widget.width()-25, self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
 
 
 def update_subtitles_list_widget(self):
+    """Function to update subtitles list widgets"""
     # self.subtitles_list_qlistwidget.setVisible(bool(self.subtitles_list))
     update_subtitles_list_qlistwidget(self)
 
 
 def update_subtitles_list_qlistwidget(self):
+    """Function to update subtitles list widgets"""
     self.subtitles_list_qlistwidget.clear()
     if self.subtitles_list:
         counter = 1
@@ -103,6 +110,7 @@ def update_subtitles_list_qlistwidget(self):
 
 
 def subtitles_list_qlistwidget_item_clicked(self):
+    """Function to call when a subtitle item on the list is clicked"""
     if self.subtitles_list_qlistwidget.currentItem():
         sub_index = int(self.subtitles_list_qlistwidget.currentItem().text().split(' - ')[0]) - 1
         self.selected_subtitle = self.subtitles_list[sub_index]
@@ -117,6 +125,7 @@ def subtitles_list_qlistwidget_item_clicked(self):
 
 
 def show(self):
+    """Function to show subtitle list panel"""
     self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()], [0, self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()])
     self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.subtitles_list_widget.width()-25, self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
     self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
@@ -124,10 +133,12 @@ def show(self):
 
 
 def hide(self):
+    """Function to hide subtitle list panel"""
     self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()], [-int(self.width()*.2), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()])
 
 
 def toppanel_save_button_clicked(self):
+    """Function to call when save button on subtitles list panel is clicked"""
     actual_subtitle_file = False
     if self.actual_subtitle_file:
         for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']:
@@ -139,9 +150,9 @@ def toppanel_save_button_clicked(self):
         suggested_path = os.path.dirname(self.video_metadata['filepath'])
         save_formats = self.format_to_save + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']]))
 
-        for format in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
-            if not format == self.format_to_save:
-                save_formats += ';;' + format + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[format]['extensions']]))
+        for extformat in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+            if not extformat == self.format_to_save:
+                save_formats += ';;' + extformat + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['extensions']]))
         suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
 
         # tem que reportar o bug que não retorna o selectedFilter se o dialogo for nativo
@@ -169,6 +180,7 @@ def toppanel_save_button_clicked(self):
 
 
 def toppanel_open_button_clicked(self):
+    """Function to call when open button on subtitles list panel is clicked"""
     if self.unsaved:
         save_message_box = QMessageBox(self)
 
@@ -186,6 +198,7 @@ def toppanel_open_button_clicked(self):
 
 
 def update_toppanel_subtitle_file_info_label(self):
+    """Function to update top information on subtitles list panel"""
     text = self.tr('Actual video does not have saved subtitle file.')
     if self.actual_subtitle_file:
         text = '<b><snall>' + self.tr('Actual project').upper() + '</small></b><br><big>' + os.path.basename(self.actual_subtitle_file) + '</big>'

@@ -15,9 +15,9 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffec
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTranslator, QTimer
 
-from modules.paths import PATH_LOCALE, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
-from modules.history import history_redo, history_undo
 from modules import config
+from modules.history import history_redo, history_undo
+from modules.paths import PATH_LOCALE, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
 
 if ACTUAL_OS == 'darwin':
     from modules.paths import NSURL
@@ -87,7 +87,7 @@ class Subtitld(QWidget):
         self.background_watermark_label = QLabel(self)
         self.background_watermark_label.setObjectName('background_watermark_label')
 
-        # I have placed all the stylesheet properties into a separate file, so importing it here
+        # All the stylesheet properties are in a separate file, so importing it here
         from modules import stylesheet
         stylesheet.set_stylesheet(self)
 
@@ -95,7 +95,7 @@ class Subtitld(QWidget):
         from modules import file_io
         self.file_io = file_io
         self.file_io.load(self)
-        #
+
         # if ACTUAL_OS == 'windows':
         #     # The windows update system
         #     from modules import update
@@ -115,26 +115,26 @@ class Subtitld(QWidget):
 
         from modules import global_subtitlesvideo_panel
         self.global_subtitlesvideo_panel = global_subtitlesvideo_panel
-        self.global_subtitlesvideo_panel.load(self, PATH_SUBTITLD_GRAPHICS)
+        self.global_subtitlesvideo_panel.load(self)
 
         from modules import subtitleslist
         self.subtitleslist = subtitleslist
-        self.subtitleslist.load(self, PATH_SUBTITLD_GRAPHICS)
+        self.subtitleslist.load(self)
 
         from modules import global_properties_panel
         self.global_properties_panel = global_properties_panel
-        self.global_properties_panel.load(self, PATH_SUBTITLD_GRAPHICS)
+        self.global_properties_panel.load(self)
 
         from modules import properties
         self.properties = properties
-        self.properties.load(self, PATH_SUBTITLD_GRAPHICS)
+        self.properties.load(self)
 
         from modules import timeline
         self.timeline = timeline
 
         from modules import playercontrols
         self.playercontrols = playercontrols
-        self.playercontrols.load(self, PATH_SUBTITLD_GRAPHICS)
+        self.playercontrols.load(self)
 
         # Maybe implement saving window position...? Useful?
         # self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
@@ -163,7 +163,7 @@ class Subtitld(QWidget):
                 event.accept()
 
     def dropEvent(self, event):
-        None #
+        event.accept()
         # if sys.platform == 'darwin':
         #     filename = str(NSURL.alloc().initWithString_(event.mimeData().urls()[0].toString()).fileSystemRepresentation())
         # else:
@@ -186,6 +186,7 @@ class Subtitld(QWidget):
 
         self.player.resized(self)
         self.timeline.resized(self)
+        event.accept()
 
     def closeEvent(self, event):
         if self.unsaved:

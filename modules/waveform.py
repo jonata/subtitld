@@ -1,19 +1,22 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+"""Waveform module
+
+"""
 
 import os
-import numpy
 import subprocess
 import json
+import numpy
 
 from modules.paths import STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp, FFPROBE_EXECUTABLE
 
 
 def return_audio_numpy(self, audionp):
+    """Function to return waveform's numpy"""
     self.video_metadata['waveform'][0] = audionp
 
 
-def ffmpeg_load_audio(filepath, sr=48000, mono=True, normalize=True, in_type=numpy.int16, out_type=numpy.float32):
+def ffmpeg_load_audio(filepath, samplerate=48000, mono=True, normalize=True, in_type=numpy.int16, out_type=numpy.float32):
+    """Function to call ffmpeg and return numpy"""
     channels = 1 if mono else 2
     format_strings = {
         numpy.float64: 'f64le',
@@ -29,15 +32,15 @@ def ffmpeg_load_audio(filepath, sr=48000, mono=True, normalize=True, in_type=num
         '-i', filepath,
         '-f', format_string,
         '-acodec', 'pcm_' + format_string,
-        '-ar', str(sr),
+        '-ar', str(samplerate),
         '-ac', str(channels),
         '-']
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
     # bytes_per_sample = numpy.dtype(in_type).itemsize
     # frame_size = bytes_per_sample * channels
     # chunk_size = frame_size * sr
 
-    with p.stdout as stdout:
+    with proc.stdout as stdout:
         raw = stdout.read()
         audio = numpy.fromstring(raw, dtype=in_type).astype(out_type)
 
@@ -57,7 +60,7 @@ def ffmpeg_load_audio(filepath, sr=48000, mono=True, normalize=True, in_type=num
     if channels > 1:
         audio = audio.reshape((-1, channels)).transpose()
     if audio.size == 0:
-        return audio, sr
+        return audio, samplerate
     if issubclass(out_type, numpy.floating):
         if normalize:
             peak = numpy.abs(audio).max()
@@ -69,6 +72,7 @@ def ffmpeg_load_audio(filepath, sr=48000, mono=True, normalize=True, in_type=num
 
 
 def ffmpeg_extract_subtitle(filepath, index):
+    """Function to extract subtitle from video using ffmpeg"""
     command = [
         FFMPEG_EXECUTABLE,
         '-i',
@@ -82,6 +86,7 @@ def ffmpeg_extract_subtitle(filepath, index):
 
 
 def ffmpeg_load_metadata(filepath):
+    """Function to read video's metadata"""
     command = [
         FFPROBE_EXECUTABLE,
         '-v',
@@ -91,15 +96,16 @@ def ffmpeg_load_metadata(filepath):
         '-show_format',
         '-show_streams',
         filepath]
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
     json_file = False
-    with p.stdout as stdout:
+    with proc.stdout as stdout:
         json_file = json.loads(stdout.read())
 
     return json_file
 
 
 def generate_waveform_zoom(zoom, duration, waveform):
+    """Function to calculate waveform from numpy"""
     positive_values = []
     negative_values = []
     parser = 0
@@ -118,4 +124,5 @@ def generate_waveform_zoom(zoom, duration, waveform):
 
 
 def return_waveform_zoom(self, qpixmap):
+    """Function to return waveform's zoom"""
     self.video_metadata['waveform'][qpixmap[0]] = qpixmap[1]

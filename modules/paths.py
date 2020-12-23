@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+"""All path definitions for Subtitld"""
 
 import os
 import sys
@@ -26,11 +26,11 @@ if sys.platform == 'darwin':
     PATH_SUBTITLD_USER_CONFIG = os.path.join(PATH_HOME, 'Library', 'Application Support', 'subtitld')
     FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg')
     FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe')
-    try:
-        from Foundation import NSURL
-    except ImportError:
-        sys.path.append('/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC')
-        from Foundation import NSURL
+    # try:
+    #     from Foundation import NSURL
+    # except ImportError:
+    #     sys.path.append('/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC')
+    #     from Foundation import NSURL
 elif sys.platform == 'win32' or os.name == 'nt':
     ACTUAL_OS = 'windows'
     PATH_SUBTITLD_USER_CONFIG = os.path.join(os.getenv('LOCALAPPDATA'), 'subtitld')
@@ -67,6 +67,7 @@ PATH_SUBTITLD_USER_CONFIG_FILE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'subtit
 
 
 def get_graphics_path(filename):
+    """Function to get graphics path. Windows have a problem with paths."""
     final_path = os.path.join(PATH_SUBTITLD_GRAPHICS, filename)
     if sys.platform == 'win32' or os.name == 'nt':
         final_path = final_path.replace('\\', '/')

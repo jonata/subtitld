@@ -1,31 +1,35 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+"""Subtitles Video panel
+
+"""
+
 import os
 import subprocess
-import autosub
 import json
 import multiprocessing
+import autosub
+# from ffsubsync import ffsubsync
 
 from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QMessageBox
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
 from PyQt5.QtGui import QFontDatabase, QKeySequence
 
 from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
-from modules import file_io
 from modules.shortcuts import shortcuts_dict
 from modules.paths import LANGUAGE_DICT_LIST
+from modules import file_io
 
 multiprocessing.freeze_support()
 
 LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
 
 list_of_supported_import_extensions = []
-for type in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS.keys():
-    for ext in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS[type]['extensions']:
+for exttype in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS:
+    for ext in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS[exttype]['extensions']:
         list_of_supported_import_extensions.append(ext)
 
 
 def convert_ffmpeg_timecode_to_seconds(timecode):
+    """Function to convert ffmpeg timecode to seconds"""
     if timecode:
         final_value = float(timecode.split(':')[-1])
         final_value += int(timecode.split(':')[-2])*60.0
@@ -35,18 +39,20 @@ def convert_ffmpeg_timecode_to_seconds(timecode):
         return False
 
 
-class thread_generated_burned_video(QThread):
+class ThreadGeneratedBurnedVideo(QThread):
+    """Thread to generate burned video"""
     response = pyqtSignal(str)
     commands = []
 
     def run(self):
+        """Run function of thread to generate burned video"""
         if self.commands:
-            p = subprocess.Popen(self.commands, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, startupinfo=STARTUPINFO, bufsize=4096)
+            proc = subprocess.Popen(self.commands, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, startupinfo=STARTUPINFO, bufsize=4096)
             number_of_steps = 0.001
             current_step = 0.0
-            while p.poll() is None:
-                # for output in p.stdout.read().decode().split('\n'):
-                output = p.stdout.readline()
+            while proc.poll() is None:
+                # for output in proc.stdout.read().decode().split('\n'):
+                output = proc.stdout.readline()
                 if 'Duration: ' in output:
                     duration = int(convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))
                     if duration > number_of_steps:
@@ -58,7 +64,47 @@ class thread_generated_burned_video(QThread):
             self.response.emit('end')
 
 
-def load(self, PATH_SUBTITLD_GRAPHICS):
+class GlobalSubtitlesvideoPanelTabwidgetShortkeysEditbox(QLineEdit):
+    """Class to reimplement QLineEdit in order to get shorkeys selection"""
+    def __init__(self, *args, parent=None):
+        super(GlobalSubtitlesvideoPanelTabwidgetShortkeysEditbox, self).__init__(*args)
+        # self.set_key_sequence(key_sequence)
+
+    def set_key_sequence(self, key_sequence):
+        """Set text with the shortkey"""
+        self.setText(key_sequence.toString(QKeySequence.NativeText))
+
+    def keyPressEvent(self, event):
+        """Function on keyPressEvent"""
+        if event.type() == QEvent.KeyPress:
+            key = event.key()
+
+            if key == Qt.Key_unknown:
+                return
+
+            if(key == Qt.Key_Control
+                or key == Qt.Key_Shift
+                or key == Qt.Key_Alt
+                or key == Qt.Key_Meta):
+                return
+
+            modifiers = event.modifiers()
+            # keyText = event.text()
+
+            if modifiers & Qt.ShiftModifier:
+                key += Qt.SHIFT
+            if modifiers & Qt.ControlModifier:
+                key += Qt.CTRL
+            if modifiers & Qt.AltModifier:
+                key += Qt.ALT
+            if modifiers & Qt.MetaModifier:
+                key += Qt.META
+
+            self.set_key_sequence(QKeySequence(key))
+
+
+def load(self):
+    """Function to load subtitles panel widgets"""
     self.global_subtitlesvideo_panel_widget = QLabel(parent=self)
     self.global_subtitlesvideo_panel_widget_animation = QPropertyAnimation(self.global_subtitlesvideo_panel_widget, b'geometry')
     self.global_subtitlesvideo_panel_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
@@ -71,8 +117,8 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
     self.global_subtitlesvideo_save_as_label = QLabel(self.tr('Default format to save:').upper(), parent=self.global_subtitlesvideo_panel_widget)
 
     list_of_subtitle_extensions = []
-    for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
-        list_of_subtitle_extensions.append(ext + ' - ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[ext]['description'])
+    for extformat in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+        list_of_subtitle_extensions.append(extformat + ' - ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['description'])
     self.global_subtitlesvideo_save_as_combobox = QComboBox(parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_save_as_combobox.setObjectName('button')
     self.global_subtitlesvideo_save_as_combobox.addItems(list_of_subtitle_extensions)
@@ -181,52 +227,14 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
             self.global_subtitlesvideo_video_burn_convert.setText(self.tr('Generate video').upper())
             self.global_subtitlesvideo_video_burn_convert.setEnabled(True)
 
-    self.thread_generated_burned_video = thread_generated_burned_video(self)
+    self.thread_generated_burned_video = ThreadGeneratedBurnedVideo(self)
     self.thread_generated_burned_video.response.connect(thread_generated_burned_video_ended)
 
     self.global_subtitlesvideo_panel_tabwidget.addTab(self.global_subtitlesvideo_panel_tabwidget_export_panel, self.tr('Export burned-in subtitles').upper())
 
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel = QWidget()
 
-    class global_subtitlesvideo_panel_tabwidget_shortkeys_editbox(QLineEdit):
-        # def __init__(self, keySequence, *args):
-        #     super(global_subtitlesvideo_panel_tabwidget_shortkeys_editbox, self).__init__(*args)
-        #
-        #     self.keySequence = keySequence
-        #     self.setKeySequence(keySequence)
-
-        def setKeySequence(self, keySequence):
-            self.keySequence = keySequence
-            self.setText(self.keySequence.toString(QKeySequence.NativeText))
-
-        def keyPressEvent(self, e):
-            if e.type() == QEvent.KeyPress:
-                key = e.key()
-
-                if key == Qt.Key_unknown:
-                    return
-
-                if(key == Qt.Key_Control
-                   or key == Qt.Key_Shift
-                   or key == Qt.Key_Alt
-                   or key == Qt.Key_Meta):
-                    return
-
-                modifiers = e.modifiers()
-                # keyText = e.text()
-
-                if modifiers & Qt.ShiftModifier:
-                    key += Qt.SHIFT
-                if modifiers & Qt.ControlModifier:
-                    key += Qt.CTRL
-                if modifiers & Qt.AltModifier:
-                    key += Qt.ALT
-                if modifiers & Qt.MetaModifier:
-                    key += Qt.META
-
-                self.setKeySequence(QKeySequence(key))
-
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox = global_subtitlesvideo_panel_tabwidget_shortkeys_editbox(parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox = GlobalSubtitlesvideoPanelTabwidgetShortkeysEditbox(parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.setStyleSheet('QLineEdit { background-color:rgb(255, 255, 255); border: 1px solid silver; border-radius: 5px; padding: 5px 5px 5px 5px; font-size:16px; color:black; qproperty-alignment: "AlignCenter";}')
 
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm = QPushButton(self.tr('Confirm').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel)
@@ -256,6 +264,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def resized(self):
+    """Function on resizing widgets"""
     if (self.subtitles_list or self.video_metadata):
         if self.subtitles_list_toggle_button.isChecked():
             self.global_subtitlesvideo_panel_widget.setGeometry(0, 0, self.width()*.8, self.height()-self.playercontrols_widget.height()+20)
@@ -310,10 +319,12 @@ def resized(self):
 
 
 def show_global_subtitlesvideo_panel(self):
+    """Function to show subtitlesvideo panel"""
     self.generate_effect(self.global_subtitlesvideo_panel_widget_animation, 'geometry', 700, [self.global_subtitlesvideo_panel_widget.x(), self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()], [0, self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()])
 
 
 def global_subtitlesvideo_panel_tabwidget_shortkeys_table_update(self):
+    """Function to update subtitlesvideo panel shorkeys table"""
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.clear()
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setRowCount(len(shortcuts_dict))
     inverted_shortcuts_dict = {value: key for key, value in shortcuts_dict.items()}
@@ -327,6 +338,7 @@ def global_subtitlesvideo_panel_tabwidget_shortkeys_table_update(self):
 
 
 def global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self):
+    """Function to change button states"""
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setVisible(not self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.isVisible())
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.setVisible(not self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.isVisible())
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.setVisible(not self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.isVisible())
@@ -335,11 +347,13 @@ def global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self):
 
 
 def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel_clicked(self):
+    """Function to cancel shortkeys editing"""
     # self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setVisible(True)
     global_subtitlesvideo_panel_tabwidget_shortkeys_set_button_clicked(self)
 
 
 def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm_clicked(self):
+    """Function to confirm shortkey editing"""
     inverted_shortcuts_dict = {value: key for key, value in shortcuts_dict.items()}
     self.settings['shortcuts'][inverted_shortcuts_dict[self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.item(self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.currentRow(), 0).text()]] = [self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.text()]
     self.shortcuts.load(self, self.settings['shortcuts'])
@@ -348,6 +362,7 @@ def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm_clicked(self
 
 
 def global_subtitlesvideo_import_button_clicked(self):
+    """Function to import file"""
     # if self.global_subtitlesvideo_import_button.isChecked():
     #     self.global_subtitlesvideo_export_button.setGeometry(20, 200, self.global_subtitlesvideo_panel_left.width()-40, 30)
     # else:
@@ -362,15 +377,16 @@ def global_subtitlesvideo_import_button_clicked(self):
 
 
 def global_subtitlesvideo_video_burn_convert_clicked(self):
+    """Function to generate buned video"""
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
-    ext = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
-    save_formats = self.tr('Video file') + ' (.' + ext + ')'
-    suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + ext
+    extformat = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
+    save_formats = self.tr('Video file') + ' (.' + extformat + ')'
+    suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
 
     generated_video_filepath = QFileDialog.getSaveFileName(self, self.tr('Select the subtitle file'), os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)[0]
 
     if generated_video_filepath:
-        file_io.save_file(os.path.join(path_tmp, 'subtitle.srt'), self.subtitles_list, format='SRT', language='en')
+        file_io.save_file(os.path.join(path_tmp, 'subtitle.srt'), self.subtitles_list, subtitle_format='SRT', language='en')
 
         vf_string = 'subtitles=filename=' + os.path.join(path_tmp, 'subtitle.srt').replace('\\', '\\\\\\\\').replace(':', '\\\:') + ":force_style='"
         vf_string += 'FontName=' + self.global_subtitlesvideo_video_burn_fontname.currentText() + ','
@@ -399,6 +415,7 @@ def global_subtitlesvideo_video_burn_convert_clicked(self):
 
 
 def global_subtitlesvideo_video_burn_pcolor_clicked(self):
+    """Function to change color"""
     color = QColorDialog().getColor(options=QColorDialog.DontUseNativeDialog)
     if color.isValid():
         self.global_subtitlesvideo_video_burn_pcolor_selected_color = color.name()
@@ -406,6 +423,7 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
 
 
 def global_subtitlesvideo_export_button_clicked(self):
+    """Function to export subtitles"""
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.txt'
     save_formats = self.tr('TXT file') + ' (.txt)'
@@ -415,29 +433,33 @@ def global_subtitlesvideo_export_button_clicked(self):
     if filedialog[0] and filedialog[1]:
         filename = filedialog[0]
         exts = []
-        for ext in filedialog[1].split('(', 1)[1].split(')', 1)[0].split('*'):
-            if ext:
-                exts.append(ext.strip())
+        for extformat in filedialog[1].split('(', 1)[1].split(')', 1)[0].split('*'):
+            if extformat:
+                exts.append(extformat.strip())
         if not filename.endswith(tuple(exts)):
             filename += exts[0]
         format_to_export = filedialog[1].split(' ', 1)[0]
 
-        file_io.export_file(filename=filename, subtitles_list=self.subtitles_list, format=format_to_export)
+        file_io.export_file(filename=filename, subtitles_list=self.subtitles_list, export_format=format_to_export)
 
 
 def hide_global_subtitlesvideo_panel(self):
+    """Function to hide subtitlesvideo panel"""
     self.generate_effect(self.global_subtitlesvideo_panel_widget_animation, 'geometry', 700, [self.global_subtitlesvideo_panel_widget.x(), self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()], [int(-(self.width()*.6))-18, self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()])
 
 
 def update_global_subtitlesvideo_save_as_combobox(self):
+    """Function to update saveas combobox"""
     self.global_subtitlesvideo_save_as_combobox.setCurrentText(self.format_to_save + ' - ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['description'])
 
 
 def global_subtitlesvideo_save_as_combobox_activated(self):
+    """Function to change format as combobox selection"""
     self.format_to_save = self.global_subtitlesvideo_save_as_combobox.currentText().split(' ', 1)[0]
 
 
 def global_subtitlesvideo_autosync_button_clicked(self):
+    """Function to run autosync"""
     run_command = False
 
     if bool(self.subtitles_list):
@@ -454,17 +476,15 @@ def global_subtitlesvideo_autosync_button_clicked(self):
         run_command = True
 
     if run_command:
-        from ffsubsync import ffsubsync
-
         file_io.save_file(os.path.join(path_tmp, 'subtitle_original.srt'), self.subtitles_list, 'SRT')
         sub = os.path.join(path_tmp, 'subtitle_final.srt')
 
-        unparsed_args = [self.video_metadata['filepath'], "-i", os.path.join(path_tmp, 'subtitle_original.srt'), "-o", sub]
+        # unparsed_args = [self.video_metadata['filepath'], "-i", os.path.join(path_tmp, 'subtitle_original.srt'), "-o", sub]
 
-        parser = ffsubsync.make_parser()
-        args = parser.parse_args(unparsed_args)
+        # parser = ffsubsync.make_parser()
+        # args = parser.parse_args(unparsed_args)
 
-        ffsubsync.run(args)
+        # ffsubsync.run(args)
 
         if os.path.isfile(sub):
             self.subtitles_list = file_io.process_subtitles_file(sub)[0]
@@ -476,6 +496,7 @@ def global_subtitlesvideo_autosync_button_clicked(self):
 
 
 def global_subtitlesvideo_autosub_button_clicked(self):
+    """Function to run autosub"""
     run_command = False
 
     if bool(self.subtitles_list):

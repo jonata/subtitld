@@ -1,17 +1,20 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+"""Properties panel module
+
+"""
 
 import os
-
-from modules import file_io
-from modules import subtitles
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QTextEdit
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QSize
 
+from modules import file_io
+from modules import subtitles
+from modules.paths import PATH_SUBTITLD_GRAPHICS
 
-def load(self, PATH_SUBTITLD_GRAPHICS):
+
+def load(self):
+    """Load function to create properties panel widgets"""
     self.properties_widget = QLabel(parent=self)
     self.properties_widget.setObjectName('properties_widget')
     self.properties_widget_animation = QPropertyAnimation(self.properties_widget, b'geometry')
@@ -47,6 +50,7 @@ def load(self, PATH_SUBTITLD_GRAPHICS):
 
 
 def resized(self):
+    """Function to call when resizing panel"""
     if self.subtitles_list or self.video_metadata:
         self.properties_widget.setGeometry((self.width()*.8)+15, 0, (self.width()*.2)-15, self.height())
     else:
@@ -64,6 +68,7 @@ def resized(self):
 
 
 def properties_toggle_button_clicked(self):
+    """Function to call when panel's toggle button is clicked"""
     if self.properties_toggle_button.isChecked():
         hide(self)
         self.global_properties_panel.show_global_properties_panel(self)
@@ -74,10 +79,12 @@ def properties_toggle_button_clicked(self):
 
 
 def properties_toggle_button_to_end(self):
+    """Function to show properties panel"""
     self.generate_effect(self.properties_toggle_button_animation, 'geometry', 700, [self.properties_toggle_button.x(), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()], [int(self.width()*.8), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()])
 
 
 def save_button_clicked(self):
+    """Function to save project"""
     if not self.actual_subtitle_file:
         self.actual_subtitle_file = QFileDialog.getSaveFileName(self, self.tr('Select the srt file'), os.path.join(os.environ.get('HOME', None), 'final.srt'), "SRT file (*.srt)")[0]
     if self.actual_subtitle_file:
@@ -85,13 +92,15 @@ def save_button_clicked(self):
 
 
 def open_button_clicked(self):
+    """Function to open a subtitle or video file"""
     file_to_open = QFileDialog.getOpenFileName(self, self.tr('Select the subtitle or video file'), os.path.expanduser("~"), "SRT file (*.srt);;MP4 file (*.mp4)")[0]
     if file_to_open and os.path.isfile(file_to_open):
-        self.properties = file_io.open_file(file_to_open)
+        file_io.open_filepath(self, file_to_open)
         update_properties_widget(self)
 
 
 def update_properties_widget(self):
+    """Function to update properties panel widgets"""
     text = ''
     if self.selected_subtitle:
         self.properties_information.setText('<small>' + self.tr('Words').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))) + '</b></big><br><br><small>' + self.tr('Characters').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))) + '</b></big>')
@@ -105,16 +114,19 @@ def update_properties_widget(self):
 
 
 def show(self):
+    """Function to show panel"""
     self.generate_effect(self.properties_widget_animation, 'geometry', 700, [self.properties_widget.x(), self.properties_widget.y(), self.properties_widget.width(), self.properties_widget.height()], [int((self.width()*.8)+15), self.properties_widget.y(), self.properties_widget.width(), self.properties_widget.height()])
     self.generate_effect(self.properties_toggle_button_animation, 'geometry', 700, [self.properties_toggle_button.x(), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()], [int((self.width()*.8)+18), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()])
     self.global_properties_panel.hide_global_properties_panel(self)
 
 
 def hide(self):
+    """Function to hide panel"""
     self.generate_effect(self.properties_widget_animation, 'geometry', 700, [self.properties_widget.x(), self.properties_widget.y(), self.properties_widget.width(), self.properties_widget.height()], [int(self.width()), self.properties_widget.y(), self.properties_widget.width(), self.properties_widget.height()])
 
 
 def properties_textedit_changed(self):
+    """Function to call when properties textedit is changed"""
     old_selected_subtitle = self.selected_subtitle
     if old_selected_subtitle:
         counter = self.subtitles_list.index(old_selected_subtitle)
@@ -125,6 +137,7 @@ def properties_textedit_changed(self):
 
 
 def send_text_to_next_subtitle_button_clicked(self):
+    """Function to call when send text to next subtitle is clicked"""
     pos = self.properties_textedit.textCursor().position()
     last_text = self.properties_textedit.toPlainText()[:pos]
     next_text = self.properties_textedit.toPlainText()[pos:]
@@ -135,6 +148,7 @@ def send_text_to_next_subtitle_button_clicked(self):
 
 
 def send_text_to_last_subtitle_button_clicked(self):
+    """Function to call when send text to last subtitle is clicked"""
     pos = self.properties_textedit.textCursor().position()
     last_text = self.properties_textedit.toPlainText()[:pos]
     next_text = self.properties_textedit.toPlainText()[pos:]

@@ -1,10 +1,12 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+"""Stylesheet module
+
+"""
 
 from modules.paths import get_graphics_path
 
 
 def set_stylesheet(self):
+    """Function to set stylesheet on self"""
     stylesheet_text = '''
                             #background_label                                    { background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 rgb(7,9,11), stop:1 rgb(26,35,43)); }
                             #background_label2                                   { background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 rgb(26,35,43), stop:1 rgb(46,62,76)); }

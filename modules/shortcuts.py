@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+"""Shortcuts module
+
+"""
 
 from PyQt5.QtWidgets import QAction
 
@@ -46,6 +48,7 @@ default_shortcuts_dict = {
 
 
 def load(self, shortcut_commands):
+    """Function to load shortcuts commands on widgets"""
     for item in default_shortcuts_dict:
         if not item in shortcut_commands:
             shortcut_commands[item] = default_shortcuts_dict[item]
