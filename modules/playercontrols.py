@@ -364,9 +364,13 @@ def load(self):
     self.step_button.clicked.connect(lambda: update_step_buttons(self))
 
     self.step_value_f = QDoubleSpinBox(parent=self.step_button)
+    self.step_value_f.setMinimum(.001)
+    self.step_value_f.setMaximum(999.999)
     self.step_value_f.valueChanged.connect(lambda: step_value_changed(self))
 
     self.step_value_i = QSpinBox(parent=self.step_button)
+    self.step_value_i.setMinimum(1)
+    self.step_value_i.setMaximum(999)
     self.step_value_i.valueChanged.connect(lambda: step_value_changed(self))
 
     self.step_unit = QComboBox(parent=self.step_button)
@@ -550,11 +554,17 @@ def snap_value_changed(self):
     self.timeline_snap_value = self.snap_value.value() if self.snap_value.value() else .1
 
 
+
+
+
 def step_value_changed(self):
     """Function to set variables to settings"""
     self.settings['timeline']['step_unit'] = self.step_unit.currentText()
-    self.settings['timeline']['step_value'] = self.step_value_f.value()
-    update_step_buttons(self)
+    if self.settings['timeline'].get('step_unit', 'Frames') == 'Seconds':
+        self.settings['timeline']['step_value'] = self.step_value_f.value()
+    else:
+        self.settings['timeline']['step_value'] = self.step_value_i.value()
+    update_step_information(self)
 
 
 def update_step_buttons(self):
@@ -562,11 +572,17 @@ def update_step_buttons(self):
     self.step_value_f.setEnabled(self.step_button.isChecked())
     self.step_value_i.setEnabled(self.step_button.isChecked())
     self.step_unit.setEnabled(self.step_button.isChecked())
+    update_step_information(self)
+
+
+def update_step_information(self):
+    """Updates the widgets information"""
     self.step_unit.setCurrentIndex(STEPS_LIST.index(self.settings['timeline'].get('step_unit', 'Frames')))
-    self.step_value_f.setVisible(self.settings['timeline'].get('step_unit', 'Frames') == 'Seconds')
-    self.step_value_i.setVisible(self.settings['timeline'].get('step_unit', 'Frames') == 'Frames')
     self.step_value_f.setValue(float(self.settings['timeline'].get('step_value', 1.0)))
     self.step_value_i.setValue(int(self.settings['timeline'].get('step_value', 1)))
+    self.step_value_f.setVisible(self.settings['timeline'].get('step_unit', 'Frames') == 'Seconds')
+    self.step_value_i.setVisible(self.settings['timeline'].get('step_unit', 'Frames') == 'Frames')
+
 
 
 def timelinescrolling_type_changed(self, scrollingtype='page'):
