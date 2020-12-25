@@ -89,7 +89,8 @@ LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
     'ASS': {'description': 'SubStation Alpha Subtitle format', 'extensions': ['ass', 'ssa']},
     'SBV': {'description': 'Subtitle format', 'extensions': ['sbv']},
     'SUB': {'description': 'MicroDVD Subtitle format', 'extensions': ['sub']},
-    'XML': {'description': 'Subtitle format', 'extensions': ['xml']}
+    'XML': {'description': 'Subtitle format', 'extensions': ['xml']},
+    'USF': {'description': 'Universal Subtitle format', 'extensions': ['usf']}
 }
 
 LIST_OF_SUPPORTED_IMPORT_EXTENSIONS = {

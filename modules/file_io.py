@@ -24,6 +24,7 @@ import captionstransformer
 import scc2srt
 
 from modules import waveform
+from modules import usf
 from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
 
 list_of_supported_subtitle_extensions = []
@@ -248,6 +249,10 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
             subtitle_format = 'SCC'
             final_subtitles = scc2srt.get_list_of_captions(subtitle_file)
 
+        elif subtitle_file.lower().endswith(('.usf')):
+            subtitle_format = 'USF'
+            final_subtitles = usf.USFReader().read(open(subtitle_file).read())
+
     return final_subtitles, subtitle_format
 
 
@@ -378,3 +383,6 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
                     captions.append(caption)
                 writer.set_captions(captions)
                 writer.write()
+
+        elif subtitle_format in ['USF']:
+            open(final_file, mode='w', encoding='utf-8').write(usf.USFWriter().write(subtitles_list))

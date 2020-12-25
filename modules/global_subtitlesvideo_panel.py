@@ -374,6 +374,7 @@ def global_subtitlesvideo_import_button_clicked(self):
     if file_to_open:
         self.subtitles_list += file_io.import_file(filename=file_to_open)[0]
         self.subtitles_list.sort()
+        update_widgets(self)
 
 
 def global_subtitlesvideo_video_burn_convert_clicked(self):
@@ -488,11 +489,7 @@ def global_subtitlesvideo_autosync_button_clicked(self):
 
         if os.path.isfile(sub):
             self.subtitles_list = file_io.process_subtitles_file(sub)[0]
-            self.unsaved = True
-            self.selected_subtitle = False
-            self.subtitleslist.update_subtitles_list_qlistwidget(self)
-            self.timeline.update(self)
-            self.properties.update_properties_widget(self)
+            update_widgets(self)
 
 
 def global_subtitlesvideo_autosub_button_clicked(self):
@@ -562,8 +559,11 @@ def global_subtitlesvideo_autosub_button_clicked(self):
             if final_subtitles:
                 self.subtitles_list = final_subtitles
 
-        self.unsaved = True
-        self.selected_subtitle = False
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
-        self.timeline.update(self)
-        self.properties.update_properties_widget(self)
+        update_widgets(self)
+
+def update_widgets(self):
+    self.unsaved = True
+    self.selected_subtitle = False
+    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.timeline.update(self)
+    self.properties.update_properties_widget(self)
