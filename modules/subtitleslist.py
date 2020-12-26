@@ -19,19 +19,25 @@ def load(self):
     self.subtitles_list_widget_animation = QPropertyAnimation(self.subtitles_list_widget, b'geometry')
     self.subtitles_list_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
+    self.toppanel_usf_label = QLabel('USF', parent=self.subtitles_list_widget)
+    self.toppanel_usf_label.setStyleSheet('QLabel { qproperty-alignment: "AlignRight | AlignVCenter"; padding: 0 4 0 20; font-weight: bold; font-size:10px; color: rgb(62,83,99); border-top-right-radius: 3px; background-color: rgb(85,212,63); }')
+
+    self.toppanel_format_label = QLabel('SAMI', parent=self.subtitles_list_widget)
+    self.toppanel_format_label.setStyleSheet('QLabel { qproperty-alignment: "AlignRight | AlignVCenter"; padding: 0 4 0 20; font-weight: bold; font-size:10px; color: white; border-bottom-right-radius: 3px; background-color: rgb(62,83,99); }')
+
     self.toppanel_save_button = QPushButton(parent=self.subtitles_list_widget)
     self.toppanel_save_button.clicked.connect(lambda: toppanel_save_button_clicked(self))
     self.toppanel_save_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'save_icon.png')))
     self.toppanel_save_button.setIconSize(QSize(20, 20))
     self.toppanel_save_button.setObjectName('button_dark')
-    self.toppanel_save_button.setStyleSheet('QPushButton {padding-left:20px;border-left:0;border-right:0;}')
+    self.toppanel_save_button.setStyleSheet('QPushButton { border-right:0; }')
 
     self.toppanel_open_button = QPushButton(parent=self.subtitles_list_widget)
     self.toppanel_open_button.clicked.connect(lambda: toppanel_open_button_clicked(self))
     self.toppanel_open_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'open_icon.png')))
     self.toppanel_open_button.setIconSize(QSize(20, 20))
     self.toppanel_open_button.setObjectName('button')
-    self.toppanel_open_button.setStyleSheet('QPushButton {border-left:0;}')
+    self.toppanel_open_button.setStyleSheet('QPushButton { border-left:0; }')
 
     self.toppanel_subtitle_file_info_label = QLabel(parent=self.subtitles_list_widget)
     self.toppanel_subtitle_file_info_label.setObjectName('toppanel_subtitle_file_info_label')
@@ -60,7 +66,10 @@ def resized(self):
     else:
         self.subtitles_list_widget.setGeometry(-((self.width()*.2)-15), 0, (self.width()*.2)-15, self.height())
 
-    self.toppanel_save_button.setGeometry(0, 20, 60, 40)
+    self.toppanel_usf_label.setGeometry(0, 20, 55, 20)
+    self.toppanel_format_label.setGeometry(0, 40, 55, 20)
+
+    self.toppanel_save_button.setGeometry(60, 20, 40, 40)
     self.toppanel_open_button.setGeometry(self.toppanel_save_button.x()+self.toppanel_save_button.width(), self.toppanel_save_button.y(), self.toppanel_save_button.height(), self.toppanel_save_button.height())
     self.toppanel_subtitle_file_info_label.setGeometry(self.toppanel_open_button.x()+self.toppanel_open_button.width()+10, self.toppanel_save_button.y(), self.subtitles_list_widget.width()-self.toppanel_open_button.x()-self.toppanel_open_button.width()-40, self.toppanel_save_button.height())
 
