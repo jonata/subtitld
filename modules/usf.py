@@ -63,8 +63,18 @@ class USFWriter():
         """Function to write subtitles, returns file content (XML)"""
         usf = BeautifulSoup(USF_BASE_MARKUP, 'lxml-xml')
 
-        for subtitle in subtitles:
+        new_style = usf.new_tag('style')
+        new_style['name'] = 'Default'
+        new_fontstyle = usf.new_tag('fontstyle', color='#EEEEFF', face='Arial', size='24', family='Arial')
+        new_fontstyle['outline-color'] = '#5555FF'
+        new_style.append(new_fontstyle)
+        new_position = usf.new_tag('position', alignment='BottomCenter')
+        new_position['relative-to'] = 'Window'
+        new_position['vertical-margin'] = '10%'
+        new_style.append(new_position)
+        usf.find('styles').append(new_style)
 
+        for subtitle in subtitles:
             new_sub = usf.new_tag('subtitle', start=str(timecode.Timecode('1000', start_seconds=subtitle[0], fractional=True)), stop=str(timecode.Timecode('1000', start_seconds=subtitle[1] + subtitle[0], fractional=True)))
             new_text = usf.new_tag('text')
             new_text.string = subtitle[2]
