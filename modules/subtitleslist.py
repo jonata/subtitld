@@ -19,11 +19,10 @@ def load(self):
     self.subtitles_list_widget_animation = QPropertyAnimation(self.subtitles_list_widget, b'geometry')
     self.subtitles_list_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
-    self.toppanel_usf_label = QLabel('USF', parent=self.subtitles_list_widget)
-    self.toppanel_usf_label.setStyleSheet('QLabel { qproperty-alignment: "AlignRight | AlignVCenter"; padding: 0 4 0 20; font-weight: bold; font-size:10px; color: rgb(62,83,99); border-top-right-radius: 3px; background-color: rgb(85,212,63); }')
+    self.toppanel_usf_label = QLabel(parent=self.subtitles_list_widget)
 
-    self.toppanel_format_label = QLabel('SAMI', parent=self.subtitles_list_widget)
-    self.toppanel_format_label.setStyleSheet('QLabel { qproperty-alignment: "AlignRight | AlignVCenter"; padding: 0 4 0 20; font-weight: bold; font-size:10px; color: white; border-bottom-right-radius: 3px; background-color: rgb(62,83,99); }')
+    self.toppanel_format_label = QLabel(parent=self.subtitles_list_widget)
+    self.toppanel_format_label.setStyleSheet('QLabel { qproperty-alignment: "AlignRight | AlignVCenter"; padding: 0 4 0 0; font-weight: bold; font-size:10px; color: white; border-bottom-right-radius: 3px; background-color: rgb(62,83,99); }')
 
     self.toppanel_save_button = QPushButton(parent=self.subtitles_list_widget)
     self.toppanel_save_button.clicked.connect(lambda: toppanel_save_button_clicked(self))
@@ -118,6 +117,15 @@ def update_subtitles_list_qlistwidget(self):
         self.subtitles_list_qlistwidget.setCurrentRow(self.subtitles_list.index(self.selected_subtitle))
 
 
+def update_subtitleslist_format_label(self):
+    if self.format_usf_present:
+        self.toppanel_usf_label.setText('USF')
+        self.toppanel_usf_label.setStyleSheet('QLabel { qproperty-alignment: "AlignRight | AlignVCenter"; padding: 0 4 0 0; font-weight: bold; font-size:10px; color: rgb(62,83,99); border-top-right-radius: 3px; background-color: rgb(85,212,63); }')
+    else:
+        self.toppanel_usf_label.setText('NO USF')
+        self.toppanel_usf_label.setStyleSheet('QLabel { qproperty-alignment: "AlignRight | AlignVCenter"; padding: 0 4 0 0; font-weight: bold; font-size:10px; color: silver; border-top-right-radius: 3px; background-color: rgb(106,116,131); }')
+    self.toppanel_format_label.setText(self.format_to_save)
+
 def subtitles_list_qlistwidget_item_clicked(self):
     """Function to call when a subtitle item on the list is clicked"""
     if self.subtitles_list_qlistwidget.currentItem():
@@ -184,6 +192,9 @@ def toppanel_save_button_clicked(self):
 
     if self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list, self.format_to_save, self.selected_language)
+        file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.usf', self.subtitles_list, 'USF', self.selected_language)
+        self.format_usf_present = True
+        update_subtitleslist_format_label(self)
         update_toppanel_subtitle_file_info_label(self)
         self.unsaved = False
 

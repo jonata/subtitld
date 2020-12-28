@@ -83,14 +83,6 @@ def properties_toggle_button_to_end(self):
     self.generate_effect(self.properties_toggle_button_animation, 'geometry', 700, [self.properties_toggle_button.x(), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()], [int(self.width()*.8), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()])
 
 
-def save_button_clicked(self):
-    """Function to save project"""
-    if not self.actual_subtitle_file:
-        self.actual_subtitle_file = QFileDialog.getSaveFileName(self, self.tr('Select the srt file'), os.path.join(os.environ.get('HOME', None), 'final.srt'), "SRT file (*.srt)")[0]
-    if self.actual_subtitle_file:
-        file_io.save_file(self.actual_subtitle_file, self.properties)
-
-
 def open_button_clicked(self):
     """Function to open a subtitle or video file"""
     file_to_open = QFileDialog.getOpenFileName(self, self.tr('Select the subtitle or video file'), os.path.expanduser("~"), "SRT file (*.srt);;MP4 file (*.mp4)")[0]

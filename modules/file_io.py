@@ -150,6 +150,13 @@ def open_filepath(self, file_to_open=False):
         self.autosave_timer.start()
     self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
+    if os.path.isfile(os.path.join(os.path.dirname(self.actual_subtitle_file), os.path.basename(self.actual_subtitle_file).rsplit('.', 1)[0] + '.usf')):
+        self.format_usf_present = True
+    else:
+        self.format_usf_present = False
+
+    self.subtitleslist.update_subtitleslist_format_label(self)
+
 
 def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
     """Definition to process subtitle file. It returns a dict with the subtitles."""

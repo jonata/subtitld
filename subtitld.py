@@ -72,6 +72,7 @@ class Subtitld(QWidget):
         self.repeat_activated = False
         self.unsaved = False
         self.format_to_save = 'SRT'
+        self.format_usf_present = False
         self.selected_language = 'en'
 
         self.background_label = QLabel(self)
