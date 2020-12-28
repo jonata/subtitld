@@ -1,5 +1,4 @@
 PyQt5
-python-mpv
 pyopengl
 numpy==1.19.3
 sip
