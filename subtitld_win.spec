@@ -12,6 +12,7 @@ a = Analysis(['subtitld.py'],
     ],
     datas=[
         ( 'graphics/*.png', 'graphics' ),
+        ( 'graphics/*.svg', 'graphics' ),
         ( 'graphics/*.ttf', 'graphics' ),
         ( 'ffmpeg-*/bin/ffmpeg.exe', '.'),
         ( 'ffmpeg-*/bin/ffprobe.exe', '.'),

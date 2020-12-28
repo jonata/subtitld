@@ -62,7 +62,7 @@ parts:
       - gsettings-desktop-schemas
       - libgtk-3-common
       #- desktop-gnome-platform
-      #- libmpv1
+      - libmpv1
       # gtk-common-themes support
       #- qt5-gtk-platformtheme
     after:

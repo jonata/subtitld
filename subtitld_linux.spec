@@ -13,6 +13,7 @@ a = Analysis(['subtitld.py'],
              binaries=[],
              datas=[
                      ( 'graphics/*.png', 'graphics' ),
+                     ( 'graphics/*.svg', 'graphics' ),
                      ( 'graphics/*.ttf', 'graphics' ),
                      ( 'ftfy/char_classes.dat', 'ftfy' ),
                  ],
