@@ -419,7 +419,7 @@ def load(self):
 
         def wheelEvent(self, event):
             """Function to call when mouse wheel is activated"""
-            self.horizontalScrollBar().setValue(self.timeline_scroll.horizontalScrollBar().value() + event.angleDelta().y())
+            self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() + event.angleDelta().y())
             event.accept()
 
         # def keyPressEvent(self, event):

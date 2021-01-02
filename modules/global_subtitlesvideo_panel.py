@@ -7,6 +7,8 @@ import subprocess
 import json
 import multiprocessing
 import autosub
+#from googletrans import Translator
+from google_trans_new import google_translator
 # from ffsubsync import ffsubsync
 
 from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QMessageBox
@@ -15,8 +17,12 @@ from PyQt5.QtGui import QFontDatabase, QKeySequence
 
 from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
 from modules.shortcuts import shortcuts_dict
-from modules.paths import LANGUAGE_DICT_LIST
+from modules.paths import LANGUAGE_DICT_LIST, path_tmp
 from modules import file_io
+
+from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat
+from azure.cognitiveservices.speech.audio import AudioOutputConfig
+from pydub import AudioSegment
 
 multiprocessing.freeze_support()
 
@@ -150,6 +156,15 @@ def load(self):
     self.global_subtitlesvideo_autosub_button = QPushButton(self.tr('Auto Subtitle').upper(), parent=self.global_subtitlesvideo_panel_widget)
     self.global_subtitlesvideo_autosub_button.setObjectName('button')
     self.global_subtitlesvideo_autosub_button.clicked.connect(lambda: global_subtitlesvideo_autosub_button_clicked(self))
+
+    self.global_subtitlesvideo_translate_button = QPushButton(self.tr('Translate').upper(), parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_translate_button.setObjectName('button')
+    self.global_subtitlesvideo_translate_button.clicked.connect(lambda: global_subtitlesvideo_translate_button_clicked(self))
+
+    self.global_subtitlesvideo_autovoiceover_button = QPushButton(self.tr('Auto Voice-over').upper(), parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_autovoiceover_button.setObjectName('button')
+    self.global_subtitlesvideo_autovoiceover_button.clicked.connect(lambda: global_subtitlesvideo_autovoiceover_button_clicked(self))
+    self.global_subtitlesvideo_autovoiceover_button.setVisible(False)
 
     self.global_subtitlesvideo_panel_tabwidget = QTabWidget(parent=self.global_subtitlesvideo_panel_widget)
 
@@ -285,6 +300,8 @@ def resized(self):
     self.global_subtitlesvideo_autosync_lang_combobox.setGeometry(20, 160, self.global_subtitlesvideo_panel_left.width()-40, 30)
     # self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
     self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    self.global_subtitlesvideo_translate_button.setGeometry(100, 240, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    self.global_subtitlesvideo_autovoiceover_button.setGeometry(100, 280, self.global_subtitlesvideo_panel_left.width()-120, 30)
 
     self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, self.global_subtitlesvideo_panel_right.width()-50, self.global_subtitlesvideo_panel_right.height()-50)
 
@@ -567,3 +584,104 @@ def update_widgets(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+
+
+def global_subtitlesvideo_translate_button_clicked(self):
+    """Function to translate subtitles"""
+    run_command = False
+
+    if bool(self.subtitles_list):
+        are_you_sure_message = QMessageBox(self)
+        are_you_sure_message.setWindowTitle(self.tr('Are you sure?'))
+        are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New text will be applied. Are you sure you want to replace your actual subtitles?'))
+        are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
+        are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
+        ret = are_you_sure_message.exec_()
+
+        if ret == QMessageBox.AcceptRole:
+            run_command = True
+    else:
+        run_command = True
+
+    if run_command:
+
+        language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
+        translator = google_translator()  #translator(service_urls=['translate.googleapis.com', 'translate.google.com','translate.google.co.kr'])
+        print(language)
+        for subtitle in self.subtitles_list:
+            subtitle[2] = translator.translate(subtitle[2], lang_tgt=language)
+            print(subtitle[2])
+
+        update_widgets(self)
+
+def global_subtitlesvideo_autovoiceover_button_clicked(self):
+    """Function to translate subtitles"""
+    speech_config = SpeechConfig(subscription="", region="southcentralus")
+    speech_config.set_speech_synthesis_output_format(SpeechSynthesisOutputFormat["Riff24Khz16BitMonoPcm"])
+
+    audio_from_video = AudioSegment.from_file(self.video_metadata['filepath'])
+    final_audio = AudioSegment.empty()
+
+    audio_config = AudioOutputConfig(filename=os.path.join(path_tmp, 'voiceover.wav'))
+
+    audio_pieces = []
+    parser = 0
+    first = True
+    for subtitle in self.subtitles_list:
+        # print(subtitle)
+
+        ssml_content = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-US"><voice name="pt-BR-AntonioNeural">'
+        ssml_content += subtitle[2] + '</voice></speak>'
+
+        synthesizer = SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+
+        synthesizer.speak_ssml_async(ssml_content)
+        audio_pieces.append([AudioSegment.from_file(os.path.join(path_tmp, 'voiceover.wav')), int(subtitle[0]*1000)])
+
+        piece1 = audio_from_video[parser:int(subtitle[0]*1000)]
+        if not first:
+            piece1 = piece1.fade(from_gain=-25.0, start=0, duration=4000)
+        piece1 = piece1.fade(to_gain=-25.0, end=int(piece1.duration_seconds*1000), duration=1200)
+        final_audio += piece1
+        parser = int(subtitle[0]*1000)
+
+        piece2 = audio_from_video[parser:parser+int(subtitle[1]*1000)]
+        piece2 = piece2 - 25.0
+        final_audio += piece2
+        parser += int(subtitle[1]*1000)
+        first = False
+
+    final_piece = audio_from_video[parser:]
+    final_piece = final_piece.fade(from_gain=-25.0, start=0, duration=5000)
+    final_audio += final_piece
+
+    #new_audio = sum(audio_pieces)
+
+    for piece in audio_pieces:
+        final_audio = final_audio.overlay(piece[0], position=piece[1])
+
+    final_audio.export(os.path.join(path_tmp, 'final_voiceover.wav'), format='wav')
+
+    subprocess.call(['ffmpeg', '-i', self.video_metadata['filepath'], '-i' , os.path.join(path_tmp, 'final_voiceover.wav'), '-c:v', 'copy', '-y', '-map', '0:v:0', '-map', '1:a:0', self.video_metadata['filepath'].rsplit('.', 1)[0] + '_voiceover.' + self.video_metadata['filepath'].rsplit('.', 1)[-1]])
+
+
+
+
+
+    # list_of_final_audiofiles = []
+    #     audio_config = AudioOutputConfig(filename="file.wav")
+    #     synthesizer = SpeechSynthesizer(speech_config=speech_config, audio_config=None)
+    #     synthesizer.speak_ssml_async(open('teste.ssml').read()))
+    #     File "<stdin>", line 1
+    #         synthesizer.speak_ssml_async(open('teste.ssml').read()))
+    #                                                             ^
+    #     SyntaxError: unmatched ')'
+    #
+
+
+    #     language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
+    #     translator = Translator(service_urls=['translate.googleapis.com'])
+
+    #         subtitle[2] = translator.translate(subtitle[2], dest=language).text
+
+    #     update_widgets(self)

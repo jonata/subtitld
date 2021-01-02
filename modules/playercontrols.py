@@ -554,9 +554,6 @@ def snap_value_changed(self):
     self.timeline_snap_value = self.snap_value.value() if self.snap_value.value() else .1
 
 
-
-
-
 def step_value_changed(self):
     """Function to set variables to settings"""
     self.settings['timeline']['step_unit'] = self.step_unit.currentText()
@@ -582,7 +579,6 @@ def update_step_information(self):
     self.step_value_i.setValue(int(self.settings['timeline'].get('step_value', 1)))
     self.step_value_f.setVisible(self.settings['timeline'].get('step_unit', 'Frames') == 'Seconds')
     self.step_value_i.setVisible(self.settings['timeline'].get('step_unit', 'Frames') == 'Frames')
-
 
 
 def timelinescrolling_type_changed(self, scrollingtype='page'):
