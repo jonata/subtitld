@@ -384,8 +384,8 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
                 captions = []
                 for cap in subtitles_list:
                     caption = captionstransformer.core.Caption()
-                    caption.start = captionstransformer.core.get_date(second=cap[0])
-                    caption.duration = captionstransformer.core.get_date(second=cap[1])
+                    caption.start = captionstransformer.core.get_date(milisecond=int(cap[0]*1000))
+                    caption.duration = captionstransformer.core.get_date(milisecond=int(cap[1]*1000))
                     caption.text = cap[2]
                     captions.append(caption)
                 writer.set_captions(captions)
