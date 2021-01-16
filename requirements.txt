@@ -14,3 +14,4 @@ scenedetect
 opencv-python
 google-api-python-client==1.8.0
 autosub3
+google-trans-new
