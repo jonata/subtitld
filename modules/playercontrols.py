@@ -394,6 +394,10 @@ def playercontrols_playpause_button_clicked(self):
     self.player_widget.pause()
     if self.repeat_activated:
         self.repeat_duration_tmp = []
+    if not self.player_widget.mpv.pause and not self.playercontrols_playpause_button.isChecked():
+        self.playercontrols_playpause_button.setChecked(True)
+    elif self.player_widget.mpv.pause and self.playercontrols_playpause_button.isChecked():
+        self.playercontrols_playpause_button.setChecked(False)
     playercontrols_playpause_button_update(self)
 
 

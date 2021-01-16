@@ -224,9 +224,10 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
         elif subtitle_file.lower().endswith(('.sbv')):
             subtitle_format = 'SBV'
             with open(subtitle_file, encoding='utf-8') as sbv_file:
-                captions = captionstransformer.sbv.Reader(sbv_file).read()
+                from captionstransformer.sbv import Reader
+                captions = Reader(sbv_file).read()
                 for caption in captions:
-                    final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text])
+                    final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text.strip()])
 
         elif subtitle_file.lower().endswith(('.xml')):
             subtitle_format = 'XML'
@@ -378,14 +379,15 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
                     assfile.save(final_file)
             else:
                 if subtitle_format == 'SBV':
-                    writer = captionstransformer.sbv.Writer(final_file)
+                    from captionstransformer.sbv import Writer
                 elif subtitle_format == 'XML':
-                    writer = captionstransformer.transcript.Writer(final_file)
+                    from captionstransformer.transcript import Writer
+                writer = Writer(open(final_file, mode='w', encoding='utf-8'))
                 captions = []
                 for cap in subtitles_list:
                     caption = captionstransformer.core.Caption()
-                    caption.start = captionstransformer.core.get_date(milisecond=int(cap[0]*1000))
-                    caption.duration = captionstransformer.core.get_date(milisecond=int(cap[1]*1000))
+                    caption.start = captionstransformer.core.get_date(second=int(cap[0]//1), millisecond=int((cap[0]%1)*1000))
+                    caption.duration = captionstransformer.core.get_date(second=int(cap[1]//1), millisecond=int((cap[1]%1)*1000)) -  captionstransformer.core.get_date()
                     caption.text = cap[2]
                     captions.append(caption)
                 writer.set_captions(captions)

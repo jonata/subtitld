@@ -5,7 +5,7 @@
 import os
 
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QListWidget, QListView, QMessageBox
+from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QListWidget, QListView, QMessageBox, QWidget, QLineEdit
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 
 from modules import file_io
@@ -50,6 +50,43 @@ def load(self):
     self.subtitles_list_qlistwidget.setIconSize(QSize(42, 42))
     self.subtitles_list_qlistwidget.clicked.connect(lambda: subtitles_list_qlistwidget_item_clicked(self))
 
+    self.subtitles_list_findandreplace_list = []
+    self.subtitles_list_findandreplace_index = None
+
+    self.subtitles_list_findandreplace_toggle_button = QPushButton('Find and Replace'.upper(), parent=self.subtitles_list_widget)
+    self.subtitles_list_findandreplace_toggle_button.setCheckable(True)
+    self.subtitles_list_findandreplace_toggle_button.setObjectName('button')
+    self.subtitles_list_findandreplace_toggle_button.clicked.connect(lambda: subtitles_list_findandreplace_toggle_button_clicked(self))
+
+    self.subtitles_list_findandreplace_panel = QLabel(parent=self.subtitles_list_widget)
+    #self.subtitles_list_findandreplace_panel.setObjectName('QLabel')
+    self.subtitles_list_findandreplace_panel.setStyleSheet('QLabel { border-radius: 4px; background: rgba(106, 116, 131,100); }')
+    #self.subtitles_list_findandreplace_panel.setVisible(False)
+
+    self.subtitles_list_findandreplace_find_field = QLineEdit(parent=self.subtitles_list_findandreplace_panel)
+    self.subtitles_list_findandreplace_find_field.setObjectName('qlineedit')
+    self.subtitles_list_findandreplace_find_field.textChanged.connect(lambda: subtitles_list_findandreplace_find_field_textchanged(self))
+
+    self.subtitles_list_findandreplace_findnext_button = QPushButton('FIND', parent=self.subtitles_list_findandreplace_panel)
+    self.subtitles_list_findandreplace_findnext_button.setObjectName('button')
+    self.subtitles_list_findandreplace_findnext_button.clicked.connect(lambda: subtitles_list_findandreplace_find_field_clicked(self))
+
+    self.subtitles_list_findandreplace_replace_field = QLineEdit(parent=self.subtitles_list_findandreplace_panel)
+    self.subtitles_list_findandreplace_replace_field.setObjectName('qlineedit')
+    self.subtitles_list_findandreplace_replace_field.setVisible(False)
+
+    self.subtitles_list_findandreplace_replace_button = QPushButton(parent=self.subtitles_list_findandreplace_panel)
+    self.subtitles_list_findandreplace_replace_button.setObjectName('button')
+    self.subtitles_list_findandreplace_replace_button.setVisible(False)
+
+    self.subtitles_list_findandreplace_replaceandfindnext_button = QPushButton(parent=self.subtitles_list_findandreplace_panel)
+    self.subtitles_list_findandreplace_replaceandfindnext_button.setObjectName('button')
+    self.subtitles_list_findandreplace_replaceandfindnext_button.setVisible(False)
+
+    self.subtitles_list_findandreplace_replaceall_button = QPushButton(parent=self.subtitles_list_findandreplace_panel)
+    self.subtitles_list_findandreplace_replaceall_button.setObjectName('button')
+    self.subtitles_list_findandreplace_replaceall_button.setVisible(False)
+
     self.subtitles_list_toggle_button = QPushButton(parent=self)
     self.subtitles_list_toggle_button.clicked.connect(lambda: subtitles_list_toggle_button_clicked(self))
     self.subtitles_list_toggle_button.setCheckable(True)
@@ -72,7 +109,7 @@ def resized(self):
     self.toppanel_open_button.setGeometry(self.toppanel_save_button.x()+self.toppanel_save_button.width(), self.toppanel_save_button.y(), self.toppanel_save_button.height(), self.toppanel_save_button.height())
     self.toppanel_subtitle_file_info_label.setGeometry(self.toppanel_open_button.x()+self.toppanel_open_button.width()+10, self.toppanel_save_button.y(), self.subtitles_list_widget.width()-self.toppanel_open_button.x()-self.toppanel_open_button.width()-40, self.toppanel_save_button.height())
 
-    self.subtitles_list_qlistwidget.setGeometry(20, 100, self.subtitles_list_widget.width()-40, self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-35)
+    #self.subtitles_list_qlistwidget.setGeometry(20, 100, self.subtitles_list_widget.width()-40, self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-60)
 
     if (self.subtitles_list or self.video_metadata):
         if self.subtitles_list_toggle_button.isChecked():
@@ -82,6 +119,15 @@ def resized(self):
     else:
         self.subtitles_list_toggle_button.setGeometry(-25, 0, 25, 80)
 
+    subtitles_list_findandreplace_toggle_button_clicked(self)
+    self.subtitles_list_findandreplace_toggle_button.setGeometry(self.subtitles_list_qlistwidget.x(), self.subtitles_list_widget.height()-self.playercontrols_widget.height()-35, ( self.subtitles_list_widget.width()-40)*.5, 20)
+    self.subtitles_list_findandreplace_panel.setGeometry(self.subtitles_list_qlistwidget.x(), self.subtitles_list_widget.height()-self.playercontrols_widget.height()-105, self.subtitles_list_qlistwidget.width(), 65)
+    self.subtitles_list_findandreplace_find_field.setGeometry(5, 5, self.subtitles_list_findandreplace_panel.width()-90, 25)
+    self.subtitles_list_findandreplace_findnext_button.setGeometry(5+self.subtitles_list_findandreplace_find_field.width()+5, 5, 50, 25)
+    self.subtitles_list_findandreplace_replace_field.setGeometry(5, 35, self.subtitles_list_findandreplace_panel.width()-90, 25)
+    self.subtitles_list_findandreplace_replace_button.setGeometry(5+self.subtitles_list_findandreplace_replace_field.width()+5, 35, 25, 25)
+    self.subtitles_list_findandreplace_replaceandfindnext_button.setGeometry(5+self.subtitles_list_findandreplace_replace_field.width()+30, 35, 25, 25)
+    self.subtitles_list_findandreplace_replaceall_button.setGeometry(5+self.subtitles_list_findandreplace_replace_field.width()+55, 35, 25, 25)
 
 def subtitles_list_toggle_button_clicked(self):
     """Function to call when clicking toggle button"""
@@ -216,6 +262,42 @@ def toppanel_open_button_clicked(self):
             self.subttileslist.toppanel_save_button_clicked(self)
     file_io.open_filepath(self)
 
+
+def subtitles_list_findandreplace_toggle_button_clicked(self):
+    if self.subtitles_list_findandreplace_toggle_button.isChecked():
+        self.subtitles_list_qlistwidget.setGeometry(20, 100, self.subtitles_list_widget.width()-40, self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-130)
+        self.subtitles_list_findandreplace_panel.setVisible(True)
+    else:
+        self.subtitles_list_qlistwidget.setGeometry(20, 100, self.subtitles_list_widget.width()-40, self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-60)
+        self.subtitles_list_findandreplace_panel.setVisible(False)
+
+
+def subtitles_list_findandreplace_find_field_textchanged(self):
+    self.subtitles_list_findandreplace_list = []
+    self.subtitles_list_findandreplace_index = None
+
+
+def subtitles_list_findandreplace_find_field_clicked(self):
+    if self.subtitles_list_findandreplace_find_field.text():
+        if self.subtitles_list_findandreplace_index is None:
+            self.subtitles_list_findandreplace_list = []
+            for subtitle in self.subtitles_list:
+                if self.subtitles_list_findandreplace_find_field.text() in subtitle[2]:
+                    self.subtitles_list_findandreplace_list.append([self.subtitles_list.index(subtitle)])
+            self.subtitles_list_findandreplace_index = 0
+        subtitles_list_findandreplace_update(self)
+
+
+def subtitles_list_findandreplace_update(self):
+    if self.subtitles_list_findandreplace_index is not None and self.subtitles_list_findandreplace_list:
+        self.selected_subtitle = self.subtitles_list[self.subtitles_list_findandreplace_list[self.subtitles_list_findandreplace_index][0]]
+        if self.selected_subtitle:
+            self.subtitles_list_qlistwidget.setCurrentRow(self.subtitles_list.index(self.selected_subtitle))
+            subtitles_list_qlistwidget_item_clicked(self)
+            if self.subtitles_list_findandreplace_index < len(self.subtitles_list_findandreplace_list) - 1:
+                self.subtitles_list_findandreplace_index += 1
+            else:
+                self.subtitles_list_findandreplace_index = 0
 
 def update_toppanel_subtitle_file_info_label(self):
     """Function to update top information on subtitles list panel"""
