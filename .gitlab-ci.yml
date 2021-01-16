@@ -38,7 +38,7 @@ appimage-amd64:
   type: deploy
   before_script:
     - apt-get update -qy
-    - apt-get install -y software-properties-common
+    - apt-get install -y software-properties-common sshpass
     - add-apt-repository ppa:mc3man/bionic-media -y
     - apt-get update -qy
     - apt-get install -y git wget python3-pip libglu1-mesa libmpv1 ffmpeg libmpv-dev libespeak-dev
