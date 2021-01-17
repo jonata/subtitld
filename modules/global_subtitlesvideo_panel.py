@@ -20,9 +20,9 @@ from modules.shortcuts import shortcuts_dict
 from modules.paths import LANGUAGE_DICT_LIST, path_tmp
 from modules import file_io
 
-from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat
-from azure.cognitiveservices.speech.audio import AudioOutputConfig
-from pydub import AudioSegment
+# from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat
+# from azure.cognitiveservices.speech.audio import AudioOutputConfig
+# from pydub import AudioSegment
 
 multiprocessing.freeze_support()
 
