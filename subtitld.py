@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Subtitle - open source subtitle editor
+"""Subtitld - open source subtitle editor
 
 You can run Subtitld by just calling this file as a Python script, like this:
 
