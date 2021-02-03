@@ -42,20 +42,23 @@ class ThreadExtractSceneTimePositions(QThread):
         """Run function of extract time positions thread"""
         if self.filepath:
             result = []
-            video_manager = VideoManager([self.filepath])
-            stats_manager = StatsManager()
-            scene_manager = SceneManager(stats_manager)
-            scene_manager.add_detector(ContentDetector())
-            base_timecode = video_manager.get_base_timecode()
             try:
-                video_manager.set_downscale_factor()
-                video_manager.start()
-                scene_manager.detect_scenes(frame_source=video_manager, show_progress=False)
-                scene_list = scene_manager.get_scene_list(base_timecode)
-                for _, scene in enumerate(scene_list):
-                    result.append(scene[0].get_seconds())
-            finally:
-                video_manager.release()
+                video_manager = VideoManager([self.filepath])
+                stats_manager = StatsManager()
+                scene_manager = SceneManager(stats_manager)
+                scene_manager.add_detector(ContentDetector())
+                base_timecode = video_manager.get_base_timecode()
+                try:
+                    video_manager.set_downscale_factor()
+                    video_manager.start()
+                    scene_manager.detect_scenes(frame_source=video_manager, show_progress=False)
+                    scene_list = scene_manager.get_scene_list(base_timecode)
+                    for _, scene in enumerate(scene_list):
+                        result.append(scene[0].get_seconds())
+                finally:
+                    video_manager.release()
+            except Exception:
+                pass
             self.command.emit(result)
 
 
