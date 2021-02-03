@@ -25,7 +25,7 @@ import scc2srt
 
 from modules import waveform
 from modules import usf
-from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS
+from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, REAL_PATH_HOME
 
 list_of_supported_subtitle_extensions = []
 for exttype in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
@@ -97,7 +97,7 @@ def open_filepath(self, file_to_open=False):
     supported_subtitle_files = self.tr('Subtitle files') + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
     supported_video_files = self.tr('Video files') + ' ({})'.format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
     if not file_to_open:
-        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video or subtitle file'), directory=os.path.expanduser("~"), filter=supported_subtitle_files + ';;' + supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
+        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video or subtitle file'), directory=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
 
     if file_to_open and os.path.isfile(file_to_open):
         if file_to_open.lower().endswith(tuple(list_of_supported_subtitle_extensions)):
@@ -121,15 +121,16 @@ def open_filepath(self, file_to_open=False):
                     break
 
     if not self.video_metadata:
-        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=os.path.expanduser("~"), filter=supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
+        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=REAL_PATH_HOME, filter=supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
         if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
             self.video_metadata = process_video_file(file_to_open)
 
     if self.video_metadata:
         self.actual_video_file = file_to_open
-        self.thread_extract_waveform.filepath = self.video_metadata['filepath']
-        self.thread_extract_waveform.start()
-        self.videoinfo_label.setText(self.tr('Extracting audio...'))
+        if self.video_metadata['audio_is_present']:
+            self.thread_extract_waveform.filepath = self.video_metadata['filepath']
+            self.thread_extract_waveform.start()
+            self.videoinfo_label.setText(self.tr('Extracting audio...'))
         self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
         self.thread_extract_scene_time_positions.start()
         self.player.update(self)
@@ -269,6 +270,7 @@ def process_video_file(video_file=False):
     video_metadata = {}
     json_result = waveform.ffmpeg_load_metadata(video_file)
     video_metadata['audio'] = False
+    video_metadata['audio_is_present'] = False
     video_metadata['waveform'] = {}
     video_metadata['duration'] = float(json_result.get('format', {}).get('duration', '0.01'))
     for stream in json_result.get('streams', []):
@@ -279,6 +281,8 @@ def process_video_file(video_file=False):
         elif stream.get('codec_type', '') in ['subtitle'] and not video_metadata.get('subttiles', False):
             video_metadata['subttiles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
             # TODO: select what language if multiple embedded subtitles
+        elif stream.get('codec_type', '') in ['audio']:
+            video_metadata['audio_is_present'] = True
     video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
 
