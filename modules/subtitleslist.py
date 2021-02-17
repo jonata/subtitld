@@ -53,15 +53,15 @@ def load(self):
     self.subtitles_list_findandreplace_list = []
     self.subtitles_list_findandreplace_index = None
 
-    self.subtitles_list_findandreplace_toggle_button = QPushButton('Find and Replace'.upper(), parent=self.subtitles_list_widget)
-    self.subtitles_list_findandreplace_toggle_button.setCheckable(True)
+    self.subtitles_list_findandreplace_toggle_button = QPushButton('Find'.upper(), parent=self.subtitles_list_widget) # It will be 'Find and replace'
     self.subtitles_list_findandreplace_toggle_button.setObjectName('button')
     self.subtitles_list_findandreplace_toggle_button.clicked.connect(lambda: subtitles_list_findandreplace_toggle_button_clicked(self))
 
-    self.subtitles_list_findandreplace_panel = QLabel(parent=self.subtitles_list_widget)
+    self.subtitles_list_findandreplace_panel = QWidget()
+    self.subtitles_list_findandreplace_panel.setWindowFlags(Qt.Tool)
     #self.subtitles_list_findandreplace_panel.setObjectName('QLabel')
-    self.subtitles_list_findandreplace_panel.setStyleSheet('QLabel { border-radius: 4px; background: rgba(106, 116, 131,100); }')
-    #self.subtitles_list_findandreplace_panel.setVisible(False)
+    #self.subtitles_list_findandreplace_panel.setStyleSheet('QLabel { border-radius: 4px; background: rgba(106, 116, 131,100); }')
+    self.subtitles_list_findandreplace_panel.setVisible(False)
 
     self.subtitles_list_findandreplace_find_field = QLineEdit(parent=self.subtitles_list_findandreplace_panel)
     self.subtitles_list_findandreplace_find_field.setObjectName('qlineedit')
@@ -119,7 +119,9 @@ def resized(self):
     else:
         self.subtitles_list_toggle_button.setGeometry(-25, 0, 25, 80)
 
-    subtitles_list_findandreplace_toggle_button_clicked(self)
+    # subtitles_list_findandreplace_toggle_button_clicked(self)
+
+    self.subtitles_list_qlistwidget.setGeometry(20, 100, self.subtitles_list_widget.width()-40, self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-60)
     self.subtitles_list_findandreplace_toggle_button.setGeometry(self.subtitles_list_qlistwidget.x(), self.subtitles_list_widget.height()-self.playercontrols_widget.height()-35, ( self.subtitles_list_widget.width()-40)*.5, 20)
     self.subtitles_list_findandreplace_panel.setGeometry(self.subtitles_list_qlistwidget.x(), self.subtitles_list_widget.height()-self.playercontrols_widget.height()-105, self.subtitles_list_qlistwidget.width(), 65)
     self.subtitles_list_findandreplace_find_field.setGeometry(5, 5, self.subtitles_list_findandreplace_panel.width()-90, 25)
@@ -264,13 +266,7 @@ def toppanel_open_button_clicked(self):
 
 
 def subtitles_list_findandreplace_toggle_button_clicked(self):
-    if self.subtitles_list_findandreplace_toggle_button.isChecked():
-        self.subtitles_list_qlistwidget.setGeometry(20, 100, self.subtitles_list_widget.width()-40, self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-130)
-        self.subtitles_list_findandreplace_panel.setVisible(True)
-    else:
-        self.subtitles_list_qlistwidget.setGeometry(20, 100, self.subtitles_list_widget.width()-40, self.subtitles_list_widget.height()-80-self.playercontrols_widget.height()-60)
-        self.subtitles_list_findandreplace_panel.setVisible(False)
-
+    self.subtitles_list_findandreplace_panel.setVisible(True)
 
 def subtitles_list_findandreplace_find_field_textchanged(self):
     self.subtitles_list_findandreplace_list = []
