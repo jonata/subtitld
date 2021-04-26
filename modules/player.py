@@ -42,9 +42,17 @@ class MpvWidget(QOpenGLWidget):
                        input_cursor=False,
                        input_default_bindings=False,
                        stop_playback_on_init_failure=False,
+
+                    #    cache=True,
+
+                       #vd_queue_enable='yes',
+                    #    demuxer_max_bytes=41943040,
+                    #    demuxer_max_back_bytes=41943040,
+                    #    hr_seek=True,
+                    #    hr_seek_framedrop=False,
                        input_vo_keyboard=False,
                        sid=False,
-                       video_sync='display-vdrop',
+                       #video_sync='display-vdrop',
                        audio_file_auto=False,
                        quiet=True,
                        hwdec=('auto'))
@@ -176,9 +184,9 @@ class PlayerSubtitleLayer(QLabel):
                                             )
         if self.subtitle_text:
             painter.setPen(QPen(QColor.fromRgb(0, 0, 0, 200)))
-            painter.drawText(title_safe_margin_qrect - QMargins(2, 2, -2, -2), Qt.AlignCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
+            painter.drawText(title_safe_margin_qrect - QMargins(2, 2, -2, -2), Qt.AlignHCenter | Qt.AlignTop | Qt.TextWordWrap, self.subtitle_text)
             painter.setPen(QPen(QColor.fromRgb(255, 255, 255)))
-            painter.drawText(title_safe_margin_qrect, Qt.AlignCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
+            painter.drawText(title_safe_margin_qrect, Qt.AlignHCenter | Qt.AlignTop | Qt.TextWordWrap, self.subtitle_text)
 
         if self.show_action_safe_margin:
             action_safe_margin_qrect = QRect(self.width()*((1.0-self.action_safe_margin)*.5),

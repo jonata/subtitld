@@ -134,8 +134,8 @@ def open_filepath(self, file_to_open=False):
             self.thread_extract_waveform.filepath = self.video_metadata['filepath']
             self.thread_extract_waveform.start()
             self.videoinfo_label.setText(self.tr('Extracting audio...'))
-        self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
-        self.thread_extract_scene_time_positions.start()
+        #self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
+        #self.thread_extract_scene_time_positions.start()
         self.player.update(self)
         self.player_widget.loadfile(self.video_metadata['filepath'])
         self.player.resize_player_widget(self)

@@ -93,13 +93,29 @@ def load(self):
     self.add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_subtitle_icon.png')))
     self.add_subtitle_button.setIconSize(QSize(20, 20))
     self.add_subtitle_button.setObjectName('button_dark')
-    self.add_subtitle_button.setStyleSheet('QPushButton {padding-right:50px; border-right:0; border-bottom:0;}')
+    self.add_subtitle_button.setStyleSheet('QPushButton {padding-right:105px; border-right:0; border-bottom:0;}')
     self.add_subtitle_button.clicked.connect(lambda: add_subtitle_button_clicked(self))
 
     self.add_subtitle_duration = QDoubleSpinBox(parent=self.add_subtitle_button)
     self.add_subtitle_duration.setMinimum(.1)
     self.add_subtitle_duration.setMaximum(60.)
     self.add_subtitle_duration.valueChanged.connect(lambda: add_subtitle_duration_changed(self))
+
+    self.add_subtitle_starting_from_last = QPushButton(parent=self.add_subtitle_button)
+    self.add_subtitle_starting_from_last.setObjectName('button_dark')
+    self.add_subtitle_starting_from_last.setCheckable(True)
+    self.add_subtitle_starting_from_last.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_from_last.svg')))
+    self.add_subtitle_starting_from_last.setIconSize(QSize(15, 15))
+    self.add_subtitle_starting_from_last.setStyleSheet('QPushButton {padding-right:0; padding-bottom:6 px;}')
+    self.add_subtitle_starting_from_last.clicked.connect(lambda: add_subtitle_starting_from_last_clicked(self))
+
+    self.add_subtitle_and_play = QPushButton(parent=self.add_subtitle_button)
+    self.add_subtitle_and_play.setObjectName('button_dark')
+    self.add_subtitle_and_play.setCheckable(True)
+    self.add_subtitle_and_play.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_and_play.svg')))
+    self.add_subtitle_and_play.setIconSize(QSize(15, 15))
+    self.add_subtitle_and_play.setStyleSheet('QPushButton {padding-right:0; border-right:5px; border-left:0; padding-bottom:6px;}')
+    self.add_subtitle_and_play.clicked.connect(lambda: add_subtitle_and_play_clicked(self))
 
     self.remove_selected_subtitle_button = QPushButton('REMOVE', parent=self.playercontrols_widget)
     self.remove_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'remove_selected_subtitle_icon.png')))
@@ -430,19 +446,23 @@ def resized(self):
     self.playercontrols_play_from_last_start_button.setGeometry(self.playercontrols_stop_button.x()-50, 11, 50, 43)
     self.playercontrols_play_from_next_start_button.setGeometry(self.playercontrols_playpause_button.x()+self.playercontrols_playpause_button.width(), 11, 50, 43)
 
-    self.add_subtitle_button.setGeometry((self.playercontrols_widget.width()*.5)-384, 44, 120, 40)
-    self.add_subtitle_duration.setGeometry(68, 8, 46, self.add_subtitle_button.height()-14)
-    self.remove_selected_subtitle_button.setGeometry(self.add_subtitle_button.x() + self.add_subtitle_button.width(), self.add_subtitle_button.y(), 100, 40)
-
-    self.gap_add_subtitle_button.setGeometry(self.add_subtitle_button.x()-131, 44, 63, 40)
-    self.gap_remove_subtitle_button.setGeometry(self.gap_add_subtitle_button.x()+self.gap_add_subtitle_button.width(), 44, 63, self.gap_add_subtitle_button.height())
-    self.gap_subtitle_duration.setGeometry(self.gap_add_subtitle_button.x()+40, 51, 46, self.gap_add_subtitle_button.height()-14)
-
     self.move_backward_subtitle.setGeometry((self.playercontrols_widget.width()*.5)-107, 61, 25, 23)
     self.move_start_back_subtitle.setGeometry((self.playercontrols_widget.width()*.5)-159, 61, 25, 23)
     self.move_start_forward_subtitle.setGeometry((self.playercontrols_widget.width()*.5)-134, 61, 25, 23)
 
     self.timeline_cursor_back_frame.setGeometry((self.playercontrols_widget.width()*.5)-80, 61, 25, 23)
+
+    self.remove_selected_subtitle_button.setGeometry(self.move_start_back_subtitle.x() - 5 - 100, self.add_subtitle_button.y(), 100, 40)
+
+    self.add_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() - 178, 44, 178, 40)
+    self.add_subtitle_duration.setGeometry(66, 8, 46, self.add_subtitle_button.height()-14)
+    self.add_subtitle_starting_from_last.setGeometry(self.add_subtitle_duration.x() + self.add_subtitle_duration.width() + 2, 8, self.add_subtitle_button.height()-14, self.add_subtitle_button.height()-8)
+    self.add_subtitle_and_play.setGeometry(self.add_subtitle_starting_from_last.x() + self.add_subtitle_starting_from_last.width(), 8, self.add_subtitle_button.height()-14, self.add_subtitle_button.height()-8)
+
+    self.gap_add_subtitle_button.setGeometry(self.add_subtitle_button.x()-131, 44, 63, 40)
+    self.gap_remove_subtitle_button.setGeometry(self.gap_add_subtitle_button.x()+self.gap_add_subtitle_button.width(), 44, 63, self.gap_add_subtitle_button.height())
+    self.gap_subtitle_duration.setGeometry(self.gap_add_subtitle_button.x()+40, 51, 46, self.gap_add_subtitle_button.height()-14)
+
     self.timeline_cursor_next_frame.setGeometry((self.playercontrols_widget.width()*.5)+55, 61, 25, 23)
 
     self.move_forward_subtitle.setGeometry((self.playercontrols_widget.width()*.5)+82, 61, 25, 23)
@@ -598,12 +618,19 @@ def add_subtitle_duration_changed(self):
     self.default_new_subtitle_duration = self.add_subtitle_duration.value()
 
 
+def add_subtitle_starting_from_last_clicked(self):
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
+
+def add_subtitle_and_play_clicked(self):
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
+
 def gap_add_subtitle_button_clicked(self):
     """Function to call when add gap button is clicked"""
     subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=self.gap_subtitle_duration.value())
     self.unsaved = True
     self.selected_subtitle = False
     self.timeline.update(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def gap_remove_subtitle_button_clicked(self):
@@ -612,6 +639,7 @@ def gap_remove_subtitle_button_clicked(self):
     self.unsaved = True
     self.selected_subtitle = False
     self.timeline.update(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def update_snap_buttons(self):
@@ -672,6 +700,7 @@ def playercontrols_play_from_last_start_button_clicked(self):
     self.player_widget.play()
     self.timeline.update_scrollbar(self)
     self.timeline.update(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def playercontrols_play_from_next_start_button_clicked(self):
@@ -684,16 +713,20 @@ def playercontrols_play_from_next_start_button_clicked(self):
         self.player_widget.play()
         self.timeline.update_scrollbar(self)
         self.timeline.update(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def add_subtitle_button_clicked(self):
     """Function to call when add subtitle button is clicked"""
-    self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.player_widget.position, duration=self.default_new_subtitle_duration)
+    start_position = False
+    self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.player_widget.position, duration=self.default_new_subtitle_duration, from_last_subtitle=self.add_subtitle_starting_from_last.isChecked())
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
     self.properties_textedit.setFocus(Qt.TabFocusReason)
+    if self.add_subtitle_and_play.isChecked():
+        self.player_widget.play()
 
 
 def remove_selected_subtitle_button_clicked(self):
@@ -704,6 +737,7 @@ def remove_selected_subtitle_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def slice_selected_subtitle_button_clicked(self):
@@ -717,6 +751,7 @@ def slice_selected_subtitle_button_clicked(self):
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
         self.properties.update_properties_widget(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def select_subtitle_in_current_position(self):
@@ -757,6 +792,7 @@ def merge_back_selected_subtitle_button_clicked(self):
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
         self.properties.update_properties_widget(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def merge_next_selected_subtitle_button_clicked(self):
@@ -767,6 +803,7 @@ def merge_next_selected_subtitle_button_clicked(self):
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
         self.properties.update_properties_widget(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def move_backward_subtitle_clicked(self):
@@ -781,6 +818,7 @@ def move_backward_subtitle_clicked(self):
         subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
         self.unsaved = True
         self.timeline.update(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def move_forward_subtitle_clicked(self):
@@ -795,6 +833,7 @@ def move_forward_subtitle_clicked(self):
         subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
         self.unsaved = True
         self.timeline.update(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def move_start_back_subtitle_clicked(self):
@@ -809,6 +848,7 @@ def move_start_back_subtitle_clicked(self):
         subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
         self.unsaved = True
         self.timeline.update(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def move_start_forward_subtitle_clicked(self):
@@ -823,6 +863,7 @@ def move_start_forward_subtitle_clicked(self):
         subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
         self.unsaved = True
         self.timeline.update(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def move_end_back_subtitle_clicked(self):
@@ -837,6 +878,7 @@ def move_end_back_subtitle_clicked(self):
         subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
         self.unsaved = True
         self.timeline.update(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def move_end_forward_subtitle_clicked(self):
@@ -851,16 +893,19 @@ def move_end_forward_subtitle_clicked(self):
         subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
         self.unsaved = True
         self.timeline.update(self)
+        self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def timeline_cursor_back_frame_clicked(self):
     """Function to move cursor one frame backward"""
     self.player_widget.frameBackStep()
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def timeline_cursor_next_frame_clicked(self):
     """Function to move cursor one frame forward"""
     self.player_widget.frameStep()
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def next_start_to_current_position_button_clicked(self):
@@ -870,6 +915,7 @@ def next_start_to_current_position_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def last_end_to_current_position_button_clicked(self):
@@ -879,6 +925,7 @@ def last_end_to_current_position_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def last_start_to_current_position_button_clicked(self):
@@ -888,6 +935,7 @@ def last_start_to_current_position_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def subtitle_start_to_current_position_button_clicked(self):
@@ -897,6 +945,7 @@ def subtitle_start_to_current_position_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def subtitle_end_to_current_position_button_clicked(self):
@@ -906,6 +955,7 @@ def subtitle_end_to_current_position_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def next_end_to_current_position_button_clicked(self):
@@ -915,6 +965,7 @@ def next_end_to_current_position_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def change_playback_speed_clicked(self):
@@ -923,6 +974,7 @@ def change_playback_speed_clicked(self):
         self.playback_speed = 1.0
         self.player.update_speed(self)
     update_playback_speed_buttons(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def change_playback_speed_decrease_clicked(self):
@@ -931,6 +983,7 @@ def change_playback_speed_decrease_clicked(self):
     self.playback_speed = self.change_playback_speed_slider.value()/100.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def change_playback_speed_slider(self):
@@ -938,6 +991,7 @@ def change_playback_speed_slider(self):
     self.playback_speed = self.change_playback_speed_slider.value()/100.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def change_playback_speed_increase_clicked(self):
@@ -946,18 +1000,22 @@ def change_playback_speed_increase_clicked(self):
     self.playback_speed = self.change_playback_speed_slider.value()/100.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def repeat_playback_clicked(self):
     """Function to call when playback repeat button is clicked"""
     self.repeat_activated = self.repeat_playback.isChecked()
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def repeat_playback_duration_changed(self):
     """Function to call when playback repeat duration is changed"""
     self.repeat_duration = self.repeat_playback_duration.value()
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def repeat_playback_times_changed(self):
     """Function to call when playback repeat number of times is changed"""
     self.repeat_times = self.repeat_playback_times.value()
+    self.timeline_widget.setFocus(Qt.TabFocusReason)

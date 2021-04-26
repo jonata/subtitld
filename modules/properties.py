@@ -6,7 +6,7 @@ import os
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QTextEdit
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QSize
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QSize, Qt
 
 from modules import file_io
 from modules import subtitles
@@ -137,6 +137,7 @@ def send_text_to_next_subtitle_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
 def send_text_to_last_subtitle_button_clicked(self):
@@ -148,3 +149,4 @@ def send_text_to_last_subtitle_button_clicked(self):
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
     self.properties.update_properties_widget(self)
+    self.timeline_widget.setFocus(Qt.TabFocusReason)

@@ -6,15 +6,18 @@ from bisect import bisect
 from modules import history
 
 
-def add_subtitle(subtitles=[], position=0.0, duration=5.0, text=''):
+def add_subtitle(subtitles=[], position=0.0, duration=5.0, text='', from_last_subtitle=False):
     """Function to add a subtitle to the main subtitle list"""
     history.history_append(subtitles)
 
     subt = [item[0] for item in subtitles]
     index = bisect(subt, position)
 
-    if index and subtitles[index-1][0] + subtitles[index-1][1] > position:
-        subtitles[index-1][1] -= (subtitles[index-1][0] + subtitles[index-1][1]) - position
+    if index:
+        if subtitles[index-1][0] + subtitles[index-1][1] > position:
+            subtitles[index-1][1] -= (subtitles[index-1][0] + subtitles[index-1][1]) - position
+        elif from_last_subtitle:
+            position = (subtitles[index-1][0] + subtitles[index-1][1]) + .001
 
     if len(subtitles) - 1 > index and subtitles[index][0] - position < duration:
         duration = subtitles[index][0] - position
@@ -33,7 +36,7 @@ def remove_subtitle(subtitles=[], selected_subtitle=False):
     return subtitles
 
 
-def slice_subtitle(subtitles=[], selected_subtitle=False, position=0.0, last_text='', next_text=''):
+def slice_subtitle(subtitles=[], selected_subtitle=False, position=0.0, last_text='', next_text='', strip_text=True):
     """Function to slice a subtitle in the main subtitle list"""
     if selected_subtitle and position > selected_subtitle[0] and position < (selected_subtitle[0] + selected_subtitle[1]):
         history.history_append(subtitles)
@@ -49,6 +52,9 @@ def slice_subtitle(subtitles=[], selected_subtitle=False, position=0.0, last_tex
 
         subtitles[index][1] = position_to_cut - subtitles[index][0] - 0.001
         subtitles[index][2] = last_text
+        if strip_text:
+            subtitles[index][2] = subtitles[index][2].strip()
+            next_text = next_text.strip()
 
         return add_subtitle(subtitles=subtitles, position=position_to_cut, duration=new_duration, text=next_text)
 

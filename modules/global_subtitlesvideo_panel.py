@@ -7,6 +7,7 @@ import subprocess
 import json
 import multiprocessing
 import autosub
+import speech_recognition as sr
 #from googletrans import Translator
 from google_trans_new import google_translator
 # from ffsubsync import ffsubsync
@@ -166,6 +167,11 @@ def load(self):
     self.global_subtitlesvideo_autovoiceover_button.clicked.connect(lambda: global_subtitlesvideo_autovoiceover_button_clicked(self))
     self.global_subtitlesvideo_autovoiceover_button.setVisible(False)
 
+    self.global_subtitlesvideo_autotranscribe_button = QPushButton(self.tr('Transcribe').upper(), parent=self.global_subtitlesvideo_panel_widget)
+    self.global_subtitlesvideo_autotranscribe_button.setObjectName('button')
+    self.global_subtitlesvideo_autotranscribe_button.clicked.connect(lambda: global_subtitlesvideo_autotranscribe_button_clicked(self))
+    self.global_subtitlesvideo_autotranscribe_button.setVisible(True)
+
     self.global_subtitlesvideo_panel_tabwidget = QTabWidget(parent=self.global_subtitlesvideo_panel_widget)
 
     self.global_subtitlesvideo_panel_tabwidget_export_panel = QWidget()
@@ -302,6 +308,7 @@ def resized(self):
     self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
     self.global_subtitlesvideo_translate_button.setGeometry(100, 240, self.global_subtitlesvideo_panel_left.width()-120, 30)
     self.global_subtitlesvideo_autovoiceover_button.setGeometry(100, 280, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    self.global_subtitlesvideo_autotranscribe_button.setGeometry(100, 280, self.global_subtitlesvideo_panel_left.width()-120, 30)
 
     self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, self.global_subtitlesvideo_panel_right.width()-50, self.global_subtitlesvideo_panel_right.height()-50)
 
@@ -424,6 +431,7 @@ def global_subtitlesvideo_video_burn_convert_clicked(self):
             '-y',
             '-vf',
             vf_string,
+            '-crf', '15',
             generated_video_filepath
             ]
 
@@ -607,15 +615,60 @@ def global_subtitlesvideo_translate_button_clicked(self):
 
         language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
         translator = google_translator()  #translator(service_urls=['translate.googleapis.com', 'translate.google.com','translate.google.co.kr'])
-        print(language)
         for subtitle in self.subtitles_list:
-            subtitle[2] = translator.translate(subtitle[2], lang_tgt=language)
-            print(subtitle[2])
+            subtitle[2] = translator.translate(subtitle[2].replace('\n', ' ').replace('  ', ' '), lang_tgt=language)
 
         update_widgets(self)
 
+def global_subtitlesvideo_autotranscribe_button_clicked(self):
+    """Function to transcribe using google speech"""
+    run_command = False
+
+    if bool(self.subtitles_list):
+        are_you_sure_message = QMessageBox(self)
+        are_you_sure_message.setWindowTitle(self.tr('Are you sure?'))
+        are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New text will be applied. Are you sure you want to replace your actual subtitles?'))
+        are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
+        are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
+        ret = are_you_sure_message.exec_()
+
+        if ret == QMessageBox.AcceptRole:
+            run_command = True
+    else:
+        run_command = True
+
+    if run_command:
+        splits = 60.0
+        actual_split = 0
+        final_text = ''
+
+        # while actual_split < self.video_metadata['duration']:
+
+        subprocess.run(['ffmpeg', '-i', self.video_metadata['filepath'], '-y', os.path.join(path_tmp, 'transcribe.wav')])
+
+
+        r = sr.Recognizer()
+        with sr.AudioFile(os.path.join(path_tmp, 'transcribe.wav')) as source:
+            audio = r.record(source)
+
+        language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
+
+        try:
+            final_text =  r.recognize_google(audio, language=language)
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+        # actual_split += splits
+
+        if final_text:
+            self.subtitles_list = [[0.0, self.video_metadata['duration'], final_text]]
+            update_widgets(self)
+
+
 def global_subtitlesvideo_autovoiceover_button_clicked(self):
-    """Function to translate subtitles"""
+    """Function to auto voiceover subtitles"""
     speech_config = SpeechConfig(subscription="", region="southcentralus")
     speech_config.set_speech_synthesis_output_format(SpeechSynthesisOutputFormat["Riff24Khz16BitMonoPcm"])
 

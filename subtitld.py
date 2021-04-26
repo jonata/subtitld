@@ -11,6 +11,7 @@ import os
 import sys
 import time
 import datetime
+
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTranslator, QTimer
