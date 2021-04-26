@@ -95,41 +95,43 @@ def load(self):
     self.thread_extract_scene_time_positions.command.connect(thread_extract_scene_time_positions_ended)
 
 
-def open_filepath(self, file_to_open=False):
+def open_filepath(self, files_to_open=False, update_interface=False):
     """Open subtitle or video and performs some checks"""
     supported_subtitle_files = self.tr('Subtitle files') + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
     supported_video_files = self.tr('Video files') + ' ({})'.format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
-    if not file_to_open:
-        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video or subtitle file'), directory=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
 
-    if file_to_open and os.path.isfile(file_to_open):
-        if file_to_open.lower().endswith(tuple(list_of_supported_subtitle_extensions)):
-            self.subtitles_list, self.format_to_save = process_subtitles_file(file_to_open)
-            self.actual_subtitle_file = file_to_open
+    if not files_to_open:
+        files_to_open = [QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video or subtitle file'), directory=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]]
 
-        elif file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
-            self.video_metadata = process_video_file(file_to_open)
+    for filepath in files_to_open:
+        if os.path.isfile(filepath):
+            if not self.subtitles_list and filepath.lower().endswith(tuple(list_of_supported_subtitle_extensions)):
+                self.subtitles_list, self.format_to_save = process_subtitles_file(filepath)
+                self.actual_subtitle_file = filepath
 
-        if not self.video_metadata and self.subtitles_list:
-            for filename in os.listdir(os.path.dirname(file_to_open)):
-                if filename.rsplit('.', 1)[0] == os.path.basename(file_to_open).rsplit('.', 1)[0] and filename.endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
-                    self.video_metadata = process_video_file(os.path.join(os.path.dirname(file_to_open), filename))
-                    break
+            elif not self.video_metadata and filepath.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
+                self.video_metadata = process_video_file(filepath)
 
-        elif self.video_metadata and not self.subtitles_list:
-            for filename in os.listdir(os.path.dirname(file_to_open)):
-                if filename.rsplit('.', 1)[0] == os.path.basename(file_to_open).rsplit('.', 1)[0] and filename.endswith(tuple(list_of_supported_subtitle_extensions)):
-                    self.subtitles_list, self.format_to_save = process_subtitles_file(os.path.join(os.path.dirname(file_to_open), filename))
-                    self.actual_subtitle_file = os.path.join(os.path.dirname(file_to_open), filename)
-                    break
+            if not self.video_metadata and self.subtitles_list:
+                for filename in os.listdir(os.path.dirname(filepath)):
+                    if filename.rsplit('.', 1)[0] == os.path.basename(filepath).rsplit('.', 1)[0] and filename.endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
+                        self.video_metadata = process_video_file(os.path.join(os.path.dirname(filepath), filename))
+                        break
 
-    if not self.video_metadata:
-        file_to_open = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=REAL_PATH_HOME, filter=supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
-        if file_to_open and os.path.isfile(file_to_open) and file_to_open.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
-            self.video_metadata = process_video_file(file_to_open)
+            elif self.video_metadata and not self.subtitles_list:
+                for filename in os.listdir(os.path.dirname(filepath)):
+                    if filename.rsplit('.', 1)[0] == os.path.basename(filepath).rsplit('.', 1)[0] and filename.endswith(tuple(list_of_supported_subtitle_extensions)):
+                        self.subtitles_list, self.format_to_save = process_subtitles_file(os.path.join(os.path.dirname(filepath), filename))
+                        self.actual_subtitle_file = os.path.join(os.path.dirname(filepath), filename)
+                        break
+
+            if not self.video_metadata:
+                filepath = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=REAL_PATH_HOME, filter=supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
+                if filepath and os.path.isfile(filepath) and filepath.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
+                    self.video_metadata = process_video_file(filepath)
 
     if self.video_metadata:
-        self.actual_video_file = file_to_open
+        self.actual_video_file = self.video_metadata['filepath']
         if self.video_metadata['audio_is_present']:
             self.thread_extract_waveform.filepath = self.video_metadata['filepath']
             self.thread_extract_waveform.start()
@@ -143,15 +145,18 @@ def open_filepath(self, file_to_open=False):
             if self.video_metadata.get('subttiles', ''):
                 self.subtitles_list, self.format_to_save = process_subtitles_file(self.video_metadata['subttiles'])
         self.subtitleslist.update_subtitles_list_widget(self)
-        self.timeline.update_timeline(self)
-        self.startscreen.hide(self)
-        self.playercontrols.show(self)
-        self.properties.show(self)
-        self.subtitleslist.show(self)
-        self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
-        self.global_properties_panel.hide_global_properties_panel(self)
-        self.settings['recent_files'][file_to_open] = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        self.settings['recent_files'][self.actual_subtitle_file] = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         self.autosave_timer.start()
+
+        if update_interface:
+            self.timeline.update_timeline(self)
+            self.startscreen.hide(self)
+            self.playercontrols.show(self)
+            self.properties.show(self)
+            self.subtitleslist.show(self)
+            self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
+            self.global_properties_panel.hide_global_properties_panel(self)
+
     self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
     if os.path.isfile(os.path.join(os.path.dirname(self.actual_subtitle_file), os.path.basename(self.actual_subtitle_file).rsplit('.', 1)[0] + '.usf')):

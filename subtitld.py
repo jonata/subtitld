@@ -11,6 +11,7 @@ import os
 import sys
 import time
 import datetime
+import argparse
 
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
@@ -28,6 +29,12 @@ for t in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
     for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[t]['extensions']:
         list_of_supported_subtitle_extensions.append(ext)
 list_of_supported_subtitle_extensions = tuple(list_of_supported_subtitle_extensions)
+
+
+parser = argparse.ArgumentParser(description='Subtitld is a software to create, edit and transcribe subtitles')
+parser.add_argument('file', type=argparse.FileType('r'), help='The path for video or subtitle file', nargs='*', default=False)
+parser.add_argument('--version', help='Prints the actual version of Subtitld.', action='store_true')
+args = parser.parse_args()
 
 
 class Subtitld(QWidget):
@@ -138,10 +145,6 @@ class Subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self)
 
-        # Maybe implement saving window position...? Useful?
-        # self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
-        self.showMaximized()
-
         self.subtitleslist.update_subtitles_list_widget(self)
         self.properties.update_properties_widget(self)
         self.player.update(self)
@@ -153,6 +156,10 @@ class Subtitld(QWidget):
         self.autosave_timer = QTimer(self)
         self.autosave_timer.setInterval(int(self.settings['autosave'].get('interval', 300000)))
         self.autosave_timer.timeout.connect(lambda: autosave_timer_timeout(self))
+
+        # Maybe implement saving window position...? Useful?
+        # self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
+        self.showMaximized()
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls and len(event.mimeData().urls()) > 0:
@@ -291,5 +298,11 @@ if __name__ == '__main__':
     app.setFont(QFont('Ubuntu', 10))
     app.main = Subtitld()
     app.main.show()
+
+    if args.file:
+        files_list = []
+        for filepath in args.file:
+            files_list.append(filepath.name)
+            app.main.file_io.open_filepath(app.main, files_to_open=files_list)
 
     sys.exit(app.exec_())

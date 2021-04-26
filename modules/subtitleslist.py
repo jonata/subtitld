@@ -247,7 +247,7 @@ def toppanel_save_button_clicked(self):
         self.unsaved = False
 
 
-def toppanel_open_button_clicked(self):
+def toppanel_open_button_clicked(self, update_interface=True):
     """Function to call when open button on subtitles list panel is clicked"""
     if self.unsaved:
         save_message_box = QMessageBox(self)
@@ -262,6 +262,7 @@ def toppanel_open_button_clicked(self):
 
         if ret == QMessageBox.AcceptRole:
             self.subttileslist.toppanel_save_button_clicked(self)
+
     file_io.open_filepath(self)
 
 

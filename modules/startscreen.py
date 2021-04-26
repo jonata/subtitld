@@ -115,10 +115,10 @@ def hide(self):
 
 def start_screen_open_button_clicked(self):
     """Function to call when the open subtitle/video button of starting screen is clicked"""
-    file_io.open_filepath(self)
+    file_io.open_filepath(self, update_interface=True)
 
 
 def start_screen_recent_listwidget_item_clicked(self):
     """Function to call when item on recent files list is clicked"""
-    file_to_open = self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]
-    file_io.open_filepath(self, file_to_open)
+    files_to_open = [self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]]
+    file_io.open_filepath(self, files_to_open=files_to_open, update_interface=True)
