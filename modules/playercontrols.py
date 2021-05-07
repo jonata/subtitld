@@ -86,6 +86,7 @@ def load(self):
     self.gap_remove_subtitle_button.clicked.connect(lambda: gap_remove_subtitle_button_clicked(self))
 
     self.gap_subtitle_duration = QDoubleSpinBox(parent=self.playercontrols_widget)
+    self.gap_subtitle_duration.setObjectName('controls_qdoublespinbox')
     self.gap_subtitle_duration.setMinimum(.1)
     self.gap_subtitle_duration.setMaximum(60.)
 
@@ -97,6 +98,7 @@ def load(self):
     self.add_subtitle_button.clicked.connect(lambda: add_subtitle_button_clicked(self))
 
     self.add_subtitle_duration = QDoubleSpinBox(parent=self.add_subtitle_button)
+    self.add_subtitle_duration.setObjectName('controls_qdoublespinbox')
     self.add_subtitle_duration.setMinimum(.1)
     self.add_subtitle_duration.setMaximum(60.)
     self.add_subtitle_duration.valueChanged.connect(lambda: add_subtitle_duration_changed(self))
@@ -283,6 +285,7 @@ def load(self):
     self.repeat_playback_icon_label.setStyleSheet('QLabel { image: url(' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'playback_repeat_icon.png') + ')}')
 
     self.repeat_playback_duration = QDoubleSpinBox(parent=self.repeat_playback)
+    self.repeat_playback_duration.setObjectName('controls_qdoublespinbox')
     self.repeat_playback_duration.setMinimum(.1)
     self.repeat_playback_duration.setMaximum(60.)
     self.repeat_playback_duration.valueChanged.connect(lambda: repeat_playback_duration_changed(self))
@@ -350,6 +353,7 @@ def load(self):
     self.snap_button.clicked.connect(lambda: snap_button_clicked(self))
 
     self.snap_value = QDoubleSpinBox(parent=self.snap_button)
+    self.snap_value.setObjectName('controls_qdoublespinbox')
     self.snap_value.valueChanged.connect(lambda: snap_value_changed(self))
 
     self.snap_limits_button = QPushButton(parent=self.playercontrols_widget)
@@ -380,6 +384,7 @@ def load(self):
     self.step_button.clicked.connect(lambda: update_step_buttons(self))
 
     self.step_value_f = QDoubleSpinBox(parent=self.step_button)
+    self.step_value_f.setObjectName('controls_qdoublespinbox')
     self.step_value_f.setMinimum(.001)
     self.step_value_f.setMaximum(999.999)
     self.step_value_f.valueChanged.connect(lambda: step_value_changed(self))

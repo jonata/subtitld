@@ -94,8 +94,8 @@ def set_stylesheet(self):
                             #start_screen_adver_label_status                     { font-size:14px; color:rgb(106, 116, 131); qproperty-alignment: "AlignCenter"; padding-left:20px; padding-right:20px;  qproperty-wordWrap: true; }
                             #start_screen_adver_label_email                      { padding:10px; border: 1px transparent rgba(255,255,255,20); border-radius: 2px; background-color: rgba(255,255,255,200); color:rgb(48,66,81); font-size:14px;  qproperty-alignment: "AlignCenter"; }
 
-                            QDoubleSpinBox                                      { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
-                            QSpinBox                                            { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
+                            #controls_qdoublespinbox                             { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
+
                             QMessageBox                                         { background-color:rgb(26,35,43); }
                             QMessageBox QLabel                                  { color: rgb(106, 116, 131); }
                             QMessageBox QPushButton                             { background-color: rgb(106, 116, 131); }
