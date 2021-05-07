@@ -4,12 +4,13 @@
 
 import os
 
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QColor
 from PyQt5.QtWidgets import QPushButton, QLabel, QFileDialog, QListWidget, QListView, QMessageBox, QWidget, QLineEdit
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 
-from modules import file_io
+from modules import file_io, quality_check
 from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, PATH_SUBTITLD_GRAPHICS
+
 
 
 def load(self):
@@ -160,6 +161,12 @@ def update_subtitles_list_qlistwidget(self):
         counter = 1
         for sub in sorted(self.subtitles_list):
             self.subtitles_list_qlistwidget.addItem(str(counter) + ' - ' + sub[2])
+
+            if self.settings['quality_check'].get('enabled', False):
+                approved, reasons = quality_check.check_subtitle(sub, self.settings['quality_check'])
+                if not approved:
+                    self.subtitles_list_qlistwidget.item(counter-1).setForeground(QColor('#9e1a1a'))
+                    # set item tipbox with reasons?
             counter += 1
     if self.selected_subtitle:
         self.subtitles_list_qlistwidget.setCurrentRow(self.subtitles_list.index(self.selected_subtitle))

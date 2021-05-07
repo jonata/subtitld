@@ -61,7 +61,7 @@ def set_stylesheet(self):
                             QPushButton                                          { font-size:10px; color:white; }
                             #start_screen_recent_alert                           { font-size:14px; color: rgb(106, 116, 131); qproperty-alignment: "AlignCenter"; padding: 40px; }
 
-                            #properties_information                              { font-size:12px; color:white; }
+                            #properties_information                              { font-size:12px; color:white; qproperty-alignment: "AlignTop";  }
 
                             #player_subtitle_layer                               { font-size:40px; color: rgb(255, 255, 255); qproperty-alignment: "AlignCenter | AlignBottom"; padding: 10px; }
                             #properties_textedit                                 { margin-left:2px; margin-right:2px; font-size:26px; color: black; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; }

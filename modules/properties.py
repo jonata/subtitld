@@ -10,6 +10,7 @@ from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QSize, Qt
 
 from modules import file_io
 from modules import subtitles
+from modules import quality_check
 from modules.paths import PATH_SUBTITLD_GRAPHICS
 
 
@@ -39,6 +40,7 @@ def load(self):
     self.send_text_to_last_subtitle_button.clicked.connect(lambda: send_text_to_last_subtitle_button_clicked(self))
 
     self.properties_information = QLabel(parent=self.properties_widget)
+    self.properties_information.setWordWrap(True)
     self.properties_information.setObjectName('properties_information')
 
     self.properties_toggle_button = QPushButton(parent=self)
@@ -59,7 +61,7 @@ def resized(self):
     self.properties_textedit.setGeometry(20, self.properties_widget.height()-self.playercontrols_widget.height()-35-180, self.properties_widget.width()-40, 200)
     self.send_text_to_last_subtitle_button.setGeometry(self.properties_textedit.x(), self.properties_textedit.y()-40, self.properties_textedit.width()*.5, 40)
     self.send_text_to_next_subtitle_button.setGeometry(self.send_text_to_last_subtitle_button.x()+self.send_text_to_last_subtitle_button.width(), self.send_text_to_last_subtitle_button.y(), self.properties_textedit.width()*.5, 40)
-    self.properties_information.setGeometry(30, 20, self.properties_widget.width()-40, 100)
+    self.properties_information.setGeometry(30, 20, self.properties_widget.width()-40, self.properties_textedit.y()-20)
 
     if (self.subtitles_list or self.video_metadata):
         self.properties_toggle_button.setGeometry(self.properties_widget.x()+5, 0, 25, 80)
@@ -93,17 +95,27 @@ def open_button_clicked(self):
 
 def update_properties_widget(self):
     """Function to update properties panel widgets"""
-    text = ''
-    if self.selected_subtitle:
-        self.properties_information.setText('<small>' + self.tr('Words').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))) + '</b></big><br><br><small>' + self.tr('Characters').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))) + '</b></big>')
-        text = self.selected_subtitle[2]
-
-    self.properties_information.setVisible(bool(self.selected_subtitle))
+    update_properties_information(self)
     self.properties_textedit.setVisible(bool(self.selected_subtitle))
     self.send_text_to_next_subtitle_button.setVisible(bool(self.selected_subtitle))
     self.send_text_to_last_subtitle_button.setVisible(bool(self.selected_subtitle))
+    text = ''
+    if self.selected_subtitle:
+        text = self.selected_subtitle[2]
     self.properties_textedit.setText(text)
+    self.properties_information.setVisible(bool(self.selected_subtitle))
 
+def update_properties_information(self):
+    if self.selected_subtitle:
+        info_text = '<small>' + self.tr('Words').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))) + '</b></big><br><br><small>' + self.tr('Characters').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))) + '</b></big>'
+        if self.settings['quality_check'].get('enabled', False):
+                approved, reasons = quality_check.check_subtitle(self.selected_subtitle, self.settings['quality_check'])
+                if not approved:
+                    info_text += '<br><br><font color="#9e1a1a"><small>' + self.tr('Quality check').upper() + ':</small><br><big><b>'
+                    for reason in reasons:
+                        info_text += str(reason) + '<br><br>'
+                    info_text += '</b></big></font>'
+        self.properties_information.setText(info_text)
 
 def show(self):
     """Function to show panel"""
@@ -126,6 +138,7 @@ def properties_textedit_changed(self):
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
         self.player.update_subtitle_layer(self)
+        update_properties_information(self)
 
 
 def send_text_to_next_subtitle_button_clicked(self):
@@ -136,7 +149,7 @@ def send_text_to_next_subtitle_button_clicked(self):
     subtitles.send_text_to_next_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, last_text=last_text, next_text=next_text)
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
@@ -148,5 +161,5 @@ def send_text_to_last_subtitle_button_clicked(self):
     subtitles.send_text_to_last_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, last_text=last_text, next_text=next_text)
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
