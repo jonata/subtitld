@@ -325,7 +325,8 @@ def import_file(filename=False, subtitle_format=False): #, fit_to_length=False, 
                 # lang="en"                       # set to 'de' for German special handling
                 # )
 
-                txt_content = clean(txt_file.read())
+                #txt_content = clean(txt_file.read())
+                txt_content = txt_file.read()
                 pos = 0.0
                 for phrase in txt_content.split('. '):
                     final_subtitles.append([pos, 5.0, phrase + '.'])
