@@ -184,9 +184,9 @@ class PlayerSubtitleLayer(QLabel):
                                             )
         if self.subtitle_text:
             painter.setPen(QPen(QColor.fromRgb(0, 0, 0, 200)))
-            painter.drawText(title_safe_margin_qrect - QMargins(2, 2, -2, -2), Qt.AlignHCenter | Qt.AlignTop | Qt.TextWordWrap, self.subtitle_text)
+            painter.drawText(title_safe_margin_qrect - QMargins(2, 2, -2, -2), Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
             painter.setPen(QPen(QColor.fromRgb(255, 255, 255)))
-            painter.drawText(title_safe_margin_qrect, Qt.AlignHCenter | Qt.AlignTop | Qt.TextWordWrap, self.subtitle_text)
+            painter.drawText(title_safe_margin_qrect, Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
 
         if self.show_action_safe_margin:
             action_safe_margin_qrect = QRect(self.width()*((1.0-self.action_safe_margin)*.5),
