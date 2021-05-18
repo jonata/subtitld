@@ -96,19 +96,40 @@ def move_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
         selected_subtitle[0] += amount
 
 
-def move_start_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
+def move_start_subtitle(subtitles=[], selected_subtitle=False, amount=0.0, absolute_time=False, move_nereast=False):
     """Function to move the start a subtitle in the main subtitle list"""
     if selected_subtitle:
         history.history_append(subtitles)
-        selected_subtitle[0] += amount
-        selected_subtitle[1] -= amount
+        if move_nereast:
+            if subtitles.index(selected_subtitle) - 1 >= 0 and round(subtitles[subtitles.index(selected_subtitle) - 1][0] + subtitles[subtitles.index(selected_subtitle) - 1][1], 3) == round(selected_subtitle[0] - .001, 3):
+                if absolute_time:
+                    subtitles[subtitles.index(selected_subtitle) - 1][1] = absolute_time - subtitles[subtitles.index(selected_subtitle) - 1][0] - 0.001
+                else:
+                    subtitles[subtitles.index(selected_subtitle) - 1][1] -= amount
+        if absolute_time:
+            selected_subtitle[1] = selected_subtitle[0] + selected_subtitle[1] - absolute_time
+            selected_subtitle[0] = absolute_time
+        else:
+            selected_subtitle[0] += amount
+            selected_subtitle[1] -= amount
 
 
-def move_end_subtitle(subtitles=[], selected_subtitle=False, amount=0.0):
+def move_end_subtitle(subtitles=[], selected_subtitle=False, amount=0.0, absolute_time=False, move_nereast=False):
     """Function to move the end of a subtitle in the main subtitle list"""
     if selected_subtitle:
         history.history_append(subtitles)
-        selected_subtitle[1] += amount
+        if move_nereast:
+            if subtitles.index(selected_subtitle) + 1 <= len(subtitles) and round(subtitles[subtitles.index(selected_subtitle) + 1][0] - .001, 3) <= round(selected_subtitle[0] + selected_subtitle[1], 3):
+                if absolute_time:
+                    subtitles[subtitles.index(selected_subtitle) + 1][1] = subtitles[subtitles.index(selected_subtitle) + 1][0] + subtitles[subtitles.index(selected_subtitle) + 1][1] - absolute_time
+                    subtitles[subtitles.index(selected_subtitle) + 1][0] = absolute_time
+                else:
+                    subtitles[subtitles.index(selected_subtitle) + 1][0] -= amount
+                    subtitles[subtitles.index(selected_subtitle) + 1][1] -= amount
+        if absolute_time:
+            selected_subtitle[1] = absolute_time - selected_subtitle[0]
+        else:
+            selected_subtitle[1] += amount
 
 
 def next_start_to_current_position(subtitles=[], position=0.0):

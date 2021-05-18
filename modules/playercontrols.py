@@ -363,6 +363,13 @@ def load(self):
     self.snap_limits_button.setCheckable(True)
     self.snap_limits_button.clicked.connect(lambda: snap_limits_button_clicked(self))
 
+    self.snap_grid_button = QPushButton(parent=self.playercontrols_widget)
+    self.snap_grid_button.setObjectName('subbutton')
+    self.snap_grid_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
+    self.snap_grid_button.setCheckable(True)
+    self.snap_grid_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_grid_icon.png')))
+    self.snap_grid_button.clicked.connect(lambda: snap_grid_button_clicked(self))
+
     self.snap_move_button = QPushButton(parent=self.playercontrols_widget)
     self.snap_move_button.setObjectName('subbutton')
     self.snap_move_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
@@ -370,12 +377,12 @@ def load(self):
     self.snap_move_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_moving_icon.png')))
     self.snap_move_button.clicked.connect(lambda: snap_move_button_clicked(self))
 
-    self.snap_grid_button = QPushButton(parent=self.playercontrols_widget)
-    self.snap_grid_button.setObjectName('subbutton')
-    self.snap_grid_button.setStyleSheet('QPushButton {border-top:0;}')
-    self.snap_grid_button.setCheckable(True)
-    self.snap_grid_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_grid_icon.png')))
-    self.snap_grid_button.clicked.connect(lambda: snap_grid_button_clicked(self))
+    self.snap_move_nereast_button = QPushButton(parent=self.playercontrols_widget)
+    self.snap_move_nereast_button.setObjectName('subbutton')
+    self.snap_move_nereast_button.setStyleSheet('QPushButton {border-top:0;}')
+    self.snap_move_nereast_button.setCheckable(True)
+    self.snap_move_nereast_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_move_next.svg')))
+    self.snap_move_nereast_button.clicked.connect(lambda: snap_move_nereast_button_clicked(self))
 
     self.step_button = QPushButton('STEP', parent=self.playercontrols_widget)
     self.step_button.setObjectName('subbutton')
@@ -510,8 +517,9 @@ def resized(self):
     self.snap_limits_button.setGeometry(self.snap_button.x()+self.snap_button.width(), self.snap_button.y(), 30, self.snap_button.height())
     self.snap_move_button.setGeometry(self.snap_limits_button.x()+self.snap_limits_button.width(), self.snap_button.y(), 30, self.snap_button.height())
     self.snap_grid_button.setGeometry(self.snap_move_button.x()+self.snap_move_button.width(), self.snap_button.y(), 30, self.snap_button.height())
+    self.snap_move_nereast_button.setGeometry(self.snap_grid_button.x()+self.snap_grid_button.width(), self.snap_button.y(), 30, self.snap_button.height())
 
-    self.step_button.setGeometry(self.snap_grid_button.x()+self.snap_grid_button.width()+5, 7, 160, 24)
+    self.step_button.setGeometry(self.snap_move_nereast_button.x()+self.snap_move_nereast_button.width()+5, 7, 160, 24)
     self.step_value_f.setGeometry(self.step_button.width()-112, 4, 46, self.step_button.height()-8)
     self.step_value_i.setGeometry(self.step_button.width()-112, 4, 46, self.step_button.height()-8)
     self.step_unit.setGeometry(self.step_button.width()-65, 4, 58, self.step_button.height()-8)
@@ -566,6 +574,11 @@ def snap_button_clicked(self):
 def snap_move_button_clicked(self):
     """Function to call when snap move button is clicked"""
     self.timeline_snap_moving = self.snap_move_button.isChecked()
+
+
+def snap_move_nereast_button_clicked(self):
+    """Function to call when snap move next button is clicked"""
+    self.timeline_snap_move_nereast = self.snap_move_nereast_button.isChecked()
 
 
 def snap_limits_button_clicked(self):
@@ -656,6 +669,8 @@ def update_snap_buttons(self):
     self.snap_move_button.setChecked(bool(self.timeline_snap_moving))
     self.snap_grid_button.setEnabled(self.snap_button.isChecked())
     self.snap_grid_button.setChecked(bool(self.timeline_snap_grid))
+    self.snap_move_nereast_button.setEnabled(self.snap_button.isChecked())
+    self.snap_move_nereast_button.setChecked(bool(self.timeline_snap_move_nereast))
     self.snap_value.setEnabled(self.snap_button.isChecked())
     self.snap_value.setValue(self.timeline_snap_value if self.timeline_snap_value else .1)
     self.timeline_widget.update()
@@ -850,7 +865,7 @@ def move_start_back_subtitle_clicked(self):
                 amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
             else:
                 amount = float(self.settings['timeline'].get('step_value', 1.0))
-        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
+        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount, move_nereast=bool(self.timeline_snap_move_nereast))
         self.unsaved = True
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
@@ -865,7 +880,7 @@ def move_start_forward_subtitle_clicked(self):
                 amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
             else:
                 amount = float(self.settings['timeline'].get('step_value', 1.0))
-        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
+        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount, move_nereast=bool(self.timeline_snap_move_nereast))
         self.unsaved = True
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)

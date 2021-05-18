@@ -68,6 +68,7 @@ class Subtitld(QWidget):
         self.timeline_snap_value = .1
         self.timeline_snap_limits = True
         self.timeline_snap_moving = True
+        self.timeline_snap_move_nereast = False
         self.timeline_snap_grid = False
         self.minimum_subtitle_width = 1
         self.timeline_show_grid = False
