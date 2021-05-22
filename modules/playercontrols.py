@@ -397,11 +397,13 @@ def load(self):
     self.step_value_f.valueChanged.connect(lambda: step_value_changed(self))
 
     self.step_value_i = QSpinBox(parent=self.step_button)
+    self.step_value_i.setObjectName('controls_qspinbox')
     self.step_value_i.setMinimum(1)
     self.step_value_i.setMaximum(999)
     self.step_value_i.valueChanged.connect(lambda: step_value_changed(self))
 
     self.step_unit = QComboBox(parent=self.step_button)
+    self.step_unit.setObjectName('controls_combobox')
     self.step_unit.insertItems(0, STEPS_LIST)
     self.step_unit.activated.connect(lambda: step_value_changed(self))
 
