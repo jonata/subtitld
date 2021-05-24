@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import QCheckBox, QDoubleSpinBox, QGridLayout, QLabel, QCom
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
 from PyQt5.QtGui import QFontDatabase, QKeySequence
 
-from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
+from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, LIST_OF_SUPPORTED_EXPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
 from modules.shortcuts import shortcuts_dict
 from modules.paths import LANGUAGE_DICT_LIST, path_tmp
 from modules import file_io
@@ -545,9 +545,10 @@ def global_subtitlesvideo_export_button_clicked(self):
     """Function to export subtitles"""
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.txt'
-    save_formats = self.tr('TXT file') + ' (.txt)'
 
-    filedialog = QFileDialog.getSaveFileName(self, self.tr('Export to file'), os.path.join(suggested_path, suggested_name), save_formats, options=QFileDialog.DontUseNativeDialog)
+    supported_export_files = ';;'.join(['{description} ({extension})'.format(extension=' '.join(['.{ext}'.format(ext=ext) for ext in LIST_OF_SUPPORTED_EXPORT_EXTENSIONS[export_format]['extensions']]), description=LIST_OF_SUPPORTED_EXPORT_EXTENSIONS[export_format]['description']) for export_format in LIST_OF_SUPPORTED_EXPORT_EXTENSIONS])
+
+    filedialog = QFileDialog.getSaveFileName(self, self.tr('Export to file'), os.path.join(suggested_path, suggested_name), supported_export_files, options=QFileDialog.DontUseNativeDialog)
 
     if filedialog[0] and filedialog[1]:
         filename = filedialog[0]
@@ -557,7 +558,7 @@ def global_subtitlesvideo_export_button_clicked(self):
                 exts.append(extformat.strip())
         if not filename.endswith(tuple(exts)):
             filename += exts[0]
-        format_to_export = filedialog[1].split(' ', 1)[0]
+        format_to_export = filedialog[1].rsplit('(', 1)[-1].split(')', 1)[0]
 
         file_io.export_file(filename=filename, subtitles_list=self.subtitles_list, export_format=format_to_export)
 

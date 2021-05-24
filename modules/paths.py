@@ -98,6 +98,11 @@ LIST_OF_SUPPORTED_IMPORT_EXTENSIONS = {
     'SRT': {'description': 'SubRip Subtitle format', 'extensions': ['srt']}
 }
 
+LIST_OF_SUPPORTED_EXPORT_EXTENSIONS = {
+    'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']},
+    'KDENLIVE': {'description': 'Kdenlive format', 'extensions': ['kdenlive']}
+}
+
 LANGUAGE_DICT_LIST = {
     'Afrikaans (South Africa)': 'af-za',
     'Amharic (Ethiopia)': 'am-et',
