@@ -16,7 +16,7 @@ from scenedetect.detectors import ContentDetector
 
 import numpy
 import pycaption
-from pycaption.exceptions import CaptionReadSyntaxError
+from pycaption.exceptions import CaptionReadSyntaxError, CaptionReadNoCaptions
 import chardet
 import pysubs2
 from cleantext import clean
@@ -207,6 +207,8 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                         duration = event.duration / 1000.0
                         text = event.plaintext
                         final_subtitles.append([start, duration, text])
+                except CaptionReadNoCaptions:
+                    pass
 
                     # error_message = QMessageBox()
                     # error_message.setWindowTitle(self.tr('There is a problem with this file and can not be opened.'))
