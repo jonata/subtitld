@@ -49,6 +49,15 @@ def set_stylesheet(self):
                             #properties_toggle_button:hover                      { border-top: 0;    border-right: 0;     border-bottom: 0;    border-left: 0;    border-image: url("''' + get_graphics_path('properties_toggle_button_hover.png') + '''")            0 0 0 0 stretch stretch; }
                             #properties_toggle_button:disabled                   { border-top: 0;    border-right: 0;     border-bottom: 0;    border-left: 0;    border-image: url("''' + get_graphics_path('properties_toggle_button_normal.png') + '''")            0 0 0 0 stretch stretch; }
 
+                            #playercontrols_properties_panel_toggle                            { border: 0; background-image: url("''' + get_graphics_path('playercontrols_properties_panel_toggle_normal.svg') + '''"); background-repeat: no-repeat; background-position: center right; }
+                            #playercontrols_properties_panel_toggle:hover:pressed              { border: 0; background-image: url("''' + get_graphics_path('playercontrols_properties_panel_toggle_pressed_hover.svg') + '''"); background-repeat: no-repeat; background-position: center right; }
+                            #playercontrols_properties_panel_toggle:checked                    { border: 0; background-image: url("''' + get_graphics_path('playercontrols_properties_panel_toggle_pressed.svg') + '''"); background-repeat: no-repeat; background-position: center right; }
+                            #playercontrols_properties_panel_toggle:hover:checked              { border: 0; background-image: url("''' + get_graphics_path('playercontrols_properties_panel_toggle_pressed_hover.svg') + '''"); background-repeat: no-repeat; background-position: center right; }
+                            #playercontrols_properties_panel_toggle:hover                      { border: 0; background-image: url("''' + get_graphics_path('playercontrols_properties_panel_toggle_hover.svg') + '''"); background-repeat: no-repeat; background-position: center right; }
+                            #playercontrols_properties_panel_toggle:disabled                   { border: 0; background-image: url("''' + get_graphics_path('playercontrols_properties_panel_toggle_normal.svg') + '''"); background-repeat: no-repeat; background-position: center right; }
+
+                            #player_controls_sub_panel                           { border-top: 5px; border-right: 5px; border-bottom: 5px; border-left: 5px; border-image: url("''' + get_graphics_path('player_controls_sub_panel.svg') + '''") 5 5 5 5 stretch stretch; }
+
                             #playercontrols_widget                               { border-top: 108px; border-right: 0; border-bottom: 0; border-left: 0; border-image: url("''' + get_graphics_path('timeline_background.png') + '''") 108 0 0 0 stretch stretch; }
                             #timeline_scroll                                     { background-color:transparent; }
                             #timeline_widget                                     { background-color:transparent; }
@@ -94,17 +103,19 @@ def set_stylesheet(self):
                             #start_screen_adver_label_status                     { font-size:14px; color:rgb(106, 116, 131); qproperty-alignment: "AlignCenter"; padding-left:20px; padding-right:20px;  qproperty-wordWrap: true; }
                             #start_screen_adver_label_email                      { padding:10px; border: 1px transparent rgba(255,255,255,20); border-radius: 2px; background-color: rgba(255,255,255,200); color:rgb(48,66,81); font-size:14px;  qproperty-alignment: "AlignCenter"; }
 
+                            #small_label                                         { font-size:7px; color:rgb(26,35,43); qproperty-wordWrap: true}
+
                             #controls_qspinbox                                   { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
                             #controls_qdoublespinbox                             { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
                             #controls_combobox                                   { padding-left:1px; border-width: 1; border-color: rgba(0,0,0,100); background-color: rgba(255,255,255,50); min-width: 5px; border-radius: 2px; font-size:10px; color:rgba(48,66,81,255) }
 
-                            QMessageBox                                         { background-color:rgb(26,35,43); }
-                            QMessageBox QLabel                                  { color: rgb(106, 116, 131); }
-                            QMessageBox QPushButton                             { background-color: rgb(106, 116, 131); }
+                            QMessageBox                                          { background-color:rgb(26,35,43); }
+                            QMessageBox QLabel                                   { color: rgb(106, 116, 131); }
+                            QMessageBox QPushButton                              { background-color: rgb(106, 116, 131); }
 
-                            QTabBar:tab {  background:rgba(184,206,224,150) ; color: rgba(46,62,76,150); border: 1px solid rgba(106, 116, 131, 100); padding: 10px; border-top-left-radius: 2px; border-top-right-radius: 2px; border-bottom:0; }
-                            QTabBar:tab:selected {  background: rgb(184,206,224); color: rgb(46,62,76); border: 1px solid rgb(106, 116, 131); border-bottom:0; }
-                            QTabWidget:pane {   background: rgb(184,206,224); border: 1px solid rgb(106, 116, 131); border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; border-top: 0;}
+                            QTabBar:tab                                          { background: rgba(184,206,224,150); color: rgba(46,62,76,150); border: 1px solid rgba(106, 116, 131, 100); padding: 10px; border-top-left-radius: 2px; border-top-right-radius: 2px; border-bottom:0; }
+                            QTabBar:tab:selected                                 { background: rgb(184,206,224); color: rgb(46,62,76); border: 1px solid rgb(106, 116, 131); border-bottom:0; }
+                            QTabWidget:pane                                      { background: rgb(184,206,224); border: 1px solid rgb(106, 116, 131); border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; border-top: 0;}
                             '''
 
     for button_color in ['button', 'button_dark', 'button_red', 'button_green']:

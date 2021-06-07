@@ -21,14 +21,16 @@ class DrawPixmap(QPixmap):
     waveform_down = []
     x_offset = 0
     waveformsize = .7
+    border_color = '#ff153450'
+    fill_color = '#cc153450'
 
     def paintEvent(self):
         """Function of paintEvent for DrawPixmap"""
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        painter.setPen(QPen(QColor.fromRgb(21, 52, 80, 255), 1, Qt.SolidLine))
-        painter.setBrush(QColor.fromRgb(21, 52, 80, alpha=200))
+        painter.setPen(QPen(QColor(self.border_color), 1, Qt.SolidLine))
+        painter.setBrush(QColor(self.fill_color))
 
         x_position = 0
         polygon = QPolygonF()
@@ -64,6 +66,8 @@ class ThreadGetQImages(QThread):
     values_list = []
     zoom = 100.0
     width = 32767
+    border_color = '#ff153450'
+    fill_color = '#cc153450'
 
     def run(self):
         """Function to run QThread"""
@@ -74,6 +78,8 @@ class ThreadGetQImages(QThread):
             qpixmap.fill(QColor(0, 0, 0, 0))
             qpixmap.waveform_up = self.values_list[0][parser:parser+self.width]
             qpixmap.waveform_down = self.values_list[1][parser:parser+self.width]
+            qpixmap.border_color = self.border_color
+            qpixmap.fill_color = self.fill_color
             qpixmap.paintEvent()
             final_list.append(qpixmap.toImage())                # qpixmap.save('/tmp/teste.png')
             parser += self.width
@@ -130,8 +136,8 @@ class Timeline(QWidget):
                             xpos += wid
 
                     elif self.parent.video_metadata['waveform'][available_zoom].get('points', []):
-                        painter.setPen(QPen(QColor.fromRgb(21, 52, 80, 255), 1, Qt.SolidLine))
-                        painter.setBrush(QColor.fromRgb(21, 52, 80, alpha=200))
+                        painter.setPen(QPen(QColor(self.parent.settings['timeline'].get('waveform_border_color', '#ff153450')), 1, Qt.SolidLine))
+                        painter.setBrush(QColor(self.parent.settings['timeline'].get('waveform_fill_color', '#cc153450')))
 
                         x_position = 0
                         polygon = QPolygonF()
@@ -148,7 +154,7 @@ class Timeline(QWidget):
 
         if self.parent.subtitles_list:
             painter.setOpacity(1)
-            painter.setPen(QPen(QColor.fromRgb(240, 240, 240, 200), 1, Qt.SolidLine))
+            # painter.setPen(QPen(QColor.fromRgb(240, 240, 240, 200), 1, Qt.SolidLine))
 
             for subtitle in self.parent.subtitles_list:
                 if (subtitle[0] / self.parent.video_metadata.get('duration', 0.01)) > ((scroll_position + scroll_width) / self.width()):
@@ -157,11 +163,11 @@ class Timeline(QWidget):
                     continue
                 else:
                     if self.parent.selected_subtitle == subtitle:
-                        painter.setPen(QColor.fromRgb(48, 66, 81, alpha=255))
-                        painter.setBrush(QColor.fromRgb(62, 83, 99, alpha=220))
+                        painter.setPen(QColor(self.parent.settings['timeline'].get('selected_subtitle_border_color', '#ff304251')))
+                        painter.setBrush(QColor(self.parent.settings['timeline'].get('selected_subtitle_fill_color', '#cc3e5363')))
                     else:
-                        painter.setPen(QColor.fromRgb(106, 116, 131, alpha=255))
-                        painter.setBrush(QColor.fromRgb(184, 206, 224, alpha=220))
+                        painter.setPen(QColor(self.parent.settings['timeline'].get('subtitle_border_color', '#ff6a7483')))
+                        painter.setBrush(QColor(self.parent.settings['timeline'].get('subtitle_fill_color', '#ccb8cee0')))
 
                     subtitle_rect = QRect(subtitle[0] * self.width_proportion,
                                             self.subtitle_y,
@@ -171,9 +177,9 @@ class Timeline(QWidget):
                     painter.drawRoundedRect(subtitle_rect, 2.0, 2.0, Qt.AbsoluteSize)
 
                     if self.parent.selected_subtitle == subtitle:
-                        painter.setPen(QColor.fromRgb(255, 255, 255, alpha=255))
+                        painter.setPen(QColor(self.parent.settings['timeline'].get('selected_subtitle_text_color', '#ffffffff')))
                     else:
-                        painter.setPen(QColor.fromRgb(48, 66, 81, alpha=255))
+                        painter.setPen(QColor(self.parent.settings['timeline'].get('subtitle_text_color', '#ff304251')))
 
                     subtitle_rect -= QMargins(22, 2, 22, 2)
                     painter.drawText(subtitle_rect, Qt.AlignCenter | Qt.TextWordWrap, subtitle[2])
@@ -188,7 +194,12 @@ class Timeline(QWidget):
                                         )
 
                         painter.drawRoundedRect(lim_rect, 1.0, 1.0, Qt.AbsoluteSize)
-                        painter.setPen(QColor.fromRgb(150, 150, 150, alpha=255))
+
+                        if self.parent.selected_subtitle == subtitle:
+                            painter.setPen(QColor(self.parent.settings['timeline'].get('selected_subtitle_arrow_color', '#ff969696')))
+                        else:
+                            painter.setPen(QColor(self.parent.settings['timeline'].get('subtitle_arrow_color', '#ff969696')))
+
                         painter.drawText(lim_rect, Qt.AlignCenter, '❮')
 
                         painter.setPen(Qt.NoPen)
@@ -200,12 +211,17 @@ class Timeline(QWidget):
                                         )
 
                         painter.drawRoundedRect(lim_rect, 1.0, 1.0, Qt.AbsoluteSize)
-                        painter.setPen(QColor.fromRgb(150, 150, 150, alpha=255))
+
+                        if self.parent.selected_subtitle == subtitle:
+                            painter.setPen(QColor(self.parent.settings['timeline'].get('selected_subtitle_arrow_color', '#ff969696')))
+                        else:
+                            painter.setPen(QColor(self.parent.settings['timeline'].get('subtitle_arrow_color', '#ff969696')))
+
                         painter.drawText(lim_rect, Qt.AlignCenter, '❯')
 
             painter.setOpacity(1)
 
-        grid_pen = QPen(QColor.fromRgb(106, 116, 131, 20), 1, Qt.SolidLine)
+        grid_pen = QPen(QColor(self.parent.settings['timeline'].get('grid_color', '#336a7483')), 1, Qt.SolidLine)
         painter.setFont(QFont('Ubuntu Mono', 8))
         xpos = 0
         for sec in range(int(self.parent.video_metadata['duration'])):
@@ -217,7 +233,7 @@ class Timeline(QWidget):
                                         50,
                                         20
                                     )
-                    painter.setPen(QColor.fromRgb(106, 116, 131, alpha=50))
+                    painter.setPen(QColor(self.parent.settings['timeline'].get('time_text_color', '#806a7483')))
                     painter.drawText(lim_rect, Qt.AlignLeft, get_timeline_time_str(sec))
                 if self.parent.timeline_show_grid and self.parent.timeline_grid_type == 'seconds':
                     painter.setPen(grid_pen)
@@ -238,7 +254,7 @@ class Timeline(QWidget):
                     painter.drawLine(xpos, 0, xpos, self.height())
 
         if self.parent.player_widget.position is not None:
-            painter.setPen(QPen(QColor.fromRgb(255, 0, 0, 200), 2, Qt.SolidLine))
+            painter.setPen(QPen(QColor(self.parent.settings['timeline'].get('cursor_color', '#ccff0000')), 2, Qt.SolidLine))
             cursor_pos = self.parent.player_widget.position * self.width_proportion
             painter.drawLine(cursor_pos, 0, cursor_pos, self.height())
 
@@ -440,6 +456,8 @@ def load(self):
         self.thread_get_qimages.values_list = command[1]
         self.thread_get_qimages.zoom = command[0]
         self.thread_get_qimages.width = self.timeline_scroll.width()
+        self.thread_get_qimages.border_color = self.settings['timeline'].get('waveform_border_color', '#ff153450')
+        self.thread_get_qimages.fill_color = self.settings['timeline'].get('waveform_fill_color', '#cc153450')
         self.thread_get_qimages.start(QThread.IdlePriority)
 
     self.thread_get_waveform = ThreadGetWaveform(self)

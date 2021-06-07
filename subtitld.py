@@ -146,6 +146,10 @@ class Subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self)
 
+        # from modules import playercontrols_properties
+        # self.playercontrols_properties = playercontrols_properties
+        # self.playercontrols_properties.load(self)
+
         self.subtitleslist.update_subtitles_list_widget(self)
         self.properties.update_properties_widget(self)
         self.player.update(self)
@@ -191,6 +195,7 @@ class Subtitld(QWidget):
         self.global_properties_panel.resized(self)
 
         self.playercontrols.resized(self)
+        # self.playercontrols_properties.resized(self)
 
         self.background_watermark_label.setGeometry(int((self.width()*.5)-129), int(((self.height()-self.playercontrols_widget.height())*.5)-129), 258, 258)
 

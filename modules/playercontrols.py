@@ -4,14 +4,42 @@
 
 import os
 from bisect import bisect
-from PyQt5.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpinBox, QComboBox
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
+from PyQt5.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpinBox, QComboBox, QTabWidget, QWidget, QStylePainter, QStyleOptionTab, QStyle, QTabBar, QColorDialog
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize, QRect, QPoint, QThread
 from PyQt5.QtGui import QIcon
 
 from modules import subtitles
 from modules.paths import PATH_SUBTITLD_GRAPHICS
 
 STEPS_LIST = ['Frames', 'Seconds']
+
+class QLeftTabBar(QTabBar):
+    def tabSizeHint(self, index):
+        s = QTabBar.tabSizeHint(self, index)
+        s.transpose()
+        return s
+
+    def paintEvent(self, event):
+        painter = QStylePainter(self)
+        opt = QStyleOptionTab()
+
+        for i in range(self.count()):
+            self.initStyleOption(opt, i)
+            painter.drawControl(QStyle.CE_TabBarTabShape, opt)
+            painter.save()
+
+            s = opt.rect.size()
+            s.transpose()
+            r = QRect(QPoint(), s)
+            r.moveCenter(opt.rect.center())
+            opt.rect = r
+
+            c = self.tabRect(i).center()
+            painter.translate(c)
+            painter.rotate(90)
+            painter.translate(-c)
+            painter.drawControl(QStyle.CE_TabBarTabLabel, opt)
+            painter.restore()
 
 def load(self):
     """Function to load player control widgets"""
@@ -21,6 +49,136 @@ def load(self):
     self.playercontrols_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
     self.timeline.load(self)
+
+    self.playercontrols_properties_panel_placeholder = QWidget(parent=self.playercontrols_widget)
+
+    self.playercontrols_properties_panel = QLabel(parent=self.playercontrols_properties_panel_placeholder)
+    self.playercontrols_properties_panel.setObjectName('player_controls_sub_panel')
+    self.playercontrols_properties_panel.setStyleSheet('QLabel {border-top:0; border-right:0;}')
+    self.playercontrols_properties_panel_animation = QPropertyAnimation(self.playercontrols_properties_panel, b'geometry')
+    self.playercontrols_properties_panel_animation.setEasingCurve(QEasingCurve.OutCirc)
+
+    self.playercontrols_properties_panel_tabwidget = QTabWidget(parent=self.playercontrols_properties_panel)
+    self.playercontrols_properties_panel_tabwidget.setTabBar(QLeftTabBar(self.playercontrols_properties_panel_tabwidget))
+    self.playercontrols_properties_panel_tabwidget.setTabPosition(2)
+    self.playercontrols_properties_panel_tabwidget.setStyleSheet('''
+                            QTabBar:tab                                    { background: rgba(184,206,224,150); color: rgba(46,62,76,150); border: 1px solid rgba(106, 116, 131, 100); padding: 10px; border-top-left-radius: 2px; border-top-right-radius: 0; border-bottom-left-radius: 2px; border-left:0; padding-top: -16px; padding-left: 4px; padding-bottom:6px; padding-right:2px; }
+                            QTabBar:tab:selected                           { background: rgb(184,206,224); color: rgb(46,62,76); border: 1px solid rgb(106, 116, 131); border-right:0; }
+                            QTabWidget:pane                                { background: rgb(184,206,224); border: 1px solid rgb(106, 116, 131); border-bottom-right-radius: 2px;  border-top-left-radius: 0; border-top-right-radius: 2px; border-left: 0;}
+                            ''')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles = QWidget()
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal = QLabel('Normal subtitle colors'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal.setObjectName('small_label')
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal.setStyleSheet(' QLabel {font-weight:bold;} ')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_normal = QLabel('Border'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_normal.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_normal = QLabel('Fill'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_normal.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_normal = QLabel('Text'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_normal.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_selected = QLabel('Selected subtitle colors'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_selected.setObjectName('small_label')
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_selected.setStyleSheet(' QLabel {font-weight:bold;} ')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_selected = QLabel('Border'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_selected.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_border_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_border_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_border_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_selected = QLabel('Fill'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_selected.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_fill_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_fill_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_fill_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_selected = QLabel('Text'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_selected.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_text_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_text_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_text_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_arrows = QLabel('Arrows colors'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_arrows.setObjectName('small_label')
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_arrows.setStyleSheet(' QLabel {font-weight:bold;} ')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal_arrows = QLabel('Normal'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal_arrows.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_arrow_normal_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_arrow_normal_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_subtitle_arrow_normal_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_title_normal_arrows = QLabel('Selected'.upper(), parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_title_normal_arrows.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_subtitles)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget.addTab(self.playercontrols_properties_panel_tabwidget_subtitles, '')
+    self.playercontrols_properties_panel_tabwidget.setTabIcon(0, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_subtitle_icon.svg')))
+
+    self.playercontrols_properties_panel_tabwidget_waveform = QWidget()
+
+    self.playercontrols_properties_panel_tabwidget_waveform_title_normal = QLabel('Waveform colors'.upper(), parent=self.playercontrols_properties_panel_tabwidget_waveform)
+    self.playercontrols_properties_panel_tabwidget_waveform_title_normal.setObjectName('small_label')
+    self.playercontrols_properties_panel_tabwidget_waveform_title_normal.setStyleSheet(' QLabel {font-weight:bold;} ')
+
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_title_normal = QLabel('Border'.upper(), parent=self.playercontrols_properties_panel_tabwidget_waveform)
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_title_normal.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_waveform)
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_waveform_border_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_title_normal = QLabel('Fill'.upper(), parent=self.playercontrols_properties_panel_tabwidget_waveform)
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_title_normal.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_waveform)
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_waveform_fill_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget.addTab(self.playercontrols_properties_panel_tabwidget_waveform, '')
+    self.playercontrols_properties_panel_tabwidget.setTabIcon(1, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_waveform_icon.svg')))
+
+    self.playercontrols_properties_panel_tabwidget_background = QWidget()
+
+    self.playercontrols_properties_panel_tabwidget_background_title_normal = QLabel('Background colors'.upper(), parent=self.playercontrols_properties_panel_tabwidget_background)
+    self.playercontrols_properties_panel_tabwidget_background_title_normal.setObjectName('small_label')
+    self.playercontrols_properties_panel_tabwidget_background_title_normal.setStyleSheet(' QLabel {font-weight:bold;} ')
+
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_title_normal = QLabel('Time'.upper(), parent=self.playercontrols_properties_panel_tabwidget_background)
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_title_normal.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_background)
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_background_time_text_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_title_normal = QLabel('Cursor'.upper(), parent=self.playercontrols_properties_panel_tabwidget_background)
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_title_normal.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_background)
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_background_cursor_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_title_normal = QLabel('Grid'.upper(), parent=self.playercontrols_properties_panel_tabwidget_background)
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_title_normal.setObjectName('small_label')
+
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_button = QPushButton(parent=self.playercontrols_properties_panel_tabwidget_background)
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_background_grid_color_button_clicked(self))
+
+    self.playercontrols_properties_panel_tabwidget.addTab(self.playercontrols_properties_panel_tabwidget_background, '')
+    self.playercontrols_properties_panel_tabwidget.setTabIcon(2, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_background_icon.svg')))
 
     self.playercontrols_widget_central_top_background = QLabel(parent=self.playercontrols_widget)
     self.playercontrols_widget_central_top_background.setObjectName('playercontrols_widget_central_top_background')
@@ -42,6 +200,10 @@ def load(self):
 
     self.playercontrols_widget_bottom_right = QLabel(parent=self.playercontrols_widget)
     self.playercontrols_widget_bottom_right.setObjectName('playercontrols_widget_bottom_right')
+
+    self.playercontrols_widget_bottom_right_corner = QLabel(parent=self.playercontrols_widget)
+    self.playercontrols_widget_bottom_right_corner.setObjectName('playercontrols_widget_central_bottom')
+    self.playercontrols_widget_bottom_right_corner.setStyleSheet('QLabel {border-right:0;}')
 
     self.playercontrols_widget_bottom_left = QLabel(parent=self.playercontrols_widget)
     self.playercontrols_widget_bottom_left.setObjectName('playercontrols_widget_bottom_left')
@@ -294,6 +456,7 @@ def load(self):
     self.repeat_playback_x_label.setStyleSheet('QLabel {qproperty-alignment:AlignCenter; font-weight:bold; color:rgb(184,206,224); }')
 
     self.repeat_playback_times = QSpinBox(parent=self.repeat_playback)
+    self.repeat_playback_times.setObjectName('controls_qspinbox')
     self.repeat_playback_times.setMinimum(1)
     self.repeat_playback_times.setMaximum(20)
     self.repeat_playback_times.valueChanged.connect(lambda: repeat_playback_times_changed(self))
@@ -407,33 +570,12 @@ def load(self):
     self.step_unit.insertItems(0, STEPS_LIST)
     self.step_unit.activated.connect(lambda: step_value_changed(self))
 
-def playercontrols_stop_button_clicked(self):
-    """Function to call when stop button is clicked"""
-    # self.player_widget.position = 0.0
-    # self.update_timeline.stop()
-    playercontrols_playpause_button_clicked(self)
-    self.player_widget.stop()
-    self.playercontrols_playpause_button.setChecked(False)
-    playercontrols_playpause_button_update(self)
-    # self.timeline.update_scrollbar(self)
-    self.timeline.update(self)
-
-
-def playercontrols_playpause_button_clicked(self):
-    """Function to call when play/pause button is clicked"""
-    self.player_widget.pause()
-    if self.repeat_activated:
-        self.repeat_duration_tmp = []
-    if not self.player_widget.mpv.pause and not self.playercontrols_playpause_button.isChecked():
-        self.playercontrols_playpause_button.setChecked(True)
-    elif self.player_widget.mpv.pause and self.playercontrols_playpause_button.isChecked():
-        self.playercontrols_playpause_button.setChecked(False)
-    playercontrols_playpause_button_update(self)
-
-
-def playercontrols_playpause_button_update(self):
-    """Function to update things when stop button is clicked"""
-    self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.png')) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')))
+    self.playercontrols_properties_panel_toggle = QPushButton(parent=self.playercontrols_widget)
+    self.playercontrols_properties_panel_toggle.setObjectName('playercontrols_properties_panel_toggle')
+    self.playercontrols_properties_panel_toggle.setCheckable(True)
+    self.playercontrols_properties_panel_toggle.clicked.connect(lambda: playercontrols_properties_panel_toggle_pressed(self))
+    self.playercontrols_properties_panel_toggle_animation = QPropertyAnimation(self.playercontrols_properties_panel_toggle, b'geometry')
+    self.playercontrols_properties_panel_toggle_animation.setEasingCurve(QEasingCurve.OutCirc)
 
 
 def resized(self):
@@ -452,8 +594,43 @@ def resized(self):
 
     self.playercontrols_widget_top_right.setGeometry(self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width(), self.playercontrols_widget_central_top.y(), self.playercontrols_widget.width()-(self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width()), self.playercontrols_widget_central_top.height())
     self.playercontrols_widget_top_left.setGeometry(0, self.playercontrols_widget_central_top.y(), self.playercontrols_widget.width()-(self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width()), self.playercontrols_widget_central_top.height())
-    self.playercontrols_widget_bottom_right.setGeometry(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width(), self.playercontrols_widget_central_bottom.y(), self.playercontrols_widget.width()-(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width()), self.playercontrols_widget_central_bottom.height())
+    self.playercontrols_widget_bottom_right.setGeometry(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width(), self.playercontrols_widget_central_bottom.y(), self.playercontrols_widget.width()-(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width())-30, self.playercontrols_widget_central_bottom.height())
+    self.playercontrols_widget_bottom_right_corner.setGeometry(self.playercontrols_widget_bottom_right.x() + self.playercontrols_widget_bottom_right.width(), self.playercontrols_widget_bottom_right.y(), 30, self.playercontrols_widget_bottom_right.height())
     self.playercontrols_widget_bottom_left.setGeometry(0, self.playercontrols_widget_central_bottom.y(), self.playercontrols_widget_central_bottom.x(), self.playercontrols_widget_central_bottom.height())
+
+    show_or_hide_playercontrols_properties_panel(self)
+    self.playercontrols_properties_panel_tabwidget.setGeometry(10, 34, self.playercontrols_properties_panel.width()-40, self.playercontrols_properties_panel.height()-60)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal.setGeometry(10,10,100,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_normal.setGeometry(10,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_button.setGeometry(10,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_normal.setGeometry(45,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_button.setGeometry(45,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_normal.setGeometry(80,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_button.setGeometry(80,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_selected.setGeometry(120,10,100,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_selected.setGeometry(120,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_border_color_button.setGeometry(120,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_selected.setGeometry(155,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_fill_color_button.setGeometry(155,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_selected.setGeometry(190,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_text_color_button.setGeometry(190,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_arrows.setGeometry(225,10,70,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal_arrows.setGeometry(225,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_arrow_normal_button.setGeometry(225,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_title_normal_arrows.setGeometry(260,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button.setGeometry(260,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_waveform_title_normal.setGeometry(10,10,100,15)
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_title_normal.setGeometry(10,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_button.setGeometry(10,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_title_normal.setGeometry(45,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_button.setGeometry(45,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_background_title_normal.setGeometry(10,10,100,15)
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_title_normal.setGeometry(10,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_button.setGeometry(10,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_title_normal.setGeometry(45,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_button.setGeometry(45,40,30,30)
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_title_normal.setGeometry(80,25,30,15)
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_button.setGeometry(80,40,30,30)
 
     self.playercontrols_stop_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-55, 11, 50, 43)
     self.playercontrols_playpause_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-5, 11, 60, 43)
@@ -529,6 +706,35 @@ def resized(self):
     self.timelinescrolling_none_button.setGeometry(self.grid_button.x() - 95, 7, 30, self.grid_button.height())
     self.timelinescrolling_page_button.setGeometry(self.grid_button.x() - 65, 7, 30, self.grid_button.height())
     self.timelinescrolling_follow_button.setGeometry(self.grid_button.x() - 35, 7, 30, self.grid_button.height())
+
+
+def playercontrols_stop_button_clicked(self):
+    """Function to call when stop button is clicked"""
+    # self.player_widget.position = 0.0
+    # self.update_timeline.stop()
+    playercontrols_playpause_button_clicked(self)
+    self.player_widget.stop()
+    self.playercontrols_playpause_button.setChecked(False)
+    playercontrols_playpause_button_update(self)
+    # self.timeline.update_scrollbar(self)
+    self.timeline.update(self)
+
+
+def playercontrols_playpause_button_clicked(self):
+    """Function to call when play/pause button is clicked"""
+    self.player_widget.pause()
+    if self.repeat_activated:
+        self.repeat_duration_tmp = []
+    if not self.player_widget.mpv.pause and not self.playercontrols_playpause_button.isChecked():
+        self.playercontrols_playpause_button.setChecked(True)
+    elif self.player_widget.mpv.pause and self.playercontrols_playpause_button.isChecked():
+        self.playercontrols_playpause_button.setChecked(False)
+    playercontrols_playpause_button_update(self)
+
+
+def playercontrols_playpause_button_update(self):
+    """Function to update things when stop button is clicked"""
+    self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.png')) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.png')))
 
 
 def show(self):
@@ -1041,3 +1247,166 @@ def repeat_playback_times_changed(self):
     """Function to call when playback repeat number of times is changed"""
     self.repeat_times = self.repeat_playback_times.value()
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self):
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_border_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('selected_subtitle_border_color', '#cc3e5363')))
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_fill_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('selected_subtitle_fill_color', '#cc3e5363')))
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_text_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('selected_subtitle_text_color', '#ffffffff')))
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('subtitle_border_color', '#ff6a7483')))
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('subtitle_fill_color', '#ccb8cee0')))
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('subtitle_text_color', '#ff304251')))
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_arrow_normal_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('subtitle_arrow_color', '#ff969696')))
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('selected_subtitle_arrow_color', '#ff969696')))
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('waveform_border_color', '#ff153450')))
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('waveform_fill_color', '#cc153450')))
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('grid_color', '#336a7483')))
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('time_text_color', '#806a7483')))
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('cursor_color', '#ccff0000')))
+
+
+
+
+def show_or_hide_playercontrols_properties_panel(self):
+    """Function to show playercontrol properties panel"""
+    panel_width = 365
+    if self.playercontrols_properties_panel_toggle.isChecked():
+        self.playercontrols_properties_panel_placeholder.setGeometry(self.playercontrols_widget.width()-panel_width, 5, panel_width, 180)
+        self.playercontrols_properties_panel.setGeometry(0, 56, self.playercontrols_properties_panel_placeholder.width(), 140)
+        self.playercontrols_properties_panel_toggle.setGeometry(self.playercontrols_widget_bottom_right_corner.x(), self.playercontrols_widget_bottom_right_corner.y()+100, self.playercontrols_widget_bottom_right_corner.width(), self.playercontrols_widget_bottom_right_corner.height())
+    else:
+        self.playercontrols_properties_panel_placeholder.setGeometry(self.playercontrols_widget.width()-panel_width, 5, panel_width, 80)
+        self.playercontrols_properties_panel.setGeometry(0, 56, self.playercontrols_properties_panel_placeholder.width(), 140)
+        self.playercontrols_properties_panel_toggle.setGeometry(self.playercontrols_widget_bottom_right_corner.x(), self.playercontrols_widget_bottom_right_corner.y(), self.playercontrols_widget_bottom_right_corner.width(), self.playercontrols_widget_bottom_right_corner.height())
+
+def playercontrols_properties_panel_toggle_pressed(self):
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    show_or_hide_playercontrols_properties_panel(self)
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_button_clicked(self):
+    """Function to show qcolordialog to choose subtitle border color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['subtitle_border_color'] =  color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_button_clicked(self):
+    """Function to show qcolordialog to choose subtitle fill color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['subtitle_fill_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_button_clicked(self):
+    """Function to show qcolordialog to choose subtitle text color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['subtitle_text_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_border_color_button_clicked(self):
+    """Function to show qcolordialog to choose selected subtitle border color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['selected_subtitle_border_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_fill_color_button_clicked(self):
+    """Function to show qcolordialog to choose selected subtitle fill color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['selected_subtitle_fill_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_text_color_button_clicked(self):
+    """Function to show qcolordialog to choose selected subtitle text color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['selected_subtitle_text_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_subtitle_arrow_normal_button_clicked(self):
+    """Function to show qcolordialog to choose selected subtitle arrow color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['subtitle_arrow_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button_clicked(self):
+    """Function to show qcolordialog to choose selected selected subtitle arrow color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['selected_subtitle_arrow_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_waveform_border_color_button_clicked(self):
+    """Function to show qcolordialog to choose waveform border color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        for available_zoom in self.video_metadata['waveform']:
+            if self.video_metadata['waveform'][available_zoom].get('qimages', []):
+                self.video_metadata['waveform'][available_zoom]['qimages'] = []
+        self.settings['timeline']['waveform_border_color'] = color.name(1)
+        self.thread_get_qimages.border_color = self.settings['timeline'].get('waveform_border_color', '#ff153450')
+        self.thread_get_qimages.fill_color = self.settings['timeline'].get('waveform_fill_color', '#cc153450')
+        self.thread_get_qimages.start(QThread.IdlePriority)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_waveform_fill_color_button_clicked(self):
+    """Function to show qcolordialog to choose waveform fill color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        for available_zoom in self.video_metadata['waveform']:
+            if self.video_metadata['waveform'][available_zoom].get('qimages', []):
+                self.video_metadata['waveform'][available_zoom]['qimages'] = []
+        self.settings['timeline']['waveform_fill_color'] = color.name(1)
+        self.thread_get_qimages.border_color = self.settings['timeline'].get('waveform_border_color', '#ff153450')
+        self.thread_get_qimages.fill_color = self.settings['timeline'].get('waveform_fill_color', '#cc153450')
+        self.thread_get_qimages.start(QThread.IdlePriority)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_background_grid_color_button_clicked(self):
+    """Function to show qcolordialog to choose background start color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['grid_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+
+def playercontrols_properties_panel_tabwidget_background_time_text_color_button_clicked(self):
+    """Function to show qcolordialog to choose background end color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['time_text_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
+
+def playercontrols_properties_panel_tabwidget_background_cursor_color_button_clicked(self):
+    """Function to show qcolordialog to choose background end color"""
+    color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
+    if color.isValid():
+        self.settings['timeline']['cursor_color'] = color.name(1)
+    playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
+    self.timeline_widget.update()
