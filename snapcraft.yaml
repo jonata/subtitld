@@ -61,6 +61,7 @@ parts:
       - espeak-data
       - gsettings-desktop-schemas
       - libgtk-3-common
+      - qtwayland5
       #- desktop-gnome-platform
       # - libmpv1
       # gtk-common-themes support
