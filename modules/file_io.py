@@ -102,7 +102,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
     supported_video_files = self.tr('Video files') + ' ({})'.format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
 
     if not files_to_open:
-        files_to_open = [QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video or subtitle file'), directory=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]]
+        files_to_open = [QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video or subtitle file'), directory=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files)[0]]
 
     for filepath in files_to_open:
         if os.path.isfile(filepath):
@@ -127,7 +127,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
                         break
 
             if not self.video_metadata:
-                filepath = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=REAL_PATH_HOME, filter=supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
+                filepath = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=REAL_PATH_HOME, filter=supported_video_files)[0]
                 if filepath and os.path.isfile(filepath) and filepath.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
                     self.video_metadata = process_video_file(filepath)
 

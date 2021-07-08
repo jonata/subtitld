@@ -103,6 +103,8 @@ class Timeline(QWidget):
         self.y_waveform = 22
         self.h_waveform = 124
         self.show_limiters = False
+        self.show_tug_of_war = False
+        self.tug_of_war_pressed = False
         self.is_cursor_pressing = False
         self.waveformsize = .7
 
@@ -253,6 +255,12 @@ class Timeline(QWidget):
                 if xpos >= scroll_position and xpos <= (scroll_position + self.parent.timeline_scroll.width()):
                     painter.drawLine(xpos, 0, xpos, self.height())
 
+        if bool(self.show_tug_of_war):
+            tug_of_war_pen = QPen(QColor(self.parent.settings['timeline'].get('selected_subtitle_arrow_color', '#ff969696')), 8, Qt.SolidLine, Qt.RoundCap)
+            painter.setPen(tug_of_war_pen)
+            xpos = self.show_tug_of_war * self.width_proportion
+            painter.drawLine(xpos, self.subtitle_y + 8, xpos, self.subtitle_y + self.subtitle_height - 8)
+
         if self.parent.player_widget.position is not None:
             painter.setPen(QPen(QColor(self.parent.settings['timeline'].get('cursor_color', '#ccff0000')), 2, Qt.SolidLine))
             cursor_pos = self.parent.player_widget.position * self.width_proportion
@@ -273,12 +281,15 @@ class Timeline(QWidget):
                 if event.pos().x()/self.width_proportion > (subtitle[0] + subtitle[1]) - (20/self.width_proportion):
                     self.subtitle_end_is_clicked = True
                     self.offset = ((self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1])*self.width_proportion) - event.pos().x()
+                    self.tug_of_war_pressed = self.show_tug_of_war
                 else:
                     self.offset = event.pos().x() - self.parent.selected_subtitle[0]*self.width_proportion
                     if event.pos().x()/self.width_proportion < subtitle[0] + (20/self.width_proportion):
                         self.subtitle_start_is_clicked = True
+                        self.tug_of_war_pressed = self.show_tug_of_war
                     else:
                         self.subtitle_is_clicked = True
+
                 break
 
         if not (self.subtitle_end_is_clicked or self.subtitle_start_is_clicked or self.subtitle_is_clicked):
@@ -302,11 +313,17 @@ class Timeline(QWidget):
         self.subtitle_start_is_clicked = False
         self.subtitle_end_is_clicked = False
         self.is_cursor_pressing = False
+        self.tug_of_war_pressed = False
         self.update()
         event.accept()
 
     def mouseMoveEvent(self, event):
+        scroll_position = self.parent.timeline_scroll.horizontalScrollBar().value()
+        scroll_width = self.parent.timeline_scroll.width()
         """Function to call when mouse moves"""
+
+        self.show_limiters = bool(event.pos().y() > self.subtitle_y and event.pos().y() < (self.subtitle_height + self.subtitle_y))
+
         if self.parent.selected_subtitle:
             i = self.parent.subtitles_list.index(self.parent.selected_subtitle)
             last = self.parent.subtitles_list[self.parent.subtitles_list.index(self.parent.selected_subtitle)-1] if self.parent.subtitles_list.index(self.parent.selected_subtitle) > 0 else [0, 0, '']
@@ -316,49 +333,61 @@ class Timeline(QWidget):
             start_position = (event.pos().x() - self.offset) / self.width_proportion
             last_scene = scenes_list[bisect(scenes_list, start_position)-1]
             next_scene = scenes_list[bisect(scenes_list, start_position)]
+
+            if self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1] > event.pos().x()/self.width_proportion > (self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1]) - (4/self.width_proportion) and nextsub[0] < (self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1] + .02):
+                self.show_tug_of_war = self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1] + .0005
+            elif self.parent.selected_subtitle[0] < event.pos().x()/self.width_proportion < self.parent.selected_subtitle[0] + (4/self.width_proportion) and last[0] + last[1] > self.parent.selected_subtitle[0] - .02:
+                self.show_tug_of_war = self.parent.selected_subtitle[0] - .0005
+            elif not self.tug_of_war_pressed:
+                self.show_tug_of_war = False
+
             if self.subtitle_start_is_clicked:
                 end = self.parent.subtitles_list[i][0] + self.parent.subtitles_list[i][1]
                 if not start_position > (end - self.parent.minimum_subtitle_width):
-                    if not (bool(self.parent.timeline_snap_move_nereast) and round(last[0] + last[1] + .001, 3) == round(self.parent.selected_subtitle[0], 3)) and self.parent.timeline_snap and self.parent.timeline_snap_limits and (last[0] + last[1] + self.parent.timeline_snap_value) > start_position:
-                        subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=last[0] + last[1] + 0.001, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                    if not (bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed) and round(last[0] + last[1] + .001, 3) == round(self.parent.selected_subtitle[0], 3)) and self.parent.timeline_snap and self.parent.timeline_snap_limits and (last[0] + last[1] + self.parent.timeline_snap_value) > start_position:
+                        subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=last[0] + last[1] + 0.001, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                     elif self.parent.timeline_snap and self.parent.timeline_snap_grid:
                         if self.parent.timeline_grid_type == 'frames':
                             difference = start_position % (1.0/self.parent.video_metadata['framerate'])
-                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, amount=difference, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, amount=difference, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         elif self.parent.timeline_grid_type == 'seconds' and float(start_position) > float(float(int(start_position)+1) - float(self.parent.timeline_snap_value)):
-                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=float(int(start_position)+1), move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=float(int(start_position)+1), move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         elif self.parent.timeline_grid_type == 'seconds' and float(start_position) < float(float(int(start_position)) + float(self.parent.timeline_snap_value)):
-                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=float(int(start_position)), move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=float(int(start_position)), move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         elif self.parent.timeline_grid_type == 'scenes' and start_position > next_scene - self.parent.timeline_snap_value:
-                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=next_scene, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=next_scene, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         elif self.parent.timeline_grid_type == 'scenes' and start_position < last_scene + self.parent.timeline_snap_value:
-                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=last_scene, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=last_scene, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         else:
-                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=start_position, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=start_position, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                     else:
-                        subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=start_position, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                        subtitles.move_start_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=start_position, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
+                if self.tug_of_war_pressed:
+                    self.show_tug_of_war = self.parent.selected_subtitle[0]
             elif self.subtitle_end_is_clicked:
                 end_position = (event.pos().x() + self.offset) / self.width_proportion
                 if not end_position < (self.parent.subtitles_list[i][0] + self.parent.minimum_subtitle_width):
-                    if not (bool(self.parent.timeline_snap_move_nereast) and round(end_position, 3) >= round(nextsub[0] - 0.001, 3)) and self.parent.timeline_snap and self.parent.timeline_snap_limits and (nextsub[0] - self.parent.timeline_snap_value) < end_position:
+                    if not (bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed) and round(end_position, 3) >= round(nextsub[0] - 0.001, 3)) and self.parent.timeline_snap and self.parent.timeline_snap_limits and (nextsub[0] - self.parent.timeline_snap_value) < end_position:
                         # self.parent.subtitles_list[i][1] = (nextsub[0] - 0.001) - self.parent.subtitles_list[i][0]
-                        subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=(nextsub[0] - 0.001), move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                        subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=(nextsub[0] - 0.001), move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                     elif self.parent.timeline_snap and self.parent.timeline_snap_grid:
                         if self.parent.timeline_grid_type == 'frames':
                             difference = end_position % (1.0/self.parent.video_metadata['framerate'])
-                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, amount=difference, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, amount=difference, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         elif self.parent.timeline_grid_type == 'seconds' and float(end_position) > float(float(int(end_position)+1) - float(self.parent.timeline_snap_value)):
-                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=float(int(end_position)+1), move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=float(int(end_position)+1), move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         elif self.parent.timeline_grid_type == 'seconds' and float(end_position) < float(float(int(end_position)) + float(self.parent.timeline_snap_value)):
-                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=float(int(end_position)), move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=float(int(end_position)), move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         elif self.parent.timeline_grid_type == 'scenes' and end_position > next_scene - self.parent.timeline_snap_value:
-                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=next_scene, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=next_scene, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         elif self.parent.timeline_grid_type == 'scenes' and end_position < last_scene + self.parent.timeline_snap_value:
-                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=last_scene, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=last_scene, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                         else:
-                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=end_position, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                            subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=end_position, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
                     else:
-                        subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=end_position, move_nereast=bool(self.parent.timeline_snap_move_nereast))
+                        subtitles.move_end_subtitle(subtitles=self.parent.subtitles_list, selected_subtitle=self.parent.selected_subtitle, absolute_time=end_position, move_nereast=bool(self.parent.timeline_snap_move_nereast or self.tug_of_war_pressed))
+                if self.tug_of_war_pressed:
+                    self.show_tug_of_war = self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1]
             elif self.subtitle_is_clicked:
                 if self.parent.timeline_snap and self.parent.timeline_snap_moving and ((nextsub[0] - self.parent.timeline_snap_value) < (start_position + self.parent.subtitles_list[i][1]) or (last[0] + last[1] + self.parent.timeline_snap_value) > start_position):
                     if (nextsub[0] - self.parent.timeline_snap_value) < (start_position + self.parent.subtitles_list[i][1]):
@@ -381,10 +410,8 @@ class Timeline(QWidget):
                         self.parent.subtitles_list[i][0] = start_position
                 else:
                     self.parent.subtitles_list[i][0] = start_position
-        if event.pos().y() > self.subtitle_y and event.pos().y() < (self.subtitle_height + self.subtitle_y):
-            self.show_limiters = True
-        else:
-            self.show_limiters = False
+
+
         if self.is_cursor_pressing and not (self.subtitle_start_is_clicked or self.subtitle_end_is_clicked or self.subtitle_is_clicked):
             self.parent.player_widget.seek((event.pos().x() / self.width())*self.parent.video_metadata['duration'])
             # if self.parent.repeat_activated:
