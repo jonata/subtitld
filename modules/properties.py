@@ -29,15 +29,29 @@ def load(self):
     self.send_text_to_next_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'send_text_to_next_subtitle_icon.png')))
     self.send_text_to_next_subtitle_button.setIconSize(QSize(20, 20))
     self.send_text_to_next_subtitle_button.setObjectName('button_dark')
-    self.send_text_to_next_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0;padding-bottom:3px;}')
+    self.send_text_to_next_subtitle_button.setStyleSheet('QPushButton {padding-right: 40px; border-bottom:0; border-left:0;padding-bottom:3px;}')
     self.send_text_to_next_subtitle_button.clicked.connect(lambda: send_text_to_next_subtitle_button_clicked(self))
+
+    self.send_text_to_next_subtitle_and_slice_button = QPushButton(parent=self.properties_widget)
+    self.send_text_to_next_subtitle_and_slice_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'slice_selected_subtitle_icon.png')))
+    self.send_text_to_next_subtitle_and_slice_button.setIconSize(QSize(20, 20))
+    self.send_text_to_next_subtitle_and_slice_button.setObjectName('button_dark')
+    self.send_text_to_next_subtitle_and_slice_button.setStyleSheet('QPushButton {border-bottom:0; padding-bottom: 2px;}')
+    self.send_text_to_next_subtitle_and_slice_button.clicked.connect(lambda: send_text_to_next_subtitle_and_slice_button_clicked(self))
 
     self.send_text_to_last_subtitle_button = QPushButton(self.tr('Send to last').upper(), parent=self.properties_widget)
     self.send_text_to_last_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'send_text_to_last_subtitle_icon.png')))
     self.send_text_to_last_subtitle_button.setIconSize(QSize(20, 20))
     self.send_text_to_last_subtitle_button.setObjectName('button_dark')
-    self.send_text_to_last_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0;padding-bottom:3px;}')
+    self.send_text_to_last_subtitle_button.setStyleSheet('QPushButton {padding-left: 40px; border-bottom:0; border-right:0; padding-bottom:3px;}')
     self.send_text_to_last_subtitle_button.clicked.connect(lambda: send_text_to_last_subtitle_button_clicked(self))
+
+    self.send_text_to_last_subtitle_and_slice_button = QPushButton(parent=self.properties_widget)
+    self.send_text_to_last_subtitle_and_slice_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'slice_selected_subtitle_icon.png')))
+    self.send_text_to_last_subtitle_and_slice_button.setIconSize(QSize(20, 20))
+    self.send_text_to_last_subtitle_and_slice_button.setObjectName('button_dark')
+    self.send_text_to_last_subtitle_and_slice_button.setStyleSheet('QPushButton {border-bottom:0; padding-bottom: 2px;}')
+    self.send_text_to_last_subtitle_and_slice_button.clicked.connect(lambda: send_text_to_last_subtitle_and_slice_button_clicked(self))
 
     self.properties_information = QLabel(parent=self.properties_widget)
     self.properties_information.setWordWrap(True)
@@ -60,8 +74,10 @@ def resized(self):
 
     self.properties_textedit.setGeometry(20, self.properties_widget.height()-self.playercontrols_widget.height()-35-180, self.properties_widget.width()-40, 200)
     self.send_text_to_last_subtitle_button.setGeometry(self.properties_textedit.x(), self.properties_textedit.y()-40, self.properties_textedit.width()*.5, 40)
+    self.send_text_to_last_subtitle_and_slice_button.setGeometry(self.send_text_to_last_subtitle_button.x() + 5, self.send_text_to_last_subtitle_button.y() + 5, 40, 35)
     self.send_text_to_next_subtitle_button.setGeometry(self.send_text_to_last_subtitle_button.x()+self.send_text_to_last_subtitle_button.width(), self.send_text_to_last_subtitle_button.y(), self.properties_textedit.width()*.5, 40)
-    self.properties_information.setGeometry(30, 20, self.properties_widget.width()-40, self.properties_textedit.y()-20)
+    self.send_text_to_next_subtitle_and_slice_button.setGeometry(self.send_text_to_next_subtitle_button.x() + self.send_text_to_next_subtitle_button.width() - 45, self.send_text_to_next_subtitle_button.y() + 5, 40, 35)
+    self.properties_information.setGeometry(30, 20, self.properties_widget.width()-40, self.send_text_to_next_subtitle_button.y()-20)
 
     if (self.subtitles_list or self.video_metadata):
         self.properties_toggle_button.setGeometry(self.properties_widget.x()+5, 0, 25, 80)
@@ -98,7 +114,9 @@ def update_properties_widget(self):
     update_properties_information(self)
     self.properties_textedit.setVisible(bool(self.selected_subtitle))
     self.send_text_to_next_subtitle_button.setVisible(bool(self.selected_subtitle))
+    self.send_text_to_next_subtitle_and_slice_button.setVisible(bool(self.selected_subtitle))
     self.send_text_to_last_subtitle_button.setVisible(bool(self.selected_subtitle))
+    self.send_text_to_last_subtitle_and_slice_button.setVisible(bool(self.selected_subtitle))
     text = ''
     if self.selected_subtitle:
         text = self.selected_subtitle[2]
@@ -143,6 +161,7 @@ def properties_textedit_changed(self):
 
 def send_text_to_next_subtitle_button_clicked(self):
     """Function to call when send text to next subtitle is clicked"""
+    print('blah')
     pos = self.properties_textedit.textCursor().position()
     last_text = self.properties_textedit.toPlainText()[:pos]
     next_text = self.properties_textedit.toPlainText()[pos:]
@@ -152,6 +171,25 @@ def send_text_to_next_subtitle_button_clicked(self):
     update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
 
+
+def send_text_to_last_subtitle_and_slice_button_clicked(self):
+    """Function to send text to the last subtitle and slice at the same time"""
+    position = self.player_widget.position
+    if not self.selected_subtitle[0] + self.selected_subtitle[1] > self.player_widget.position > self.selected_subtitle[0]:
+        position = self.selected_subtitle[0] + (self.selected_subtitle[1]*.5)
+    subtitles.subtitle_start_to_current_position(subtitles=self.subtitles_list, position=position)
+    subtitles.last_end_to_current_position(subtitles=self.subtitles_list, position=position-.001)
+    send_text_to_last_subtitle_button_clicked(self)
+
+
+def send_text_to_next_subtitle_and_slice_button_clicked(self):
+    """Function to send text to the next subtitle and slice at the same time"""
+    position = self.player_widget.position
+    if not self.selected_subtitle[0] + self.selected_subtitle[1] > self.player_widget.position > self.selected_subtitle[0]:
+        position = self.selected_subtitle[0] + (self.selected_subtitle[1]*.5)
+    subtitles.subtitle_end_to_current_position(subtitles=self.subtitles_list, position=position)
+    subtitles.next_start_to_current_position(subtitles=self.subtitles_list, position=position+.001)
+    send_text_to_next_subtitle_button_clicked(self)
 
 def send_text_to_last_subtitle_button_clicked(self):
     """Function to call when send text to last subtitle is clicked"""
