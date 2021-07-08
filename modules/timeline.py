@@ -13,6 +13,7 @@ import timecode
 from modules import waveform
 from modules import history
 from modules import subtitles
+from modules import quality_check
 
 
 class DrawPixmap(QPixmap):
@@ -178,7 +179,10 @@ class Timeline(QWidget):
 
                     painter.drawRoundedRect(subtitle_rect, 2.0, 2.0, Qt.AbsoluteSize)
 
-                    if self.parent.selected_subtitle == subtitle:
+                    approved, _ = quality_check.check_subtitle(subtitle, self.parent.settings['quality_check'])
+                    if self.parent.settings['quality_check'].get('enabled', False) and not approved:
+                        painter.setPen(QColor('#9e1a1a'))
+                    elif self.parent.selected_subtitle == subtitle:
                         painter.setPen(QColor(self.parent.settings['timeline'].get('selected_subtitle_text_color', '#ffffffff')))
                     else:
                         painter.setPen(QColor(self.parent.settings['timeline'].get('subtitle_text_color', '#ff304251')))
@@ -271,33 +275,48 @@ class Timeline(QWidget):
 
     def mousePressEvent(self, event):
         """Function to call when mouse is pressed"""
-        self.is_cursor_pressing = True
+        scroll_position = self.parent.timeline_scroll.horizontalScrollBar().value()
+        scroll_width = self.parent.timeline_scroll.width()
 
+        cursor_is_out_of_view = bool(self.parent.player_widget.position * self.width_proportion < self.parent.timeline_scroll.horizontalScrollBar().value() or self.parent.player_widget.position * self.width_proportion > self.parent.timeline_scroll.width() + self.parent.timeline_scroll.horizontalScrollBar().value())
+
+        self.is_cursor_pressing = True
         self.parent.selected_subtitle = False
 
         for subtitle in self.parent.subtitles_list:
-            if event.pos().y() > self.subtitle_y and event.pos().y() < (self.subtitle_height + self.subtitle_y) and (((event.pos().x())/self.width_proportion) > subtitle[0] and ((event.pos().x())/self.width_proportion) < (subtitle[0] + subtitle[1])):
-                self.parent.selected_subtitle = subtitle
-                if event.pos().x()/self.width_proportion > (subtitle[0] + subtitle[1]) - (20/self.width_proportion):
-                    self.subtitle_end_is_clicked = True
-                    self.offset = ((self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1])*self.width_proportion) - event.pos().x()
-                    self.tug_of_war_pressed = self.show_tug_of_war
-                else:
-                    self.offset = event.pos().x() - self.parent.selected_subtitle[0]*self.width_proportion
-                    if event.pos().x()/self.width_proportion < subtitle[0] + (20/self.width_proportion):
-                        self.subtitle_start_is_clicked = True
+            if (subtitle[0] / self.parent.video_metadata.get('duration', 0.01)) > ((scroll_position + scroll_width) / self.width()):
+                break
+            elif (subtitle[0] + subtitle[1]) / self.parent.video_metadata.get('duration', 0.01) < (scroll_position / self.width()):
+                continue
+            else:
+                if event.pos().y() > self.subtitle_y and event.pos().y() < (self.subtitle_height + self.subtitle_y) and (((event.pos().x())/self.width_proportion) > subtitle[0] and ((event.pos().x())/self.width_proportion) < (subtitle[0] + subtitle[1])):
+                    self.parent.selected_subtitle = subtitle
+                    if event.pos().x()/self.width_proportion > (subtitle[0] + subtitle[1]) - (20/self.width_proportion):
+                        self.subtitle_end_is_clicked = True
+                        self.offset = ((self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1])*self.width_proportion) - event.pos().x()
                         self.tug_of_war_pressed = self.show_tug_of_war
                     else:
-                        self.subtitle_is_clicked = True
+                        self.offset = event.pos().x() - self.parent.selected_subtitle[0]*self.width_proportion
+                        if event.pos().x()/self.width_proportion < subtitle[0] + (20/self.width_proportion):
+                            self.subtitle_start_is_clicked = True
+                            self.tug_of_war_pressed = self.show_tug_of_war
+                        else:
+                            self.subtitle_is_clicked = True
+                    break
 
-                break
-
-        if not (self.subtitle_end_is_clicked or self.subtitle_start_is_clicked or self.subtitle_is_clicked):
+        if not (self.subtitle_end_is_clicked or self.subtitle_start_is_clicked or self.subtitle_is_clicked) or cursor_is_out_of_view:
             self.parent.player_widget.position = (event.pos().x() / self.width())*self.parent.video_metadata['duration']
             self.parent.player_widget.seek(self.parent.player_widget.position)
             if self.parent.repeat_activated:
                 self.parent.repeat_duration_tmp = []
             update_timecode_label(self.parent)
+
+
+
+
+
+
+
 
         self.parent.properties.update_properties_widget(self.parent)
 
