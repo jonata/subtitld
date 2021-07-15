@@ -15,7 +15,7 @@ def check_subtitle(subtitle=[], settings={}):
             reasons.append('The duration of this subtitle, {ad}, is less than the minimum of {d}.'.format(d=settings.get('minimum_duration', .7), ad=round(subtitle[1], 2)))
         if subtitle[1] > settings.get('maximum_duration', 7):
             approved = False
-            reasons.append('The duration of this subtitle, {ad}, is less than the minimum of {d}.'.format(d=settings.get('maximum_duration', 7), ad=round(subtitle[1], 2)))
+            reasons.append('The duration of this subtitle, {ad}, is more than the maximum of {d}.'.format(d=settings.get('maximum_duration', 7), ad=round(subtitle[1], 2)))
         if len(subtitle[2].split('\n')) > settings.get('maximum_lines', 2):
             approved = False
             reasons.append('There are {al} lines, more than the maximum of {l}.'.format(l=settings.get('maximum_lines', 2), al=round(len(subtitle[2].split('\n')), 2)))

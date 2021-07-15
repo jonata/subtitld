@@ -12,7 +12,6 @@ from modules import file_io, quality_check
 from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, PATH_SUBTITLD_GRAPHICS
 
 
-
 def load(self):
     """Function to load subtitles list widgets"""
     self.subtitles_list_widget = QLabel(parent=self)

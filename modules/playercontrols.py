@@ -984,7 +984,7 @@ def slice_selected_subtitle_button_clicked(self):
 
 def select_subtitle_in_current_position(self):
     """Function to call when actual subtitle under cursor need to be selected"""
-    subtitle = subtitles.subtitle_under_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
+    subtitle, _ = subtitles.subtitle_under_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     if subtitle:
         self.selected_subtitle = subtitle
         self.subtitleslist.update_subtitles_list_qlistwidget(self)

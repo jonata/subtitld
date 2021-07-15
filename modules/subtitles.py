@@ -179,7 +179,7 @@ def subtitle_under_current_position(subtitles=[], position=0.0):
     index = bisect(subt, position)
     if position > subtitles[index-1][0] and position < (subtitles[index-1][0] + subtitles[index-1][1]):
         current_subtitle = subtitles[index-1]
-    return current_subtitle
+    return current_subtitle, index-1
 
 
 def last_subtitle_current_position(subtitles=[], position=0.0):

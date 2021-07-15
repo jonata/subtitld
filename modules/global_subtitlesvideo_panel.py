@@ -8,13 +8,14 @@ import json
 import multiprocessing
 import autosub
 import speech_recognition as sr
+import timecode
 #from googletrans import Translator
 from google_trans_new import google_translator
 # from ffsubsync import ffsubsync
 
 from PyQt5.QtWidgets import QCheckBox, QDoubleSpinBox, QGridLayout, QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QMessageBox, QVBoxLayout, QCheckBox, QGridLayout, QSlider
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QEvent, Qt
-from PyQt5.QtGui import QFontDatabase, QKeySequence
+from PyQt5.QtCore import QMargins, QPropertyAnimation, QEasingCurve, QSize, QThread, pyqtSignal, QEvent, Qt
+from PyQt5.QtGui import QBrush, QColor, QFont, QFontDatabase, QKeySequence, QPainter, QPen
 
 from modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, LIST_OF_SUPPORTED_EXPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
 from modules.shortcuts import shortcuts_dict
@@ -240,6 +241,10 @@ def load(self):
     self.global_subtitlesvideo_video_burn_convert = QPushButton(self.tr('Generate video').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
     self.global_subtitlesvideo_video_burn_convert.setObjectName('button_dark')
     self.global_subtitlesvideo_video_burn_convert.clicked.connect(lambda: global_subtitlesvideo_video_burn_convert_clicked(self))
+
+    self.global_subtitlesvideo_video_generate_transparent_video_cutton = QPushButton(self.tr('Generate transparent video').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_generate_transparent_video_cutton.setObjectName('button_dark')
+    self.global_subtitlesvideo_video_generate_transparent_video_cutton.clicked.connect(lambda: global_subtitlesvideo_video_generate_transparent_video_cutton_clicked(self))
 
     def thread_generated_burned_video_ended(response):
         if '|' in response:
@@ -539,6 +544,101 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
     if color.isValid():
         self.global_subtitlesvideo_video_burn_pcolor_selected_color = color.name()
     self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
+
+
+def global_subtitlesvideo_video_generate_transparent_video_cutton_clicked(self):
+    suggested_path = os.path.dirname(self.video_metadata['filepath'])
+    extformat = 'mov'#os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
+    save_formats = self.tr('Video file') + ' (.' + extformat + ')'
+    suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
+
+    generated_video_filepath = QFileDialog.getSaveFileName(self, self.tr('Select the subtitle file'), os.path.join(suggested_path, suggested_name), save_formats)[0]
+
+    print(path_tmp)
+
+    if generated_video_filepath:
+        class layerWidget(QWidget):
+            subtitle_text = ''
+            font = 'Ubuntu'
+            fontsize = 18
+
+            def paintEvent(canvas, paintEvent):
+                painter = QPainter(canvas)
+                painter.setRenderHint(QPainter.Antialiasing)
+
+                if canvas.subtitle_text:
+                    font = QFont(canvas.font)
+                    font.setPointSize(canvas.fontsize)
+                    painter.setFont(font)
+
+                    text_rect = painter.boundingRect(canvas.width()*.08, canvas.height()*.08, canvas.width()*.84, canvas.height()*.84, Qt.AlignBottom | Qt.AlignHCenter | Qt.TextWordWrap, canvas.subtitle_text)
+
+                    painter.setPen(Qt.NoPen)
+                    painter.setBrush(QBrush(QColor('#cc000000')))
+                    painter.drawRoundedRect(text_rect.marginsAdded(QMargins(10,10,10,10)), 5, 5)
+
+                    painter.setPen(QPen(QColor('#fff')))
+                    painter.drawText(text_rect.adjusted(0, 2, 0, 2), Qt.AlignCenter | Qt.TextWordWrap, canvas.subtitle_text)
+
+                painter.end()
+
+        layer = layerWidget(self)
+        layer.setVisible(False)
+        layer.setStyleSheet('background: transparent;')
+        layer.resize(QSize(self.video_metadata.get('width', 1920), self.video_metadata.get('height', 1920)))
+        layer.font = self.global_subtitlesvideo_video_burn_fontname.currentText()
+        layer.fontsize = self.global_subtitlesvideo_video_burn_fontsize.value()
+        final_text = ''
+
+        i = 0
+        last_position = .0
+        # if not self.subtitles_list[0][0] == .0:
+        #     filename = os.path.join(path_tmp, 'empty.png')
+        #     layer.subtitle_text = ''
+        #     layer.grab().save(filename, 'PNG')
+
+        #     final_text += "file '" + filename + "'\n"
+        #     final_text += 'duration {}\n'.format(self.subtitles_list[0][0])
+
+        #     i += 1
+
+        for subtitle in self.subtitles_list:
+            if not last_position + .001 > subtitle[0] - .001:
+                filename = os.path.join(path_tmp, 'empty.png')
+                layer.subtitle_text = ''
+                layer.grab().save(filename, 'PNG')
+
+                final_text += "file '" + filename + "'\n"
+                final_text += 'duration {}\n'.format(subtitle[0] - last_position)
+
+            filename = os.path.join(path_tmp, '{}.png'.format(i))
+            layer.subtitle_text = subtitle[2]
+            layer.grab().save(filename, 'PNG')
+
+            final_text += "file '" + filename + "'\n"
+            final_text += 'duration {}\n'.format(subtitle[1])
+
+            last_position = subtitle[0] + subtitle[1]
+            i += 1
+            print(i)
+
+        if not self.subtitles_list[-1][0] + self.subtitles_list[-1][1] == self.video_metadata.get('duration', 60.0):
+            filename = os.path.join(path_tmp, 'empty.png')
+            layer.subtitle_text = ''
+            layer.grab().save(filename, 'PNG')
+
+            final_text += "file '" + filename + "'\n"
+            final_text += 'duration {}\n'.format(self.subtitles_list[0][0])
+            final_text += "file '" + filename + "'\n"
+
+        open(os.path.join(path_tmp, 'subtitles.txt'), 'w').write(final_text)
+        subprocess.Popen([FFMPEG_EXECUTABLE, '-y', '-f', 'concat', '-safe', '0', '-i', os.path.join(path_tmp, 'subtitles.txt'), '-r', str(self.video_metadata.get('framerate', 24)), '-c:v', 'qtrle', '-an', generated_video_filepath], startupinfo=STARTUPINFO, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read()
+
+
+
+
+
+
 
 
 def global_subtitlesvideo_export_button_clicked(self):

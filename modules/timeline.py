@@ -567,6 +567,10 @@ def update(self):
     elif self.settings['timeline'].get('scrolling', 'page') == 'page' and (self.player_widget.position * (self.timeline_widget.width()/self.video_metadata.get('duration', 0.01))) > self.timeline_scroll.width() + self.timeline_scroll.horizontalScrollBar().value():
         update_scrollbar(self)
 
+    current_sub, index = subtitles.subtitle_under_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
+    if current_sub and not (self.subtitles_list_qlistwidget.verticalScrollBar().value() + self.subtitles_list_qlistwidget.verticalScrollBar().pageStep() > index > self.subtitles_list_qlistwidget.verticalScrollBar().value()):
+        self.subtitles_list_qlistwidget.verticalScrollBar().setValue(index - 1)
+
     update_timecode_label(self)
     self.timeline_widget.update()
 

@@ -161,10 +161,9 @@ def properties_textedit_changed(self):
 
 def send_text_to_next_subtitle_button_clicked(self):
     """Function to call when send text to next subtitle is clicked"""
-    print('blah')
     pos = self.properties_textedit.textCursor().position()
-    last_text = self.properties_textedit.toPlainText()[:pos]
-    next_text = self.properties_textedit.toPlainText()[pos:]
+    last_text = self.properties_textedit.toPlainText()[:pos].strip()
+    next_text = self.properties_textedit.toPlainText()[pos:].strip()
     subtitles.send_text_to_next_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, last_text=last_text, next_text=next_text)
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
@@ -194,8 +193,8 @@ def send_text_to_next_subtitle_and_slice_button_clicked(self):
 def send_text_to_last_subtitle_button_clicked(self):
     """Function to call when send text to last subtitle is clicked"""
     pos = self.properties_textedit.textCursor().position()
-    last_text = self.properties_textedit.toPlainText()[:pos]
-    next_text = self.properties_textedit.toPlainText()[pos:]
+    last_text = self.properties_textedit.toPlainText()[:pos].strip()
+    next_text = self.properties_textedit.toPlainText()[pos:].strip()
     subtitles.send_text_to_last_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, last_text=last_text, next_text=next_text)
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
