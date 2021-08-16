@@ -15,7 +15,7 @@ import argparse
 
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTranslator, QTimer
+from PyQt5.QtCore import QSize, Qt, QRect, QPropertyAnimation, QTranslator, QTimer
 
 from modules import config
 from modules.history import history_redo, history_undo
@@ -165,6 +165,7 @@ class Subtitld(QWidget):
         # Maybe implement saving window position...? Useful?
         # self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
         self.showMaximized()
+        # self.setFixedSize(QSize(1280, 720))
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls and len(event.mimeData().urls()) > 0:
@@ -198,6 +199,7 @@ class Subtitld(QWidget):
         # self.playercontrols_properties.resized(self)
 
         self.background_watermark_label.setGeometry(int((self.width()*.5)-129), int(((self.height()-self.playercontrols_widget.height())*.5)-129), 258, 258)
+        # self.background_watermark_label.setVisible(False)
 
         self.player.resized(self)
         self.timeline.resized(self)

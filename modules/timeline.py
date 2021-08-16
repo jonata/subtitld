@@ -260,10 +260,14 @@ class Timeline(QWidget):
                     painter.drawLine(xpos, 0, xpos, self.height())
 
         if bool(self.show_tug_of_war):
-            tug_of_war_pen = QPen(QColor(self.parent.settings['timeline'].get('selected_subtitle_arrow_color', '#ff969696')), 8, Qt.SolidLine, Qt.RoundCap)
+            tug_of_war_pen = QPen(QColor(self.parent.settings['timeline'].get('selected_subtitle_arrow_color', '#ff969696')), 4, Qt.SolidLine, Qt.RoundCap)
             painter.setPen(tug_of_war_pen)
-            xpos = self.show_tug_of_war * self.width_proportion
-            painter.drawLine(xpos, self.subtitle_y + 8, xpos, self.subtitle_y + self.subtitle_height - 8)
+            xpos = (self.show_tug_of_war * self.width_proportion) - 4
+            y_tug_pos = 0
+            for l in range(6):
+                painter.drawLine(xpos, self.subtitle_y + 8 + y_tug_pos, xpos + 8, self.subtitle_y + 8 + y_tug_pos)
+                # painter.drawLine(xpos, self.subtitle_y + 8 + y_tug_pos, xpos + 8, self.subtitle_y + self.subtitle_height - 8)
+                y_tug_pos += (self.subtitle_height - 8)/6
 
         if self.parent.player_widget.position is not None:
             painter.setPen(QPen(QColor(self.parent.settings['timeline'].get('cursor_color', '#ccff0000')), 2, Qt.SolidLine))
@@ -311,13 +315,6 @@ class Timeline(QWidget):
                 self.parent.repeat_duration_tmp = []
             update_timecode_label(self.parent)
 
-
-
-
-
-
-
-
         self.parent.properties.update_properties_widget(self.parent)
 
         if (self.subtitle_is_clicked or self.subtitle_start_is_clicked or self.subtitle_end_is_clicked):
@@ -343,6 +340,19 @@ class Timeline(QWidget):
 
         self.show_limiters = bool(event.pos().y() > self.subtitle_y and event.pos().y() < (self.subtitle_height + self.subtitle_y))
 
+        for subtitle in self.parent.subtitles_list:
+            last = self.parent.subtitles_list[self.parent.subtitles_list.index(subtitle)-1] if self.parent.subtitles_list.index(subtitle) > 0 else [0, 0, '']
+            nextsub = self.parent.subtitles_list[self.parent.subtitles_list.index(subtitle)+1] if self.parent.subtitles_list.index(subtitle) < len(self.parent.subtitles_list) - 1 else [self.parent.video_metadata['duration'], 0, '']
+
+            if subtitle[0] + subtitle[1] > event.pos().x()/self.width_proportion > (subtitle[0] + subtitle[1]) - (4/self.width_proportion) and nextsub[0] < (subtitle[0] + subtitle[1] + .02):
+                self.show_tug_of_war = subtitle[0] + subtitle[1] + .0005
+                break
+            elif subtitle[0] < event.pos().x()/self.width_proportion < subtitle[0] + (4/self.width_proportion) and last[0] + last[1] > subtitle[0] - .02:
+                self.show_tug_of_war = subtitle[0] - .0005
+                break
+            elif not self.tug_of_war_pressed:
+                self.show_tug_of_war = False
+
         if self.parent.selected_subtitle:
             i = self.parent.subtitles_list.index(self.parent.selected_subtitle)
             last = self.parent.subtitles_list[self.parent.subtitles_list.index(self.parent.selected_subtitle)-1] if self.parent.subtitles_list.index(self.parent.selected_subtitle) > 0 else [0, 0, '']
@@ -353,12 +363,6 @@ class Timeline(QWidget):
             last_scene = scenes_list[bisect(scenes_list, start_position)-1]
             next_scene = scenes_list[bisect(scenes_list, start_position)]
 
-            if self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1] > event.pos().x()/self.width_proportion > (self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1]) - (4/self.width_proportion) and nextsub[0] < (self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1] + .02):
-                self.show_tug_of_war = self.parent.selected_subtitle[0] + self.parent.selected_subtitle[1] + .0005
-            elif self.parent.selected_subtitle[0] < event.pos().x()/self.width_proportion < self.parent.selected_subtitle[0] + (4/self.width_proportion) and last[0] + last[1] > self.parent.selected_subtitle[0] - .02:
-                self.show_tug_of_war = self.parent.selected_subtitle[0] - .0005
-            elif not self.tug_of_war_pressed:
-                self.show_tug_of_war = False
 
             if self.subtitle_start_is_clicked:
                 end = self.parent.subtitles_list[i][0] + self.parent.subtitles_list[i][1]

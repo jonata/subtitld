@@ -242,9 +242,10 @@ def load(self):
     self.global_subtitlesvideo_video_burn_convert.setObjectName('button_dark')
     self.global_subtitlesvideo_video_burn_convert.clicked.connect(lambda: global_subtitlesvideo_video_burn_convert_clicked(self))
 
-    self.global_subtitlesvideo_video_generate_transparent_video_cutton = QPushButton(self.tr('Generate transparent video').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
-    self.global_subtitlesvideo_video_generate_transparent_video_cutton.setObjectName('button_dark')
-    self.global_subtitlesvideo_video_generate_transparent_video_cutton.clicked.connect(lambda: global_subtitlesvideo_video_generate_transparent_video_cutton_clicked(self))
+    self.global_subtitlesvideo_video_generate_transparent_video_button = QPushButton(self.tr('Generate transparent video').upper(), parent=self.global_subtitlesvideo_panel_tabwidget_export_panel)
+    self.global_subtitlesvideo_video_generate_transparent_video_button.setObjectName('button_dark')
+    self.global_subtitlesvideo_video_generate_transparent_video_button.clicked.connect(lambda: global_subtitlesvideo_video_generate_transparent_video_button_clicked(self))
+    self.global_subtitlesvideo_video_generate_transparent_video_button.setVisible(False)
 
     def thread_generated_burned_video_ended(response):
         if '|' in response:
@@ -546,7 +547,7 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
     self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
 
 
-def global_subtitlesvideo_video_generate_transparent_video_cutton_clicked(self):
+def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
     extformat = 'mov'#os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
     save_formats = self.tr('Video file') + ' (.' + extformat + ')'

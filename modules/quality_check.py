@@ -6,7 +6,7 @@ def check_subtitle(subtitle=[], settings={}):
     """Function to check individual subtitle"""
     approved = True
     reasons = []
-    if subtitle:
+    if subtitle and subtitle[1]:
         if len(subtitle[2].replace('\n', '')) / subtitle[1] > settings.get('reading_speed', 21):
             approved = False
             reasons.append('Reading speed: {ars} characters per second. It should be {rs} per second.'.format(rs=settings.get('reading_speed', 21), ars=round(len(subtitle[2].replace('\n', '')) / subtitle[1], 2)))
