@@ -1,21 +1,35 @@
 name: subtitld
-version: "20.07.2"
-version-script: echo $VERSION_NUMBER # date +%y.%m.%d.%H%M
 summary: Subtitld
 description: |
  Subtitld is a software to create and edit subtitles. Visit http://subtitld.jonata.org/ for more information.
-icon: dist/subtitld/graphics/subtitld.png
+icon: subtitld/graphics/subtitld.png
 confinement: strict
-grade: stable
-base: core18
+adopt-info: subtitld
+base: core20
+
+plugs:
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes:gtk-3-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes:icon-themes
+  sound-themes:
+    interface: content
+    target: $SNAP/data-dir/sounds
+    default-provider: gtk-common-themes:sounds-themes
+  gsettings: null
 
 apps:
   subtitld:
-    command: desktop-launch snapcraft-preload $SNAP/subtitld/subtitld
+    command: bin/desktop-launch $SNAP/bin/subtitld
     environment:
         LC_ALL: C.UTF-8
-        GSETTINGS_SCHEMA_DIR: $SNAP/usr/share/glib-2.0/schemas
-        DISABLE_WAYLAND: 1
+        PYTHONPATH: $SNAP/usr/lib/python3/dist-packages
+        LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+        QT_QPA_PLATFORMTHEME: gtk3
     plugs:
       - audio-playback
       - gsettings
@@ -32,48 +46,40 @@ apps:
       - removable-media
       - mount-observe
 
-plugs:
-  # gtk-common-themes support
-  gtk-3-themes:
-    interface: content
-    target: $SNAP/data-dir/themes
-    default-provider: gtk-common-themes:gtk-3-themes
-  icon-themes:
-    interface: content
-    target: $SNAP/data-dir/icons
-    default-provider: gtk-common-themes:icon-themes
-  sound-themes:
-    interface: content
-    target: $SNAP/data-dir/sounds
-    default-provider: gtk-common-themes:sounds-themes
-  # gnome-3-34-1804:
-  #   interface: content
-  #   target: $SNAP/gnome-platform
-  #   default-provider: gnome-3-34-1804
-
 parts:
+  prepare:
+    plugin: nil
+    build-packages:
+        - software-properties-common
+    prime: [-*]
+  desktop-qt6:
+      source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+      source-subdir: qt
+      plugin: make
+      after: [prepare]
+      make-parameters: ["FLAVOR=qt5"]
+      build-packages:
+        - build-essential
+        - qtbase5-dev
+        - dpkg-dev
+      stage-packages:
+        - libopengl0
+        - libglx0
+        - libgl1
+        - libegl1
+        - libxkbcommon0
+        - libfontconfig1
+        - qtwayland5
+        - libqt5gui5
+        - qt5-style-plugins
   subtitld:
-    plugin: dump
+    plugin: python
     source: .
-    organize:
-      'dist' : .
-    stage-packages:
-      - ffmpeg
-      - espeak-data
-      - gsettings-desktop-schemas
-      - libgtk-3-common
-      - qtwayland5
-      #- desktop-gnome-platform
-      # - libmpv1
-      # gtk-common-themes support
-      #- qt5-gtk-platformtheme
-    after:
-      - desktop-qt5
-
-  snapcraft-preload:
-          source: https://github.com/sergiusens/snapcraft-preload.git
-          plugin: cmake
-          build-packages:
-            - on amd64:
-              - gcc-multilib
-              - g++-multilib
+    after: [prepare, desktop-qt6]
+    build-packages:
+        - python3-dev
+        - python3-setuptools
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version "$VERSION_NUMBER"
+      snapcraftctl set-grade "stable"

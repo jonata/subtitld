@@ -4,16 +4,14 @@ VERSION = '20.07.0.0'
 if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
     VERSION = os.environ['VERSION_NUMBER']
 
-a = Analysis(['subtitld.py'],
+a = Analysis(['subtitld/__main__.py'],
     pathex=['/Users/admin/Documents/subtitld', 'C:\Python36\Lib\site-packages\scipy\extra-dll'],
     excludes=['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter'],
     binaries=[
         ( 'mpv/x86_64/mpv-1.dll', '.')
     ],
     datas=[
-        ( 'graphics/*.png', 'graphics' ),
-        ( 'graphics/*.svg', 'graphics' ),
-        ( 'graphics/*.ttf', 'graphics' ),
+        ( 'graphics/*', 'graphics' ),
         ( 'ffmpeg-*/bin/ffmpeg.exe', '.'),
         ( 'ffmpeg-*/bin/ffprobe.exe', '.'),
         ( 'ftfy/char_classes.dat', 'ftfy' ),
