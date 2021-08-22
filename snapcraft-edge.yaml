@@ -77,7 +77,7 @@ parts:
         - libmpv1
         - ffmpeg
   subtitld:
-    plugin: nil
+    plugin: dump
     source: .
     after: [prepare, desktop-qt6]
     organize:
