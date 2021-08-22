@@ -30,6 +30,7 @@ AppDir:
       # - libcanberra-gtk3-module
       # - librsvg2-common
       # - zlib1g
+      - libgdk-pixbuf2.0-0
       - python3-pyqt5
       - libmpv1
       - libmpv-dev
