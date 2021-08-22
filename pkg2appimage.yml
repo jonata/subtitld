@@ -11,8 +11,8 @@ ingredients:
   #   -  wget -c https://raw.githubusercontent.com/mu-editor/mu/master/conf/mu.codewith.editor.png
   #   -  wget -c https://raw.githubusercontent.com/mu-editor/mu/master/conf/mu.appdata.xml
 script:
-  - cp subtitld/graphics/subtitld.png ./usr/share/icons/hicolor/512x512/
-  - cp subtitld/graphics/subtitld.png .
+  # - cp subtitld/graphics/subtitld.png ./usr/share/icons/hicolor/512x512/
+  # - cp subtitld/graphics/subtitld.png .
   # - mkdir -p usr/share/metainfo/ ; cp ../mu.appdata.xml usr/share/metainfo/
   - virtualenv --python=python3 usr
   - ./usr/bin/pip3 install subtitld
