@@ -124,7 +124,10 @@ def pip_notes():
 
 # --------------------------------------------------------------------------- #
 
-setup_requires = ['setuptools']
+setup_requires = [
+    'setuptools',
+    'py2app'
+]
 install_requires = [
     'PyQt5',
     'pyopengl',
@@ -152,11 +155,12 @@ install_requires = [
 try:
     # begin setuptools installer
     result = setup(
+        app=['subtitld/__main__.py'],
         name=subtitld.__appname__.lower(),
         version=subtitld.__version__,
         author=subtitld.__author__,
         author_email=subtitld.__email__,
-        description='Theocratic Aid Software',
+        description='Subtitld',
         long_description=get_description(),
         url=subtitld.__website__,
         license='Proprietary',
@@ -177,7 +181,13 @@ try:
             'Operating System :: POSIX',
             'Topic :: Multimedia',
             'Programming Language :: Python :: 3 :: Only'
-        ]
+        ],
+        options={'py2app': {
+                    'argv_emulation': True,
+                    #'iconfile': 'src/Icon.icns',  # optional
+                    #'plist': 'src/Info.plist',    # optional
+                    }
+                },
     )
 except BaseException:
     if subtitld.__ispypi__:
