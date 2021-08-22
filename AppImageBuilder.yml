@@ -24,7 +24,7 @@ AppDir:
     include:
       - ffmpeg
       # - libc6-i386
-      # - dconf-gsettings-backend
+      - dconf-gsettings-backend
       # - glib-networking
       # - gvfs
       # - libcanberra-gtk3-module

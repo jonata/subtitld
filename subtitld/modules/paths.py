@@ -50,8 +50,9 @@ else:
         pass
     if not os.path.isdir(os.path.join(PATH_HOME, '.config')):
         os.mkdir(os.path.join(PATH_HOME, '.config'))
+    if 'APPIMAGE' in os.environ:
+        PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
 
-print(os.environ)
 
 PATH_SUBTITLD_DATA_BACKUP = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'backup')
 
