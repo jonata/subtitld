@@ -8,7 +8,7 @@ block_cipher = None
 
 #                     ( '/usr/local/lib/python3.6/dist-packages/ftfy/char_classes.dat', 'ftfy' ),
 
-a = Analysis(['subtitld.py'],
+a = Analysis(['subtitld/__main__.py'],
              pathex=['/home/jonata/Projetos/subtitld'],
              binaries=[],
              datas=[
