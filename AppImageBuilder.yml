@@ -12,7 +12,7 @@ AppDir:
     icon: subtitld
     version: !ENV ${VERSION_NUMBER}
     exec: usr/bin/python3
-    exec_args: "subtitld $@"
+    exec_args: "usr/local/bin/subtitld $@"
 
   runtime:
     env:
