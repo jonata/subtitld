@@ -40,8 +40,11 @@ appimage-amd64:
   before_script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
-  - apt-get install -y sshpass graphicsmagick-imagemagick-compat python3-virtualenv
+  - apt-get install -y sshpass python3-pip
+  - python3 -m pip install -U pip
+  - python3 -m pip install pyinstaller
   script:
+  - pyinstaller subtitld_linux.spec
   - appimage-builder --recipe AppImageBuilder.yml
   - export SSHPASS=$USER_PASS
   - sshpass -e scp -o stricthostkeychecking=no *.AppImage* jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
