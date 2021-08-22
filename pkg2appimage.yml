@@ -14,7 +14,7 @@ script:
   # - cp subtitld/graphics/subtitld.png ./usr/share/icons/hicolor/512x512/
   # - cp subtitld/graphics/subtitld.png .
   # - mkdir -p usr/share/metainfo/ ; cp ../mu.appdata.xml usr/share/metainfo/
-  - virtualenv --python=python3 usr
+  # - virtualenv --python=python3 usr
   - ./usr/bin/pip3 install subtitld
   - cat > usr/share/applications/org.jonata.Subtitld.desktop <<\EOF
   - [Desktop Entry]
