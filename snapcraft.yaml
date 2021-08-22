@@ -73,6 +73,7 @@ parts:
         - libqt5gui5
         - qt5-style-plugins
         - python3-pyqt5
+        - python3-pyqt5.qtopengl
   subtitld:
     plugin: python
     source: .
