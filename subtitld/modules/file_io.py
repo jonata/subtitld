@@ -21,8 +21,7 @@ import chardet
 import pysubs2
 from cleantext import clean
 import captionstransformer
-from subtitld import scc2srt
-import timecode
+from subtitld import scc2srt, timecode
 
 from subtitld.modules import waveform
 from subtitld.modules import usf
