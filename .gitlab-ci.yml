@@ -54,9 +54,10 @@ appimage-amd64:
     - python3 -m pip install pyinstaller
   script:
     - pyinstaller subtitld_linux.spec
-    - mv dist/subtitld AppDir
+    - mv dist/subtitld AppDir/subtitld
+    - ls AppDir/subtitld
     - mkdir -p /usr/share/icons/hicolor/512x512/
-    - cp AppDir/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
+    - cp AppDir/subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
     - appimage-builder --skip-test
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no *.AppImage* jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
