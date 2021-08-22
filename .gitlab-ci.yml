@@ -41,7 +41,7 @@ appimage-amd64:
     - apt-get update -qy
     # - apt-get install -y software-properties-common sshpass
     - apt-get install -y sshpass python3-pip
-    - pyhton3 -m pip install --upgrade pip
+    - python3 -m pip install --upgrade pip
     # - add-apt-repository ppa:mc3man/bionic-media -y
     # - apt-get update -qy
     # - apt-get install -y git wget python3-pip libglu1-mesa libmpv1 ffmpeg libmpv-dev libespeak-dev
