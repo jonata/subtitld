@@ -40,7 +40,7 @@ appimage-amd64:
   before_script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   - apt-get update -qy
-  - apt-get install -y sshpass graphicsmagick-imagemagick-compat
+  - apt-get install -y sshpass graphicsmagick-imagemagick-compat python3-virtualenv
   script:
   - wget https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage
   - chmod +x pkg2appimage
