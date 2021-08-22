@@ -3,7 +3,7 @@ script:
   - rm -rf AppDir | true
   - mkdir AppDir
   - cp -r dist/subtitld AppDir/subtitld
-  - cp dist/subtitld/graphics/subtitld.png AppDir/.
+  - cp dist/subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/256x256/apps/.
 
 AppDir:
   path: ./AppDir
