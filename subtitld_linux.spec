@@ -12,7 +12,7 @@ a = Analysis(['subtitld/__main__.py'],
              pathex=['/home/jonata/Projetos/subtitld'],
              binaries=[],
              datas=[
-                     ( 'subtitld/graphics/*', 'subtitld/graphics/.' ),
+                     ( 'subtitld/graphics', 'subtitld/.' ),
                      ( 'subtitld/ftfy/char_classes.dat', 'ftfy' ),
                  ],
              hiddenimports=['sip',
