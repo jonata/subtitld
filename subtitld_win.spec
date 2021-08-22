@@ -36,7 +36,7 @@ exe = EXE(pyz,
     upx=True,
     console=False,
     debug=False,
-    icon='graphics/subtitld.ico' )
+    icon='subtitld/graphics/subtitld.ico' )
 
 exe_cmd = EXE(pyz,
     a.scripts,
@@ -46,7 +46,7 @@ exe_cmd = EXE(pyz,
     upx=True,
     console=True,
     debug=True,
-    icon='graphics/subtitld.ico' )
+    icon='subtitld/graphics/subtitld.ico' )
 
 coll = COLLECT( exe, exe_cmd,
                 a.binaries,
