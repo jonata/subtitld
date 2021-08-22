@@ -1,9 +1,7 @@
 version: 1
 script:
-  - rm -rf ./AppDir
-  - python3 -m pip install --upgrade pip
-  - python3 -m pip install --ignore-installed --prefix=/usr --root=AppDir -r requirements.txt
-  - python3 setup.py install --prefix=/usr --root=AppDir --force
+  - rm -rf AppDir | true
+  - cp dist/* AppDir/.
 
 AppDir:
   path: ./AppDir
@@ -12,14 +10,14 @@ AppDir:
     name: Subtitld
     icon: subtitld
     version: !ENV ${VERSION_NUMBER}
-    exec: usr/bin/python3
-    exec_args: "$APPDIR/usr/bin/subtitld $@"
+    exec: subtitld/subtitld
+    exec_args: "$@"
 
   runtime:
     env:
       PATH: '${APPDIR}:${PATH}'
-      PYTHONHOME: '${APPDIR}/usr'
-      PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages'
+      # PYTHONHOME: '${APPDIR}/usr'
+      # PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages'
 
   apt:
     arch: amd64
@@ -27,7 +25,7 @@ AppDir:
     sources:
       - sourceline: 'deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse'
         key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
-    include:
+    # include:
       # - dconf-gsettings-backend
       # - glib-networking
       # - gvfs
@@ -35,14 +33,14 @@ AppDir:
       # - librsvg2-common
       # - zlib1g
       # - libgdk-pixbuf2.0-0
-      - libmpv1
-      - libmpv-dev
-      - python3-pkg-resources
-      - python3-opengl
-      - python3-pyqt5
-      - python3-pyqt5.qtopengl
-      - python3-pyqt5.qtx11extras
-      - ffmpeg
+      # - libmpv1
+      # - libmpv-dev
+      # - python3-pkg-resources
+      # - python3-opengl
+      # - python3-pyqt5
+      # - python3-pyqt5.qtopengl
+      # - python3-pyqt5.qtx11extras
+      # - ffmpeg
 
     exclude: []
 
