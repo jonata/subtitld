@@ -2,15 +2,15 @@
 
 !define MUI_PRODUCT "Subtitld"
 !define MUI_BRANDINGTEXT "Subtitld"
-!define MUI_ICON  "graphics\subtitld_installer.ico"
-!define MUI_UNICON  "graphics\subtitld_installer.ico"
+!define MUI_ICON  "subtitld\graphics\subtitld_installer.ico"
+!define MUI_UNICON  "subtitld\graphics\subtitld_installer.ico"
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "graphics\installer_bar.bmp"
-!define MUI_HEADERIMAGE_UNBITMAP "graphics\installer_bar.bmp"
+!define MUI_HEADERIMAGE_BITMAP "subtitld\graphics\installer_bar.bmp"
+!define MUI_HEADERIMAGE_UNBITMAP "subtitld\graphics\installer_bar.bmp"
 !define MUI_HEADERIMAGE_RIGHT
 !define MUI_BGCOLOR B8CEE0
-!define MUI_WELCOMEFINISHPAGE_BITMAP "graphics\installer_welcome.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "graphics\installer_uninstall.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "subtitld\graphics\installer_welcome.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "subtitld\graphics\installer_uninstall.bmp"
 !define MUI_COMPONENTSPAGE_NODESC
 !define MUI_VERSION $%VERSION_NUMBER%
 
