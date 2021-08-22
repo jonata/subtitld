@@ -144,6 +144,7 @@ install_requires = [
     'scenedetect',
     'opencv-python',
     'autosub3',
+    'google-trans-new',
     'SpeechRecognition',
     'beautifulsoup4<4.5.0,>=4.2.1'
 ]
