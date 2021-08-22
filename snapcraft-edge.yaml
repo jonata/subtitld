@@ -88,7 +88,8 @@ parts:
       - python3-setuptools
     override-build: |
       python3 -m pip install -U pip
-      python3 setup.py install
+      python3 -m pip install pyinstaller
+      pyinstaller subtitld_linux.spec
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version "$VERSION_NUMBER"
