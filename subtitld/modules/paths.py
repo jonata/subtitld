@@ -9,10 +9,10 @@ import subtitld
 PATH_SUBTITLD = os.path.dirname(subtitld.__file__)
 PATH_LOCALE = os.path.join(PATH_SUBTITLD, 'locale')
 PATH_SUBTITLD_GRAPHICS = os.path.join(PATH_SUBTITLD, 'graphics')
-PATH_SUBTITLD_USER_CONFIG = os.path.join(PATH_HOME, '.config', 'subtitld')
-
 PATH_HOME = os.path.expanduser("~")
+PATH_SUBTITLD_USER_CONFIG = os.path.join(PATH_HOME, '.config', 'subtitld')
 REAL_PATH_HOME = PATH_HOME
+
 
 FFMPEG_EXECUTABLE = 'ffmpeg'
 FFPROBE_EXECUTABLE = 'ffprobe'
