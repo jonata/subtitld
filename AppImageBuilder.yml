@@ -1,5 +1,6 @@
 version: 1
 script:
+  - python3 -m pip install --upgrade pip
   - python3 -m pip install --ignore-installed --prefix=/usr --root=AppDir -r requirements.txt
   - python3 setup.py install --prefix=/usr --root=AppDir --force
 
