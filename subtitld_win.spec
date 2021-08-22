@@ -11,10 +11,10 @@ a = Analysis(['subtitld/__main__.py'],
         ( 'mpv/x86_64/mpv-1.dll', '.')
     ],
     datas=[
-        ( 'graphics/*', 'graphics' ),
+        ( 'subtitld/graphics/*', 'graphics' ),
         ( 'ffmpeg-*/bin/ffmpeg.exe', '.'),
         ( 'ffmpeg-*/bin/ffprobe.exe', '.'),
-        ( 'ftfy/char_classes.dat', 'ftfy' ),
+        ( 'subtitld/ftfy/char_classes.dat', 'ftfy' ),
     ],
     hiddenimports=['_cffi_backend',
                    'cleantext',
