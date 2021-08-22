@@ -28,7 +28,6 @@ script:
   - Categories=Application;Multimedia;
   - Keywords=Subtitles;
   - StartupWMClass=subtitld
-  - MimeType=text/x-python3;text/x-python3;
   - EOF
   - cp usr/share/applications/org.jonata.Subtitld.desktop .
   - usr/bin/pip3 freeze | grep "subtitld" | cut -d "=" -f 3 >> ../VERSION
