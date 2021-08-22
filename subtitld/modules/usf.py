@@ -2,7 +2,7 @@
 
 
 from bs4 import BeautifulSoup
-import timecode
+from subtitld import timecode
 
 # <?xml version="1.0" encoding="UTF-16"?>
 USF_BASE_MARKUP = '''
