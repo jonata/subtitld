@@ -6,7 +6,7 @@ ingredients:
     - deb http://us.archive.ubuntu.com/ubuntu/ focal-updates main universe
     - deb http://us.archive.ubuntu.com/ubuntu/ focal-security main universe
   packages:
-    - python3.8-venv
+    - python3-virtualenv
   # script:
   #   -  wget -c https://raw.githubusercontent.com/mu-editor/mu/master/conf/mu.codewith.editor.png
   #   -  wget -c https://raw.githubusercontent.com/mu-editor/mu/master/conf/mu.appdata.xml

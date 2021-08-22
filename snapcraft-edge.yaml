@@ -81,7 +81,7 @@ parts:
     source: .
     after: [prepare, desktop-qt6]
     organize:
-      'dist/Subtitld' : subtitld
+      'dist/*' : .
     build-packages:
       - python3-pip
       - python3-dev
