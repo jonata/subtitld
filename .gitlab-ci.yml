@@ -1,4 +1,4 @@
-staging:amd64:
+snap:amd64:
   image:
     name: cibuilds/snapcraft:core20
   type: deploy
@@ -19,14 +19,10 @@ staging:amd64:
 
 appimage-amd64:
   image:
-    name: ubuntu:20.04
+    name: appimagecrafters:appimage-builder
   type: deploy
   before_script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-  - apt-get update -qy
-  - apt-get install -y python3-pip libgdk-pixbuf2.0-0
-  - python3 -m pip install --upgrade pip
-  - python3 -m pip install appimage-builder
   script:
   - appimage-builder --recipe AppImageBuilder.yml --skip-tests
   - export SSHPASS=$USER_PASS
