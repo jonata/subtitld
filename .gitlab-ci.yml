@@ -42,7 +42,7 @@ appimage-amd64:
   - apt-get update -qy
   - apt-get install -y sshpass graphicsmagick-imagemagick-compat python3-virtualenv
   script:
-  - appimage-builder --recipe AppImageGuilder.yml
+  - appimage-builder --recipe AppImageBuilder.yml
   - export SSHPASS=$USER_PASS
   - sshpass -e scp -o stricthostkeychecking=no *.AppImage* jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
   artifacts:
