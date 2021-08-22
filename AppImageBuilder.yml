@@ -11,8 +11,8 @@ AppDir:
     name: Subtitld
     icon: subtitld
     version: !ENV ${VERSION_NUMBER}
-    exec: usr/bin/subtitld
-    exec_args: "$@"
+    exec: python3
+    exec_args: "subtitld $@"
 
   runtime:
     env:
