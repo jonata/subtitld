@@ -1,0 +1,55 @@
+{
+    "app-id": "org.jonata.Subtitld",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "5.12",
+    "sdk": "org.kde.Sdk",
+    "command": "subtitld",
+    "modules": [
+        {
+            "name": "pyqt5",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 configure.py --assume-shared --confirm-license --no-designer-plugin --no-qml-plugin --sysroot=/app -w --sip=/app/bin/sip --sip-incdir=/app/include --no-tools -verbose QMAKE_CFLAGS_RELEASE='-I/usr/include/python3.7m/' QMAKE_CXXFLAGS_RELEASE='-I/usr/include/python3.7m/'",
+        				"make -j `nproc`",
+        				"make install DESTDIR=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.1/PyQt5_gpl-5.12.1.tar.gz",
+                    "sha256": "3718ce847d824090fd5f95ff3f13847ee75c2507368d4cbaeb48338f506e59bf"
+                }
+            ],
+            "modules": [
+                {
+                    "name": "sip",
+                    "buildsystem": "simple",
+                    "build-commands": [
+                        "python3 configure.py -b /app/bin -d /app/lib/python3.7/dist-packages -e /app/include/python3.7m -v /app/share/sip --stubsdir=/app/lib/python3.7/dist-packages",
+                        "make install"
+                    ],
+                    "sources": [
+                        {
+                            "type": "archive",
+                            "url": "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.16/sip-4.19.16.tar.gz",
+                            "sha256": "184c790d58e9527fc6bdac2bbf8638f3d1b41dea922cad8eb83172b4ba70c620"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Subtitld",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+              {
+                "type": "dir",
+                "path": "."
+              }
+            ]
+        }
+    ]
+}

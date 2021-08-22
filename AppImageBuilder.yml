@@ -18,6 +18,8 @@ AppDir:
   runtime:
     env:
       PATH: '${APPDIR}:${PATH}'
+      PYTHONHOME: '${APPDIR}/usr'
+      PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages'
 
   apt:
     arch: amd64

@@ -66,3 +66,26 @@ windows-nsis:
     expire_in: 1 week
   only:
   - master
+
+
+flatpak-amd64:
+  image:
+    name: flatpak/flatpak-builder:gnome-3-28
+  type: deploy
+  before_script:
+  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+  # - apt-get update -qy
+  # - apt-get install -y sshpass
+  script:
+  - flatpak-builder build-dir org.jonata.Subttild.json --force-clean
+  # - export SSHPASS=$USER_PASS
+  # - sshpass -e scp -o stricthostkeychecking=no *.AppImage* jonata@jonata.org:/home/jonata/subtitld.jonata.org/flatpak/
+  artifacts:
+    paths:
+      - '*.flatpak'
+    expire_in: 1 week
+  only:
+  - master
+
+
+
