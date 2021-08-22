@@ -95,6 +95,7 @@ flatpak-amd64:
   # - apt-get update -qy
   # - apt-get install -y sshpass
   script:
+  - flatpak install flathub org.kde.Sdk//5.12
   - flatpak-builder build-dir org.jonata.Subtitld.json --force-clean
   # - export SSHPASS=$USER_PASS
   # - sshpass -e scp -o stricthostkeychecking=no *.AppImage* jonata@jonata.org:/home/jonata/subtitld.jonata.org/flatpak/
