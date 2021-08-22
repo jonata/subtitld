@@ -15,6 +15,24 @@ snap:amd64:
   only:
   - master
 
+snap-edge:amd64:
+  image:
+    name: cibuilds/snapcraft:core20
+  type: deploy
+  script:
+  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+  - mv snapcraft-beta.yaml snapcraft.yaml
+  - snapcraft
+  - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
+  - snapcraft login --with snapcraft.login
+  - snapcraft upload *.snap --release edge
+  artifacts:
+    paths:
+    - subtitld*.snap
+    expire_in: 1 week
+  only:
+  - master
+
 appimage-amd64:
   image:
     name: appimagecrafters/appimage-builder:latest
@@ -77,7 +95,7 @@ flatpak-amd64:
   # - apt-get update -qy
   # - apt-get install -y sshpass
   script:
-  - flatpak-builder build-dir org.jonata.Subttild.json --force-clean
+  - flatpak-builder build-dir org.jonata.Subtitld.json --force-clean
   # - export SSHPASS=$USER_PASS
   # - sshpass -e scp -o stricthostkeychecking=no *.AppImage* jonata@jonata.org:/home/jonata/subtitld.jonata.org/flatpak/
   artifacts:
