@@ -8,7 +8,7 @@ import json
 import multiprocessing
 import autosub
 import speech_recognition as sr
-import timecode
+from subtitld import timecode
 #from googletrans import Translator
 from google_trans_new import google_translator
 # from ffsubsync import ffsubsync

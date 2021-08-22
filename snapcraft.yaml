@@ -74,6 +74,7 @@ parts:
         - qt5-style-plugins
         - python3-pyqt5
         - python3-pyqt5.qtopengl
+        - libmpv1
   subtitld:
     plugin: python
     source: .
