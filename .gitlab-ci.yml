@@ -61,10 +61,10 @@ appimage-amd64:
     - cp AppDir/subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
     - appimage-builder --skip-test
     - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no *.AppImage* jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
+    - sshpass -e scp -o stricthostkeychecking=no *.AppImage jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
   artifacts:
     paths:
-      - '*.AppImage*'
+      - '*.AppImage'
     expire_in: 1 week
   only:
   - master
