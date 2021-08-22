@@ -8,6 +8,7 @@ import subtitld
 
 PATH_SUBTITLD = os.path.dirname(subtitld.__file__)
 PATH_LOCALE = os.path.join(PATH_SUBTITLD, 'locale')
+PATH_SUBTITLD_GRAPHICS = os.path.join(PATH_SUBTITLD, 'graphics')
 
 PATH_HOME = os.path.expanduser("~")
 REAL_PATH_HOME = PATH_HOME
@@ -37,6 +38,7 @@ elif sys.platform == 'win32' or os.name == 'nt':
     PATH_SUBTITLD_USER_CONFIG = os.path.join(os.getenv('LOCALAPPDATA'), 'subtitld')
     FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
     FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')
+    PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
     STARTUPINFO = subprocess.STARTUPINFO()
     STARTUPINFO.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     STARTUPINFO.wShowWindow = subprocess.SW_HIDE
@@ -63,8 +65,6 @@ if not os.path.isdir(PATH_SUBTITLD_DATA_UPDATE):
     os.mkdir(PATH_SUBTITLD_DATA_UPDATE)
 
 PATH_SUBTITLD_USER_CONFIG_FILE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'subtitld.config')
-
-PATH_SUBTITLD_GRAPHICS = os.path.join(PATH_SUBTITLD, 'graphics')
 
 
 def get_graphics_path(filename):
