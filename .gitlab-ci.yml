@@ -21,6 +21,8 @@ appimage-amd64:
   type: deploy
   before_script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+  - apt-get update -qy
+  - apt-get install -y sshpass
   script:
   - appimage-builder --recipe AppImageBuilder.yml --skip-tests
   - export SSHPASS=$USER_PASS
