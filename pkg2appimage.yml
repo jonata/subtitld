@@ -25,9 +25,6 @@ script:
   - Icon=org.jonata.Subtitld
   - Exec=python3 bin/subtitld %F
   - Terminal=false
-  - Categories=Application;Multimedia;
-  - Keywords=Subtitles;
-  - StartupWMClass=subtitld
   - EOF
   - cp usr/share/applications/org.jonata.Subtitld.desktop .
   - usr/bin/pip3 freeze | grep "subtitld" | cut -d "=" -f 3 >> ../VERSION
