@@ -3,14 +3,13 @@ script:
   - rm -rf AppDir | true
   - mkdir AppDir
   - cp -r dist/subtitld AppDir/subtitld
-  - cp dist/subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
 
 AppDir:
   path: ./AppDir
   app_info:
     id: org.jonata.Subtitld
     name: Subtitld
-    icon: subtitld
+    # icon: subtitld
     version: !ENV ${VERSION_NUMBER}
     exec: subtitld/subtitld
     exec_args: "$@"
