@@ -13,7 +13,7 @@ AppDir:
     icon: subtitld
     version: !ENV ${VERSION_NUMBER}
     exec: usr/bin/python3
-    exec_args: "usr/bin/subtitld $@"
+    exec_args: "$APPDIR/usr/bin/subtitld $@"
 
   runtime:
     env:
@@ -23,7 +23,7 @@ AppDir:
     arch: amd64
     allow_unauthenticated: true
     sources:
-      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse'
+      - sourceline: 'deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse'
         key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
     include:
       # - dconf-gsettings-backend
@@ -33,13 +33,14 @@ AppDir:
       # - librsvg2-common
       # - zlib1g
       # - libgdk-pixbuf2.0-0
-      - python3-pyqt5
       - libmpv1
       - libmpv-dev
+      - python3-pkg-resources
+      - python3-opengl
+      - python3-pyqt5
       - python3-pyqt5.qtopengl
       - python3-pyqt5.qtx11extras
       - ffmpeg
-      - python3-opengl
 
     exclude: []
 
