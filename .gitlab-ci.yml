@@ -17,7 +17,7 @@ snap:amd64:
 
 appimage-amd64:
   image:
-    name: appimagecrafters:appimage-builder
+    name: appimagecrafters/docker-linuxdeploy-qt:latest
   type: deploy
   before_script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
