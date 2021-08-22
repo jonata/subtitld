@@ -42,7 +42,9 @@ appimage-amd64:
   - apt-get update -qy
   - apt-get install -y sshpass
   script:
-  - pkg2appimage pkg2appimage.yml
+  - wget https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage
+  - chmod +x pkg2appimage
+  - ./pkg2appimage pkg2appimage.yml
   - export SSHPASS=$USER_PASS
   - sshpass -e scp -o stricthostkeychecking=no *.AppImage* jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
   artifacts:
