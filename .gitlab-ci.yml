@@ -52,6 +52,7 @@ appimage-amd64:
     # - python3 -m pip uninstall -y enum34
     # - python3 -m pip install pyinstaller==3.6
     - python3 -m pip install pyinstaller
+    - mkdir AppDir
   script:
     - pyinstaller subtitld_linux.spec
     - mv dist/subtitld AppDir/subtitld
