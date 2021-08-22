@@ -1,7 +1,7 @@
 version: 1
 script:
   - rm -rf AppDir | true
-  - cp dist/* AppDir/.
+  - cp dist/subtitld AppDir/subtitld
 
 AppDir:
   path: ./AppDir
