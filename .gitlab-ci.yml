@@ -1,6 +1,6 @@
 staging:amd64:
   image:
-    name: cibuilds/snapcraft:core20
+    name: ubuntu:21.04 #cibuilds/snapcraft:core20
   type: deploy
   script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
