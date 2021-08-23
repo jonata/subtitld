@@ -2,7 +2,7 @@ name: subtitld
 summary: Subtitld
 description: |
  Subtitld is a software to create and edit subtitles. Visit http://subtitld.jonata.org/ for more information.
-icon: subtitld/graphics/subtitld.png
+icon: dist/subtitld/graphics/subtitld.png
 confinement: strict
 adopt-info: subtitld
 base: core20
