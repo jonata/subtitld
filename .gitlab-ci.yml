@@ -42,7 +42,7 @@ appimage-amd64:
     - export DEBIAN_FRONTEND=noninteractive
     - apt update -qy
     # - apt-get install -y software-properties-common sshpass
-    - apt install -y sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse
+    - apt install -y wget sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse
     - python3 -m pip install --upgrade pip
     - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
     - chmod +x /usr/local/bin/appimagetool
