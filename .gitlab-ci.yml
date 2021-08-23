@@ -35,12 +35,12 @@
 
 appimage-amd64:
   image:
-    name: appimagecrafters/appimage-builder:latest
+    name: appimagecrafters/appimage-builder:0.9.1
   type: deploy
   before_script:
     - apt-get update -qy
     # - apt-get install -y software-properties-common sshpass
-    - apt-get install -y sshpass python3-pip fontconfig-config
+    - apt-get install -y sshpass python3-pip
     - python3 -m pip install --upgrade pip
     # - add-apt-repository ppa:mc3man/bionic-media -y
     # - apt-get update -qy
