@@ -23,7 +23,7 @@ snap-edge:amd64:
     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
     - export DEBIAN_FRONTEND=noninteractive
     - sudo apt update -qy
-    - sudo apt install -y sshpass python3-pip libmpv-dev ffmpeg libxcb-icccm4
+    - sudo apt install -y sshpass python3-pip libmpv-dev ffmpeg libxcb-icccm4 libxcb-image0
     - python3 -m pip install --upgrade pip
     - python3 -m pip install -r requirements.txt
     - python3 -m pip install pyinstaller
@@ -61,7 +61,7 @@ snap-edge:amd64:
 #     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
 #     - export DEBIAN_FRONTEND=noninteractive
 #     - apt update -qy
-#     - apt install -y wget sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse libxcb-icccm4
+#     - apt install -y wget sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse libxcb-icccm4 libxcb-image0
 #     - python3 -m pip install --upgrade pip
 #     - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
 #     - chmod +x /usr/local/bin/appimagetool
