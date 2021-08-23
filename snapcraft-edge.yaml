@@ -24,7 +24,7 @@ plugs:
 
 apps:
   subtitld:
-    command: $SNAP/subtitld/subtitld
+    command: $SNAP/dist/subtitld/subtitld
     environment:
         LC_ALL: C.UTF-8
         # PYTHONPATH: $SNAP/usr/lib/python3/dist-packages
