@@ -50,8 +50,8 @@ parts:
   subtitld:
     plugin: dump
     source: .
-    organize:
-      'dist/subtitld' : 'subtitld'
+    # organize:
+    #   'dist/subtitld' : 'subtitld'
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version "$VERSION_NUMBER"
