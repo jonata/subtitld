@@ -100,21 +100,20 @@ appimage-amd64:
 #   - master
 
 
-# flatpak-amd64:
-#   image:
-#     name: flatpak/flatpak-builder:gnome-3-28
-#   type: deploy
-#   before_script:
-#   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-#   script:
-#   - flatpak install flathub org.kde.Platform//5.12
-#   - flatpak-builder build-dir org.jonata.Subtitld.json --force-clean
-#   artifacts:
-#     paths:
-#       - '*.flatpak'
-#     expire_in: 1 week
-#   only:
-#   - master
+flatpak-amd64:
+  image:
+    name: flatpak/flatpak-builder:base
+  type: deploy
+  before_script:
+  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+  script:
+  - flatpak-builder -v --force-clean --ccache --repo=repo --subject="Build of org.jonata.Subtitld `date`" ./build org.jonata.Subtitld.json
+  artifacts:
+    paths:
+      - '*.flatpak'
+    expire_in: 1 week
+  only:
+  - master
 
 
 
