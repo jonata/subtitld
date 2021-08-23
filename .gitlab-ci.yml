@@ -40,7 +40,7 @@ appimage-amd64:
   before_script:
     - apt-get update -qy
     # - apt-get install -y software-properties-common sshpass
-    - apt-get install -y sshpass python3-pip
+    - apt-get install -y sshpass python3-pip fontconfig-config
     - python3 -m pip install --upgrade pip
     # - add-apt-repository ppa:mc3man/bionic-media -y
     # - apt-get update -qy
