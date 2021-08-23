@@ -40,6 +40,8 @@ snap-edge:amd64:
     - rm subtitld_win.nsi
     - rm subtitld_win.spec
     - mv dist/subtitld subtitld
+    - ls
+    - ls subtitld/
     - snapcraft
     - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
     - snapcraft login --with snapcraft.login
