@@ -35,7 +35,7 @@ def ffmpeg_load_audio(filepath, samplerate=48000, mono=True, normalize=True, in_
         '-ar', str(samplerate),
         '-ac', str(channels),
         '-']
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, startupinfo=STARTUPINFO)
     # bytes_per_sample = numpy.dtype(in_type).itemsize
     # frame_size = bytes_per_sample * channels
     # chunk_size = frame_size * sr
@@ -44,7 +44,7 @@ def ffmpeg_load_audio(filepath, samplerate=48000, mono=True, normalize=True, in_
         raw = stdout.read()
         audio = numpy.fromstring(raw, dtype=in_type).astype(out_type)
 
-    # p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=4096, startupinfo=STARTUPINFO) # creationflags=subprocess.CREATE_NO_WINDOW,
+    # p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=4096, startupinfo=STARTUPINFO) # creationflags=subprocess.CREATE_NO_WINDOW,
     # bytes_per_sample = numpy.dtype(in_type).itemsize
     # frame_size = bytes_per_sample * channels
     # chunk_size = frame_size * sr # read in 1-second chunks
@@ -80,7 +80,7 @@ def ffmpeg_extract_subtitle(filepath, index):
         '-map',
         '0:' + str(index),
         os.path.join(path_tmp, 'subtitle.vtt')]
-    subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=STARTUPINFO).wait()
+    subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, startupinfo=STARTUPINFO).wait()
 
     return os.path.join(path_tmp, 'subtitle.vtt')
 
@@ -99,9 +99,7 @@ def ffmpeg_load_metadata(filepath):
     proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, startupinfo=STARTUPINFO)
     json_file = False
     with proc.stdout as stdout:
-        test = stdout.read()
-        print(test)
-        json_file = json.loads(test)
+        json_file = json.loads(stdout.read())
 
     return json_file
 
