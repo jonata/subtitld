@@ -13,6 +13,7 @@ a = Analysis(['subtitld/__main__.py'],
              binaries=[
                  ('/usr/lib/x86_64-linux-gnu/libmpv.so', '.'),
                  ('/usr/lib/x86_64-linux-gnu/libxcb.so.1', '.'),
+                 ('/usr/lib/x86_64-linux-gnu/libxcb-icccm.so.4', '.'),
                  ('/usr/bin/ffmpeg', '.'),
                  ('/usr/bin/ffprobe', '.'),
              ],
