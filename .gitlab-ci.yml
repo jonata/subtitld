@@ -54,7 +54,7 @@ appimage-amd64:
     - python3 -m pip install -r requirements.txt
     # - python3 -m pip uninstall -y enum34
     # - python3 -m pip install pyinstaller==3.6
-    - python3 -m pip install pyinstaller
+    - python3 -m pip install pyinstaller appimage-builder
     - mkdir AppDir
     - mkdir -p /usr/share/icons/hicolor/512x512/
     - cp subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
