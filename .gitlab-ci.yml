@@ -35,7 +35,7 @@
 
 appimage-amd64:
   image:
-    name: appimagecrafters/appimage-builder:0.9.1
+    name: appimagecrafters/appimage-builder:latest
   type: deploy
   before_script:
     - apt-get update -qy
@@ -56,7 +56,7 @@ appimage-amd64:
   script:
     - pyinstaller subtitld_linux.spec
     - mv dist/subtitld AppDir/subtitld
-    - apt-get -y remove libfontconfig1
+    - rm AppDir/subtitld/libfontconfig.so.1
     - mkdir -p /usr/share/icons/hicolor/512x512/
     - cp AppDir/subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
     - appimage-builder --skip-test
