@@ -15,61 +15,61 @@
 #   only:
 #   - master
 
-# snap-edge:amd64:
-#   image:
-#     name: cibuilds/snapcraft:core20
-#   type: deploy
-#   script:
-#   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-#   - mv snapcraft-edge.yaml snapcraft.yaml
-#   - snapcraft
-#   - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
-#   - snapcraft login --with snapcraft.login
-#   - snapcraft upload *.snap --release edge
-#   artifacts:
-#     paths:
-#     - subtitld*.snap
-#     expire_in: 1 week
-#   only:
-#   - master
-
-appimage-amd64:
+snap-edge:amd64:
   image:
-    name: ubuntu:focal
+    name: cibuilds/snapcraft:core20
   type: deploy
   before_script:
     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
     - export DEBIAN_FRONTEND=noninteractive
     - apt update -qy
-    # - apt-get install -y software-properties-common sshpass
-    - apt install -y wget sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse
+    - apt install -y sshpass python3-pip libmpv-dev ffmpeg
     - python3 -m pip install --upgrade pip
-    - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
-    - chmod +x /usr/local/bin/appimagetool
-    # - add-apt-repository ppa:mc3man/bionic-media -y
-    # - apt-get update -qy
-    # - apt-get install -y git wget python3-pip libglu1-mesa libmpv1 ffmpeg libmpv-dev libespeak-dev
-    # - pip3 install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
-    # - python3 -m pip install --upgrade pip
     - python3 -m pip install -r requirements.txt
-    # - python3 -m pip uninstall -y enum34
-    # - python3 -m pip install pyinstaller==3.6
-    - python3 -m pip install pyinstaller appimage-builder
-    - mkdir AppDir
-    - mkdir -p /usr/share/icons/hicolor/512x512/
-    - cp subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
+    - python3 -m pip install pyinstaller
   script:
     - pyinstaller subtitld_linux.spec
-    - mv dist/subtitld AppDir/subtitld
-    - appimage-builder --skip-test
-    - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no *.AppImage jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
+    - mv snapcraft-edge.yaml snapcraft.yaml
+    - snapcraft
+    - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
+    - snapcraft login --with snapcraft.login
+    - snapcraft upload *.snap --release edge
   artifacts:
     paths:
-      - '*.AppImage'
+    - subtitld*.snap
     expire_in: 1 week
   only:
   - master
+
+# appimage-amd64:
+#   image:
+#     name: ubuntu:focal
+#   type: deploy
+#   before_script:
+#     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+#     - export DEBIAN_FRONTEND=noninteractive
+#     - apt update -qy
+#     - apt install -y wget sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse
+#     - python3 -m pip install --upgrade pip
+#     - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+#     - chmod +x /usr/local/bin/appimagetool
+#     - python3 -m pip install -r requirements.txt
+#     - python3 -m pip install pyinstaller appimage-builder
+#     - mkdir AppDir
+#     - mkdir -p /usr/share/icons/hicolor/512x512/
+#     - cp subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
+#   script:
+#     - pyinstaller subtitld_linux.spec
+#     - mv dist/subtitld AppDir/subtitld
+#     - appimage-builder --skip-test
+#     - export SSHPASS=$USER_PASS
+#     - sshpass -e scp -o stricthostkeychecking=no *.AppImage jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
+#   artifacts:
+#     paths:
+#       - '*.AppImage'
+#     expire_in: 1 week
+#   only:
+#   - master
 
 
 # windows-nsis:
@@ -100,22 +100,22 @@ appimage-amd64:
 #   - master
 
 
-flatpak-amd64:
-  image:
-    name: flatpak/flatpak-builder:base
-  type: deploy
-  before_script:
-  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-  script:
-  - flatpak install flathub org.kde.Sdk//5.12
-  - flatpak install flathub org.kde.Platform//5.12
-  - flatpak-builder -v --force-clean --ccache --repo=repo --subject="Build of org.jonata.Subtitld `date`" ./build org.jonata.Subtitld.json
-  artifacts:
-    paths:
-      - '*.flatpak'
-    expire_in: 1 week
-  only:
-  - master
+# flatpak-amd64:
+#   image:
+#     name: flatpak/flatpak-builder:base
+#   type: deploy
+#   before_script:
+#   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+#   script:
+#   - flatpak install flathub org.kde.Sdk//5.12
+#   - flatpak install flathub org.kde.Platform//5.12
+#   - flatpak-builder -v --force-clean --ccache --repo=repo --subject="Build of org.jonata.Subtitld `date`" ./build org.jonata.Subtitld.json
+#   artifacts:
+#     paths:
+#       - '*.flatpak'
+#     expire_in: 1 week
+#   only:
+#   - master
 
 
 

@@ -24,11 +24,11 @@ plugs:
 
 apps:
   subtitld:
-    command: bin/desktop-launch $SNAP/subtitld/subtitld
+    command: $SNAP/subtitld/subtitld
     environment:
         LC_ALL: C.UTF-8
         # PYTHONPATH: $SNAP/usr/lib/python3/dist-packages
-        LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+        # LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
         # QT_QPA_PLATFORMTHEME: gtk3
     plugs:
       - audio-playback
@@ -47,49 +47,11 @@ apps:
       - mount-observe
 
 parts:
-  prepare:
-    plugin: nil
-    build-packages:
-        - software-properties-common
-    prime: [-*]
-  desktop-qt6:
-      source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-      source-subdir: qt
-      plugin: make
-      after: [prepare]
-      make-parameters: ["FLAVOR=qt5"]
-      build-packages:
-        - build-essential
-        - qtbase5-dev
-        - dpkg-dev
-      stage-packages:
-        - libopengl0
-        - libglx0
-        - libgl1
-        - libegl1
-        - libxkbcommon0
-        - libfontconfig1
-        - qtwayland5
-        - libqt5gui5
-        - qt5-style-plugins
-        # - python3-pyqt5
-        # - python3-pyqt5.qtopengl
-        - libmpv1
-        - ffmpeg
   subtitld:
     plugin: dump
     source: .
-    after: [prepare, desktop-qt6]
     organize:
       'dist/*' : .
-    build-packages:
-      - python3-pip
-      - python3-dev
-      - python3-setuptools
-    override-build: |
-      python3 -m pip install -U pip
-      python3 -m pip install pyinstaller
-      pyinstaller subtitld_linux.spec
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version "$VERSION_NUMBER"
