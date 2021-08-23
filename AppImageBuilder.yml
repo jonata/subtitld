@@ -15,33 +15,33 @@ AppDir:
       # PYTHONHOME: '${APPDIR}/usr'
       # PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages'
 
-  # apt:
-  #   arch: amd64
-  #   allow_unauthenticated: true
-  #   sources:
-  #     - sourceline: 'deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse'
-  #       key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
-  #   include:
-  #     - ffmpeg
-  #     # - fontconfig-config
-  #     # - libc6-i386
-  #     # - dconf-gsettings-backend
-  #     # - glib-networking
-  #     # - gvfs
-  #     # - libcanberra-gtk3-module
-  #     # - librsvg2-common
-  #     # - zlib1g
-  #     # - libgdk-pixbuf2.0-0
-  #     # - libmpv1
-  #     # - libmpv-dev
-  #     # - python3-pkg-resources
-  #     # - python3-opengl
-  #     # - python3-pyqt5
-  #     # - python3-pyqt5.qtopengl
-  #     # - python3-pyqt5.qtx11extras
-  #     # - ffmpeg
+  apt:
+    arch: amd64
+    allow_unauthenticated: true
+    sources:
+      - sourceline: 'deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse'
+        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+    include:
+      - libmpv1
+      # - fontconfig-config
+      # - libc6-i386
+      # - dconf-gsettings-backend
+      # - glib-networking
+      # - gvfs
+      # - libcanberra-gtk3-module
+      # - librsvg2-common
+      # - zlib1g
+      # - libgdk-pixbuf2.0-0
+      # - libmpv1
+      # - libmpv-dev
+      # - python3-pkg-resources
+      # - python3-opengl
+      # - python3-pyqt5
+      # - python3-pyqt5.qtopengl
+      # - python3-pyqt5.qtx11extras
+      # - ffmpeg
 
-  #   exclude: ['libfontconfig1']
+    # exclude: ['libfontconfig1']
 
   test:
     fedora:
