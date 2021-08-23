@@ -22,8 +22,8 @@ snap-edge:amd64:
   before_script:
     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
     - export DEBIAN_FRONTEND=noninteractive
-    - apt update -qy
-    - apt install -y sshpass python3-pip libmpv-dev ffmpeg
+    - sudo apt update -qy
+    - sudo apt install -y sshpass python3-pip libmpv-dev ffmpeg
     - python3 -m pip install --upgrade pip
     - python3 -m pip install -r requirements.txt
     - python3 -m pip install pyinstaller
