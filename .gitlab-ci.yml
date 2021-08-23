@@ -56,7 +56,7 @@ appimage-amd64:
   script:
     - pyinstaller subtitld_linux.spec
     - mv dist/subtitld AppDir/subtitld
-    - rm AppDir/subtitld/libfontconfig.so.1
+    # - rm AppDir/subtitld/libfontconfig.so.1
     - mkdir -p /usr/share/icons/hicolor/512x512/
     - cp AppDir/subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
     - appimage-builder --skip-test
