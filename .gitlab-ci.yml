@@ -40,7 +40,7 @@ appimage-amd64:
   before_script:
     - apt-get update -qy
     # - apt-get install -y software-properties-common sshpass
-    - apt-get install -y sshpass python3-pip
+    - apt-get install -y sshpass python3-pip libmpv-dev ffmpeg
     - python3 -m pip install --upgrade pip
     # - add-apt-repository ppa:mc3man/bionic-media -y
     # - apt-get update -qy
@@ -53,12 +53,11 @@ appimage-amd64:
     # - python3 -m pip install pyinstaller==3.6
     - python3 -m pip install pyinstaller
     - mkdir AppDir
+    - mkdir -p /usr/share/icons/hicolor/512x512/
+    - cp subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
   script:
     - pyinstaller subtitld_linux.spec
     - mv dist/subtitld AppDir/subtitld
-    # - rm AppDir/subtitld/libfontconfig.so.1
-    - mkdir -p /usr/share/icons/hicolor/512x512/
-    - cp AppDir/subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
     - appimage-builder --skip-test
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no *.AppImage jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
