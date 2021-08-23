@@ -36,7 +36,7 @@ snap-edge:amd64:
     - rm org.jonata.Subtitld.json
     - rm requirements.txt
     - rm setup.py
-    - rm subttild_linux.spec
+    - rm subtitld_linux.spec
     - rm subtitld_win.nsi
     - rm subtitld_win.spec
     - snapcraft
