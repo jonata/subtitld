@@ -1,7 +1,7 @@
 {
     "app-id": "org.jonata.Subtitld",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.15",
+    "runtime-version": "5.12",
     "sdk": "org.kde.Sdk",
     "command": "subtitld",
     "finish-args": [

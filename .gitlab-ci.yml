@@ -107,8 +107,8 @@ flatpak-amd64:
   before_script:
   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
   script:
-  - flatpak install flathub org.kde.Sdk//5.15
-  - flatpak install flathub org.kde.Platform//5.15
+  - flatpak install flathub org.kde.Sdk//5.12
+  - flatpak install flathub org.kde.Platform//5.12
   - flatpak-builder -v --force-clean --ccache --repo=repo --subject="Build of org.jonata.Subtitld `date`" ./build org.jonata.Subtitld.json
   artifacts:
     paths:
