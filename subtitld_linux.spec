@@ -12,6 +12,7 @@ a = Analysis(['subtitld/__main__.py'],
              pathex=['/home/jonata/Projetos/subtitld'],
              binaries=[
                  ('/usr/lib/x86_64-linux-gnu/libmpv.so', '.'),
+                 ('/usr/lib/x86_64-linux-gnu/libxcb.so.1', '.'),
                  ('/usr/bin/ffmpeg', '.'),
                  ('/usr/bin/ffprobe', '.'),
              ],
