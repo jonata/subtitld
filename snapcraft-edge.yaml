@@ -65,6 +65,9 @@ parts:
     source: .
     # organize:
     #   'dist/subtitld' : 'subtitld'
+    filesets:
+      exclude:
+        - -snapcraft.yaml
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version "$VERSION_NUMBER"
