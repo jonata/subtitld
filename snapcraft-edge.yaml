@@ -24,7 +24,7 @@ plugs:
 
 apps:
   subtitld:
-    command: desktop-exports subtitld/subtitld
+    command: bin/desktop-launch $SNAP/subtitld/subtitld
     environment:
         LC_ALL: C.UTF-8
         # QT_DEBUG_PLUGINS: 1
