@@ -100,7 +100,7 @@ def ffmpeg_load_metadata(filepath):
     json_file = False
     with proc.stdout as stdout:
         json_file = json.loads(stdout.read())
-
+    print(json_file)
     return json_file
 
 
