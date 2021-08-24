@@ -46,6 +46,7 @@ apps:
       - opengl
       - removable-media
       - mount-observe
+      - alsa
 
 parts:
   subtitld:
