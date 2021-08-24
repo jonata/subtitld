@@ -96,12 +96,12 @@ def ffmpeg_load_metadata(filepath):
         '-show_format',
         '-show_streams',
         filepath]
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, startupinfo=STARTUPINFO)
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, startupinfo=STARTUPINFO)
     json_file = False
     with proc.stdout as stdout:
-        test = stdout.read()
-        print(test)
-        json_file = json.loads(test)
+        # test = stdout.read()
+        # print(test)
+        json_file = json.loads(stdout.read())
 
     return json_file
 
