@@ -27,8 +27,8 @@ snap-edge:amd64:
     - python3 -m pip install --upgrade pip
     - python3 -m pip install -r requirements.txt
     - python3 -m pip install pyinstaller
-    - wget https://raw.githubusercontent.com/ubuntu/snapcraft-desktop-helpers/master/common/desktop-exports
-    - chmod +x desktop-exports
+    # - wget https://raw.githubusercontent.com/ubuntu/snapcraft-desktop-helpers/master/common/desktop-exports
+    # - chmod +x desktop-exports
   script:
     - pyinstaller subtitld_linux.spec
     - mv snapcraft-edge.yaml snapcraft.yaml
