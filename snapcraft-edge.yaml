@@ -55,7 +55,6 @@ parts:
       source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
       source-subdir: qt
       plugin: make
-      after: [prepare]
       make-parameters: ["FLAVOR=qt5"]
       build-packages:
         - build-essential
