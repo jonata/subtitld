@@ -24,16 +24,16 @@ plugs:
 
 apps:
   subtitld:
-    command: subtitld/subtitld
+    command: desktop-exports subtitld/subtitld
     environment:
         LC_ALL: C.UTF-8
         # QT_DEBUG_PLUGINS: 1
         # PYTHONPATH: $SNAP/usr/lib/python3/dist-packages
-        LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$RUNTIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$RUNTIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$RUNTIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$RUNTIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl   #$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+        # LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$RUNTIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$RUNTIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$RUNTIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$RUNTIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl   #$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
         # QT_QPA_PLATFORMTHEME: gtk3
-        XKB_CONFIG_ROOT: $XKB_CONFIG_ROOT:$RUNTIME/usr/share/X11/xkb
-        XLOCALEDIR: $XLOCALEDIR:$RUNTIME/usr/share/X11/locale
-        XCURSOR_PATH: $XCURSOR_PATH:$RUNTIME/usr/share/icons
+        # XKB_CONFIG_ROOT: $XKB_CONFIG_ROOT:$RUNTIME/usr/share/X11/xkb
+        # XLOCALEDIR: $XLOCALEDIR:$RUNTIME/usr/share/X11/locale
+        # XCURSOR_PATH: $XCURSOR_PATH:$RUNTIME/usr/share/icons
     plugs:
       - audio-playback
       - audio-record

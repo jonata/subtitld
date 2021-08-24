@@ -23,10 +23,12 @@ snap-edge:amd64:
     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
     - export DEBIAN_FRONTEND=noninteractive
     - sudo apt update -qy
-    - sudo apt install -y sshpass python3-pip libmpv-dev ffmpeg libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libdrm2 libavresample4
+    - sudo apt install -y wget sshpass python3-pip libmpv-dev ffmpeg libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libdrm2 libavresample4
     - python3 -m pip install --upgrade pip
     - python3 -m pip install -r requirements.txt
     - python3 -m pip install pyinstaller
+    - wget https://raw.githubusercontent.com/ubuntu/snapcraft-desktop-helpers/master/common/desktop-exports
+    - chmod +x desktop-exports
   script:
     - pyinstaller subtitld_linux.spec
     - mv snapcraft-edge.yaml snapcraft.yaml
@@ -40,8 +42,6 @@ snap-edge:amd64:
     - rm subtitld_win.nsi
     - rm subtitld_win.spec
     - mv dist/subtitld subtitld
-    - ls
-    - ls subtitld/
     - snapcraft
     - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
     - snapcraft login --with snapcraft.login
