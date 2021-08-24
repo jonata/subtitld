@@ -62,9 +62,7 @@ parts:
         - dpkg-dev
   subtitld:
     plugin: dump
-    source: .
-    # organize:
-    #   'dist/subtitld' : 'subtitld'
+    source:
     filesets:
       exclude:
         - -snapcraft.yaml
