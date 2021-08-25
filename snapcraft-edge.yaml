@@ -67,7 +67,10 @@ parts:
         - dpkg-dev
   subtitld:
     plugin: dump
-    source:
+    source: .
+    filesets:
+      exclude:
+        - -snapcraft.yaml
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version "$VERSION_NUMBER"
