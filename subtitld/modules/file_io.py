@@ -171,6 +171,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
         self.thread_generate_hash_of_video.start()
         self.player.update(self)
         self.player_widget.loadfile(self.video_metadata['filepath'])
+        self.player_widget.seek(self.settings['recent_files'][self.actual_subtitle_file].get('last_position', 0))
         self.player.resize_player_widget(self)
         if not self.actual_subtitle_file:
             if self.video_metadata.get('subttiles', ''):
