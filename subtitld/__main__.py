@@ -18,7 +18,7 @@ from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTranslator, QTimer
 
 from subtitld.modules import config
 from subtitld.modules.history import history_redo, history_undo
-from subtitld.modules.paths import PATH_LOCALE, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
+from subtitld.modules.paths import PATH_LOCALE, PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
 
 if ACTUAL_OS == 'darwin':
     from subtitld.modules.paths import NSURL
@@ -225,8 +225,10 @@ class Subtitld(QWidget):
         self.thread_extract_scene_time_positions.quit()
         self.thread_generated_burned_video.quit()
         self.thread_extract_waveform.quit()
+        if self.actual_subtitle_file and 'hash' in self.video_metadata:
+            self.player_widget.grab().save(os.path.join(PATH_SUBTITLD_DATA_THUMBNAILS, self.video_metadata['hash'] + '.png'))
         self.player_widget.close()
-        time.sleep(.1)
+
         event.accept()
 
     def keyPressEvent(self, event):
