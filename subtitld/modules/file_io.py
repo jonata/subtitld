@@ -5,6 +5,7 @@
 import os
 import datetime
 import html
+import hashlib
 
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -78,6 +79,26 @@ class ThreadExtractWaveform(QThread):
             self.command.emit(result)
 
 
+class ThreadGenerateHashOfVideo(QThread):
+    """Thread to extract time positions of scenes"""
+    response = pyqtSignal(list)
+    filepath = ''
+
+    def run(self):
+        if self.filepath and os.path.isfile(self.filepath):
+            md5_object = hashlib.md5()
+            block_size = 128*md5_object.block_size
+            file_object = open(self.filepath, 'rb')
+            chunk = file_object.read(block_size)
+            while chunk:
+                md5_object.update(chunk)
+                chunk = file_object.read(block_size)
+
+            md5_hash = md5_object.hexdigest()
+
+            self.response.emit([self.filepath, md5_hash])
+
+
 def load(self):
     """Load thread objects"""
     def thread_extract_waveform_ended(command):
@@ -93,6 +114,13 @@ def load(self):
 
     self.thread_extract_scene_time_positions = ThreadExtractSceneTimePositions(self)
     self.thread_extract_scene_time_positions.command.connect(thread_extract_scene_time_positions_ended)
+
+    def thread_generate_hash_of_video(response):
+        if self.video_metadata.get('filepath', '') == response[0] and not 'hash' in self.video_metadata:
+            self.video_metadata['hash'] = response[1]
+
+    self.thread_generate_hash_of_video = ThreadGenerateHashOfVideo(self)
+    self.thread_generate_hash_of_video.response.connect(thread_generate_hash_of_video)
 
 
 def open_filepath(self, files_to_open=False, update_interface=False):
@@ -138,6 +166,8 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.videoinfo_label.setText(self.tr('Extracting audio...'))
         #self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
         #self.thread_extract_scene_time_positions.start()
+        self.thread_generate_hash_of_video.filepath = self.video_metadata['filepath']
+        self.thread_generate_hash_of_video.start()
         self.player.update(self)
         self.player_widget.loadfile(self.video_metadata['filepath'])
         self.player.resize_player_widget(self)
@@ -295,6 +325,8 @@ def process_video_file(video_file=False):
             video_metadata['audio_is_present'] = True
     video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
+
+
 
     return video_metadata
 
