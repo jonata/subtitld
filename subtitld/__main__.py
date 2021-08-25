@@ -61,7 +61,6 @@ class Subtitld(QWidget):
         self.video_waveformsize = .7
         self.mediaplayer_opacity = .5
         self.video_length = 0.01
-        self.mediaplayer_current_position = 0.0
         self.mediaplayer_view_mode = 'verticalform'
         self.timeline_snap = True
         self.timeline_snap_value = .1
