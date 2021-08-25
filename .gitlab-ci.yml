@@ -1,19 +1,19 @@
-# snap:amd64:
-#   image:
-#     name: cibuilds/snapcraft:core20
-#   type: deploy
-#   script:
-#   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-#   - snapcraft
-#   - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
-#   - snapcraft login --with snapcraft.login
-#   - snapcraft upload *.snap --release beta
-#   artifacts:
-#     paths:
-#     - subtitld*.snap
-#     expire_in: 1 week
-#   only:
-#   - master
+snap:amd64:
+  image:
+    name: cibuilds/snapcraft:core20
+  type: deploy
+  script:
+  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+  - snapcraft
+  - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
+  - snapcraft login --with snapcraft.login
+  - snapcraft upload *.snap --release beta
+  artifacts:
+    paths:
+    - subtitld*.snap
+    expire_in: 1 week
+  only:
+  - master
 
 snap-edge:amd64:
   image:
@@ -53,63 +53,63 @@ snap-edge:amd64:
   only:
   - master
 
-# appimage-amd64:
-#   image:
-#     name: ubuntu:focal
-#   type: deploy
-#   before_script:
-#     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-#     - export DEBIAN_FRONTEND=noninteractive
-#     - apt update -qy
-#     - apt install -y wget sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libdrm2 libavresample4
-#     - python3 -m pip install --upgrade pip
-#     - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
-#     - chmod +x /usr/local/bin/appimagetool
-#     - python3 -m pip install -r requirements.txt
-#     - python3 -m pip install pyinstaller appimage-builder
-#     - mkdir AppDir
-#     - mkdir -p /usr/share/icons/hicolor/512x512/
-#     - cp subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
-#   script:
-#     - pyinstaller subtitld_linux.spec
-#     - mv dist/subtitld AppDir/subtitld
-#     - appimage-builder --skip-test
-#     - export SSHPASS=$USER_PASS
-#     - sshpass -e scp -o stricthostkeychecking=no *.AppImage jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
-#   artifacts:
-#     paths:
-#       - '*.AppImage'
-#     expire_in: 1 week
-#   only:
-#   - master
+appimage-amd64:
+  image:
+    name: ubuntu:focal
+  type: deploy
+  before_script:
+    - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt update -qy
+    - apt install -y wget sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libdrm2 libavresample4
+    - python3 -m pip install --upgrade pip
+    - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+    - chmod +x /usr/local/bin/appimagetool
+    - python3 -m pip install -r requirements.txt
+    - python3 -m pip install pyinstaller appimage-builder
+    - mkdir AppDir
+    - mkdir -p /usr/share/icons/hicolor/512x512/
+    - cp subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
+  script:
+    - pyinstaller subtitld_linux.spec
+    - mv dist/subtitld AppDir/subtitld
+    - appimage-builder --skip-test
+    - export SSHPASS=$USER_PASS
+    - sshpass -e scp -o stricthostkeychecking=no *.AppImage jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
+  artifacts:
+    paths:
+      - '*.AppImage'
+    expire_in: 1 week
+  only:
+  - master
 
 
-# windows-nsis:
-#   image: schnouki/pyinstaller-windows-ci:python3
-#   type: deploy
-#   script:
-#   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-#   - apt-get update -qy
-#   - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev xvfb espeak-data
-#   - wine python -m pip install -U pip
-#   - wine pip3 install -U setuptools
-#   - wine pip3 install -r requirements.txt
-#   - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
-#   - unzip ffmpeg-release-essentials.zip
-#   - wget --no-check-certificate https://mpv.srsfckn.biz/mpv-dev-latest.7z
-#   - 7z x -ompv mpv-dev-latest.7z
-#   - wine pip uninstall -y enum34
-#   - wine PyInstaller subtitld_win.spec
-#   - makensis subtitld_win.nsi
-#   - export SSHPASS=$USER_PASS
-#   - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
-#   - "curl -d '{ \"number\":\"'\"$VERSION_NUMBER\"'\", \"is_stable\":\"False\" }' -H \"Content-Type: application/json\" -X POST https://api2.jonata.org/subtitld/windows_version\n"
-#   artifacts:
-#     paths:
-#     - Subtitld*Installer.exe
-#     expire_in: 1 week
-#   only:
-#   - master
+windows-nsis:
+  image: schnouki/pyinstaller-windows-ci:python3
+  type: deploy
+  script:
+  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+  - apt-get update -qy
+  - apt-get install -y nsis unzip openssh-client sshpass p7zip-full curl libespeak-dev xvfb espeak-data
+  - wine python -m pip install -U pip
+  - wine pip3 install -U setuptools
+  - wine pip3 install -r requirements.txt
+  - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
+  - unzip ffmpeg-release-essentials.zip
+  - wget --no-check-certificate https://mpv.srsfckn.biz/mpv-dev-latest.7z
+  - 7z x -ompv mpv-dev-latest.7z
+  - wine pip uninstall -y enum34
+  - wine PyInstaller subtitld_win.spec
+  - makensis subtitld_win.nsi
+  - export SSHPASS=$USER_PASS
+  - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
+  - "curl -d '{ \"number\":\"'\"$VERSION_NUMBER\"'\", \"is_stable\":\"False\" }' -H \"Content-Type: application/json\" -X POST https://api2.jonata.org/subtitld/windows_version\n"
+  artifacts:
+    paths:
+    - Subtitld*Installer.exe
+    expire_in: 1 week
+  only:
+  - master
 
 
 # flatpak-amd64:

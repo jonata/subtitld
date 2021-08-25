@@ -22,14 +22,6 @@ plugs:
     default-provider: gtk-common-themes:sounds-themes
   gsettings: null
 
-layout:
-  /etc/fonts:
-    bind: $SNAP/etc/fonts
-  /usr/share/fonts:
-    bind: $SNAP/usr/share/fonts
-  /var/cache/fontconfig:
-    bind: $SNAP_DATA/var/cache/fontconfig
-
 apps:
   subtitld:
     command: bin/desktop-launch $SNAP/subtitld/subtitld
