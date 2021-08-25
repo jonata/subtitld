@@ -44,19 +44,21 @@ elif sys.platform == 'win32' or os.name == 'nt':
     STARTUPINFO.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     STARTUPINFO.wShowWindow = subprocess.SW_HIDE
 else:
-    try:
-        REAL_PATH_HOME = subprocess.Popen(['getente', 'passwd', str(os.getuid())], stdout=subprocess.PIPE).stdout.read().decode().split(':')[5]
-    except FileNotFoundError:
-        pass
-    if not os.path.isdir(os.path.join(PATH_HOME, '.config')):
-        os.mkdir(os.path.join(PATH_HOME, '.config'))
-
     if 'APPIMAGE' in os.environ or 'SNAP' in os.environ:
         PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
         FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg')
         FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe')
 
-    print(os.environ)
+    if 'SNAP_REAL_HOME' in os.environ:
+        REAL_PATH_HOME =os.environ['SNAP_REAL_HOME']
+    else:
+        try:
+            REAL_PATH_HOME = subprocess.Popen(['getente', 'passwd', str(os.getuid())], stdout=subprocess.PIPE).stdout.read().decode().split(':')[5]
+        except FileNotFoundError:
+            pass
+
+    if not os.path.isdir(os.path.join(PATH_HOME, '.config')):
+        os.mkdir(os.path.join(PATH_HOME, '.config'))
 
 
 PATH_SUBTITLD_DATA_BACKUP = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'backup')
