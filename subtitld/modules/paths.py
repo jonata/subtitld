@@ -65,6 +65,8 @@ PATH_SUBTITLD_DATA_BACKUP = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'backup')
 
 PATH_SUBTITLD_DATA_UPDATE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'update')
 
+PATH_SUBTITLD_DATA_THUMBNAILS = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'thumbnails')
+
 if not os.path.isdir(PATH_SUBTITLD_USER_CONFIG):
     os.mkdir(PATH_SUBTITLD_USER_CONFIG)
 
@@ -73,6 +75,9 @@ if not os.path.isdir(PATH_SUBTITLD_DATA_BACKUP):
 
 if not os.path.isdir(PATH_SUBTITLD_DATA_UPDATE):
     os.mkdir(PATH_SUBTITLD_DATA_UPDATE)
+
+if not os.path.isdir(PATH_SUBTITLD_DATA_THUMBNAILS):
+    os.mkdir(PATH_SUBTITLD_DATA_THUMBNAILS)
 
 PATH_SUBTITLD_USER_CONFIG_FILE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'subtitld.config')
 

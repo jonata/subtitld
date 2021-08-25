@@ -118,6 +118,7 @@ def load(self):
     def thread_generate_hash_of_video(response):
         if self.video_metadata.get('filepath', '') == response[0] and not 'hash' in self.video_metadata:
             self.video_metadata['hash'] = response[1]
+            self.settings['recent_files'][self.actual_subtitle_file]['video_hash'] = self.video_metadata['hash']
 
     self.thread_generate_hash_of_video = ThreadGenerateHashOfVideo(self)
     self.thread_generate_hash_of_video.response.connect(thread_generate_hash_of_video)
