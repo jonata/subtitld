@@ -218,7 +218,6 @@ class Subtitld(QWidget):
             if ret == QMessageBox.AcceptRole:
                 self.subtitleslist.toppanel_save_button_clicked(self)
 
-        config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)
         self.thread_get_waveform.quit()
         self.thread_get_qimages.quit()
         self.thread_extract_scene_time_positions.quit()
@@ -226,6 +225,8 @@ class Subtitld(QWidget):
         self.thread_extract_waveform.quit()
         if self.actual_subtitle_file and 'hash' in self.video_metadata:
             self.player_widget.grab().save(os.path.join(PATH_SUBTITLD_DATA_THUMBNAILS, self.video_metadata['hash'] + '.png'))
+            self.settings['recent_files'][self.actual_subtitle_file]['last_position'] = self.player_widget.position
+        config.save(self.settings, PATH_SUBTITLD_USER_CONFIG_FILE)
         self.player_widget.close()
 
         event.accept()
