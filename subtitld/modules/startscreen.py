@@ -5,20 +5,23 @@
 import os
 import sys
 from datetime import datetime
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsOpacityEffect, QListWidget, QListWidgetItem
 from PyQt5.QtCore import QPropertyAnimation, Qt, QSize
 
 from subtitld.modules import file_io
-from subtitld.modules.paths import VERSION_NUMBER
+from subtitld.modules.paths import PATH_SUBTITLD_DATA_THUMBNAILS, VERSION_NUMBER
 
 
 def load(self):
     """Function to load all starting screen widgets"""
     self.start_screen = QLabel(parent=self)
+    self.start_screen.setObjectName('start_screen')
     self.start_screen_transparency = QGraphicsOpacityEffect()
     self.start_screen.setGraphicsEffect(self.start_screen_transparency)
     self.start_screen_transparency_animation = QPropertyAnimation(self.start_screen_transparency, b'opacity')
     self.start_screen_transparency.setOpacity(0)
+
 
     self.start_screen_recentfiles_background = QLabel(parent=self.start_screen)
     self.start_screen_recentfiles_background.setObjectName('start_screen_recentfiles_background')
@@ -41,6 +44,7 @@ def load(self):
     self.start_screen_recent_listwidget.setObjectName('start_screen_recent_listwidget')
     self.start_screen_recent_listwidget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
     self.start_screen_recent_listwidget.setFocusPolicy(Qt.NoFocus)
+    self.start_screen_recent_listwidget.currentItemChanged.connect(lambda item: start_screen_recent_listwidget_item_changed(self, item))
     self.start_screen_recent_listwidget.itemDoubleClicked.connect(lambda: start_screen_recent_listwidget_item_clicked(self))
 
     self.start_screen_recent_alert = QLabel(self.tr('There is no recent file history.'), parent=self.start_screen)
@@ -126,3 +130,20 @@ def start_screen_recent_listwidget_item_clicked(self):
     """Function to call when item on recent files list is clicked"""
     files_to_open = [self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]]
     file_io.open_filepath(self, files_to_open=files_to_open, update_interface=True)
+    self.generate_effect(self.start_screen_thumbnail_background_animation, 'geometry', 1000, [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()], [self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height()])
+    self.generate_effect(self.start_screen_thumbnail_background_transparency_animation, 'opacity', 1000, 1.0, 0.0)
+    self.start_screen_thumbnail_background.setVisible(False)
+    self.generate_effect(self.player_widget_animation, 'geometry', 1000, [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()], [self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height()])
+    self.generate_effect(self.player_widget_transparency_animation, 'opacity', 1000, 0.0, 1.0)
+
+
+
+def start_screen_recent_listwidget_item_changed(self, item):
+    file_to_open = self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]
+    print(self.settings['recent_files'][file_to_open])
+    thumbnail_image_path = os.path.join(PATH_SUBTITLD_DATA_THUMBNAILS, self.settings['recent_files'][file_to_open].get('video_hash', '') + '.png')
+    if os.path.isfile(thumbnail_image_path):
+        self.start_screen_thumbnail_background.setPixmap(QPixmap(thumbnail_image_path).scaled(self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height(), Qt.KeepAspectRatioByExpanding))
+        self.generate_effect(self.start_screen_thumbnail_background_transparency_animation, 'opacity', 800, 0.0, 1.0)
+
+    #print(self.settings['recent_files'][file_to_open])

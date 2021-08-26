@@ -9,7 +9,7 @@ def set_stylesheet(self):
     """Function to set stylesheet on self"""
     stylesheet_text = '''
                             #background_label                                    { background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 rgb(7,9,11), stop:1 rgb(26,35,43)); }
-                            #background_label2                                   { background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 rgb(26,35,43), stop:1 rgb(46,62,76)); }
+                            #background_label2                                   { background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 rgba(26,35,43,250), stop:1 rgba(46,62,76,230)); }
                             #background_watermark_label                          { image: url("''' + get_graphics_path('background_watermark.png') + '''"); }
                             #subtitles_list_widget                               { border-top: 81px; border-right: 25px;  border-bottom: 0;    border-left: 0;    border-image: url("''' + get_graphics_path('subtitle_list_widget_background.png') + '''")     81  25  0  0 stretch stretch; }
                             #global_subtitlesvideo_panel_left                    { border-top: 0;    border-right: 0;     border-bottom: 0;    border-left: 0;    border-image: url("''' + get_graphics_path('global_config_subtitles_background.png') + '''")  0  0  0  0 stretch stretch; }

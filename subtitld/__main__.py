@@ -14,7 +14,7 @@ import argparse
 
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTranslator, QTimer
+from PyQt5.QtCore import QEasingCurve, Qt, QRect, QPropertyAnimation, QTranslator, QTimer
 
 from subtitld.modules import config
 from subtitld.modules.history import history_redo, history_undo
@@ -85,11 +85,22 @@ class Subtitld(QWidget):
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')
 
+        self.start_screen_thumbnail_background = QLabel(parent=self)
+        self.start_screen_thumbnail_background.setAlignment(Qt.AlignCenter)
+        self.start_screen_thumbnail_background_transparency = QGraphicsOpacityEffect()
+        self.start_screen_thumbnail_background.setGraphicsEffect(self.start_screen_thumbnail_background_transparency)
+        self.start_screen_thumbnail_background_transparency_animation = QPropertyAnimation(self.start_screen_thumbnail_background_transparency, b'opacity')
+        # self.start_screen_thumbnail_background_transparency_animation.setEasingCurve(QEasingCurve.InExpo)
+        self.start_screen_thumbnail_background_transparency.setOpacity(1)
+        self.start_screen_thumbnail_background_animation = QPropertyAnimation(self.start_screen_thumbnail_background, b'geometry')
+        self.start_screen_thumbnail_background_animation.setEasingCurve(QEasingCurve.OutCirc)
+
         self.background_label2 = QLabel(self)
         self.background_label2.setObjectName('background_label2')
         self.background_label2_transparency = QGraphicsOpacityEffect()
         self.background_label2.setGraphicsEffect(self.background_label2_transparency)
         self.background_label2_transparency_animation = QPropertyAnimation(self.background_label2_transparency, b'opacity')
+        self.background_label2_transparency.setOpacity(1)
 
         # Setting the gorgeous watermarked background logo
         self.background_watermark_label = QLabel(self)
@@ -184,6 +195,7 @@ class Subtitld(QWidget):
 
     def resizeEvent(self, event):
         self.background_label.setGeometry(0, 0, self.width(), self.height())
+        self.start_screen_thumbnail_background.setGeometry(0, 0, self.width(), self.height())
         self.background_label2.setGeometry(0, 0, self.width(), self.height())
 
         self.startscreen.resized(self)

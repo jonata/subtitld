@@ -4,9 +4,9 @@
 
 import os
 
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QRect, QMargins, QMetaObject
+from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, pyqtSignal, pyqtSlot, Qt, QRect, QMargins, QMetaObject
 from PyQt5.QtGui import QPainter, QPen, QColor
-from PyQt5.QtWidgets import QOpenGLWidget, QLabel, QWidget
+from PyQt5.QtWidgets import QGraphicsOpacityEffect, QOpenGLWidget, QLabel, QWidget
 from PyQt5.QtOpenGL import QGLContext
 
 from subtitld.mpv import MPV, _mpv_get_sub_api, _mpv_opengl_cb_set_update_callback, _mpv_opengl_cb_init_gl, OpenGlCbGetProcAddrFn, _mpv_opengl_cb_draw, _mpv_opengl_cb_report_flip, MpvSubApi, OpenGlCbUpdateFn, _mpv_opengl_cb_uninit_gl
@@ -238,12 +238,21 @@ class PlayerWidgetArea(QWidget):
 
 def load(self):
     """Function to load player widgets"""
-    self.player_widget_area = PlayerWidgetArea(self)
 
-    self.player_border = QLabel(self.player_widget_area)
+    self.player_border = QLabel(self)
     self.player_border.setObjectName('player_border')
 
+    self.player_widget_area = PlayerWidgetArea(self)
+
+
     self.player_widget = MpvWidget(parent=self.player_widget_area)
+    self.player_widget_transparency = QGraphicsOpacityEffect()
+    self.player_widget.setGraphicsEffect(self.player_widget_transparency)
+    self.player_widget_transparency_animation = QPropertyAnimation(self.player_widget_transparency, b'opacity')
+    self.player_widget_transparency_animation.setEasingCurve(QEasingCurve.OutExpo)
+    self.player_widget_transparency.setOpacity(1)
+    self.player_widget_animation = QPropertyAnimation(self.player_widget, b'geometry')
+    self.player_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
 
     self.player_widget.positionChanged.connect(lambda: self.timeline.update(self))
 
@@ -270,7 +279,7 @@ def update(self):
 
 def resized(self):
     """Function to resize player widgets"""
-    self.player_widget_area.setGeometry(self.width()*.2, 0, self.width()*.6, self.height()-self.playercontrols_widget.height())
+    self.player_widget_area.setGeometry(0, 0, self.width(), self.height()-self.playercontrols_widget.height())
     self.videoinfo_label.setGeometry(self.player_widget_area.x(), 20, self.player_widget_area.width(), 50)
     resize_player_widget(self)
 
@@ -312,11 +321,11 @@ def update_subtitle_layer(self):
 def resize_player_widget(self):
     """Function to resize player widget (to accomodate video ratio inside screen space)"""
     if self.video_metadata.get('width', 640) > self.video_metadata.get('height', 480):
-        heigth_proportion = (self.player_widget_area.width()-6) / self.video_metadata.get('width', 640)
-        self.player_widget.setGeometry(3, (self.player_widget_area.height()*.5)-((heigth_proportion*self.video_metadata.get('height', 480))*.5), self.player_widget_area.width()-6, self.video_metadata.get('height', 480)*heigth_proportion)
+        heigth_proportion = ((self.player_widget_area.width()*.6)-6) / self.video_metadata.get('width', 640)
+        self.player_widget.setGeometry((self.width()*.2) + 3, (self.player_widget_area.height()*.5)-((heigth_proportion*self.video_metadata.get('height', 480))*.5), (self.player_widget_area.width()*.6)-6, self.video_metadata.get('height', 480)*heigth_proportion)
     else:
         width_proportion = (self.player_widget_area.height()-6) / self.video_metadata.get('height', 480)
-        self.player_widget.setGeometry((self.player_widget_area.width()*.5)-((width_proportion*self.video_metadata.get('width', 640))*.5), 3, self.video_metadata.get('width', 640)*width_proportion, self.player_widget_area.height()-6)
+        self.player_widget.setGeometry((self.width()*.2) + ((self.player_widget_area.width()*.6)*.5)-((width_proportion*self.video_metadata.get('width', 640))*.5), 3, self.video_metadata.get('width', 640)*width_proportion, self.player_widget_area.height()-6)
     self.player_border.setGeometry(self.player_widget.x()-3, self.player_widget.y()-3, self.player_widget.width()+6, self.player_widget.height()+6)
     self.player_subtitle_layer.setGeometry(self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height())
     # self.player_subtitle_textedit.setGeometry(self.player_widget.x()+(self.player_widget.width()*.1), self.player_widget.y()+(self.player_widget.height()*.5), self.player_widget.width()*.8, self.player_widget.height()*.4)
