@@ -2,6 +2,7 @@
 
 """
 
+import time
 from bisect import bisect
 
 from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap
@@ -14,36 +15,6 @@ from subtitld.modules import waveform
 from subtitld.modules import history
 from subtitld.modules import subtitles
 from subtitld.modules import quality_check
-
-
-class DrawPixmap(QPixmap):
-    """Class to generate pixmaps for timeline"""
-    waveform_up = []
-    waveform_down = []
-    x_offset = 0
-    waveformsize = .7
-    border_color = '#ff153450'
-    fill_color = '#cc153450'
-
-    def paintEvent(self):
-        """Function of paintEvent for DrawPixmap"""
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        painter.setPen(QPen(QColor(self.border_color), 1, Qt.SolidLine))
-        painter.setBrush(QColor(self.fill_color))
-
-        x_position = 0
-        polygon = QPolygonF()
-        for point in self.waveform_up:
-            polygon.append(QPointF(x_position, (self.height()*.5) + (point*(self.waveformsize*100))))
-            x_position += 1
-        for point in reversed(self.waveform_down):
-            polygon.append(QPointF(x_position, (self.height()*.5) + (point*(self.waveformsize*100))))
-            x_position -= 1
-        painter.drawPolygon(polygon)
-
-        painter.end()
 
 
 class ThreadGetWaveform(QThread):
@@ -64,6 +35,7 @@ class ThreadGetWaveform(QThread):
 class ThreadGetQImages(QThread):
     """Class to generate QThread for QImages"""
     command = pyqtSignal(list)
+    endcommand = pyqtSignal(str)
     values_list = []
     zoom = 100.0
     width = 32767
@@ -72,7 +44,36 @@ class ThreadGetQImages(QThread):
 
     def run(self):
         """Function to run QThread"""
-        final_list = []
+
+        class DrawPixmap(QPixmap):
+            """Class to generate pixmaps for timeline"""
+            waveform_up = []
+            waveform_down = []
+            x_offset = 0
+            waveformsize = .7
+            border_color = '#ff153450'
+            fill_color = '#cc153450'
+
+            def paintEvent(self):
+                """Function of paintEvent for DrawPixmap"""
+                painter = QPainter(self)
+                painter.setRenderHint(QPainter.Antialiasing)
+
+                painter.setPen(QPen(QColor(self.border_color), 1, Qt.SolidLine))
+                painter.setBrush(QColor(self.fill_color))
+
+                x_position = 0
+                polygon = QPolygonF()
+                for point in self.waveform_up:
+                    polygon.append(QPointF(x_position, (self.height()*.5) + (point*(self.waveformsize*100))))
+                    x_position += 1
+                for point in reversed(self.waveform_down):
+                    polygon.append(QPointF(x_position, (self.height()*.5) + (point*(self.waveformsize*100))))
+                    x_position -= 1
+                painter.drawPolygon(polygon)
+
+                painter.end()
+
         parser = 0
         while True:
             qpixmap = DrawPixmap(self.width, 124)
@@ -82,11 +83,12 @@ class ThreadGetQImages(QThread):
             qpixmap.border_color = self.border_color
             qpixmap.fill_color = self.fill_color
             qpixmap.paintEvent()
-            final_list.append(qpixmap.toImage())                # qpixmap.save('/tmp/teste.png')
+            self.command.emit([self.zoom, qpixmap.toImage()])                # qpixmap.save('/tmp/teste.png')
+            time.sleep(.2)
             parser += self.width
             if parser > len(self.values_list[0]):
                 break
-        self.command.emit([self.zoom, final_list])
+        self.endcommand.emit('qthread finished')
 
 
 class Timeline(QWidget):
@@ -508,18 +510,23 @@ def load(self):
         self.thread_get_qimages.width = self.timeline_scroll.width()
         self.thread_get_qimages.border_color = self.settings['timeline'].get('waveform_border_color', '#ff153450')
         self.thread_get_qimages.fill_color = self.settings['timeline'].get('waveform_fill_color', '#cc153450')
-        self.thread_get_qimages.start(QThread.IdlePriority)
+        self.thread_get_qimages.start()
+        # self.thread_get_qimages.start(QThread.IdlePriority)
 
     self.thread_get_waveform = ThreadGetWaveform(self)
     self.thread_get_waveform.command.connect(thread_get_waveform_ended)
 
+
     def thread_get_qimages_ended(command):
-        self.video_metadata['waveform'][command[0]]['qimages'] = command[1]
-        self.videoinfo_label.setText(self.tr('Waveform optimized'))
+        self.video_metadata['waveform'][command[0]]['qimages'].append(command[1])
         self.timeline_widget.update()
+
+    def thread_qimages_endcommand(command):
+        self.videoinfo_label.setText(self.tr('Waveform optimized'))
 
     self.thread_get_qimages = ThreadGetQImages(self)
     self.thread_get_qimages.command.connect(thread_get_qimages_ended)
+    self.thread_get_qimages.endcommand.connect(thread_qimages_endcommand)
 
 
 def resized(self):
