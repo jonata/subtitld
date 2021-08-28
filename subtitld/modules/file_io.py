@@ -6,6 +6,7 @@ import os
 import datetime
 import html
 import hashlib
+from docx import Document
 
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -118,7 +119,8 @@ def load(self):
     def thread_generate_hash_of_video(response):
         if self.video_metadata.get('filepath', '') == response[0] and not 'hash' in self.video_metadata:
             self.video_metadata['hash'] = response[1]
-            self.settings['recent_files'][self.actual_subtitle_file]['video_hash'] = self.video_metadata['hash']
+            if self.actual_subtitle_file in self.settings['recent_files']:
+                self.settings['recent_files'][self.actual_subtitle_file]['video_hash'] = self.video_metadata['hash']
 
     self.thread_generate_hash_of_video = ThreadGenerateHashOfVideo(self)
     self.thread_generate_hash_of_video.response.connect(thread_generate_hash_of_video)
@@ -172,7 +174,8 @@ def open_filepath(self, files_to_open=False, update_interface=False):
         if self.actual_subtitle_file:
             self.thread_generate_hash_of_video.filepath = self.video_metadata['filepath']
             self.thread_generate_hash_of_video.start()
-            self.player_widget.seek(self.settings['recent_files'][self.actual_subtitle_file].get('last_position', 0))
+            if self.actual_subtitle_file in self.settings['recent_files']:
+                self.player_widget.seek(self.settings['recent_files'][self.actual_subtitle_file].get('last_position', 0))
         self.player.resize_player_widget(self)
         if not self.actual_subtitle_file:
             if self.video_metadata.get('subttiles', ''):
@@ -180,7 +183,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
         self.subtitleslist.update_subtitles_list_widget(self)
         self.settings['recent_files'][self.actual_subtitle_file] = {
             'last_opened': datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
-            'video_file': self.video_metadata['filepath']
+            'video_filepath': self.video_metadata['filepath']
         }
         self.autosave_timer.start()
 
@@ -371,8 +374,24 @@ def import_file(filename=False, subtitle_format=False): #, fit_to_length=False, 
                 for phrase in txt_content.split('. '):
                     final_subtitles.append([pos, 5.0, phrase + '.'])
                     pos += 5.0
+
         elif filename.lower().endswith(('.srt')):
             subtitle_format = 'SRT'
+            final_subtitles += process_subtitles_file(subtitle_file=filename, subtitle_format=subtitle_format)[0]
+
+        elif filename.lower().endswith(('.docx')):
+            subtitle_format = 'DOCX'
+            txt_content = ''
+
+            doc = Document(filename)
+            for par in doc.paragraphs:
+                txt_content += par.text
+
+            pos = 0.0
+            for phrase in txt_content.split('. '):
+                final_subtitles.append([pos, 5.0, phrase + '.'])
+                pos += 5.0
+
             final_subtitles += process_subtitles_file(subtitle_file=filename, subtitle_format=subtitle_format)[0]
 
     return final_subtitles, subtitle_format

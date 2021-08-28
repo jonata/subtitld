@@ -111,6 +111,7 @@ LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
 
 LIST_OF_SUPPORTED_IMPORT_EXTENSIONS = {
     'TXT': {'description': 'Simple TXT file', 'extensions': ['txt']},
+    'DOCX': {'description': 'Microsoft Word document (docx)', 'extensions': ['docx']},
     'SRT': {'description': 'SubRip Subtitle format', 'extensions': ['srt']}
 }
 

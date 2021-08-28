@@ -146,7 +146,8 @@ install_requires = [
     'autosub3',
     'google-trans-new',
     'SpeechRecognition',
-    'beautifulsoup4<4.5.0,>=4.2.1'
+    'beautifulsoup4<4.5.0,>=4.2.1',
+    'python-docx'
 ]
 
 # --------------------------------------------------------------------------- #
