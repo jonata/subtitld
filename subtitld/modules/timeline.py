@@ -524,6 +524,7 @@ def load(self):
     def thread_qimages_endcommand(command):
         self.videoinfo_label.setText(self.tr('Waveform optimized'))
 
+
     self.thread_get_qimages = ThreadGetQImages(self)
     self.thread_get_qimages.command.connect(thread_get_qimages_ended)
     self.thread_get_qimages.endcommand.connect(thread_qimages_endcommand)
