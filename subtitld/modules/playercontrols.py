@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpinB
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize, QRect, QPoint, QThread
 from PyQt5.QtGui import QIcon
 
-from subtitld.modules import subtitles
+from subtitld.modules import subtitles, subtitleslist
 from subtitld.modules.paths import PATH_SUBTITLD_GRAPHICS
 
 STEPS_LIST = ['Frames', 'Seconds']
@@ -236,14 +236,14 @@ def load(self):
     self.gap_add_subtitle_button = QPushButton(parent=self.playercontrols_widget)
     self.gap_add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'gap_add_icon.png')))
     self.gap_add_subtitle_button.setIconSize(QSize(20, 20))
-    self.gap_add_subtitle_button.setObjectName('button_dark')
+    self.gap_add_subtitle_button.setProperty('class', 'button_dark')
     self.gap_add_subtitle_button.setStyleSheet('QPushButton { border-right:0; border-bottom:0; padding-right:26px; }')
     self.gap_add_subtitle_button.clicked.connect(lambda: gap_add_subtitle_button_clicked(self))
 
     self.gap_remove_subtitle_button = QPushButton(parent=self.playercontrols_widget)
     self.gap_remove_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'gap_remove_icon.png')))
     self.gap_remove_subtitle_button.setIconSize(QSize(20, 20))
-    self.gap_remove_subtitle_button.setObjectName('button_dark')
+    self.gap_remove_subtitle_button.setProperty('class', 'button_dark')
     self.gap_remove_subtitle_button.setStyleSheet('QPushButton { border-left:0; border-bottom:0; padding-left:26px; }')
     self.gap_remove_subtitle_button.clicked.connect(lambda: gap_remove_subtitle_button_clicked(self))
 
@@ -255,7 +255,7 @@ def load(self):
     self.add_subtitle_button = QPushButton('ADD', parent=self.playercontrols_widget)
     self.add_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_subtitle_icon.png')))
     self.add_subtitle_button.setIconSize(QSize(20, 20))
-    self.add_subtitle_button.setObjectName('button_dark')
+    self.add_subtitle_button.setProperty('class', 'button_dark')
     self.add_subtitle_button.setStyleSheet('QPushButton {padding-right:105px; border-right:0; border-bottom:0;}')
     self.add_subtitle_button.clicked.connect(lambda: add_subtitle_button_clicked(self))
 
@@ -266,7 +266,7 @@ def load(self):
     self.add_subtitle_duration.valueChanged.connect(lambda: add_subtitle_duration_changed(self))
 
     self.add_subtitle_starting_from_last = QPushButton(parent=self.add_subtitle_button)
-    self.add_subtitle_starting_from_last.setObjectName('button_dark')
+    self.add_subtitle_starting_from_last.setProperty('class', 'button_dark')
     self.add_subtitle_starting_from_last.setCheckable(True)
     self.add_subtitle_starting_from_last.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_from_last.svg')))
     self.add_subtitle_starting_from_last.setIconSize(QSize(15, 15))
@@ -274,7 +274,7 @@ def load(self):
     self.add_subtitle_starting_from_last.clicked.connect(lambda: add_subtitle_starting_from_last_clicked(self))
 
     self.add_subtitle_and_play = QPushButton(parent=self.add_subtitle_button)
-    self.add_subtitle_and_play.setObjectName('button_dark')
+    self.add_subtitle_and_play.setProperty('class', 'button_dark')
     self.add_subtitle_and_play.setCheckable(True)
     self.add_subtitle_and_play.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'add_and_play.svg')))
     self.add_subtitle_and_play.setIconSize(QSize(15, 15))
@@ -284,52 +284,52 @@ def load(self):
     self.remove_selected_subtitle_button = QPushButton('REMOVE', parent=self.playercontrols_widget)
     self.remove_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'remove_selected_subtitle_icon.png')))
     self.remove_selected_subtitle_button.setIconSize(QSize(20, 20))
-    self.remove_selected_subtitle_button.setObjectName('button_dark')
+    self.remove_selected_subtitle_button.setProperty('class', 'button_dark')
     self.remove_selected_subtitle_button.setStyleSheet('QPushButton { border-left:0; border-bottom:0;}')
     self.remove_selected_subtitle_button.clicked.connect(lambda: remove_selected_subtitle_button_clicked(self))
 
     self.merge_back_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
     self.merge_back_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'merge_back_selected_subtitle_icon.png')))
     self.merge_back_selected_subtitle_button.setIconSize(QSize(20, 20))
-    self.merge_back_selected_subtitle_button.setObjectName('button_dark')
+    self.merge_back_selected_subtitle_button.setProperty('class', 'button_dark')
     self.merge_back_selected_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0;}')
     self.merge_back_selected_subtitle_button.clicked.connect(lambda: merge_back_selected_subtitle_button_clicked(self))
 
     self.slice_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
     self.slice_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'slice_selected_subtitle_icon.png')))
     self.slice_selected_subtitle_button.setIconSize(QSize(20, 20))
-    self.slice_selected_subtitle_button.setObjectName('button_dark')
+    self.slice_selected_subtitle_button.setProperty('class', 'button_dark')
     self.slice_selected_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0; border-right:0;}')
     self.slice_selected_subtitle_button.clicked.connect(lambda: slice_selected_subtitle_button_clicked(self))
 
     self.merge_next_selected_subtitle_button = QPushButton(parent=self.playercontrols_widget)
     self.merge_next_selected_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'merge_next_selected_subtitle_icon.png')))
     self.merge_next_selected_subtitle_button.setIconSize(QSize(20, 20))
-    self.merge_next_selected_subtitle_button.setObjectName('button_dark')
+    self.merge_next_selected_subtitle_button.setProperty('class', 'button_dark')
     self.merge_next_selected_subtitle_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0;}')
     self.merge_next_selected_subtitle_button.clicked.connect(lambda: merge_next_selected_subtitle_button_clicked(self))
 
     self.move_start_back_subtitle = QPushButton(parent=self.playercontrols_widget)
     self.move_start_back_subtitle.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'move_start_back_subtitle.png')))
-    self.move_start_back_subtitle.setObjectName('subbutton2_dark')
+    self.move_start_back_subtitle.setProperty('class', 'subbutton2_dark')
     self.move_start_back_subtitle.setStyleSheet('QPushButton {border-bottom:0; border-right:0;}')
     self.move_start_back_subtitle.clicked.connect(lambda: move_start_back_subtitle_clicked(self))
 
     self.move_start_forward_subtitle = QPushButton(parent=self.playercontrols_widget)
     self.move_start_forward_subtitle.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'move_start_forward_subtitle.png')))
-    self.move_start_forward_subtitle.setObjectName('subbutton2_dark')
+    self.move_start_forward_subtitle.setProperty('class', 'subbutton2_dark')
     self.move_start_forward_subtitle.setStyleSheet('QPushButton {border-bottom:0; border-left:0; padding-left:2px;}')
     self.move_start_forward_subtitle.clicked.connect(lambda: move_start_forward_subtitle_clicked(self))
 
     self.move_backward_subtitle = QPushButton(parent=self.playercontrols_widget)
     self.move_backward_subtitle.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'move_backward_subtitle.png')))
-    self.move_backward_subtitle.setObjectName('subbutton2_dark')
+    self.move_backward_subtitle.setProperty('class', 'subbutton2_dark')
     self.move_backward_subtitle.setStyleSheet('QPushButton {border-bottom:0;}')
     self.move_backward_subtitle.clicked.connect(lambda: move_backward_subtitle_clicked(self))
 
     self.timeline_cursor_back_frame = QPushButton(parent=self.playercontrols_widget)
     self.timeline_cursor_back_frame.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'timeline_cursor_back_frame.png')))
-    self.timeline_cursor_back_frame.setObjectName('subbutton_left_dark')
+    self.timeline_cursor_back_frame.setProperty('class', 'subbutton_left_dark')
     self.timeline_cursor_back_frame.setStyleSheet('QPushButton {border-bottom:0;}')
     self.timeline_cursor_back_frame.clicked.connect(lambda: timeline_cursor_back_frame_clicked(self))
 
@@ -338,82 +338,82 @@ def load(self):
 
     self.timeline_cursor_next_frame = QPushButton(parent=self.playercontrols_widget)
     self.timeline_cursor_next_frame.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'timeline_cursor_next_frame.png')))
-    self.timeline_cursor_next_frame.setObjectName('subbutton_right_dark')
+    self.timeline_cursor_next_frame.setProperty('class', 'subbutton_right_dark')
     self.timeline_cursor_next_frame.setStyleSheet('QPushButton {border-bottom:0;}')
     self.timeline_cursor_next_frame.clicked.connect(lambda: timeline_cursor_next_frame_clicked(self))
 
     self.move_forward_subtitle = QPushButton(parent=self.playercontrols_widget)
     self.move_forward_subtitle.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'move_forward_subtitle.png')))
-    self.move_forward_subtitle.setObjectName('subbutton2_dark')
+    self.move_forward_subtitle.setProperty('class', 'subbutton2_dark')
     self.move_forward_subtitle.setStyleSheet('QPushButton {border-bottom:0;}')
     self.move_forward_subtitle.clicked.connect(lambda: move_forward_subtitle_clicked(self))
 
     self.move_end_back_subtitle = QPushButton(parent=self.playercontrols_widget)
     self.move_end_back_subtitle.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'move_end_back_subtitle.png')))
-    self.move_end_back_subtitle.setObjectName('subbutton2_dark')
+    self.move_end_back_subtitle.setProperty('class', 'subbutton2_dark')
     self.move_end_back_subtitle.setStyleSheet('QPushButton {border-bottom:0; border-right:0;}')
     self.move_end_back_subtitle.clicked.connect(lambda: move_end_back_subtitle_clicked(self))
 
     self.move_end_forward_subtitle = QPushButton(parent=self.playercontrols_widget)
     self.move_end_forward_subtitle.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'move_end_forward_subtitle.png')))
-    self.move_end_forward_subtitle.setObjectName('subbutton2_dark')
+    self.move_end_forward_subtitle.setProperty('class', 'subbutton2_dark')
     self.move_end_forward_subtitle.setStyleSheet('QPushButton {border-bottom:0; border-left:0; padding-left:2px;}')
     self.move_end_forward_subtitle.clicked.connect(lambda: move_end_forward_subtitle_clicked(self))
 
     self.zoomin_button = QPushButton(parent=self.playercontrols_widget)
     self.zoomin_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_in_icon.png')))
     self.zoomin_button.setIconSize(QSize(20, 20))
-    self.zoomin_button.setObjectName('button_dark')
+    self.zoomin_button.setProperty('class', 'button_dark')
     self.zoomin_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0;}')
     self.zoomin_button.clicked.connect(lambda: zoomin_button_clicked(self))
 
     self.zoomout_button = QPushButton(parent=self.playercontrols_widget)
     self.zoomout_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'zoom_out_icon.png')))
     self.zoomout_button.setIconSize(QSize(20, 20))
-    self.zoomout_button.setObjectName('button_dark')
+    self.zoomout_button.setProperty('class', 'button_dark')
     self.zoomout_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0;}')
     self.zoomout_button.clicked.connect(lambda: zoomout_button_clicked(self))
 
     self.next_start_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
     self.next_start_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'next_start_to_current_position_icon.png')))
     self.next_start_to_current_position_button.setIconSize(QSize(20, 20))
-    self.next_start_to_current_position_button.setObjectName('button_dark')
+    self.next_start_to_current_position_button.setProperty('class', 'button_dark')
     self.next_start_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0; padding-right:10px;}')
     self.next_start_to_current_position_button.clicked.connect(lambda: next_start_to_current_position_button_clicked(self))
 
     self.last_start_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
     self.last_start_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'last_start_to_current_position_icon.png')))
     self.last_start_to_current_position_button.setIconSize(QSize(20, 20))
-    self.last_start_to_current_position_button.setObjectName('button_dark')
+    self.last_start_to_current_position_button.setProperty('class', 'button_dark')
     self.last_start_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-right:0; border-left:0; padding-left:10px;}')
     self.last_start_to_current_position_button.clicked.connect(lambda: last_start_to_current_position_button_clicked(self))
 
     self.subtitle_start_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
-    self.subtitle_start_to_current_position_button.setObjectName('button_dark')
+    self.subtitle_start_to_current_position_button.setProperty('class', 'button_dark')
     self.subtitle_start_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0;}')
     self.subtitle_start_to_current_position_button.clicked.connect(lambda: subtitle_start_to_current_position_button_clicked(self))
 
     self.next_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
     self.next_end_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'next_end_to_current_position_icon.png')))
     self.next_end_to_current_position_button.setIconSize(QSize(20, 20))
-    self.next_end_to_current_position_button.setObjectName('button_dark')
+    self.next_end_to_current_position_button.setProperty('class', 'button_dark')
     self.next_end_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0; border-right:0; padding-right:10px;}')
     self.next_end_to_current_position_button.clicked.connect(lambda: next_end_to_current_position_button_clicked(self))
 
     self.last_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
     self.last_end_to_current_position_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'last_end_to_current_position_icon.png')))
     self.last_end_to_current_position_button.setIconSize(QSize(20, 20))
-    self.last_end_to_current_position_button.setObjectName('button_dark')
+    self.last_end_to_current_position_button.setProperty('class', 'button_dark')
     self.last_end_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0; border-left:0; padding-left:10px;}')
     self.last_end_to_current_position_button.clicked.connect(lambda: last_end_to_current_position_button_clicked(self))
 
     self.subtitle_end_to_current_position_button = QPushButton(parent=self.playercontrols_widget)
-    self.subtitle_end_to_current_position_button.setObjectName('button_dark')
+    self.subtitle_end_to_current_position_button.setProperty('class', 'button_dark')
     self.subtitle_end_to_current_position_button.setStyleSheet('QPushButton {border-bottom:0;}')
     self.subtitle_end_to_current_position_button.clicked.connect(lambda: subtitle_end_to_current_position_button_clicked(self))
 
     self.change_playback_speed = QPushButton(parent=self.playercontrols_widget)
-    self.change_playback_speed.setObjectName('button')
+    self.change_playback_speed.setProperty('class', 'button')
     self.change_playback_speed.setCheckable(True)
     self.change_playback_speed.setStyleSheet('QPushButton {border-top:0; padding-left:36px; text-align:left;}')
     self.change_playback_speed.clicked.connect(lambda: change_playback_speed_clicked(self))
@@ -422,7 +422,7 @@ def load(self):
     self.change_playback_speed_icon_label.setStyleSheet('QLabel { image: url(' + os.path.join(PATH_SUBTITLD_GRAPHICS, 'playback_speed_icon.png') + ')}')
 
     self.change_playback_speed_decrease = QPushButton('-', parent=self.change_playback_speed)
-    self.change_playback_speed_decrease.setObjectName('button')
+    self.change_playback_speed_decrease.setProperty('class', 'button')
     self.change_playback_speed_decrease.setStyleSheet('QPushButton {border-top:5px; padding-left:5px; border-right:0;}')
     self.change_playback_speed_decrease.clicked.connect(lambda: change_playback_speed_decrease_clicked(self))
 
@@ -433,12 +433,12 @@ def load(self):
     self.change_playback_speed_slider.sliderReleased.connect(lambda: change_playback_speed_slider(self))
 
     self.change_playback_speed_increase = QPushButton('+', parent=self.change_playback_speed)
-    self.change_playback_speed_increase.setObjectName('button')
+    self.change_playback_speed_increase.setProperty('class', 'button')
     self.change_playback_speed_increase.setStyleSheet('QPushButton {border-top:5px; padding-left:5px; border-left:0;}')
     self.change_playback_speed_increase.clicked.connect(lambda: change_playback_speed_increase_clicked(self))
 
     self.repeat_playback = QPushButton(parent=self.playercontrols_widget)
-    self.repeat_playback.setObjectName('button')
+    self.repeat_playback.setProperty('class', 'button')
     self.repeat_playback.setCheckable(True)
     self.repeat_playback.setStyleSheet('QPushButton {border-top:0; }')
     self.repeat_playback.clicked.connect(lambda: repeat_playback_clicked(self))
@@ -462,55 +462,55 @@ def load(self):
     self.repeat_playback_times.valueChanged.connect(lambda: repeat_playback_times_changed(self))
 
     self.timelinescrolling_none_button = QPushButton(parent=self.playercontrols_widget)
-    self.timelinescrolling_none_button.setObjectName('subbutton')
+    self.timelinescrolling_none_button.setProperty('class', 'subbutton')
     self.timelinescrolling_none_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.timelinescrolling_none_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'timelinescrolling_none_icon.svg')))
     self.timelinescrolling_none_button.setCheckable(True)
     self.timelinescrolling_none_button.clicked.connect(lambda: timelinescrolling_type_changed(self, 'none'))
 
     self.timelinescrolling_page_button = QPushButton(parent=self.playercontrols_widget)
-    self.timelinescrolling_page_button.setObjectName('subbutton')
+    self.timelinescrolling_page_button.setProperty('class', 'subbutton')
     self.timelinescrolling_page_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.timelinescrolling_page_button.setCheckable(True)
     self.timelinescrolling_page_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'timelinescrolling_page_icon.svg')))
     self.timelinescrolling_page_button.clicked.connect(lambda: timelinescrolling_type_changed(self, 'page'))
 
     self.timelinescrolling_follow_button = QPushButton(parent=self.playercontrols_widget)
-    self.timelinescrolling_follow_button.setObjectName('subbutton')
+    self.timelinescrolling_follow_button.setProperty('class', 'subbutton')
     self.timelinescrolling_follow_button.setStyleSheet('QPushButton {border-top:0;}')
     self.timelinescrolling_follow_button.setCheckable(True)
     self.timelinescrolling_follow_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'timelinescrolling_follow_icon.svg')))
     self.timelinescrolling_follow_button.clicked.connect(lambda: timelinescrolling_type_changed(self, 'follow'))
 
     self.grid_button = QPushButton('GRID', parent=self.playercontrols_widget)
-    self.grid_button.setObjectName('subbutton')
+    self.grid_button.setProperty('class', 'subbutton')
     self.grid_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.grid_button.setCheckable(True)
     self.grid_button.clicked.connect(lambda: grid_button_clicked(self))
 
     self.grid_frames_button = QPushButton(parent=self.playercontrols_widget)
-    self.grid_frames_button.setObjectName('subbutton')
+    self.grid_frames_button.setProperty('class', 'subbutton')
     self.grid_frames_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.grid_frames_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'grid_frames_icon.png')))
     self.grid_frames_button.setCheckable(True)
     self.grid_frames_button.clicked.connect(lambda: grid_type_changed(self, 'frames'))
 
     self.grid_seconds_button = QPushButton(parent=self.playercontrols_widget)
-    self.grid_seconds_button.setObjectName('subbutton')
+    self.grid_seconds_button.setProperty('class', 'subbutton')
     self.grid_seconds_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.grid_seconds_button.setCheckable(True)
     self.grid_seconds_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'grid_seconds_icon.png')))
     self.grid_seconds_button.clicked.connect(lambda: grid_type_changed(self, 'seconds'))
 
     self.grid_scenes_button = QPushButton(parent=self.playercontrols_widget)
-    self.grid_scenes_button.setObjectName('subbutton')
+    self.grid_scenes_button.setProperty('class', 'subbutton')
     self.grid_scenes_button.setStyleSheet('QPushButton {border-top:0;}')
     self.grid_scenes_button.setCheckable(True)
     self.grid_scenes_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'grid_scenes_icon.png')))
     self.grid_scenes_button.clicked.connect(lambda: grid_type_changed(self, 'scenes'))
 
     self.snap_button = QPushButton('SNAP', parent=self.playercontrols_widget)
-    self.snap_button.setObjectName('subbutton')
+    self.snap_button.setProperty('class', 'subbutton')
     self.snap_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.snap_button.setCheckable(True)
     self.snap_button.clicked.connect(lambda: snap_button_clicked(self))
@@ -520,35 +520,35 @@ def load(self):
     self.snap_value.valueChanged.connect(lambda: snap_value_changed(self))
 
     self.snap_limits_button = QPushButton(parent=self.playercontrols_widget)
-    self.snap_limits_button.setObjectName('subbutton')
+    self.snap_limits_button.setProperty('class', 'subbutton')
     self.snap_limits_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.snap_limits_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_limits_icon.png')))
     self.snap_limits_button.setCheckable(True)
     self.snap_limits_button.clicked.connect(lambda: snap_limits_button_clicked(self))
 
     self.snap_grid_button = QPushButton(parent=self.playercontrols_widget)
-    self.snap_grid_button.setObjectName('subbutton')
+    self.snap_grid_button.setProperty('class', 'subbutton')
     self.snap_grid_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.snap_grid_button.setCheckable(True)
     self.snap_grid_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_grid_icon.png')))
     self.snap_grid_button.clicked.connect(lambda: snap_grid_button_clicked(self))
 
     self.snap_move_button = QPushButton(parent=self.playercontrols_widget)
-    self.snap_move_button.setObjectName('subbutton')
+    self.snap_move_button.setProperty('class', 'subbutton')
     self.snap_move_button.setStyleSheet('QPushButton {border-right:0; border-top:0;}')
     self.snap_move_button.setCheckable(True)
     self.snap_move_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_moving_icon.png')))
     self.snap_move_button.clicked.connect(lambda: snap_move_button_clicked(self))
 
     self.snap_move_nereast_button = QPushButton(parent=self.playercontrols_widget)
-    self.snap_move_nereast_button.setObjectName('subbutton')
+    self.snap_move_nereast_button.setProperty('class', 'subbutton')
     self.snap_move_nereast_button.setStyleSheet('QPushButton {border-top:0;}')
     self.snap_move_nereast_button.setCheckable(True)
     self.snap_move_nereast_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'snap_move_next.svg')))
     self.snap_move_nereast_button.clicked.connect(lambda: snap_move_nereast_button_clicked(self))
 
     self.step_button = QPushButton('STEP', parent=self.playercontrols_widget)
-    self.step_button.setObjectName('subbutton')
+    self.step_button.setProperty('class', 'subbutton')
     self.step_button.setStyleSheet('QPushButton {border-top:0;}')
     self.step_button.setCheckable(True)
     self.step_button.clicked.connect(lambda: update_step_buttons(self))
@@ -739,7 +739,7 @@ def playercontrols_playpause_button_update(self):
 
 def show(self):
     """Function that shows the entire panel"""
-    self.generate_effect(self.playercontrols_widget_animation, 'geometry', 1000, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
+    self.generate_effect(self.playercontrols_widget_animation, 'geometry', 800, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
     update_snap_buttons(self)
     update_grid_buttons(self)
     update_step_buttons(self)
@@ -857,6 +857,7 @@ def gap_add_subtitle_button_clicked(self):
     self.selected_subtitle = False
     self.timeline.update(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def gap_remove_subtitle_button_clicked(self):
@@ -866,6 +867,7 @@ def gap_remove_subtitle_button_clicked(self):
     self.selected_subtitle = False
     self.timeline.update(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def update_snap_buttons(self):
@@ -926,8 +928,8 @@ def playercontrols_play_from_last_start_button_clicked(self):
     last_subtitle = self.subtitles_list[bisect(subt, self.player_widget.position)-1]
     self.player_widget.seek(last_subtitle[0])
     self.player_widget.play()
-    self.timeline.update_scrollbar(self)
-    self.timeline.update(self)
+    # self.timeline.update_scrollbar(self)
+    # self.timeline.update(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
@@ -951,10 +953,11 @@ def add_subtitle_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.subtitleslist.update_properties_widget(self)
     self.properties_textedit.setFocus(Qt.TabFocusReason)
     if self.add_subtitle_and_play.isChecked():
         self.player_widget.play()
+    subtitleslist.update_topbar_status(self)
 
 
 def remove_selected_subtitle_button_clicked(self):
@@ -964,8 +967,9 @@ def remove_selected_subtitle_button_clicked(self):
     self.selected_subtitle = False
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.subtitleslist.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def slice_selected_subtitle_button_clicked(self):
@@ -978,8 +982,9 @@ def slice_selected_subtitle_button_clicked(self):
         self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.properties.update_properties_widget(self)
+        self.subtitleslist.update_properties_widget(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
+        subtitleslist.update_topbar_status(self)
 
 
 def select_subtitle_in_current_position(self):
@@ -989,7 +994,7 @@ def select_subtitle_in_current_position(self):
         self.selected_subtitle = subtitle
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.properties.update_properties_widget(self)
+        self.subtitleslist.update_properties_widget(self)
 
 
 def select_next_subtitle_over_current_position(self):
@@ -999,7 +1004,7 @@ def select_next_subtitle_over_current_position(self):
         self.selected_subtitle = subtitle
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.properties.update_properties_widget(self)
+        self.subtitleslist.update_properties_widget(self)
 
 
 def select_last_subtitle_over_current_position(self):
@@ -1009,7 +1014,7 @@ def select_last_subtitle_over_current_position(self):
         self.selected_subtitle = subtitle
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.properties.update_properties_widget(self)
+        self.subtitleslist.update_properties_widget(self)
 
 
 def merge_back_selected_subtitle_button_clicked(self):
@@ -1019,8 +1024,9 @@ def merge_back_selected_subtitle_button_clicked(self):
         self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.properties.update_properties_widget(self)
+        self.subtitleslist.update_properties_widget(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
+        subtitleslist.update_topbar_status(self)
 
 
 def merge_next_selected_subtitle_button_clicked(self):
@@ -1030,8 +1036,9 @@ def merge_next_selected_subtitle_button_clicked(self):
         self.unsaved = True
         self.subtitleslist.update_subtitles_list_qlistwidget(self)
         self.timeline.update(self)
-        self.properties.update_properties_widget(self)
+        self.subtitleslist.update_properties_widget(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
+        subtitleslist.update_topbar_status(self)
 
 
 def move_backward_subtitle_clicked(self):
@@ -1047,6 +1054,7 @@ def move_backward_subtitle_clicked(self):
         self.unsaved = True
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
+        subtitleslist.update_topbar_status(self)
 
 
 def move_forward_subtitle_clicked(self):
@@ -1062,6 +1070,7 @@ def move_forward_subtitle_clicked(self):
         self.unsaved = True
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
+        subtitleslist.update_topbar_status(self)
 
 
 def move_start_back_subtitle_clicked(self):
@@ -1077,6 +1086,7 @@ def move_start_back_subtitle_clicked(self):
         self.unsaved = True
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
+        subtitleslist.update_topbar_status(self)
 
 
 def move_start_forward_subtitle_clicked(self):
@@ -1092,6 +1102,7 @@ def move_start_forward_subtitle_clicked(self):
         self.unsaved = True
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
+        subtitleslist.update_topbar_status(self)
 
 
 def move_end_back_subtitle_clicked(self):
@@ -1122,6 +1133,7 @@ def move_end_forward_subtitle_clicked(self):
         self.unsaved = True
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
+        subtitleslist.update_topbar_status(self)
 
 
 def timeline_cursor_back_frame_clicked(self):
@@ -1142,8 +1154,9 @@ def next_start_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.subtitleslist.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def last_end_to_current_position_button_clicked(self):
@@ -1152,8 +1165,9 @@ def last_end_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.subtitleslist.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def last_start_to_current_position_button_clicked(self):
@@ -1162,8 +1176,9 @@ def last_start_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.subtitleslist.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def subtitle_start_to_current_position_button_clicked(self):
@@ -1172,8 +1187,9 @@ def subtitle_start_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.subtitleslist.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def subtitle_end_to_current_position_button_clicked(self):
@@ -1182,8 +1198,9 @@ def subtitle_end_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.subtitleslist.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def next_end_to_current_position_button_clicked(self):
@@ -1192,15 +1209,16 @@ def next_end_to_current_position_button_clicked(self):
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
     self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.subtitleslist.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+    subtitleslist.update_topbar_status(self)
 
 
 def change_playback_speed_clicked(self):
     """Function to call when playback speed button is clicked"""
-    if not self.change_playback_speed.isChecked():
-        self.playback_speed = 1.0
-        self.player.update_speed(self)
+    #if not self.change_playback_speed.isChecked():
+        # self.playback_speed = 1.0
+    self.player.update_speed(self)
     update_playback_speed_buttons(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
 

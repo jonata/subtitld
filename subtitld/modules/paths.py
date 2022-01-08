@@ -82,7 +82,7 @@ if not os.path.isdir(PATH_SUBTITLD_DATA_THUMBNAILS):
 PATH_SUBTITLD_USER_CONFIG_FILE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'subtitld.config')
 
 
-def get_graphics_path(filename):
+def get_graphics_path(filename=''):
     """Function to get graphics path. Windows have a problem with paths."""
     final_path = os.path.join(PATH_SUBTITLD_GRAPHICS, filename)
     if sys.platform == 'win32' or os.name == 'nt':
@@ -98,7 +98,8 @@ LIST_OF_SUPPORTED_VIDEO_EXTENSIONS = (('.mp4', '.mkv', '.mov', '.mpg', '.webm', 
 
 LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
     'SRT': {'description': 'SubRip Subtitle format', 'extensions': ['srt']},
-    'DFXP': {'description': 'Subtitle format', 'extensions': ['ttml', 'dfxp']},
+    'DFXP': {'description': 'Subtitle format', 'extensions': ['dfxp', 'itt']},
+    'TTML': {'description': 'Subtitle format', 'extensions': ['ttml']},
     'SAMI': {'description': 'Subtitle format', 'extensions': ['smi', 'sami']},
     'SCC': {'description': 'Subtitle format', 'extensions': ['scc']},
     'VTT': {'description': 'Subtitle format', 'extensions': ['webvtt', 'vtt']},

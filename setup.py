@@ -131,12 +131,12 @@ setup_requires = [
 install_requires = [
     'PyQt5',
     'pyopengl',
-    'numpy==1.19.3',
+    'numpy',
     'sip',
     'cffi',
     'requests',
     'pycaption',
-    'captionstransformer',
+    'captionstransformer @ git+ssh://git@github.com/toutpt/captionstransformer',
     'pysubs2',
     'lxml',
     'clean-text[gpl]',
@@ -146,8 +146,9 @@ install_requires = [
     'autosub3',
     'google-trans-new',
     'SpeechRecognition',
-    'beautifulsoup4<4.5.0,>=4.2.1',
-    'python-docx'
+    'beautifulsoup4<4.10,>=4.8.1',
+    'python-docx',
+    'python-mpv'
 ]
 
 # --------------------------------------------------------------------------- #

@@ -8,17 +8,16 @@ Subtitld - open source subtitle editor
 
 import os
 import sys
-import time
 import datetime
 import argparse
 
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import QEasingCurve, Qt, QRect, QPropertyAnimation, QTranslator, QTimer
+from PyQt5.QtCore import QEasingCurve, QMargins, Qt, QRect, QPropertyAnimation, QTranslator, QTimer
 
 from subtitld.modules import config
 from subtitld.modules.history import history_redo, history_undo
-from subtitld.modules.paths import PATH_LOCALE, PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
+from subtitld.modules.paths import PATH_LOCALE, PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP, get_graphics_path
 
 if ACTUAL_OS == 'darwin':
     from subtitld.modules.paths import NSURL
@@ -81,19 +80,21 @@ class Subtitld(QWidget):
         self.format_to_save = 'SRT'
         self.format_usf_present = False
         self.selected_language = 'en'
+        self.subtitleslist_width_proportion = .3
 
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')
 
         self.start_screen_thumbnail_background = QLabel(parent=self)
         self.start_screen_thumbnail_background.setAlignment(Qt.AlignCenter)
+        # self.start_screen_thumbnail_background.setScaledContents(True)
         self.start_screen_thumbnail_background_transparency = QGraphicsOpacityEffect()
         self.start_screen_thumbnail_background.setGraphicsEffect(self.start_screen_thumbnail_background_transparency)
         self.start_screen_thumbnail_background_transparency_animation = QPropertyAnimation(self.start_screen_thumbnail_background_transparency, b'opacity')
         # self.start_screen_thumbnail_background_transparency_animation.setEasingCurve(QEasingCurve.InExpo)
         self.start_screen_thumbnail_background_transparency.setOpacity(1)
-        self.start_screen_thumbnail_background_animation = QPropertyAnimation(self.start_screen_thumbnail_background, b'geometry')
-        self.start_screen_thumbnail_background_animation.setEasingCurve(QEasingCurve.OutCirc)
+        # self.start_screen_thumbnail_background_animation = QPropertyAnimation(self.start_screen_thumbnail_background, b'geometry')
+        # self.start_screen_thumbnail_background_animation.setEasingCurve(QEasingCurve.OutCirc)
 
         self.background_label2 = QLabel(self)
         self.background_label2.setObjectName('background_label2')
@@ -107,8 +108,8 @@ class Subtitld(QWidget):
         self.background_watermark_label.setObjectName('background_watermark_label')
 
         # All the stylesheet properties are in a separate file, so importing it here
-        from subtitld.modules import stylesheet
-        stylesheet.set_stylesheet(self)
+        self.setStyleSheet(open(os.path.join(PATH_SUBTITLD_GRAPHICS, 'stylesheet.qss')).read().replace('PATH_SUBTITLD_GRAPHICS/', get_graphics_path()))
+
 
         # The file io system
         from subtitld.modules import file_io
@@ -140,14 +141,6 @@ class Subtitld(QWidget):
         self.subtitleslist = subtitleslist
         self.subtitleslist.load(self)
 
-        from subtitld.modules import global_properties_panel
-        self.global_properties_panel = global_properties_panel
-        self.global_properties_panel.load(self)
-
-        from subtitld.modules import properties
-        self.properties = properties
-        self.properties.load(self)
-
         from subtitld.modules import timeline
         self.timeline = timeline
 
@@ -159,8 +152,8 @@ class Subtitld(QWidget):
         # self.playercontrols_properties = playercontrols_properties
         # self.playercontrols_properties.load(self)
 
-        self.subtitleslist.update_subtitles_list_widget(self)
-        self.properties.update_properties_widget(self)
+        #self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        #self.subtitleslist.update_properties_widget(self)
         self.player.update(self)
 
         from subtitld.modules import shortcuts
@@ -200,10 +193,10 @@ class Subtitld(QWidget):
 
         self.startscreen.resized(self)
         self.subtitleslist.resized(self)
-        self.properties.resized(self)
+        #self.properties.resized(self)
 
         self.global_subtitlesvideo_panel.resized(self)
-        self.global_properties_panel.resized(self)
+        #self.global_properties_panel.resized(self)
 
         self.playercontrols.resized(self)
         # self.playercontrols_properties.resized(self)
@@ -276,6 +269,9 @@ class Subtitld(QWidget):
         if effect_type == 'geometry':
             widget.setStartValue(QRect(startValue[0], startValue[1], startValue[2], startValue[3]))
             widget.setEndValue(QRect(endValue[0], endValue[1], endValue[2], endValue[3]))
+        if effect_type in ['maximumHeight', 'maximumWidth']:
+            widget.setStartValue(startValue)
+            widget.setEndValue(endValue)
         elif effect_type == 'opacity':
             widget.setStartValue(startValue)
             widget.setEndValue(endValue)
@@ -292,10 +288,10 @@ def autosave_timer_timeout(self):
 def main():
     app = QApplication(sys.argv)
     # command to update ts files: pylupdate5 subtitld.py modules/*.py -ts locale/en_US.ts
-    if os.path.isfile(os.path.join(PATH_LOCALE, 'en_US.qm')):
-        translator = QTranslator()
-        translator.load(os.path.join(PATH_LOCALE, 'en_US.qm'))
-        app.installTranslator(translator)
+    # if os.path.isfile(os.path.join(PATH_LOCALE, 'en_US.qm')):
+    #     translator = QTranslator()
+    #     translator.load(os.path.join(PATH_LOCALE, 'en_US.qm'))
+    #     app.installTranslator(translator)
     # app.setDesktopSettingsAware(False)
     app.setStyle("plastique")
     app.setApplicationName("Subtitld")

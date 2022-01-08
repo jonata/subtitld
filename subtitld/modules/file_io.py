@@ -16,12 +16,11 @@ from scenedetect.scene_manager import SceneManager
 from scenedetect.stats_manager import StatsManager
 from scenedetect.detectors import ContentDetector
 
-import numpy
 import pycaption
 from pycaption.exceptions import CaptionReadSyntaxError, CaptionReadNoCaptions
 import chardet
 import pysubs2
-from cleantext import clean
+# from cleantext import clean
 import captionstransformer
 from subtitld import scc2srt, timecode
 
@@ -66,7 +65,7 @@ class ThreadExtractSceneTimePositions(QThread):
 
 class ThreadExtractWaveform(QThread):
     """Thread to extract waveform"""
-    command = pyqtSignal(numpy.ndarray)
+    command = pyqtSignal(list)
     filepath = ''
     audio = ''
     duration = ''
@@ -76,7 +75,8 @@ class ThreadExtractWaveform(QThread):
     def run(self):
         """Run function of thread to extract waveform"""
         if self.filepath:
-            result = waveform.ffmpeg_load_audio(filepath=self.filepath)
+            # result = waveform.ffmpeg_load_audio(filepath=self.filepath)
+            result = waveform.ffms2_load_audio(filepath=self.filepath)
             self.command.emit(result)
 
 
@@ -88,7 +88,7 @@ class ThreadGenerateHashOfVideo(QThread):
     def run(self):
         if self.filepath and os.path.isfile(self.filepath):
             md5_object = hashlib.md5()
-            block_size = 128*md5_object.block_size
+            block_size = 128 * md5_object.block_size
             file_object = open(self.filepath, 'rb')
             chunk = file_object.read(block_size)
             while chunk:
@@ -103,12 +103,25 @@ class ThreadGenerateHashOfVideo(QThread):
 def load(self):
     """Load thread objects"""
     def thread_extract_waveform_ended(command):
+        print('audio ffms2 ended')
         self.video_metadata['audio'] = command
         self.timeline.zoom_update_waveform(self)
         self.videoinfo_label.setText(self.tr('Audio ffmpeg_extract_subtitleed'))
 
     self.thread_extract_waveform = ThreadExtractWaveform(self)
     self.thread_extract_waveform.command.connect(thread_extract_waveform_ended)
+
+    def thread_extract_waveform_ended2(command):
+        if not command[0] in self.video_metadata['waveform']:
+            self.video_metadata['waveform'][command[0]] = {'qimages': []}
+        self.video_metadata['waveform'][command[0]]['qimages'].append(command[1])
+        self.timeline_widget.update()
+        #self.video_metadata['audio'] = command
+        # self.timeline.zoom_update_waveform(self)
+        #self.videoinfo_label.setText(self.tr('Audio ffmpeg_extract_subtitleed'))
+
+    self.thread_extract_waveform2 = waveform.ThreadExtractWaveform2(self)
+    self.thread_extract_waveform2.command.connect(thread_extract_waveform_ended2)
 
     def thread_extract_scene_time_positions_ended(command):
         self.video_metadata['scenes'] = command
@@ -132,7 +145,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
     supported_video_files = self.tr('Video files') + ' ({})'.format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
 
     if not files_to_open:
-        files_to_open = [QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video or subtitle file'), directory=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files)[0]]
+        files_to_open = [QFileDialog.getOpenFileName(parent=self, caption=self.tr('Select the video or subtitle file'), directory=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]]
 
     for filepath in files_to_open:
         if os.path.isfile(filepath):
@@ -157,7 +170,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
                         break
 
             if not self.video_metadata:
-                filepath = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=REAL_PATH_HOME, filter=supported_video_files)[0]
+                filepath = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), directory=REAL_PATH_HOME, filter=supported_video_files, options=QFileDialog.DontUseNativeDialog)[0]
                 if filepath and os.path.isfile(filepath) and filepath.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
                     self.video_metadata = process_video_file(filepath)
 
@@ -169,18 +182,19 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.videoinfo_label.setText(self.tr('Extracting audio...'))
         #self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
         #self.thread_extract_scene_time_positions.start()
-        self.player.update(self)
+
         self.player_widget.loadfile(self.video_metadata['filepath'])
         if self.actual_subtitle_file:
             self.thread_generate_hash_of_video.filepath = self.video_metadata['filepath']
             self.thread_generate_hash_of_video.start()
             if self.actual_subtitle_file in self.settings['recent_files']:
                 self.player_widget.seek(self.settings['recent_files'][self.actual_subtitle_file].get('last_position', 0))
-        self.player.resize_player_widget(self)
+        #self.player.resize_player_widget(self)
         if not self.actual_subtitle_file:
-            if self.video_metadata.get('subttiles', ''):
-                self.subtitles_list, self.format_to_save = process_subtitles_file(self.video_metadata['subttiles'])
-        self.subtitleslist.update_subtitles_list_widget(self)
+            if self.video_metadata.get('subtitles', ''):
+                self.subtitles_list, self.format_to_save = process_subtitles_file(self.video_metadata['subtitles'])
+        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.subtitleslist.update_topbar_status(self)
         self.settings['recent_files'][self.actual_subtitle_file] = {
             'last_opened': datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
             'video_filepath': self.video_metadata['filepath']
@@ -191,10 +205,19 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.timeline.update_timeline(self)
             self.startscreen.hide(self)
             self.playercontrols.show(self)
-            self.properties.show(self)
+            #self.properties.show(self)
             self.subtitleslist.show(self)
             self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
-            self.global_properties_panel.hide_global_properties_panel(self)
+            #self.global_properties_panel.hide_global_properties_panel(self)
+            player_qrect = self.player.resize_player_widget(self, just_get_qrect=True)
+            original_qrect = [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()]
+            # self.generate_effect(self.start_screen_thumbnail_background_animation, 'geometry', 1000, original_qrect, player_qrect)
+            self.generate_effect(self.start_screen_thumbnail_background_transparency_animation, 'opacity', 200, 1.0, 0.0)
+            self.generate_effect(self.player_border_animation, 'geometry', 700, original_qrect, player_qrect)
+            self.generate_effect(self.player_border_transparency_animation, 'opacity', 700, 0.5, 1.0)
+            #self.generate_effect(self.layer_player_bottom_spacer_animation, 'maximumHeight', 1000, self.layer_player_bottom_spacer.maximumHeight(), 200)
+            #self.generate_effect(self.layer_player_left_spacer_animation, 'maximumWidth', 1000, 0, self.width()*self.subtitleslist_width_proportion)#self.layer_player_left_spacer.maximumWidth()
+            #self.generate_effect(self.videoinfo_label_animation, 'maximumHeight', 1000, self.videoinfo_label.maximumHeight(), 60)
 
     self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
@@ -251,15 +274,26 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                     # error_message = QMessageBox()
                     # error_message.setWindowTitle(self.tr('There is a problem with this file and can not be opened.'))
 
-        elif subtitle_file.lower().endswith(('.ttml', '.dfxp')):
-            subtitle_format = 'DFXP'
-            with open(subtitle_file, encoding='utf-8') as dfxp_file:
-                dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
-                languages = dfxp_reader.get_languages()
-                language = languages[0]
-                captions = dfxp_reader.get_captions(language)
-                for caption in captions:
-                    final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+        elif subtitle_file.lower().endswith(('.ttml', '.dfxp', '.xml', '.itt')):
+            if subtitle_file.lower().endswith(('.xml')) and '<transcript>' in open(subtitle_file).read():
+                subtitle_format = 'XML'
+                with open(subtitle_file, encoding='utf-8') as xml_file:
+                    captions = captionstransformer.transcript.Reader(xml_file).read()
+                    for caption in captions:
+                        final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
+            else:
+                if '<tt ' in open(subtitle_file).read():
+                    subtitle_format = 'TTML'
+                else:
+                    subtitle_format = 'DFXP'
+
+                with open(subtitle_file, encoding='utf-8') as dfxp_file:
+                    dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
+                    languages = dfxp_reader.get_languages()
+                    language = languages[0]
+                    captions = dfxp_reader.get_captions(language)
+                    for caption in captions:
+                        final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.smi', '.sami')):
             subtitle_format = 'SAMI'
@@ -279,13 +313,6 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                 for caption in captions:
                     final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text.strip()])
 
-        elif subtitle_file.lower().endswith(('.xml')):
-            subtitle_format = 'XML'
-            if '<transcript>' in open(subtitle_file).read():
-                with open(subtitle_file, encoding='utf-8') as xml_file:
-                    captions = captionstransformer.transcript.Reader(xml_file).read()
-                    for caption in captions:
-                        final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
 
         elif subtitle_file.lower().endswith(('.ass', '.ssa', '.sub')):
             if subtitle_file.lower().endswith(('.ass', '.ssa')):
@@ -327,15 +354,13 @@ def process_video_file(video_file=False):
             video_metadata['width'] = int(stream.get('width', 640))
             video_metadata['height'] = int(stream.get('height', 480))
             video_metadata['framerate'] = int(stream.get('r_frame_rate', '1/30').split('/', 1)[0])/int(stream.get('r_frame_rate', '1/30').split('/', 1)[-1])
-        elif stream.get('codec_type', '') in ['subtitle'] and not video_metadata.get('subttiles', False):
-            video_metadata['subttiles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
+        elif stream.get('codec_type', '') in ['subtitle'] and not video_metadata.get('subtitles', False):
+            video_metadata['subtitles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
             # TODO: select what language if multiple embedded subtitles
         elif stream.get('codec_type', '') in ['audio']:
             video_metadata['audio_is_present'] = True
     video_metadata['filepath'] = video_file
     video_metadata['scenes'] = []
-
-
 
     return video_metadata
 
@@ -574,7 +599,7 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
         # if not final_file.lower().endswith('.' + format.lower()):
         #     final_file += '.' + format.lower()
 
-        if subtitle_format in ['SRT', 'DFXP', 'SAMI', 'SCC', 'VTT']:
+        if subtitle_format in ['SRT', 'DFXP', 'TTML', 'SAMI', 'SCC', 'VTT']:
             captions = pycaption.CaptionList()
             for sub in subtitles_list:
                 # skip extra blank lines
@@ -585,7 +610,7 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
 
             if subtitle_format == 'SRT':
                 open(final_file, mode='w', encoding='utf-8').write(pycaption.SRTWriter().write(caption_set))
-            elif subtitle_format == 'DFXP':
+            elif subtitle_format in ['DFXP', 'TTML']:
                 open(final_file, mode='w', encoding='utf-8').write(pycaption.DFXPWriter().write(caption_set))
             elif subtitle_format == 'SAMI':
                 open(final_file, mode='w', encoding='utf-8').write(pycaption.SAMIWriter().write(caption_set))

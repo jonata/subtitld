@@ -25,10 +25,11 @@ class ThreadGetWaveform(QThread):
     duration = False
     width = False
     height = False
+    filepath = ''
 
     def run(self):
-        """Function to run QThread"""
-        positive_values, negative_values, _ = waveform.generate_waveform_zoom(zoom=self.zoom, duration=self.duration, waveform=self.audio)
+        # positive_values, negative_values, _ = waveform.generate_waveform_zoom(zoom=self.zoom, duration=self.duration, waveform=self.audio)
+        positive_values, negative_values, _ = waveform.generate_waveform_zoom2(zoom=self.zoom, duration=self.duration, filepath=self.filepath)
         self.command.emit([self.zoom, [positive_values, negative_values]])
 
 
@@ -75,6 +76,7 @@ class ThreadGetQImages(QThread):
                 painter.end()
 
         parser = 0
+        print('blah')
         while True:
             qpixmap = DrawPixmap(self.width, 124)
             qpixmap.fill(QColor(0, 0, 0, 0))
@@ -85,6 +87,7 @@ class ThreadGetQImages(QThread):
             qpixmap.paintEvent()
             self.command.emit([self.zoom, qpixmap.toImage()])                # qpixmap.save('/tmp/teste.png')
             time.sleep(.2)
+
             parser += self.width
             if parser > len(self.values_list[0]):
                 break
@@ -128,14 +131,14 @@ class Timeline(QWidget):
                     available_zoom = self.parent.mediaplayer_zoom
                     if available_zoom not in self.parent.video_metadata['waveform'].keys():
                         available_zoom = sorted(self.parent.video_metadata['waveform'].keys())[0]
-                        x_factor = self.parent.mediaplayer_zoom/available_zoom
+                        x_factor = self.parent.mediaplayer_zoom / available_zoom
 
-                    w_factor = (self.parent.video_metadata.get('duration', 0.01)*available_zoom)/len(self.parent.video_metadata['waveform'][available_zoom]['points'][0])
+                    w_factor = (self.parent.video_metadata.get('duration', 0.01) * available_zoom) / len(self.parent.video_metadata['waveform'][available_zoom]['points'][0])
 
                     if self.parent.video_metadata['waveform'][available_zoom].get('qimages', []):
                         xpos = 0
                         for qimage in self.parent.video_metadata['waveform'][available_zoom]['qimages']:
-                            wid = qimage.width()*w_factor*x_factor
+                            wid = qimage.width() * w_factor * x_factor
                             if not xpos > scroll_position + scroll_width and not xpos + wid < scroll_position:
                                 painter.drawImage(QRect(xpos, self.y_waveform, wid, self.h_waveform), qimage)
                             xpos += wid
@@ -317,7 +320,7 @@ class Timeline(QWidget):
                 self.parent.repeat_duration_tmp = []
             update_timecode_label(self.parent)
 
-        self.parent.properties.update_properties_widget(self.parent)
+        self.parent.subtitleslist.update_properties_widget(self.parent)
 
         if (self.subtitle_is_clicked or self.subtitle_start_is_clicked or self.subtitle_end_is_clicked):
             history.history_append(self.parent.subtitles_list)
@@ -591,7 +594,8 @@ def zoom_update_waveform(self):
     """Function to update timeline zoom"""
     if not isinstance(self.video_metadata['audio'], bool) and self.mediaplayer_zoom not in self.video_metadata['waveform'].keys():
         self.videoinfo_label.setText(self.tr('Generating waveform...'))
-        self.thread_get_waveform.audio = self.video_metadata['audio']
+        # self.thread_get_waveform.audio = self.video_metadata['audio']
+        self.thread_get_waveform.filepath = self.video_metadata['filepath']
         self.thread_get_waveform.zoom = self.mediaplayer_zoom
         self.thread_get_waveform.duration = self.video_metadata.get('duration', 0.01)
         self.thread_get_waveform.start(QThread.IdlePriority)

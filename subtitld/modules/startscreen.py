@@ -35,7 +35,7 @@ def load(self):
 
     self.start_screen_open_button = QPushButton(self.tr('Open').upper(), parent=self.start_screen)
     self.start_screen_open_button.clicked.connect(lambda: start_screen_open_button_clicked(self))
-    self.start_screen_open_button.setObjectName('button_dark')
+    self.start_screen_open_button.setProperty('class', 'button_dark')
 
     self.start_screen_recent_label = QLabel(self.tr('Recent subtitles').upper(), parent=self.start_screen)
     self.start_screen_recent_label.setObjectName('start_screen_recent_label')
@@ -130,11 +130,10 @@ def start_screen_recent_listwidget_item_clicked(self):
     """Function to call when item on recent files list is clicked"""
     files_to_open = [self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]]
     file_io.open_filepath(self, files_to_open=files_to_open, update_interface=True)
-    self.generate_effect(self.start_screen_thumbnail_background_animation, 'geometry', 1000, [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()], [self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height()])
-    self.generate_effect(self.start_screen_thumbnail_background_transparency_animation, 'opacity', 1000, 1.0, 0.0)
     # self.start_screen_thumbnail_background.setVisible(False)
-    self.generate_effect(self.player_widget_animation, 'geometry', 1000, [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()], [self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height()])
-    self.generate_effect(self.player_widget_transparency_animation, 'opacity', 1000, 0.0, 1.0)
+    #self.generate_effect(self.player_widget_animation, 'geometry', 1000, [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()], [self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height()])
+    #self.generate_effect(self.player_widget_transparency_animation, 'opacity', 1000, 0.0, 1.0)
+    # self.generate_effect(self.layer_player_vbox_animation, 'contentsMargins', 1000, self.layer_player_vbox.contentsMargins(), [300, 0, 0, 200])
 
 
 
