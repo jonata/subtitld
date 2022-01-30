@@ -4,16 +4,17 @@
 
 import os
 
-from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, QSize, pyqtSignal, pyqtSlot, Qt, QRect, QMargins, QMetaObject
+from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, pyqtSignal, pyqtSlot, Qt, QRect, QMargins
 from PyQt5.QtGui import QPainter, QPen, QColor
-from PyQt5.QtWidgets import QBoxLayout, QGraphicsOpacityEffect, QHBoxLayout, QOpenGLWidget, QLabel, QSizePolicy, QSpacerItem, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QGraphicsOpacityEffect, QOpenGLWidget, QLabel, QVBoxLayout, QWidget
 from PyQt5.QtOpenGL import QGLContext
 
-#from subtitld.mpv import MPV, _mpv_get_sub_api, _mpv_opengl_cb_set_update_callback, _mpv_opengl_cb_init_gl, OpenGlCbGetProcAddrFn, _mpv_opengl_cb_draw, _mpv_opengl_cb_report_flip, MpvSubApi, OpenGlCbUpdateFn, _mpv_opengl_cb_uninit_gl
-#from subtitld.modules.mpv_widget import MpvWidget2
+# from subtitld.mpv import MPV, _mpv_get_sub_api, _mpv_opengl_cb_set_update_callback, _mpv_opengl_cb_init_gl, OpenGlCbGetProcAddrFn, _mpv_opengl_cb_draw, _mpv_opengl_cb_report_flip, MpvSubApi, OpenGlCbUpdateFn, _mpv_opengl_cb_uninit_gl
+# from subtitld.modules.mpv_widget import MpvWidget2
 
-import mpv
+# import mpv
 from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
+
 
 def get_proc_addr(_, name):
     glctx = QGLContext.currentContext()
@@ -30,8 +31,6 @@ class MpvWidget(QOpenGLWidget):
     def __init__(widget, parent=None):
         super().__init__(parent)
 
-        #widget.setFixedSize(QSize(640,480))
-
         widget.mpv = MPV(
             ytdl=False,
             loglevel='info',
@@ -41,7 +40,7 @@ class MpvWidget(QOpenGLWidget):
         widget.mpv_gl = None
         widget.get_proc_addr_c = OpenGlCbGetProcAddrFn(get_proc_addr)
         widget.frameSwapped.connect(
-           widget.swapped, Qt.ConnectionType.DirectConnection
+            widget.swapped, Qt.ConnectionType.DirectConnection
         )
 
         for key, value in {
@@ -143,7 +142,7 @@ class MpvWidget(QOpenGLWidget):
             widget.position = pos
         if pos is not None:
             widget.positionChanged.emit(pos, 1)
-            #widget.parent.parent().timeline.update(widget.parent.parent())
+            # widget.parent.parent().timeline.update(widget.parent.parent())
 
     def loadfile(widget, filepath) -> None:
         """Function to load a media file"""
@@ -188,10 +187,11 @@ class MpvWidget(QOpenGLWidget):
         """Function to change volume"""
         widget.property('volume', vol)
 
-    #def resizeEvent(widget, event):
+    # def resizeEvent(widget, event):
     #    event.accept()
     #    #print(widget.width())
     #    #print(widget.height())
+
 
 class PlayerSubtitleLayer(QLabel):
     """Lass of subtitle layer"""
@@ -208,10 +208,10 @@ class PlayerSubtitleLayer(QLabel):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
         if self.show_title_safe_margin or self.subtitle_text:
-            title_safe_margin_qrect = QRect(self.width()*((1.0-self.title_safe_margin)*.5),
-                                            self.height()*((1.0-self.title_safe_margin)*.5),
-                                            self.width()*(self.title_safe_margin),
-                                            self.height()*(self.title_safe_margin)
+            title_safe_margin_qrect = QRect(self.width() * ((1.0 - self.title_safe_margin) * .5),
+                                            self.height() * ((1.0 - self.title_safe_margin) * .5),
+                                            self.width() * (self.title_safe_margin),
+                                            self.height() * (self.title_safe_margin)
                                             )
         if self.subtitle_text:
             painter.setPen(QPen(QColor.fromRgb(0, 0, 0, 200)))
@@ -220,29 +220,38 @@ class PlayerSubtitleLayer(QLabel):
             painter.drawText(title_safe_margin_qrect, Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
 
         if self.show_action_safe_margin:
-            action_safe_margin_qrect = QRect(self.width()*((1.0-self.action_safe_margin)*.5),
-                                                self.height()*((1.0-self.action_safe_margin)*.5),
-                                                self.width()*(self.action_safe_margin),
-                                                self.height()*(self.action_safe_margin)
-                                                )
+            action_safe_margin_qrect = QRect(
+                self.width() * ((1.0 - self.action_safe_margin) * .5),
+                self.height() * ((1.0 - self.action_safe_margin) * .5),
+                self.width() * (self.action_safe_margin),
+                self.height() * (self.action_safe_margin)
+            )
             painter.setPen(QPen(QColor.fromRgb(103, 255, 77, 240), 1, Qt.SolidLine))
             painter.drawRect(action_safe_margin_qrect)
-            painter.drawLine(self.width()*.5,
-                                action_safe_margin_qrect.y(),
-                                self.width()*.5,
-                                action_safe_margin_qrect.y() + (self.height()*.025))
-            painter.drawLine(self.width()*.5,
-                                action_safe_margin_qrect.y() + action_safe_margin_qrect.height(),
-                                self.width()*.5,
-                                action_safe_margin_qrect.y() + action_safe_margin_qrect.height() - (self.height()*.025))
-            painter.drawLine(action_safe_margin_qrect.x(),
-                                self.height()*.5,
-                                action_safe_margin_qrect.x() + (self.width()*.025),
-                                self.height()*.5)
-            painter.drawLine(action_safe_margin_qrect.x() + action_safe_margin_qrect.width(),
-                                self.height()*.5,
-                                action_safe_margin_qrect.x() + action_safe_margin_qrect.width() - (self.width()*.025),
-                                self.height()*.5)
+            painter.drawLine(
+                self.width() * .5,
+                action_safe_margin_qrect.y(),
+                self.width() * .5,
+                action_safe_margin_qrect.y() + (self.height() * .025)
+            )
+            painter.drawLine(
+                self.width() * .5,
+                action_safe_margin_qrect.y() + action_safe_margin_qrect.height(),
+                self.width() * .5,
+                action_safe_margin_qrect.y() + action_safe_margin_qrect.height() - (self.height() * .025)
+            )
+            painter.drawLine(
+                action_safe_margin_qrect.x(),
+                self.height() * .5,
+                action_safe_margin_qrect.x() + (self.width() * .025),
+                self.height() * .5
+            )
+            painter.drawLine(
+                action_safe_margin_qrect.x() + action_safe_margin_qrect.width(),
+                self.height() * .5,
+                action_safe_margin_qrect.x() + action_safe_margin_qrect.width() - (self.width() * .025),
+                self.height() * .5
+            )
 
         if self.show_title_safe_margin:
             painter.setPen(QPen(QColor.fromRgb(255, 0, 0, 240), 1, Qt.SolidLine))
@@ -273,8 +282,7 @@ def load(self):
     # self.layer_player = QWidget(self)
     # self.layer_player.setLayout(QVBoxLayout())
     # self.layer_player.setContentsMargins(self.subtitleslist_width_proportion * self.width(), 20, 20, 200)
-    #self.layer_player.layout().setSpacing(0)
-
+    # self.layer_player.layout().setSpacing(0)
 
     # self.layer_player_left_spacer = QWidget()
     # self.layer_player_left_spacer.setMaximumWidth(0)
@@ -287,24 +295,24 @@ def load(self):
     # self.layer_player_vbox = QVBoxLayout()
     # self.layer_player_vbox.setContentsMargins(0, 0, 0, 0)
 
-    self.videoinfo_label = QLabel() # parent=self.layer_player
-    #self.videoinfo_label.setObjectName('videoinfo_label')
-    #self.videoinfo_label.setFixedHeight(20)
-    #sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-    #self.videoinfo_label.setSizePolicy(sizePolicy)
-    #layer_player.layout().addWidget(self.videoinfo_label)
+    self.videoinfo_label = QLabel()  # parent=self.layer_player
+    # self.videoinfo_label.setObjectName('videoinfo_label')
+    # self.videoinfo_label.setFixedHeight(20)
+    # sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+    # self.videoinfo_label.setSizePolicy(sizePolicy)
+    # layer_player.layout().addWidget(self.videoinfo_label)
 
     self.player_widget = MpvWidget()
-    #sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-    #sizePolicy.setWidthForHeight(self.player_widget.sizePolicy().hasWidthForHeight())
-    #self.player_widget.setSizePolicy(sizePolicy)
-    #self.player_widget_transparency = QGraphicsOpacityEffect()
-    #self.player_widget.setGraphicsEffect(self.player_widget_transparency)
-    #self.player_widget_transparency_animation = QPropertyAnimation(self.player_widget_transparency, b'opacity')
-    #self.player_widget_transparency_animation.setEasingCurve(QEasingCurve.OutExpo)
-    #self.player_widget_transparency.setOpacity(1)
-    #self.player_widget_animation = QPropertyAnimation(self.player_widget, b'geometry')
-    #self.player_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
+    # sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+    # sizePolicy.setWidthForHeight(self.player_widget.sizePolicy().hasWidthForHeight())
+    # self.player_widget.setSizePolicy(sizePolicy)
+    # self.player_widget_transparency = QGraphicsOpacityEffect()
+    # self.player_widget.setGraphicsEffect(self.player_widget_transparency)
+    # self.player_widget_transparency_animation = QPropertyAnimation(self.player_widget_transparency, b'opacity')
+    # self.player_widget_transparency_animation.setEasingCurve(QEasingCurve.OutExpo)
+    # self.player_widget_transparency.setOpacity(1)
+    # self.player_widget_animation = QPropertyAnimation(self.player_widget, b'geometry')
+    # self.player_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
     self.player_widget.positionChanged.connect(lambda: self.timeline.update(self))
     self.player_widget.setLayout(QVBoxLayout(self.player_widget))
 
@@ -318,20 +326,19 @@ def load(self):
     #         if self.video_metadata:
     #             aspect_ratio = self.video_metadata.get('height', 1080) / self.video_metadata.get('width', 1920)
     #             widget.setFixedHeight(widget.height() * aspect_ratio) #self.video_metadata.get('width', 1920), self.video_metadata.get('height', 1080))
-                # w = widget.width()
-                # h = widget.height()
-                # if w / h > aspect_ratio:  # too wide
-                #     widget.setFixedHeight(h)
-                #     widget.layout().setDirection(QBoxLayout.LeftToRight)
-                #     widget_stretch = h * aspect_ratio
-                #     outer_stretch = (w - widget_stretch) / 2 + 0.5
-                # else:  # too tall
-                #     widget.layout().setDirection(QBoxLayout.TopToBottom)
-                #     widget_stretch = w / aspect_ratio
-                #     outer_stretch = (h - widget_stretch) / 2 + 0.5
+    #            # w = widget.width()
+    #            # h = widget.height()
+    #            # if w / h > aspect_ratio:  # too wide
+    #            #     widget.setFixedHeight(h)
+    #            #     widget.layout().setDirection(QBoxLayout.LeftToRight)
+    #            #     widget_stretch = h * aspect_ratio
+    #            #     outer_stretch = (w - widget_stretch) / 2 + 0.5
+    #            # else:  # too tall
+    #            #     widget.layout().setDirection(QBoxLayout.TopToBottom)
+    #            #     widget_stretch = w / aspect_ratio
+    #            #     outer_stretch = (h - widget_stretch) / 2 + 0.5
 
-
-    self.player_border = QLabel(self) #parent=self.layer_player
+    self.player_border = QLabel(self)  # parent=self.layer_player
     self.player_border_transparency = QGraphicsOpacityEffect()
     self.player_border.setGraphicsEffect(self.player_border_transparency)
     self.player_border_transparency_animation = QPropertyAnimation(self.player_border_transparency, b'opacity')
@@ -345,7 +352,7 @@ def load(self):
     self.player_border.layout().setContentsMargins(1, 1, 1, 1)
     self.player_border.layout().addWidget(self.player_widget)
 
-    #self.layer_player.layout().addWidget(self.player_border)
+    # self.layer_player.layout().addWidget(self.player_border)
 
     # class player_ratio_widget(QLabel):
     #     def __init__(widget, child):
@@ -377,27 +384,26 @@ def load(self):
 
     # self.player_ratio_widget = player_ratio_widget(child=self.player_border)#QLabel()
 
-    #self.layer_player.layout().addWidget(self.player_ratio_widget)
+    # self.layer_player.layout().addWidget(self.player_ratio_widget)
 
-    #self.layer_player_hbox.addLayout(self.layer_player_vbox)
-
+    # self.layer_player_hbox.addLayout(self.layer_player_vbox)
 
 
 def update(self):
     """Function to update player widgets"""
-    #self.layer_player.setVisible(bool(self.video_metadata))
-    #self.player_border.setVisible(bool(self.video_metadata))
+    # self.layer_player.setVisible(bool(self.video_metadata))
+    # self.player_border.setVisible(bool(self.video_metadata))
     update_safety_margins_subtitle_layer(self)
 
 
 def resized(self):
     """Function to resize player widgets"""
-    #self.layer_player.setGeometry(0, 0, self.width(), self.height())
-    #self.layer_player.layout().setContentsMargins(self.width()*self.subtitleslist_width_proportion, 20, 20, 200)
+    # self.layer_player.setGeometry(0, 0, self.width(), self.height())
+    # self.layer_player.layout().setContentsMargins(self.width()*self.subtitleslist_width_proportion, 20, 20, 200)
     # TODO
-    #self.layer_player_left_spacer.setMaximumWidth(self.width()*self.subtitleslist_width_proportion)
-    #self.player_widget_area.setGeometry(0, 0, self.width(), self.height()-self.playercontrols_widget.height())
-    #self.videoinfo_label.setGeometry(self.player_widget_area.x(), 20, self.player_widget_area.width(), 50)
+    # self.layer_player_left_spacer.setMaximumWidth(self.width()*self.subtitleslist_width_proportion)
+    # self.player_widget_area.setGeometry(0, 0, self.width(), self.height()-self.playercontrols_widget.height())
+    # self.videoinfo_label.setGeometry(self.player_widget_area.x(), 20, self.player_widget_area.width(), 50)
 
     resize_player_widget(self)
 
@@ -468,12 +474,12 @@ def resize_player_widget(self, just_get_qrect=False):
     #     hp = 1
 
     # self.video_metadata.get('width', 1920) / self.video_metadata.get('height', 1080)
-    #if self.video_metadata.get('width', 640) > self.video_metadata.get('height', 480):
+    # if self.video_metadata.get('width', 640) > self.video_metadata.get('height', 480):
     #    heigth_proportion = ((self.player_widget_area.width()*.7)-6) / self.video_metadata.get('width', 640)
     #    self.player_widget.setGeometry((self.width()*.2) + 3, (self.player_widget_area.height()*.5)-((heigth_proportion*self.video_metadata.get('height', 480))*.5), (self.player_widget_area.width()*.7)-6, self.video_metadata.get('height', 480)*heigth_proportion)
-    #else:
+    # else:
     #    width_proportion = (self.player_widget_area.height()-7) / self.video_metadata.get('height', 480)
     #    self.player_widget.setGeometry((self.width()*.2) + ((self.player_widget_area.width()*.7)*.5)-((width_proportion*self.video_metadata.get('width', 640))*.5), 3, self.video_metadata.get('width', 640)*width_proportion, self.player_widget_area.height()-6)
-    #self.player_border.setGeometry(self.player_widget.x()-3, self.player_widget.y()-3, self.player_widget.width()+6, self.player_widget.height()+6)
-    #self.player_subtitle_layer.setGeometry(self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height())
+    # self.player_border.setGeometry(self.player_widget.x()-3, self.player_widget.y()-3, self.player_widget.width()+6, self.player_widget.height()+6)
+    # self.player_subtitle_layer.setGeometry(self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height())
     # self.player_subtitle_textedit.setGeometry(self.player_widget.x()+(self.player_widget.width()*.1), self.player_widget.y()+(self.player_widget.height()*.5), self.player_widget.width()*.8, self.player_widget.height()*.4)

@@ -10,13 +10,13 @@ import autosub
 import speech_recognition as sr
 from google_trans_new import google_translator
 
-from PyQt5.QtWidgets import QCheckBox, QDoubleSpinBox, QGridLayout, QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QMessageBox, QVBoxLayout, QCheckBox, QGridLayout, QSlider
+from PyQt5.QtWidgets import QDoubleSpinBox, QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QTabWidget, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QMessageBox, QVBoxLayout, QCheckBox, QGridLayout, QSlider
 from PyQt5.QtCore import QMargins, QPropertyAnimation, QEasingCurve, QSize, QThread, pyqtSignal, QEvent, Qt
 from PyQt5.QtGui import QBrush, QColor, QFont, QFontDatabase, QKeySequence, QPainter, QPen
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_IMPORT_EXTENSIONS, LIST_OF_SUPPORTED_EXPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
 from subtitld.modules.shortcuts import shortcuts_dict
-from subtitld.modules.paths import LANGUAGE_DICT_LIST, path_tmp
+from subtitld.modules.paths import LANGUAGE_DICT_LIST
 from subtitld.modules import file_io
 
 # from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat
@@ -37,8 +37,8 @@ def convert_ffmpeg_timecode_to_seconds(timecode):
     """Function to convert ffmpeg timecode to seconds"""
     if timecode:
         final_value = float(timecode.split(':')[-1])
-        final_value += int(timecode.split(':')[-2])*60.0
-        final_value += int(timecode.split(':')[-3])*3600.0
+        final_value += int(timecode.split(':')[-2]) * 60.0
+        final_value += int(timecode.split(':')[-3]) * 3600.0
         return final_value
     else:
         return False
@@ -87,10 +87,7 @@ class GlobalSubtitlesvideoPanelTabwidgetShortkeysEditbox(QLineEdit):
             if key == Qt.Key_unknown:
                 return
 
-            if(key == Qt.Key_Control
-                or key == Qt.Key_Shift
-                or key == Qt.Key_Alt
-                or key == Qt.Key_Meta):
+            if key in [Qt.Key_Control, Qt.Key_Shift, Qt.Key_Alt, Qt.Key_Meta]:
                 return
 
             modifiers = event.modifiers()
@@ -384,33 +381,34 @@ def load(self):
 
     update_global_subtitlesvideo_panel_tabwidget_quality_panel_widgets(self)
 
+
 def resized(self):
     """Function on resizing widgets"""
+    x = -self.width() + 20
     if (self.subtitles_list or self.video_metadata):
         if self.subtitles_list_toggle_button.isChecked():
-            self.global_subtitlesvideo_panel_widget.setGeometry(0, 0, self.width()*.8, self.height()-self.playercontrols_widget.height()+20)
+            x = 0
         else:
-            self.global_subtitlesvideo_panel_widget.setGeometry(-(self.width()*.6)-18, 0, self.width()*.8, self.height()-self.playercontrols_widget.height()+20)
-    else:
-        self.global_subtitlesvideo_panel_widget.setGeometry(-(self.width()*.8), 0, self.width()*.8, self.height()-self.playercontrols_widget.height()+20)
+            x = -(self.width() * .6) - 18
+    self.global_subtitlesvideo_panel_widget.setGeometry(x, 0, self.width() - 20, self.height() - self.playercontrols_widget.height() + 20)
 
-    self.global_subtitlesvideo_panel_left.setGeometry(0, 0, self.width()*.2, self.global_subtitlesvideo_panel_widget.height())
-    self.global_subtitlesvideo_panel_right.setGeometry(self.global_subtitlesvideo_panel_left.width(), 0, self.global_subtitlesvideo_panel_widget.width()-self.global_subtitlesvideo_panel_left.width(), self.global_subtitlesvideo_panel_widget.height())
+    self.global_subtitlesvideo_panel_left.setGeometry(0, 0, self.width() * .2, self.global_subtitlesvideo_panel_widget.height())
+    self.global_subtitlesvideo_panel_right.setGeometry(self.global_subtitlesvideo_panel_left.width(), 0, self.global_subtitlesvideo_panel_widget.width() - self.global_subtitlesvideo_panel_left.width(), self.global_subtitlesvideo_panel_widget.height())
 
-    self.global_subtitlesvideo_save_as_label.setGeometry(20, 20, self.global_subtitlesvideo_panel_left.width()-40, 20)
-    self.global_subtitlesvideo_save_as_combobox.setGeometry(20, 40, self.global_subtitlesvideo_panel_left.width()-40, 30)
+    self.global_subtitlesvideo_save_as_label.setGeometry(20, 20, self.global_subtitlesvideo_panel_left.width() - 40, 20)
+    self.global_subtitlesvideo_save_as_combobox.setGeometry(20, 40, self.global_subtitlesvideo_panel_left.width() - 40, 30)
 
-    self.global_subtitlesvideo_import_button.setGeometry(20, 80, self.global_subtitlesvideo_panel_left.width()-40, 30)
-    # self.global_subtitlesvideo_import_panel.setGeometry(20, 110, self.global_subtitlesvideo_panel_left.width()-40, 100)
-    self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width()-40, 30)
-    self.global_subtitlesvideo_autosync_lang_combobox.setGeometry(20, 160, self.global_subtitlesvideo_panel_left.width()-40, 30)
-    # self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width()-120, 30)
-    self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width()-120, 30)
-    self.global_subtitlesvideo_translate_button.setGeometry(100, 240, self.global_subtitlesvideo_panel_left.width()-120, 30)
-    self.global_subtitlesvideo_autovoiceover_button.setGeometry(100, 280, self.global_subtitlesvideo_panel_left.width()-120, 30)
-    self.global_subtitlesvideo_autotranscribe_button.setGeometry(100, 280, self.global_subtitlesvideo_panel_left.width()-120, 30)
+    self.global_subtitlesvideo_import_button.setGeometry(20, 80, self.global_subtitlesvideo_panel_left.width() - 40, 30)
+    # self.global_subtitlesvideo_import_panel.setGeometry(20, 110, self.global_subtitlesvideo_panel_left.width() - 40, 100)
+    self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width() - 40, 30)
+    self.global_subtitlesvideo_autosync_lang_combobox.setGeometry(20, 160, self.global_subtitlesvideo_panel_left.width() - 40, 30)
+    # self.global_subtitlesvideo_autosync_button.setGeometry(100, 160, self.global_subtitlesvideo_panel_left.width() - 120, 30)
+    self.global_subtitlesvideo_autosub_button.setGeometry(100, 200, self.global_subtitlesvideo_panel_left.width() - 120, 30)
+    self.global_subtitlesvideo_translate_button.setGeometry(100, 240, self.global_subtitlesvideo_panel_left.width() - 120, 30)
+    self.global_subtitlesvideo_autovoiceover_button.setGeometry(100, 280, self.global_subtitlesvideo_panel_left.width() - 120, 30)
+    self.global_subtitlesvideo_autotranscribe_button.setGeometry(100, 280, self.global_subtitlesvideo_panel_left.width() - 120, 30)
 
-    self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x()+20, 20, self.global_subtitlesvideo_panel_right.width()-50, self.global_subtitlesvideo_panel_right.height()-50)
+    self.global_subtitlesvideo_panel_tabwidget.setGeometry(self.global_subtitlesvideo_panel_right.x() + 20, 20, self.global_subtitlesvideo_panel_right.width() - 50, self.global_subtitlesvideo_panel_right.height() - 50)
 
     self.global_subtitlesvideo_video_burn_label.setGeometry(20, 20, 200, 20)
     self.global_subtitlesvideo_video_burn_fontname_label.setGeometry(20, 50, 200, 20)
@@ -418,29 +416,28 @@ def resized(self):
 
     self.global_subtitlesvideo_video_burn_fontsize_label.setGeometry(20, 110, 150, 20)
     self.global_subtitlesvideo_video_burn_fontsize.setGeometry(20, 130, 150, 30)
-    self.global_subtitlesvideo_video_burn_shadowdistance_label.setGeometry(20+150+10, 110, 150, 20)
-    self.global_subtitlesvideo_video_burn_shadowdistance.setGeometry(20+150+10, 130, 150, 30)
-    self.global_subtitlesvideo_video_burn_outline_label.setGeometry(20+150+150+20, 110, 150, 20)
-    self.global_subtitlesvideo_video_burn_outline.setGeometry(20+150+150+20, 130, 150, 30)
+    self.global_subtitlesvideo_video_burn_shadowdistance_label.setGeometry(20 + 150 + 10, 110, 150, 20)
+    self.global_subtitlesvideo_video_burn_shadowdistance.setGeometry(20 + 150 + 10, 130, 150, 30)
+    self.global_subtitlesvideo_video_burn_outline_label.setGeometry(20 + 150 + 150 + 20, 110, 150, 20)
+    self.global_subtitlesvideo_video_burn_outline.setGeometry(20 + 150 + 150 + 20, 130, 150, 30)
     self.global_subtitlesvideo_video_burn_marvinv_label.setGeometry(20, 170, 150, 20)
     self.global_subtitlesvideo_video_burn_marvinv.setGeometry(20, 190, 150, 30)
-    self.global_subtitlesvideo_video_burn_marvinl_label.setGeometry(20+150+10, 170, 150, 20)
-    self.global_subtitlesvideo_video_burn_marvinl.setGeometry(20+150+10, 190, 150, 30)
-    self.global_subtitlesvideo_video_burn_marvinr_label.setGeometry(20+150+150+20, 170, 150, 20)
-    self.global_subtitlesvideo_video_burn_marvinr.setGeometry(20+150+150+20, 190, 150, 30)
-    self.global_subtitlesvideo_video_burn_pcolor_label.setGeometry(20+150+150+20+150+10, 170, 150, 20)
-    self.global_subtitlesvideo_video_burn_pcolor.setGeometry(20+150+150+20+150+10, 190, 150, 30)
+    self.global_subtitlesvideo_video_burn_marvinl_label.setGeometry(20 + 150 + 10, 170, 150, 20)
+    self.global_subtitlesvideo_video_burn_marvinl.setGeometry(20 + 150 + 10, 190, 150, 30)
+    self.global_subtitlesvideo_video_burn_marvinr_label.setGeometry(20 + 150 + 150 + 20, 170, 150, 20)
+    self.global_subtitlesvideo_video_burn_marvinr.setGeometry(20 + 150 + 150 + 20, 190, 150, 30)
+    self.global_subtitlesvideo_video_burn_pcolor_label.setGeometry(20 + 150 + 150 + 20 + 150 + 10, 170, 150, 20)
+    self.global_subtitlesvideo_video_burn_pcolor.setGeometry(20 + 150 + 150 + 20 + 150 + 10, 190, 150, 30)
     self.global_subtitlesvideo_video_burn_convert.setGeometry(20, 240, 200, 40)
 
     self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.setGeometry(0, 0, self.global_subtitlesvideo_panel_tabwidget.width(), self.global_subtitlesvideo_panel_tabwidget.height())
 
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.setGeometry((self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.width()*.5)-100, (self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.height()*.5)-50, 200, 60)
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.setGeometry(self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.x() + 20, self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.y()+self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.height(), 80, 40)
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.setGeometry(self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.x() + (self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.width()*.5), self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.y()+self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.height(), 80, 40)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.setGeometry((self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.width() * .5) - 100, (self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.height() * .5) - 50, 200, 60)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm.setGeometry(self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.x() + 20, self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.y() + self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.height(), 80, 40)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_cancel.setGeometry(self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.x() + (self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.width() * .5), self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.y() + self.global_subtitlesvideo_panel_tabwidget_shortkeys_editbox.height(), 80, 40)
 
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setGeometry(20, 20, self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.width()-40, self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.height()-100)
-    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setGeometry(20+(self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.width()*.5)-80, 20+self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.height()+5, 160, 30)
-
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.setGeometry(20, 20, self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.width() - 40, self.global_subtitlesvideo_panel_tabwidget_shortkeys_panel.height() - 100)
+    self.global_subtitlesvideo_panel_tabwidget_shortkeys_set_button.setGeometry(20 + (self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.width() * .5) - 80, 20 + self.global_subtitlesvideo_panel_tabwidget_shortkeys_table.height() + 5, 160, 30)
 
 
 def show_global_subtitlesvideo_panel(self):
@@ -489,12 +486,12 @@ def global_subtitlesvideo_panel_tabwidget_shortkeys_editbox_confirm_clicked(self
 def global_subtitlesvideo_import_button_clicked(self):
     """Function to import file"""
     # if self.global_subtitlesvideo_import_button.isChecked():
-    #     self.global_subtitlesvideo_export_button.setGeometry(20, 200, self.global_subtitlesvideo_panel_left.width()-40, 30)
+    #     self.global_subtitlesvideo_export_button.setGeometry(20, 200, self.global_subtitlesvideo_panel_left.width() - 40, 30)
     # else:
-    #     self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width()-40, 30)
+    #     self.global_subtitlesvideo_export_button.setGeometry(20, 120, self.global_subtitlesvideo_panel_left.width() - 40, 30)
     # self.global_subtitlesvideo_import_panel.setVisible(self.global_subtitlesvideo_import_button.isChecked())
 
-    supported_import_files = self.tr('Text files') + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in list_of_supported_import_extensions]))
+    supported_import_files = self.tr('Text files') + ' ({})'.format(" ".join([" * .{}".format(fo) for fo in list_of_supported_import_extensions]))
     file_to_open = QFileDialog.getOpenFileName(parent=self, caption=self.tr('Select the file to import'), directory=os.path.expanduser("~"), filter=supported_import_files, options=QFileDialog.DontUseNativeDialog)[0]
     if file_to_open:
         self.subtitles_list += file_io.import_file(filename=file_to_open)[0]
@@ -534,7 +531,7 @@ def global_subtitlesvideo_video_burn_convert_clicked(self):
             vf_string,
             '-crf', '15',
             generated_video_filepath
-            ]
+        ]
 
         self.thread_generated_burned_video.commands = commands
         self.thread_generated_burned_video.start()
@@ -551,13 +548,13 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
 
 def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
-    extformat = 'mov'#os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
+    extformat = 'mov'  # os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
     save_formats = self.tr('Video file') + ' (.' + extformat + ')'
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
 
     generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), directory=os.path.join(suggested_path, suggested_name), filter=save_formats, options=QFileDialog.DontUseNativeDialog)[0]
 
-    print(path_tmp)
+    # print(path_tmp)
 
     if generated_video_filepath:
         class layerWidget(QWidget):
@@ -574,11 +571,11 @@ def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
                     font.setPointSize(canvas.fontsize)
                     painter.setFont(font)
 
-                    text_rect = painter.boundingRect(canvas.width()*.08, canvas.height()*.08, canvas.width()*.84, canvas.height()*.84, Qt.AlignBottom | Qt.AlignHCenter | Qt.TextWordWrap, canvas.subtitle_text)
+                    text_rect = painter.boundingRect(canvas.width() * .08, canvas.height() * .08, canvas.width() * .84, canvas.height() * .84, Qt.AlignBottom | Qt.AlignHCenter | Qt.TextWordWrap, canvas.subtitle_text)
 
                     painter.setPen(Qt.NoPen)
                     painter.setBrush(QBrush(QColor('#cc000000')))
-                    painter.drawRoundedRect(text_rect.marginsAdded(QMargins(10,10,10,10)), 5, 5)
+                    painter.drawRoundedRect(text_rect.marginsAdded(QMargins(10, 10, 10, 10)), 5, 5)
 
                     painter.setPen(QPen(QColor('#fff')))
                     painter.drawText(text_rect.adjusted(0, 2, 0, 2), Qt.AlignCenter | Qt.TextWordWrap, canvas.subtitle_text)
@@ -638,12 +635,6 @@ def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
         subprocess.Popen([FFMPEG_EXECUTABLE, '-y', '-f', 'concat', '-safe', '0', '-i', os.path.join(path_tmp, 'subtitles.txt'), '-r', str(self.video_metadata.get('framerate', 24)), '-c:v', 'qtrle', '-an', generated_video_filepath], startupinfo=STARTUPINFO, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read()
 
 
-
-
-
-
-
-
 def global_subtitlesvideo_export_button_clicked(self):
     """Function to export subtitles"""
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
@@ -668,7 +659,7 @@ def global_subtitlesvideo_export_button_clicked(self):
 
 def hide_global_subtitlesvideo_panel(self):
     """Function to hide subtitlesvideo panel"""
-    self.generate_effect(self.global_subtitlesvideo_panel_widget_animation, 'geometry', 700, [self.global_subtitlesvideo_panel_widget.x(), self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()], [int(-(self.width()*.6))-18, self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()])
+    self.generate_effect(self.global_subtitlesvideo_panel_widget_animation, 'geometry', 700, [self.global_subtitlesvideo_panel_widget.x(), self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()], [int(-self.global_subtitlesvideo_panel_widget.width() + self.subtitles_list_widget.width()), self.global_subtitlesvideo_panel_widget.y(), self.global_subtitlesvideo_panel_widget.width(), self.global_subtitlesvideo_panel_widget.height()])
 
 
 def update_global_subtitlesvideo_save_as_combobox(self):
@@ -812,11 +803,12 @@ def global_subtitlesvideo_translate_button_clicked(self):
     if run_command:
 
         language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
-        translator = google_translator()  #translator(service_urls=['translate.googleapis.com', 'translate.google.com','translate.google.co.kr'])
+        translator = google_translator()  # translator(service_urls=['translate.googleapis.com', 'translate.google.com','translate.google.co.kr'])
         for subtitle in self.subtitles_list:
             subtitle[2] = translator.translate(subtitle[2].replace('\n', ' ').replace('  ', ' '), lang_tgt=language)
 
         update_widgets(self)
+
 
 def global_subtitlesvideo_autotranscribe_button_clicked(self):
     """Function to transcribe using google speech"""
@@ -836,14 +828,13 @@ def global_subtitlesvideo_autotranscribe_button_clicked(self):
         run_command = True
 
     if run_command:
-        splits = 60.0
-        actual_split = 0
+        # splits = 60.0
+        # actual_split = 0
         final_text = ''
 
         # while actual_split < self.video_metadata['duration']:
 
         subprocess.run(['ffmpeg', '-i', self.video_metadata['filepath'], '-y', os.path.join(path_tmp, 'transcribe.wav')])
-
 
         r = sr.Recognizer()
         with sr.AudioFile(os.path.join(path_tmp, 'transcribe.wav')) as source:
@@ -852,7 +843,7 @@ def global_subtitlesvideo_autotranscribe_button_clicked(self):
         language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
 
         try:
-            final_text =  r.recognize_google(audio, language=language)
+            final_text = r.recognize_google(audio, language=language)
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand audio")
         except sr.RequestError as e:
@@ -867,75 +858,72 @@ def global_subtitlesvideo_autotranscribe_button_clicked(self):
 
 def global_subtitlesvideo_autovoiceover_button_clicked(self):
     """Function to auto voiceover subtitles"""
-    speech_config = SpeechConfig(subscription="", region="southcentralus")
-    speech_config.set_speech_synthesis_output_format(SpeechSynthesisOutputFormat["Riff24Khz16BitMonoPcm"])
+    None
+    # speech_config = SpeechConfig(subscription="", region="southcentralus")
+    # speech_config.set_speech_synthesis_output_format(SpeechSynthesisOutputFormat["Riff24Khz16BitMonoPcm"])
 
-    audio_from_video = AudioSegment.from_file(self.video_metadata['filepath'])
-    final_audio = AudioSegment.empty()
+    # audio_from_video = AudioSegment.from_file(self.video_metadata['filepath'])
+    # final_audio = AudioSegment.empty()
 
-    audio_config = AudioOutputConfig(filename=os.path.join(path_tmp, 'voiceover.wav'))
+    # audio_config = AudioOutputConfig(filename=os.path.join(path_tmp, 'voiceover.wav'))
 
-    audio_pieces = []
-    parser = 0
-    first = True
-    for subtitle in self.subtitles_list:
-        # print(subtitle)
+    # audio_pieces = []
+    # parser = 0
+    # first = True
+    # for subtitle in self.subtitles_list:
+    #     # print(subtitle)
 
-        ssml_content = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-US"><voice name="pt-BR-AntonioNeural">'
-        ssml_content += subtitle[2] + '</voice></speak>'
+    #     ssml_content = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-US"><voice name="pt-BR-AntonioNeural">'
+    #     ssml_content += subtitle[2] + '</voice></speak>'
 
-        synthesizer = SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+    #     synthesizer = SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
-        synthesizer.speak_ssml_async(ssml_content)
-        audio_pieces.append([AudioSegment.from_file(os.path.join(path_tmp, 'voiceover.wav')), int(subtitle[0]*1000)])
+    #     synthesizer.speak_ssml_async(ssml_content)
+    #     audio_pieces.append([AudioSegment.from_file(os.path.join(path_tmp, 'voiceover.wav')), int(subtitle[0]*1000)])
 
-        piece1 = audio_from_video[parser:int(subtitle[0]*1000)]
-        if not first:
-            piece1 = piece1.fade(from_gain=-25.0, start=0, duration=4000)
-        piece1 = piece1.fade(to_gain=-25.0, end=int(piece1.duration_seconds*1000), duration=1200)
-        final_audio += piece1
-        parser = int(subtitle[0]*1000)
+    #     piece1 = audio_from_video[parser:int(subtitle[0]*1000)]
+    #     if not first:
+    #         piece1 = piece1.fade(from_gain=-25.0, start=0, duration=4000)
+    #     piece1 = piece1.fade(to_gain=-25.0, end=int(piece1.duration_seconds*1000), duration=1200)
+    #     final_audio += piece1
+    #     parser = int(subtitle[0]*1000)
 
-        piece2 = audio_from_video[parser:parser+int(subtitle[1]*1000)]
-        piece2 = piece2 - 25.0
-        final_audio += piece2
-        parser += int(subtitle[1]*1000)
-        first = False
+    #     piece2 = audio_from_video[parser:parser+int(subtitle[1]*1000)]
+    #     piece2 = piece2 - 25.0
+    #     final_audio += piece2
+    #     parser += int(subtitle[1]*1000)
+    #     first = False
 
-    final_piece = audio_from_video[parser:]
-    final_piece = final_piece.fade(from_gain=-25.0, start=0, duration=5000)
-    final_audio += final_piece
+    # final_piece = audio_from_video[parser:]
+    # final_piece = final_piece.fade(from_gain=-25.0, start=0, duration=5000)
+    # final_audio += final_piece
 
-    #new_audio = sum(audio_pieces)
+    # #new_audio = sum(audio_pieces)
 
-    for piece in audio_pieces:
-        final_audio = final_audio.overlay(piece[0], position=piece[1])
+    # for piece in audio_pieces:
+    #     final_audio = final_audio.overlay(piece[0], position=piece[1])
 
-    final_audio.export(os.path.join(path_tmp, 'final_voiceover.wav'), format='wav')
+    # final_audio.export(os.path.join(path_tmp, 'final_voiceover.wav'), format='wav')
 
-    subprocess.call(['ffmpeg', '-i', self.video_metadata['filepath'], '-i' , os.path.join(path_tmp, 'final_voiceover.wav'), '-c:v', 'copy', '-y', '-map', '0:v:0', '-map', '1:a:0', self.video_metadata['filepath'].rsplit('.', 1)[0] + '_voiceover.' + self.video_metadata['filepath'].rsplit('.', 1)[-1]])
+    # subprocess.call(['ffmpeg', '-i', self.video_metadata['filepath'], '-i' , os.path.join(path_tmp, 'final_voiceover.wav'), '-c:v', 'copy', '-y', '-map', '0:v:0', '-map', '1:a:0', self.video_metadata['filepath'].rsplit('.', 1)[0] + '_voiceover.' + self.video_metadata['filepath'].rsplit('.', 1)[-1]])
 
+    # # list_of_final_audiofiles = []
+    # #     audio_config = AudioOutputConfig(filename="file.wav")
+    # #     synthesizer = SpeechSynthesizer(speech_config=speech_config, audio_config=None)
+    # #     synthesizer.speak_ssml_async(open('teste.ssml').read()))
+    # #     File "<stdin>", line 1
+    # #         synthesizer.speak_ssml_async(open('teste.ssml').read()))
+    # #                                                             ^
+    # #     SyntaxError: unmatched ')'
+    # #
 
+    # #     language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
+    # #     translator = Translator(service_urls=['translate.googleapis.com'])
 
+    # #         subtitle[2] = translator.translate(subtitle[2], dest=language).text
 
+    # #     update_widgets(self)
 
-    # list_of_final_audiofiles = []
-    #     audio_config = AudioOutputConfig(filename="file.wav")
-    #     synthesizer = SpeechSynthesizer(speech_config=speech_config, audio_config=None)
-    #     synthesizer.speak_ssml_async(open('teste.ssml').read()))
-    #     File "<stdin>", line 1
-    #         synthesizer.speak_ssml_async(open('teste.ssml').read()))
-    #                                                             ^
-    #     SyntaxError: unmatched ')'
-    #
-
-
-    #     language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
-    #     translator = Translator(service_urls=['translate.googleapis.com'])
-
-    #         subtitle[2] = translator.translate(subtitle[2], dest=language).text
-
-    #     update_widgets(self)
 
 def update_global_subtitlesvideo_panel_tabwidget_quality_panel_widgets(self):
     self.global_subtitlesvideo_panel_tabwidget_quality_enable_checkbox.setChecked(self.settings['quality_check'].get('enabled', False))

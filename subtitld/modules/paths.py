@@ -22,7 +22,7 @@ STARTUPINFO = None
 ACTUAL_OS = 'linux'
 
 tempdir = tempfile.TemporaryDirectory()
-path_tmp  = tempdir.name
+path_tmp = tempdir.name
 
 if sys.platform == 'darwin':
     ACTUAL_OS = 'macos'
@@ -50,7 +50,7 @@ else:
         FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe')
 
     if 'SNAP_REAL_HOME' in os.environ:
-        REAL_PATH_HOME =os.environ['SNAP_REAL_HOME']
+        REAL_PATH_HOME = os.environ['SNAP_REAL_HOME']
     else:
         try:
             REAL_PATH_HOME = subprocess.Popen(['getente', 'passwd', str(os.getuid())], stdout=subprocess.PIPE).stdout.read().decode().split(':')[5]

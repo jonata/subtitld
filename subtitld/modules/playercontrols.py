@@ -13,6 +13,7 @@ from subtitld.modules.paths import PATH_SUBTITLD_GRAPHICS
 
 STEPS_LIST = ['Frames', 'Seconds']
 
+
 class QLeftTabBar(QTabBar):
     def tabSizeHint(self, index):
         s = QTabBar.tabSizeHint(self, index)
@@ -40,6 +41,7 @@ class QLeftTabBar(QTabBar):
             painter.translate(-c)
             painter.drawControl(QStyle.CE_TabBarTabLabel, opt)
             painter.restore()
+
 
 def load(self):
     """Function to load player control widgets"""
@@ -581,127 +583,127 @@ def load(self):
 def resized(self):
     """Function to call when resizing widgets"""
     if self.subtitles_list or self.video_metadata:
-        self.playercontrols_widget.setGeometry(0, self.height()-200, self.width(), 200)
+        self.playercontrols_widget.setGeometry(0, self.height() - 200, self.width(), 200)
     else:
         self.playercontrols_widget.setGeometry(0, self.height(), self.width(), 200)
     top_width = 300
     bottom_width = 120
-    self.playercontrols_widget_central_top_background.setGeometry((self.playercontrols_widget.width()*.5)-(top_width*.5), 10, top_width, 45)
-    self.playercontrols_widget_central_bottom_background.setGeometry((self.playercontrols_widget.width()*.5)-(bottom_width*.5), 62, bottom_width, 22)
-    self.playercontrols_widget_central_top.setGeometry((self.playercontrols_widget.width()*.5)-(top_width*.5), 0, top_width, 60)
-    self.playercontrols_widget_central_bottom.setGeometry((self.playercontrols_widget.width()*.5)-(bottom_width*.5), 60, bottom_width, 26)
+    self.playercontrols_widget_central_top_background.setGeometry((self.playercontrols_widget.width() * .5) - (top_width * .5), 10, top_width, 45)
+    self.playercontrols_widget_central_bottom_background.setGeometry((self.playercontrols_widget.width() * .5) - (bottom_width * .5), 62, bottom_width, 22)
+    self.playercontrols_widget_central_top.setGeometry((self.playercontrols_widget.width() * .5) - (top_width * .5), 0, top_width, 60)
+    self.playercontrols_widget_central_bottom.setGeometry((self.playercontrols_widget.width() * .5) - (bottom_width * .5), 60, bottom_width, 26)
     self.playercontrols_timecode_label.setGeometry(0, 0, self.playercontrols_widget_central_bottom.width(), self.playercontrols_widget_central_bottom.height())
 
-    self.playercontrols_widget_top_right.setGeometry(self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width(), self.playercontrols_widget_central_top.y(), self.playercontrols_widget.width()-(self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width()), self.playercontrols_widget_central_top.height())
-    self.playercontrols_widget_top_left.setGeometry(0, self.playercontrols_widget_central_top.y(), self.playercontrols_widget.width()-(self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width()), self.playercontrols_widget_central_top.height())
-    self.playercontrols_widget_bottom_right.setGeometry(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width(), self.playercontrols_widget_central_bottom.y(), self.playercontrols_widget.width()-(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width())-30, self.playercontrols_widget_central_bottom.height())
+    self.playercontrols_widget_top_right.setGeometry(self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width(), self.playercontrols_widget_central_top.y(), self.playercontrols_widget.width() - (self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width()), self.playercontrols_widget_central_top.height())
+    self.playercontrols_widget_top_left.setGeometry(0, self.playercontrols_widget_central_top.y(), self.playercontrols_widget.width() - (self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width()), self.playercontrols_widget_central_top.height())
+    self.playercontrols_widget_bottom_right.setGeometry(self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width(), self.playercontrols_widget_central_bottom.y(), self.playercontrols_widget.width() - (self.playercontrols_widget_central_bottom.x() + self.playercontrols_widget_central_bottom.width()) - 30, self.playercontrols_widget_central_bottom.height())
     self.playercontrols_widget_bottom_right_corner.setGeometry(self.playercontrols_widget_bottom_right.x() + self.playercontrols_widget_bottom_right.width(), self.playercontrols_widget_bottom_right.y(), 30, self.playercontrols_widget_bottom_right.height())
     self.playercontrols_widget_bottom_left.setGeometry(0, self.playercontrols_widget_central_bottom.y(), self.playercontrols_widget_central_bottom.x(), self.playercontrols_widget_central_bottom.height())
 
     show_or_hide_playercontrols_properties_panel(self)
-    self.playercontrols_properties_panel_tabwidget.setGeometry(10, 34, self.playercontrols_properties_panel.width()-40, self.playercontrols_properties_panel.height()-60)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal.setGeometry(10,10,100,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_normal.setGeometry(10,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_button.setGeometry(10,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_normal.setGeometry(45,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_button.setGeometry(45,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_normal.setGeometry(80,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_button.setGeometry(80,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_selected.setGeometry(120,10,100,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_selected.setGeometry(120,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_border_color_button.setGeometry(120,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_selected.setGeometry(155,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_fill_color_button.setGeometry(155,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_selected.setGeometry(190,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_text_color_button.setGeometry(190,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_arrows.setGeometry(225,10,70,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal_arrows.setGeometry(225,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_arrow_normal_button.setGeometry(225,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_title_normal_arrows.setGeometry(260,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button.setGeometry(260,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_waveform_title_normal.setGeometry(10,10,100,15)
-    self.playercontrols_properties_panel_tabwidget_waveform_border_color_title_normal.setGeometry(10,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_waveform_border_color_button.setGeometry(10,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_title_normal.setGeometry(45,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_button.setGeometry(45,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_background_title_normal.setGeometry(10,10,100,15)
-    self.playercontrols_properties_panel_tabwidget_background_time_text_color_title_normal.setGeometry(10,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_background_time_text_color_button.setGeometry(10,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_background_cursor_color_title_normal.setGeometry(45,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_background_cursor_color_button.setGeometry(45,40,30,30)
-    self.playercontrols_properties_panel_tabwidget_background_grid_color_title_normal.setGeometry(80,25,30,15)
-    self.playercontrols_properties_panel_tabwidget_background_grid_color_button.setGeometry(80,40,30,30)
+    self.playercontrols_properties_panel_tabwidget.setGeometry(10, 34, self.playercontrols_properties_panel.width() - 40, self.playercontrols_properties_panel.height() - 60)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal.setGeometry(10, 10, 100, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_normal.setGeometry(10, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_button.setGeometry(10, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_normal.setGeometry(45, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_button.setGeometry(45, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_normal.setGeometry(80, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_button.setGeometry(80, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_selected.setGeometry(120, 10, 100, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_title_selected.setGeometry(120, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_border_color_button.setGeometry(120, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_fill_color_title_selected.setGeometry(155, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_fill_color_button.setGeometry(155, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_text_color_title_selected.setGeometry(190, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_text_color_button.setGeometry(190, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_arrows.setGeometry(225, 10, 70, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_title_normal_arrows.setGeometry(225, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_subtitle_arrow_normal_button.setGeometry(225, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_title_normal_arrows.setGeometry(260, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button.setGeometry(260, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_waveform_title_normal.setGeometry(10, 10, 100, 15)
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_title_normal.setGeometry(10, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_waveform_border_color_button.setGeometry(10, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_title_normal.setGeometry(45, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_waveform_fill_color_button.setGeometry(45, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_background_title_normal.setGeometry(10, 10, 100, 15)
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_title_normal.setGeometry(10, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_background_time_text_color_button.setGeometry(10, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_title_normal.setGeometry(45, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_background_cursor_color_button.setGeometry(45, 40, 30, 30)
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_title_normal.setGeometry(80, 25, 30, 15)
+    self.playercontrols_properties_panel_tabwidget_background_grid_color_button.setGeometry(80, 40, 30, 30)
 
-    self.playercontrols_stop_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-55, 11, 50, 43)
-    self.playercontrols_playpause_button.setGeometry((self.playercontrols_widget_central_top.width()*.5)-5, 11, 60, 43)
-    self.playercontrols_play_from_last_start_button.setGeometry(self.playercontrols_stop_button.x()-50, 11, 50, 43)
-    self.playercontrols_play_from_next_start_button.setGeometry(self.playercontrols_playpause_button.x()+self.playercontrols_playpause_button.width(), 11, 50, 43)
+    self.playercontrols_stop_button.setGeometry((self.playercontrols_widget_central_top.width() * .5) - 55, 11, 50, 43)
+    self.playercontrols_playpause_button.setGeometry((self.playercontrols_widget_central_top.width() * .5) - 5, 11, 60, 43)
+    self.playercontrols_play_from_last_start_button.setGeometry(self.playercontrols_stop_button.x() - 50, 11, 50, 43)
+    self.playercontrols_play_from_next_start_button.setGeometry(self.playercontrols_playpause_button.x() + self.playercontrols_playpause_button.width(), 11, 50, 43)
 
-    self.move_backward_subtitle.setGeometry((self.playercontrols_widget.width()*.5)-107, 61, 25, 23)
-    self.move_start_back_subtitle.setGeometry((self.playercontrols_widget.width()*.5)-159, 61, 25, 23)
-    self.move_start_forward_subtitle.setGeometry((self.playercontrols_widget.width()*.5)-134, 61, 25, 23)
+    self.move_backward_subtitle.setGeometry((self.playercontrols_widget.width() * .5) - 107, 61, 25, 23)
+    self.move_start_back_subtitle.setGeometry((self.playercontrols_widget.width() * .5) - 159, 61, 25, 23)
+    self.move_start_forward_subtitle.setGeometry((self.playercontrols_widget.width() * .5) - 134, 61, 25, 23)
 
-    self.timeline_cursor_back_frame.setGeometry((self.playercontrols_widget.width()*.5)-80, 61, 25, 23)
+    self.timeline_cursor_back_frame.setGeometry((self.playercontrols_widget.width() * .5) - 80, 61, 25, 23)
 
     self.remove_selected_subtitle_button.setGeometry(self.move_start_back_subtitle.x() - 5 - 100, self.add_subtitle_button.y(), 100, 40)
 
     self.add_subtitle_button.setGeometry(self.remove_selected_subtitle_button.x() - 178, 44, 178, 40)
-    self.add_subtitle_duration.setGeometry(66, 8, 46, self.add_subtitle_button.height()-14)
-    self.add_subtitle_starting_from_last.setGeometry(self.add_subtitle_duration.x() + self.add_subtitle_duration.width() + 2, 8, self.add_subtitle_button.height()-14, self.add_subtitle_button.height()-8)
-    self.add_subtitle_and_play.setGeometry(self.add_subtitle_starting_from_last.x() + self.add_subtitle_starting_from_last.width(), 8, self.add_subtitle_button.height()-14, self.add_subtitle_button.height()-8)
+    self.add_subtitle_duration.setGeometry(66, 8, 46, self.add_subtitle_button.height() - 14)
+    self.add_subtitle_starting_from_last.setGeometry(self.add_subtitle_duration.x() + self.add_subtitle_duration.width() + 2, 8, self.add_subtitle_button.height() - 14, self.add_subtitle_button.height() - 8)
+    self.add_subtitle_and_play.setGeometry(self.add_subtitle_starting_from_last.x() + self.add_subtitle_starting_from_last.width(), 8, self.add_subtitle_button.height() - 14, self.add_subtitle_button.height() - 8)
 
-    self.gap_add_subtitle_button.setGeometry(self.add_subtitle_button.x()-131, 44, 63, 40)
-    self.gap_remove_subtitle_button.setGeometry(self.gap_add_subtitle_button.x()+self.gap_add_subtitle_button.width(), 44, 63, self.gap_add_subtitle_button.height())
-    self.gap_subtitle_duration.setGeometry(self.gap_add_subtitle_button.x()+40, 51, 46, self.gap_add_subtitle_button.height()-14)
+    self.gap_add_subtitle_button.setGeometry(self.add_subtitle_button.x() - 131, 44, 63, 40)
+    self.gap_remove_subtitle_button.setGeometry(self.gap_add_subtitle_button.x() + self.gap_add_subtitle_button.width(), 44, 63, self.gap_add_subtitle_button.height())
+    self.gap_subtitle_duration.setGeometry(self.gap_add_subtitle_button.x() + 40, 51, 46, self.gap_add_subtitle_button.height() - 14)
 
-    self.timeline_cursor_next_frame.setGeometry((self.playercontrols_widget.width()*.5)+55, 61, 25, 23)
+    self.timeline_cursor_next_frame.setGeometry((self.playercontrols_widget.width() * .5) + 55, 61, 25, 23)
 
-    self.move_forward_subtitle.setGeometry((self.playercontrols_widget.width()*.5)+82, 61, 25, 23)
-    self.move_end_back_subtitle.setGeometry((self.playercontrols_widget.width()*.5)+109, 61, 25, 23)
-    self.move_end_forward_subtitle.setGeometry((self.playercontrols_widget.width()*.5)+134, 61, 25, 23)
+    self.move_forward_subtitle.setGeometry((self.playercontrols_widget.width() * .5) + 82, 61, 25, 23)
+    self.move_end_back_subtitle.setGeometry((self.playercontrols_widget.width() * .5) + 109, 61, 25, 23)
+    self.move_end_forward_subtitle.setGeometry((self.playercontrols_widget.width() * .5) + 134, 61, 25, 23)
 
-    self.merge_back_selected_subtitle_button.setGeometry((self.playercontrols_widget.width()*.5)+164, 44, 40, 40)
+    self.merge_back_selected_subtitle_button.setGeometry((self.playercontrols_widget.width() * .5) + 164, 44, 40, 40)
     self.slice_selected_subtitle_button.setGeometry(self.merge_back_selected_subtitle_button.x() + self.merge_back_selected_subtitle_button.width(), self.merge_back_selected_subtitle_button.y(), 40, 40)
     self.merge_next_selected_subtitle_button.setGeometry(self.slice_selected_subtitle_button.x() + self.slice_selected_subtitle_button.width(), self.merge_back_selected_subtitle_button.y(), 40, 40)
 
-    self.next_start_to_current_position_button.setGeometry(self.merge_next_selected_subtitle_button.x()+self.merge_next_selected_subtitle_button.width()+5, 44, 50, 40)
-    self.subtitle_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+40, 50, 20, 34)
-    self.last_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x()+self.next_start_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
-    self.next_end_to_current_position_button.setGeometry(self.last_start_to_current_position_button.x()+self.last_start_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
-    self.subtitle_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x()+40, 50, 20, 34)
-    self.last_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x()+self.next_end_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
+    self.next_start_to_current_position_button.setGeometry(self.merge_next_selected_subtitle_button.x() + self.merge_next_selected_subtitle_button.width() + 5, 44, 50, 40)
+    self.subtitle_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x() + 40, 50, 20, 34)
+    self.last_start_to_current_position_button.setGeometry(self.next_start_to_current_position_button.x() + self.next_start_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
+    self.next_end_to_current_position_button.setGeometry(self.last_start_to_current_position_button.x() + self.last_start_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
+    self.subtitle_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x() + 40, 50, 20, 34)
+    self.last_end_to_current_position_button.setGeometry(self.next_end_to_current_position_button.x() + self.next_end_to_current_position_button.width(), self.next_start_to_current_position_button.y(), 50, 40)
 
-    self.change_playback_speed.setGeometry(self.playercontrols_widget_central_top.x()-182, 7, 180, 36)
+    self.change_playback_speed.setGeometry(self.playercontrols_widget_central_top.x() - 182, 7, 180, 36)
     self.change_playback_speed_icon_label.setGeometry(0, 0, self.change_playback_speed.height(), self.change_playback_speed.height())
     self.change_playback_speed_decrease.setGeometry(70, 10, 20, 20)
     self.change_playback_speed_slider.setGeometry(90, 10, 60, 20)
     self.change_playback_speed_increase.setGeometry(150, 10, 20, 20)
 
-    self.repeat_playback.setGeometry(self.playercontrols_widget_central_top.x()+self.playercontrols_widget_central_top.width()+2, 7, 150, 36)
+    self.repeat_playback.setGeometry(self.playercontrols_widget_central_top.x() + self.playercontrols_widget_central_top.width() + 2, 7, 150, 36)
     self.repeat_playback_icon_label.setGeometry(0, 0, self.repeat_playback.height(), self.repeat_playback.height())
-    self.repeat_playback_duration.setGeometry(self.repeat_playback_icon_label.x()+self.repeat_playback_icon_label.width(), 6, 46, self.repeat_playback.height()-14)
-    self.repeat_playback_x_label.setGeometry(self.repeat_playback_duration.x()+self.repeat_playback_duration.width(), 0, 15, self.repeat_playback.height())
-    self.repeat_playback_times.setGeometry(self.repeat_playback_x_label.x()+self.repeat_playback_x_label.width(), 6, 40, self.repeat_playback.height()-14)
+    self.repeat_playback_duration.setGeometry(self.repeat_playback_icon_label.x() + self.repeat_playback_icon_label.width(), 6, 46, self.repeat_playback.height() - 14)
+    self.repeat_playback_x_label.setGeometry(self.repeat_playback_duration.x() + self.repeat_playback_duration.width(), 0, 15, self.repeat_playback.height())
+    self.repeat_playback_times.setGeometry(self.repeat_playback_x_label.x() + self.repeat_playback_x_label.width(), 6, 40, self.repeat_playback.height() - 14)
 
     self.zoomout_button.setGeometry(self.last_end_to_current_position_button.x() + self.last_end_to_current_position_button.width() + 5, 44, 40, 40)
     self.zoomin_button.setGeometry(self.zoomout_button.x() + self.zoomout_button.width(), 44, 40, 40)
 
-    self.grid_button.setGeometry(self.change_playback_speed.x()-145, 7, 50, 24)
-    self.grid_frames_button.setGeometry(self.grid_button.x()+self.grid_button.width(), self.grid_button.y(), 30, self.grid_button.height())
-    self.grid_seconds_button.setGeometry(self.grid_frames_button.x()+self.grid_frames_button.width(), self.grid_button.y(), 30, self.grid_button.height())
-    self.grid_scenes_button.setGeometry(self.grid_seconds_button.x()+self.grid_seconds_button.width(), self.grid_button.y(), 30, self.grid_button.height())
+    self.grid_button.setGeometry(self.change_playback_speed.x() - 145, 7, 50, 24)
+    self.grid_frames_button.setGeometry(self.grid_button.x() + self.grid_button.width(), self.grid_button.y(), 30, self.grid_button.height())
+    self.grid_seconds_button.setGeometry(self.grid_frames_button.x() + self.grid_frames_button.width(), self.grid_button.y(), 30, self.grid_button.height())
+    self.grid_scenes_button.setGeometry(self.grid_seconds_button.x() + self.grid_seconds_button.width(), self.grid_button.y(), 30, self.grid_button.height())
 
-    self.snap_button.setGeometry(self.repeat_playback.x()+self.repeat_playback.width()+5, 7, 100, 24)
-    self.snap_value.setGeometry(self.snap_button.width()-50, 4, 46, self.snap_button.height()-8)
-    self.snap_limits_button.setGeometry(self.snap_button.x()+self.snap_button.width(), self.snap_button.y(), 30, self.snap_button.height())
-    self.snap_move_button.setGeometry(self.snap_limits_button.x()+self.snap_limits_button.width(), self.snap_button.y(), 30, self.snap_button.height())
-    self.snap_grid_button.setGeometry(self.snap_move_button.x()+self.snap_move_button.width(), self.snap_button.y(), 30, self.snap_button.height())
-    self.snap_move_nereast_button.setGeometry(self.snap_grid_button.x()+self.snap_grid_button.width(), self.snap_button.y(), 30, self.snap_button.height())
+    self.snap_button.setGeometry(self.repeat_playback.x() + self.repeat_playback.width() + 5, 7, 100, 24)
+    self.snap_value.setGeometry(self.snap_button.width() - 50, 4, 46, self.snap_button.height() - 8)
+    self.snap_limits_button.setGeometry(self.snap_button.x() + self.snap_button.width(), self.snap_button.y(), 30, self.snap_button.height())
+    self.snap_move_button.setGeometry(self.snap_limits_button.x() + self.snap_limits_button.width(), self.snap_button.y(), 30, self.snap_button.height())
+    self.snap_grid_button.setGeometry(self.snap_move_button.x() + self.snap_move_button.width(), self.snap_button.y(), 30, self.snap_button.height())
+    self.snap_move_nereast_button.setGeometry(self.snap_grid_button.x() + self.snap_grid_button.width(), self.snap_button.y(), 30, self.snap_button.height())
 
-    self.step_button.setGeometry(self.snap_move_nereast_button.x()+self.snap_move_nereast_button.width()+5, 7, 160, 24)
-    self.step_value_f.setGeometry(self.step_button.width()-112, 4, 46, self.step_button.height()-8)
-    self.step_value_i.setGeometry(self.step_button.width()-112, 4, 46, self.step_button.height()-8)
-    self.step_unit.setGeometry(self.step_button.width()-65, 4, 58, self.step_button.height()-8)
+    self.step_button.setGeometry(self.snap_move_nereast_button.x() + self.snap_move_nereast_button.width() + 5, 7, 160, 24)
+    self.step_value_f.setGeometry(self.step_button.width() - 112, 4, 46, self.step_button.height() - 8)
+    self.step_value_i.setGeometry(self.step_button.width() - 112, 4, 46, self.step_button.height() - 8)
+    self.step_unit.setGeometry(self.step_button.width() - 65, 4, 58, self.step_button.height() - 8)
 
     self.timelinescrolling_none_button.setGeometry(self.grid_button.x() - 95, 7, 30, self.grid_button.height())
     self.timelinescrolling_page_button.setGeometry(self.grid_button.x() - 65, 7, 30, self.grid_button.height())
@@ -739,7 +741,7 @@ def playercontrols_playpause_button_update(self):
 
 def show(self):
     """Function that shows the entire panel"""
-    self.generate_effect(self.playercontrols_widget_animation, 'geometry', 800, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height()-200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
+    self.generate_effect(self.playercontrols_widget_animation, 'geometry', 800, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height() - 200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
     update_snap_buttons(self)
     update_grid_buttons(self)
     update_step_buttons(self)
@@ -767,8 +769,8 @@ def zoom_buttons_update(self):
     """Function to update zoom buttons"""
     self.zoomout_button.setEnabled(True if self.mediaplayer_zoom - 5.0 > 0.0 else False)
     self.zoomin_button.setEnabled(True if self.mediaplayer_zoom + 5.0 < 500.0 else False)
-    proportion = ((self.player_widget.position*self.timeline_widget.width_proportion)-self.timeline_scroll.horizontalScrollBar().value())/self.timeline_scroll.width()
-    self.timeline_widget.setGeometry(0, 0, int(round(self.video_metadata.get('duration', 0.01)*self.mediaplayer_zoom)), self.timeline_scroll.height()-20)
+    proportion = ((self.player_widget.position * self.timeline_widget.width_proportion) - self.timeline_scroll.horizontalScrollBar().value()) / self.timeline_scroll.width()
+    self.timeline_widget.setGeometry(0, 0, int(round(self.video_metadata.get('duration', 0.01) * self.mediaplayer_zoom)), self.timeline_scroll.height() - 20)
     # self.timeline.zoom_update_waveform(self)
     self.timeline.update_scrollbar(self, position=proportion)
 
@@ -847,8 +849,10 @@ def add_subtitle_duration_changed(self):
 def add_subtitle_starting_from_last_clicked(self):
     self.timeline_widget.setFocus(Qt.TabFocusReason)
 
+
 def add_subtitle_and_play_clicked(self):
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+
 
 def gap_add_subtitle_button_clicked(self):
     """Function to call when add gap button is clicked"""
@@ -893,7 +897,7 @@ def update_playback_speed_buttons(self):
     self.change_playback_speed_slider.setEnabled(self.change_playback_speed.isChecked())
     self.change_playback_speed_increase.setEnabled(self.change_playback_speed.isChecked())
     self.change_playback_speed.setText('x' + str(self.playback_speed))
-    self.change_playback_speed_slider.setValue(self.playback_speed*100)
+    self.change_playback_speed_slider.setValue(self.playback_speed * 100)
 
 
 def grid_button_clicked(self):
@@ -925,7 +929,7 @@ def update_grid_buttons(self):
 def playercontrols_play_from_last_start_button_clicked(self):
     """Function to call when stop button is clicked"""
     subt = [item[0] for item in self.subtitles_list]
-    last_subtitle = self.subtitles_list[bisect(subt, self.player_widget.position)-1]
+    last_subtitle = self.subtitles_list[bisect(subt, self.player_widget.position) - 1]
     self.player_widget.seek(last_subtitle[0])
     self.player_widget.play()
     # self.timeline.update_scrollbar(self)
@@ -948,7 +952,7 @@ def playercontrols_play_from_next_start_button_clicked(self):
 
 def add_subtitle_button_clicked(self):
     """Function to call when add subtitle button is clicked"""
-    start_position = False
+    # start_position = False
     self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.player_widget.position, duration=self.default_new_subtitle_duration, from_last_subtitle=self.add_subtitle_starting_from_last.isChecked())
     self.unsaved = True
     self.subtitleslist.update_subtitles_list_qlistwidget(self)
@@ -1216,8 +1220,8 @@ def next_end_to_current_position_button_clicked(self):
 
 def change_playback_speed_clicked(self):
     """Function to call when playback speed button is clicked"""
-    #if not self.change_playback_speed.isChecked():
-        # self.playback_speed = 1.0
+    # if not self.change_playback_speed.isChecked():
+    # self.playback_speed = 1.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
@@ -1225,8 +1229,8 @@ def change_playback_speed_clicked(self):
 
 def change_playback_speed_decrease_clicked(self):
     """Function to call when playback speed decrease button is clicked"""
-    self.change_playback_speed_slider.setValue(self.change_playback_speed_slider.value()-10)
-    self.playback_speed = self.change_playback_speed_slider.value()/100.0
+    self.change_playback_speed_slider.setValue(self.change_playback_speed_slider.value() - 10)
+    self.playback_speed = self.change_playback_speed_slider.value() / 100.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
@@ -1234,7 +1238,7 @@ def change_playback_speed_decrease_clicked(self):
 
 def change_playback_speed_slider(self):
     """Function to call when playback speed slider button is changed"""
-    self.playback_speed = self.change_playback_speed_slider.value()/100.0
+    self.playback_speed = self.change_playback_speed_slider.value() / 100.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
@@ -1242,8 +1246,8 @@ def change_playback_speed_slider(self):
 
 def change_playback_speed_increase_clicked(self):
     """Function to call when playback speed increase button is clicked"""
-    self.change_playback_speed_slider.setValue(self.change_playback_speed_slider.value()+10)
-    self.playback_speed = self.change_playback_speed_slider.value()/100.0
+    self.change_playback_speed_slider.setValue(self.change_playback_speed_slider.value() + 10)
+    self.playback_speed = self.change_playback_speed_slider.value() / 100.0
     self.player.update_speed(self)
     update_playback_speed_buttons(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
@@ -1283,19 +1287,18 @@ def playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self):
     self.playercontrols_properties_panel_tabwidget_background_cursor_color_button.setStyleSheet('background-color: {color};'.format(color=self.settings['timeline'].get('cursor_color', '#ccff0000')))
 
 
-
-
 def show_or_hide_playercontrols_properties_panel(self):
     """Function to show playercontrol properties panel"""
     panel_width = 365
     if self.playercontrols_properties_panel_toggle.isChecked():
-        self.playercontrols_properties_panel_placeholder.setGeometry(self.playercontrols_widget.width()-panel_width, 5, panel_width, 180)
+        self.playercontrols_properties_panel_placeholder.setGeometry(self.playercontrols_widget.width() - panel_width, 5, panel_width, 180)
         self.playercontrols_properties_panel.setGeometry(0, 56, self.playercontrols_properties_panel_placeholder.width(), 140)
-        self.playercontrols_properties_panel_toggle.setGeometry(self.playercontrols_widget_bottom_right_corner.x(), self.playercontrols_widget_bottom_right_corner.y()+100, self.playercontrols_widget_bottom_right_corner.width(), self.playercontrols_widget_bottom_right_corner.height())
+        self.playercontrols_properties_panel_toggle.setGeometry(self.playercontrols_widget_bottom_right_corner.x(), self.playercontrols_widget_bottom_right_corner.y() + 100, self.playercontrols_widget_bottom_right_corner.width(), self.playercontrols_widget_bottom_right_corner.height())
     else:
-        self.playercontrols_properties_panel_placeholder.setGeometry(self.playercontrols_widget.width()-panel_width, 5, panel_width, 80)
+        self.playercontrols_properties_panel_placeholder.setGeometry(self.playercontrols_widget.width() - panel_width, 5, panel_width, 80)
         self.playercontrols_properties_panel.setGeometry(0, 56, self.playercontrols_properties_panel_placeholder.width(), 140)
         self.playercontrols_properties_panel_toggle.setGeometry(self.playercontrols_widget_bottom_right_corner.x(), self.playercontrols_widget_bottom_right_corner.y(), self.playercontrols_widget_bottom_right_corner.width(), self.playercontrols_widget_bottom_right_corner.height())
+
 
 def playercontrols_properties_panel_toggle_pressed(self):
     playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
@@ -1306,7 +1309,7 @@ def playercontrols_properties_panel_tabwidget_subtitles_subtitle_border_color_bu
     """Function to show qcolordialog to choose subtitle border color"""
     color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
     if color.isValid():
-        self.settings['timeline']['subtitle_border_color'] =  color.name(1)
+        self.settings['timeline']['subtitle_border_color'] = color.name(1)
     playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
     self.timeline_widget.update()
 
@@ -1420,6 +1423,7 @@ def playercontrols_properties_panel_tabwidget_background_time_text_color_button_
         self.settings['timeline']['time_text_color'] = color.name(1)
     playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
     self.timeline_widget.update()
+
 
 def playercontrols_properties_panel_tabwidget_background_cursor_color_button_clicked(self):
     """Function to show qcolordialog to choose background end color"""

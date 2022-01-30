@@ -4,9 +4,9 @@
 
 import os
 
-from PyQt5.QtGui import QColor, QFont, QFontMetrics, QIcon, QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QLayout, QListWidgetItem, QPushButton, QLabel, QFileDialog, QListView, QMessageBox, QSizePolicy, QStackedWidget, QStyle, QStyledItemDelegate, QTextEdit, QVBoxLayout, QWidget, QLineEdit
-from PyQt5.QtCore import QAbstractListModel, QFile, QMargins, QPropertyAnimation, QEasingCurve, QRect, Qt, QSize
+from PyQt5.QtGui import QColor, QFont, QFontMetrics, QIcon
+from PyQt5.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QFileDialog, QListView, QMessageBox, QSizePolicy, QStackedWidget, QStyle, QStyledItemDelegate, QTextEdit, QVBoxLayout, QWidget, QLineEdit
+from PyQt5.QtCore import QAbstractListModel, QMargins, QPropertyAnimation, QEasingCurve, QRect, Qt, QSize
 
 from subtitld.modules import file_io, quality_check, subtitles
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, PATH_SUBTITLD_GRAPHICS
@@ -290,14 +290,15 @@ def load(self):
     self.properties_information.setObjectName('properties_information')
     self.subtitles_list_simplelist_widget_vbox.addWidget(self.properties_information)
 
-    self.properties_toggle_button = QPushButton(parent=self)
-    self.properties_toggle_button.clicked.connect(lambda: properties_toggle_button_clicked(self))
-    self.properties_toggle_button.setCheckable(True)
-    self.properties_toggle_button.setObjectName('properties_toggle_button')
-    self.properties_toggle_button_animation = QPropertyAnimation(self.properties_toggle_button, b'geometry')
-    self.properties_toggle_button_animation.setEasingCurve(QEasingCurve.OutCirc)
+    # self.properties_toggle_button = QPushButton(parent=self)
+    # self.properties_toggle_button.clicked.connect(lambda: properties_toggle_button_clicked(self))
+    # self.properties_toggle_button.setCheckable(True)
+    # self.properties_toggle_button.setObjectName('properties_toggle_button')
+    # self.properties_toggle_button_animation = QPropertyAnimation(self.properties_toggle_button, b'geometry')
+    # self.properties_toggle_button_animation.setEasingCurve(QEasingCurve.OutCirc)
 
     self.subtitles_list_toggle_button = QPushButton(parent=self)
+    self.subtitles_list_toggle_button.setFixedSize(QSize(22, 70))
     self.subtitles_list_toggle_button.clicked.connect(lambda: subtitles_list_toggle_button_clicked(self))
     self.subtitles_list_toggle_button.setCheckable(True)
     self.subtitles_list_toggle_button.setObjectName('subtitles_list_toggle_button')
@@ -311,6 +312,13 @@ def resized(self):
         self.subtitles_list_widget.setGeometry(0, 0, (self.width() * self.subtitleslist_width_proportion) - 15, self.height())
     else:
         self.subtitles_list_widget.setGeometry(-((self.width() * self.subtitleslist_width_proportion) - 15), 0, (self.width() * self.subtitleslist_width_proportion) - 15, self.height())
+
+    x = self.subtitles_list_widget.x() + self.subtitles_list_widget.width()
+    if (self.subtitles_list or self.video_metadata) and self.subtitles_list_toggle_button.isChecked():
+        x = self.global_subtitlesvideo_panel_widget.x() + self.global_subtitlesvideo_panel_widget.width()
+    x -= self.subtitles_list_toggle_button.width()
+
+    self.subtitles_list_toggle_button.move(x, self.subtitles_list_widget.y())
 
 
 def subtitles_list_toggle_button_clicked(self):
@@ -332,7 +340,7 @@ def update_topbar_status(self):
 
 def subtitleslist_toggle_button_to_end(self):
     """Function to show subtitles list panel"""
-    self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.global_subtitlesvideo_panel_widget.width() - 25, self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
+    self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.global_subtitlesvideo_panel_widget.width() - 22, self.global_subtitlesvideo_panel_widget.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
 
 
 def update_subtitle_list_qlistwidget(self):
@@ -387,14 +395,15 @@ def subtitles_list_qlistwidget_item_clicked(self):
 def show(self):
     """Function to show subtitle list panel"""
     self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()], [0, self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()])
-    self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.subtitles_list_widget.width() - 25, self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
+    self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.subtitles_list_widget.width() - 22, self.subtitles_list_widget.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
     self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
     update_toppanel_subtitle_file_info_label(self)
+    update_properties_widget(self)
 
 
 def hide(self):
     """Function to hide subtitle list panel"""
-    self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()], [-int(self.width() * .2), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()])
+    self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()], [-self.subtitles_list_widget.width(), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()])
 
 
 def toppanel_save_button_clicked(self):
@@ -504,20 +513,20 @@ def update_toppanel_subtitle_file_info_label(self):
     self.toppanel_subtitle_file_info_label.setText(text)
 
 
-def properties_toggle_button_clicked(self):
-    """Function to call when panel's toggle button is clicked"""
-    if self.properties_toggle_button.isChecked():
-        hide(self)
-        self.global_properties_panel.show_global_properties_panel(self)
-        properties_toggle_button_to_end(self)
-    else:
-        show(self)
-        self.global_properties_panel.hide_global_properties_panel(self)
+# def properties_toggle_button_clicked(self):
+#     """Function to call when panel's toggle button is clicked"""
+#     if self.properties_toggle_button.isChecked():
+#         hide(self)
+#         self.global_properties_panel.show_global_properties_panel(self)
+#         properties_toggle_button_to_end(self)
+#     else:
+#         show(self)
+#         self.global_properties_panel.hide_global_properties_panel(self)
 
 
-def properties_toggle_button_to_end(self):
-    """Function to show properties panel"""
-    self.generate_effect(self.properties_toggle_button_animation, 'geometry', 700, [self.properties_toggle_button.x(), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()], [int(self.width() * .8), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()])
+# def properties_toggle_button_to_end(self):
+#     """Function to show properties panel"""
+#     self.generate_effect(self.properties_toggle_button_animation, 'geometry', 700, [self.properties_toggle_button.x(), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()], [int(self.width() * .8), self.properties_toggle_button.y(), self.properties_toggle_button.width(), self.properties_toggle_button.height()])
 
 
 def update_properties_widget(self):

@@ -116,9 +116,6 @@ def load(self):
             self.video_metadata['waveform'][command[0]] = {'qimages': []}
         self.video_metadata['waveform'][command[0]]['qimages'].append(command[1])
         self.timeline_widget.update()
-        #self.video_metadata['audio'] = command
-        # self.timeline.zoom_update_waveform(self)
-        #self.videoinfo_label.setText(self.tr('Audio ffmpeg_extract_subtitleed'))
 
     self.thread_extract_waveform2 = waveform.ThreadExtractWaveform2(self)
     self.thread_extract_waveform2.command.connect(thread_extract_waveform_ended2)
@@ -130,7 +127,7 @@ def load(self):
     self.thread_extract_scene_time_positions.command.connect(thread_extract_scene_time_positions_ended)
 
     def thread_generate_hash_of_video(response):
-        if self.video_metadata.get('filepath', '') == response[0] and not 'hash' in self.video_metadata:
+        if self.video_metadata.get('filepath', '') == response[0] and 'hash' not in self.video_metadata:
             self.video_metadata['hash'] = response[1]
             if self.actual_subtitle_file in self.settings['recent_files']:
                 self.settings['recent_files'][self.actual_subtitle_file]['video_hash'] = self.video_metadata['hash']
@@ -180,8 +177,6 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.thread_extract_waveform.filepath = self.video_metadata['filepath']
             self.thread_extract_waveform.start()
             self.videoinfo_label.setText(self.tr('Extracting audio...'))
-        #self.thread_extract_scene_time_positions.filepath = self.video_metadata['filepath']
-        #self.thread_extract_scene_time_positions.start()
 
         self.player_widget.loadfile(self.video_metadata['filepath'])
         if self.actual_subtitle_file:
@@ -189,7 +184,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.thread_generate_hash_of_video.start()
             if self.actual_subtitle_file in self.settings['recent_files']:
                 self.player_widget.seek(self.settings['recent_files'][self.actual_subtitle_file].get('last_position', 0))
-        #self.player.resize_player_widget(self)
+
         if not self.actual_subtitle_file:
             if self.video_metadata.get('subtitles', ''):
                 self.subtitles_list, self.format_to_save = process_subtitles_file(self.video_metadata['subtitles'])
@@ -205,19 +200,13 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.timeline.update_timeline(self)
             self.startscreen.hide(self)
             self.playercontrols.show(self)
-            #self.properties.show(self)
             self.subtitleslist.show(self)
             self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
-            #self.global_properties_panel.hide_global_properties_panel(self)
             player_qrect = self.player.resize_player_widget(self, just_get_qrect=True)
             original_qrect = [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()]
-            # self.generate_effect(self.start_screen_thumbnail_background_animation, 'geometry', 1000, original_qrect, player_qrect)
             self.generate_effect(self.start_screen_thumbnail_background_transparency_animation, 'opacity', 200, 1.0, 0.0)
             self.generate_effect(self.player_border_animation, 'geometry', 700, original_qrect, player_qrect)
             self.generate_effect(self.player_border_transparency_animation, 'opacity', 700, 0.5, 1.0)
-            #self.generate_effect(self.layer_player_bottom_spacer_animation, 'maximumHeight', 1000, self.layer_player_bottom_spacer.maximumHeight(), 200)
-            #self.generate_effect(self.layer_player_left_spacer_animation, 'maximumWidth', 1000, 0, self.width()*self.subtitleslist_width_proportion)#self.layer_player_left_spacer.maximumWidth()
-            #self.generate_effect(self.videoinfo_label_animation, 'maximumHeight', 1000, self.videoinfo_label.maximumHeight(), 60)
 
     self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
@@ -247,7 +236,7 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                 language = languages[0]
                 captions = srt_reader.get_captions(language)
                 for caption in captions:
-                    final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+                    final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.vtt', '.webvtt')):
             subtitle_format = 'VTT'
@@ -258,7 +247,7 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                     language = languages[0]
                     captions = vtt_reader.get_captions(language)
                     for caption in captions:
-                        final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+                        final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
                 except CaptionReadSyntaxError:
                     with open(subtitle_file, encoding='utf-8') as fileobj:
                         subfile = pysubs2.SSAFile.from_string(fileobj.read())
@@ -280,7 +269,7 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                 with open(subtitle_file, encoding='utf-8') as xml_file:
                     captions = captionstransformer.transcript.Reader(xml_file).read()
                     for caption in captions:
-                        final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
+                        final_subtitles.append([(caption.start - datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
             else:
                 if '<tt ' in open(subtitle_file).read():
                     subtitle_format = 'TTML'
@@ -293,7 +282,7 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                     language = languages[0]
                     captions = dfxp_reader.get_captions(language)
                     for caption in captions:
-                        final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+                        final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.smi', '.sami')):
             subtitle_format = 'SAMI'
@@ -303,7 +292,7 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                 language = languages[0]
                 captions = sami_reader.get_captions(language)
                 for caption in captions:
-                    final_subtitles.append([caption.start/1000000, (caption.end/1000000) - caption.start/1000000, caption.get_text()])
+                    final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.sbv')):
             subtitle_format = 'SBV'
@@ -311,8 +300,7 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                 from captionstransformer.sbv import Reader
                 captions = Reader(sbv_file).read()
                 for caption in captions:
-                    final_subtitles.append([(caption.start-datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text.strip()])
-
+                    final_subtitles.append([(caption.start - datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text.strip()])
 
         elif subtitle_file.lower().endswith(('.ass', '.ssa', '.sub')):
             if subtitle_file.lower().endswith(('.ass', '.ssa')):
@@ -353,7 +341,7 @@ def process_video_file(video_file=False):
         if stream.get('codec_type', '') == 'video' and not stream.get('codec_name', 'png') in ['png', 'mjpeg']:
             video_metadata['width'] = int(stream.get('width', 640))
             video_metadata['height'] = int(stream.get('height', 480))
-            video_metadata['framerate'] = int(stream.get('r_frame_rate', '1/30').split('/', 1)[0])/int(stream.get('r_frame_rate', '1/30').split('/', 1)[-1])
+            video_metadata['framerate'] = int(stream.get('r_frame_rate', '1/30').split('/', 1)[0]) / int(stream.get('r_frame_rate', '1/30').split('/', 1)[-1])
         elif stream.get('codec_type', '') in ['subtitle'] and not video_metadata.get('subtitles', False):
             video_metadata['subtitles'] = waveform.ffmpeg_extract_subtitle(video_file, stream.get('index', 2))
             # TODO: select what language if multiple embedded subtitles
@@ -365,7 +353,7 @@ def process_video_file(video_file=False):
     return video_metadata
 
 
-def import_file(filename=False, subtitle_format=False): #, fit_to_length=False, length=.01, distribute_fixed_duration=False):
+def import_file(filename=False, subtitle_format=False):  # , fit_to_length=False, length=.01, distribute_fixed_duration=False):
     """Function to import file into the subtitle project."""
     final_subtitles = []
     if filename:
@@ -393,7 +381,7 @@ def import_file(filename=False, subtitle_format=False): #, fit_to_length=False, 
                 # lang="en"                       # set to 'de' for German special handling
                 # )
 
-                #txt_content = clean(txt_file.read())
+                # txt_content = clean(txt_file.read())
                 txt_content = txt_file.read()
                 pos = 0.0
                 for phrase in txt_content.split('. '):
@@ -460,7 +448,7 @@ def export_file(filename=False, subtitles_list=False, export_format='TXT', optio
                                 <property name="force_reload">0</property>
                                 <property name="meta.media.width">1920</property>
                                 <property name="meta.media.height">1080</property>
-                            </producer>'''.format(i=i, id=i+2, length=int(sub[1]*25), clipname='Subtitle {i}'.format(i=i), content=sub[2], zerotime=str(timecode.Timecode('1000', start_seconds=0.001, fractional=True)), out=str(timecode.Timecode('1000', start_seconds=sub[1], fractional=True)))
+                            </producer>'''.format(i=i, id=i + 2, length=int(sub[1] * 25), clipname='Subtitle {i}'.format(i=i), content=sub[2], zerotime=str(timecode.Timecode('1000', start_seconds=0.001, fractional=True)), out=str(timecode.Timecode('1000', start_seconds=sub[1], fractional=True)))
                 i += 1
 
             final_xml += '''<playlist id="main_bin">
@@ -564,7 +552,7 @@ def export_file(filename=False, subtitles_list=False, export_format='TXT', optio
                 final_xml += '''
                                 <entry producer="producer{i}" in="{zerotime}" out="{out}">
                                     <property name="kdenlive:id">{id}</property>
-                                </entry>'''.format(i=i, id=i+2, zerotime=str(timecode.Timecode('1000', start_seconds=0.001, fractional=True)), out=str(timecode.Timecode('1000', start_seconds=sub[1], fractional=True)))
+                                </entry>'''.format(i=i, id=i + 2, zerotime=str(timecode.Timecode('1000', start_seconds=0.001, fractional=True)), out=str(timecode.Timecode('1000', start_seconds=sub[1], fractional=True)))
                 last_intime = sub[0] + sub[1]
                 i += 1
 
@@ -604,7 +592,7 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
             for sub in subtitles_list:
                 # skip extra blank lines
                 nodes = [pycaption.CaptionNode.create_text(sub[2])]
-                caption = pycaption.Caption(start=sub[0]*1000000, end=(sub[0] + sub[1])*1000000, nodes=nodes)
+                caption = pycaption.Caption(start=sub[0] * 1000000, end=(sub[0] + sub[1]) * 1000000, nodes=nodes)
                 captions.append(caption)
             caption_set = pycaption.CaptionSet({language: captions})
 
@@ -624,7 +612,7 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
                 assfile = pysubs2.SSAFile()
                 index = 0
                 for sub in reversed(sorted(subtitles_list)):
-                    assfile.insert(index, pysubs2.SSAEvent(start=int(sub[0]*1000), end=int((sub[0]*1000)+(sub[1]*1000)), text=sub[2].replace('\n', ' ')))
+                    assfile.insert(index, pysubs2.SSAEvent(start=int(sub[0] * 1000), end=int((sub[0] * 1000) + (sub[1] * 1000)), text=sub[2].replace('\n', ' ')))
                 if subtitle_format == 'SUB':
                     assfile.save(final_file, subtitle_format='microdvd')
                 else:
@@ -638,8 +626,8 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
                 captions = []
                 for cap in subtitles_list:
                     caption = captionstransformer.core.Caption()
-                    caption.start = captionstransformer.core.get_date(second=int(cap[0]//1), millisecond=int((cap[0]%1)*1000))
-                    caption.duration = captionstransformer.core.get_date(second=int(cap[1]//1), millisecond=int((cap[1]%1)*1000)) -  captionstransformer.core.get_date()
+                    caption.start = captionstransformer.core.get_date(second=int(cap[0] // 1), millisecond=int((cap[0] % 1) * 1000))
+                    caption.duration = captionstransformer.core.get_date(second=int(cap[1] // 1), millisecond=int((cap[1] % 1) * 1000)) - captionstransformer.core.get_date()
                     caption.text = cap[2]
                     captions.append(caption)
                 writer.set_captions(captions)
