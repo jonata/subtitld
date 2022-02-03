@@ -30,15 +30,12 @@
 }
 
 #background_watermark_label {
-    image: url("PATH_SUBTITLD_GRAPHICS/background_watermark.png");
+    image: url("PATH_SUBTITLD_GRAPHICS/background_watermark.svg");
 }
 
 #subtitles_list_widget {
-    border-top: 81px;
-    border-right: 25px;
-    border-bottom: 0;
-    border-left: 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitle_list_widget_background.png") 81  25  0  0 stretch stretch;
+    border-width: 81px 25px 0 0;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitle_list_widget_background.svg") 81  25  0  0 stretch stretch;
 }
 
 #subtitles_list_qlistwidget {
@@ -107,46 +104,19 @@
     background-color: rgba(255, 255, 255, 200);
 }
 
-#global_subtitlesvideo_panel_left {
+#global_panel_menu {
     border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/global_config_subtitles_background.png")  0  0  0  0 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/global_config_subtitles_background.svg")  0  0  0  0 stretch stretch;
 }
 
-#global_subtitlesvideo_panel_right {
-    border-top: 0;
-       border-right: 2px;
-      border-bottom: 0;
-       border-left: 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/global_config_video_background.png")      0  2  0  5 stretch stretch;
-}
-
-#global_properties_panel {
-    border-top: 0;
-       border-right: 0;
-        border-bottom: 0;
-       border-left: 2px;
-     border-image: url("PATH_SUBTITLD_GRAPHICS/global_config_properties_background.png") 0  0  0  2 stretch stretch;
-}
-
-#subtitles_list_top_widget {
-    border-top: 0;
-       border-right: 0;
-        border-bottom: 2px;
-     border-left: 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitle_list_top_background.png")        0  0  2  0 stretch stretch;
-}
-
-#properties_widget {
-    border-top: 81px;
-    border-right: 0;
-        border-bottom: 0;
-       border-left: 25px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/properties_widget_background.png")        81  0  0  25 stretch stretch;
+#global_panel_content {
+    border-width: 0 2px 0 0;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/global_config_video_background.svg")      0  2  0  0 stretch stretch;
 }
 
 #playercontrols_widget_central_top_background {
     border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls_background.png")    0  0  0  0 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls_background.svg")    0  0  0  0 stretch stretch;
 }
 
 #playercontrols_widget_central_top {
@@ -154,12 +124,12 @@
        border-right: 18px;
      border-bottom: 0;
        border-left: 18px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls.png")               0 18 0 18 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls.svg")               0 18 0 18 stretch stretch;
 }
 
 #playercontrols_widget_central_bottom_background {
     border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_bottom_controls_background.png") 0 0 0 0 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_bottom_controls_background.svg") 0 0 0 0 stretch stretch;
 }
 
 #playercontrols_widget_central_bottom {
@@ -167,7 +137,7 @@
        border-right: 12px;
      border-bottom: 0;
        border-left: 12px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_bottom_controls.png")            0 12 0 12 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_bottom_controls.svg")            0 12 0 12 stretch stretch;
 }
 
 #playercontrols_widget_top_left {
@@ -175,7 +145,7 @@
        border-right: 0;
         border-bottom: 0;
        border-left: 39px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls.png")               0 38 0 1 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls.svg")               0 38 0 1 stretch stretch;
 }
 
 #playercontrols_widget_bottom_left {
@@ -183,7 +153,7 @@
        border-right: 0;
         border-bottom: 0;
        border-left: 25px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_bottom_controls.png")            0 24 0 1 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_bottom_controls.svg")            0 24 0 1 stretch stretch;
 }
 
 #playercontrols_widget_top_right {
@@ -191,7 +161,7 @@
        border-right: 25px;
      border-bottom: 0;
        border-left: 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls.png")               0 1 0 38 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls.svg")               0 1 0 38 stretch stretch;
 }
 
 #playercontrols_widget_bottom_right {
@@ -199,16 +169,13 @@
        border-right: 25px;
      border-bottom: 0;
        border-left: 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_bottom_controls.png")            0 1 0 24 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_bottom_controls.svg")            0 1 0 24 stretch stretch;
 }
 
 #player_border {
-    border-top: 5px;
-     border-right: 5px;
-      border-bottom: 5px;
-     border-left: 5px;
-     border-image: url("PATH_SUBTITLD_GRAPHICS/video_border.png")                        5 5 5 5 stretch stretch;
-    padding: -3;
+    border-width: 3;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/video_border.svg")                        3 3 3 3 stretch stretch;
+    padding: -2;
 }
 
 #playercontrols_timecode_label {
@@ -218,118 +185,59 @@
     font-family:"Ubuntu Mono";
 }
 
-
-#player_controls_button {
-    border-top: 0;
-       border-right: 15px;
-     border-bottom: 0;
-       border-left: 15px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_normal.png")          0 15 0 15 stretch stretch;
+#playercontrols_playpause_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/play_icon.svg");
 }
 
-#player_controls_button:hover:pressed {
-    border-top: 0;
-       border-right: 15px;
-     border-bottom: 0;
-       border-left: 15px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_pressed.png")          0 15 0 15 stretch stretch;
+#playercontrols_play_from_next_start_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/play_from_next_start_icon.svg");
 }
 
-#player_controls_button:checked {
-    border-top: 0;
-       border-right: 15px;
-     border-bottom: 0;
-       border-left: 15px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_pressed.png")          0 15 0 15 stretch stretch;
+#playercontrols_play_from_last_start_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/play_from_last_start_icon.svg");
 }
 
-#player_controls_button:hover:checked {
-    border-top: 0;
-       border-right: 15px;
-     border-bottom: 0;
-       border-left: 15px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_pressed.png")          0 15 0 15 stretch stretch;
+#playercontrols_stop_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/stop_icon.svg");
 }
 
-#player_controls_button:hover {
-    border-top: 0;
-       border-right: 15px;
-     border-bottom: 0;
-       border-left: 15px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_hover.png")          0 15 0 15 stretch stretch;
+QPushButton[class=playercontrols_button] {
+    icon-size: 24px;
+    border-width: 0 15px 0 15px;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_normal.svg")          0 15 0 15 stretch stretch;
 }
 
-#player_controls_button:disabled {
-    border-top: 0;
-       border-right: 15px;
-     border-bottom: 0;
-       border-left: 15px;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_normal.png")          0 15 0 15 stretch stretch;
-    color:rgba(255,255,255,100)
+QPushButton[class=playercontrols_button]:hover:pressed,
+QPushButton[class=playercontrols_button]:checked,
+QPushButton[class=playercontrols_button]:hover:checked {
+    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_pressed.svg")          0 15 0 15 stretch stretch;
 }
 
+QPushButton[class=playercontrols_button]:hover {
+    border-image: url("PATH_SUBTITLD_GRAPHICS/player_controls_button_hover.svg")          0 15 0 15 stretch stretch;
+}
 
-#subtitles_list_toggle_button {
+#subtitles_list_toggle_button,
+#subtitles_list_toggle_button:disabled {
     border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_normal.png")            0 0 0 0 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_normal.svg")            0 0 0 0 stretch stretch;
 }
 
-#subtitles_list_toggle_button:hover:pressed {
+#subtitles_list_toggle_button:hover:pressed,
+#subtitles_list_toggle_button:hover:checked {
     border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_hover_pressed.png")            0 0 0 0 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_hover_pressed.svg")            0 0 0 0 stretch stretch;
 }
 
 #subtitles_list_toggle_button:checked {
     border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_pressed.png")            0 0 0 0 stretch stretch;
-}
-
-#subtitles_list_toggle_button:hover:checked {
-    border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_hover_pressed.png")            0 0 0 0 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_pressed.svg")            0 0 0 0 stretch stretch;
 }
 
 #subtitles_list_toggle_button:hover {
     border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_hover.png")            0 0 0 0 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_hover.svg")            0 0 0 0 stretch stretch;
 }
-
-#subtitles_list_toggle_button:disabled {
-    border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_list_toggle_button_normal.png")            0 0 0 0 stretch stretch;
-}
-
-
-#properties_toggle_button {
-    border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/properties_toggle_button_normal.png")            0 0 0 0 stretch stretch;
-}
-
-#properties_toggle_button:hover:pressed {
-    border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/properties_toggle_button_hover_pressed.png")            0 0 0 0 stretch stretch;
-}
-
-#properties_toggle_button:checked {
-    border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/properties_toggle_button_pressed.png")            0 0 0 0 stretch stretch;
-}
-
-#properties_toggle_button:hover:checked {
-    border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/properties_toggle_button_hover_pressed.png")            0 0 0 0 stretch stretch;
-}
-
-#properties_toggle_button:hover {
-    border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/properties_toggle_button_hover.png")            0 0 0 0 stretch stretch;
-}
-
-#properties_toggle_button:disabled {
-    border: 0 0 0 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/properties_toggle_button_normal.png")            0 0 0 0 stretch stretch;
-}
-
 
 #playercontrols_properties_panel_toggle {
     border: 0;
@@ -382,36 +290,12 @@
 }
 
 
-#playercontrols_widget {
-    border-top: 108px;
-    border-right: 0;
-    border-bottom: 0;
-    border-left: 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_background.png") 108 0 0 0 stretch stretch;
-}
-
 #timeline_scroll {
     background-color:transparent;
 }
 
 #timeline_widget {
     background-color:transparent;
-}
-
-#toppanel_widget_left {
-    border-top: 0;
-       border-right: 16px;
-     border-bottom: 55px;
-       border-left: 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/toppanel_background_left.png")          0 16 55 0 stretch stretch;
-}
-
-#toppanel_widget_right {
-    border-top: 0;
-       border-right: 18px;
-     border-bottom: 55px;
-       border-left: 5px;
-     border-image: url("PATH_SUBTITLD_GRAPHICS/toppanel_background_right.png") 0 18 55 5 stretch stretch;
 }
 
 #videoinfo_label {
@@ -433,79 +317,81 @@ QPushButton {
     color:white;
     outline: none;
     font-size:11px;
-    border: 5;
+    border: 3;
+    icon-size: 20px;
+    padding: 4;
 }
 
 QPushButton[class=button] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_normal.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_normal.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=button],
 QPushButton:checked[class=button],
 QPushButton:hover:checked[class=button] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_pressed.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_pressed.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:hover[class=button] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_hover.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_hover.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:disabled[class=button] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_disabled.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_disabled.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton[class=button_dark] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_dark_normal.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_dark_normal.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=button_dark],
 QPushButton:checked[class=button_dark],
 QPushButton:hover:checked[class=button_dark] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_dark_pressed.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_dark_pressed.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:hover[class=button_dark] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_dark_hover.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_dark_hover.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:disabled[class=button_dark] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_dark_disabled.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_dark_disabled.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton[class=button_red] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_red_normal.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_red_normal.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=button_red],
 QPushButton:checked[class=button_red],
 QPushButton:hover:checked[class=button_red] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_red_pressed.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_red_pressed.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:hover[class=button_red] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_red_hover.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_red_hover.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:disabled[class=button_red] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_red_disabled.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_red_disabled.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton[class=button_green] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_green_normal.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_green_normal.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=button_green],
 QPushButton:checked[class=button_green],
 QPushButton:hover:checked[class=button_green] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_green_pressed.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_green_pressed.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:hover[class=button_green] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_green_hover.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_green_hover.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton:disabled[class=button_green] {
-    border-image: url("PATH_SUBTITLD_GRAPHICS/button_green_disabled.png") 5 5 5 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_green_disabled.svg") 3 3 3 3 stretch stretch;
 }
 
 QPushButton[class=subbutton] {
@@ -514,52 +400,23 @@ QPushButton[class=subbutton] {
     font-weight:bold;
     padding-left:4px;
     font-size:10px;
-    border-top: 2;
-    border-right: 2;
-    border-bottom: 2;
-    border-left: 5;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_normal.png") 2 2 2 5 stretch stretch;
+    border-width: 2 2 2 5;
+    icon-size: 16px;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_normal.svg") 2 2 2 5 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=subbutton],
 QPushButton:checked[class=subbutton],
 QPushButton:hover:checked[class=subbutton] {
-    color:rgba(48,66,81,255);
-    text-align:left;
-    font-weight:bold;
-    padding-left:4px;
-    font-size:10px;
-    border-top: 2;
-    border-right: 2;
-    border-bottom: 2;
-    border-left: 5;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_pressed.png") 2 2 2 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_pressed.svg") 2 2 2 5 stretch stretch;
 }
 
 QPushButton:hover[class=subbutton] {
-    color:rgba(48,66,81,255);
-    text-align:left;
-    font-weight:bold;
-    padding-left:4px;
-    font-size:10px;
-    border-top: 2;
-    border-right: 2;
-    border-bottom: 2;
-    border-left: 5;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_hover.png") 2 2 2 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_hover.svg") 2 2 2 5 stretch stretch;
 }
 
 QPushButton:disabled[class=subbutton] {
-    color:rgba(48,66,81,255);
-    text-align:left;
-    font-weight:bold;
-    padding-left:4px;
-    font-size:10px;
-    border-top: 2;
-    border-right: 2;
-    border-bottom: 2;
-    border-left: 5;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_disabled.png") 2 2 2 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_disabled.svg") 2 2 2 5 stretch stretch;
 }
 
 QPushButton[class=subbutton_dark] {
@@ -568,52 +425,22 @@ QPushButton[class=subbutton_dark] {
     font-weight:bold;
     padding-left:4px;
     font-size:10px;
-    border-top: 2;
-    border-right: 2;
-    border-bottom: 2;
-    border-left: 5;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_dark_normal.png") 2 2 2 5 stretch stretch;
+    border-width: 2 2 2 5;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_dark_normal.svg") 2 2 2 5 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=subbutton_dark],
 QPushButton:checked[class=subbutton_dark],
 QPushButton:hover:checked[class=subbutton_dark] {
-    color:rgba(48,66,81,255);
-    text-align:left;
-    font-weight:bold;
-    padding-left:4px;
-    font-size:10px;
-    border-top: 2;
-    border-right: 2;
-    border-bottom: 2;
-    border-left: 5;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_dark_pressed.png") 2 2 2 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_dark_pressed.svg") 2 2 2 5 stretch stretch;
 }
 
 QPushButton:hover[class=subbutton_dark] {
-    color:rgba(48,66,81,255);
-    text-align:left;
-    font-weight:bold;
-    padding-left:4px;
-    font-size:10px;
-    border-top: 2;
-    border-right: 2;
-    border-bottom: 2;
-    border-left: 5;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_dark_hover.png") 2 2 2 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_dark_hover.svg") 2 2 2 5 stretch stretch;
 }
 
 QPushButton:disabled[class=subbutton_dark] {
-    color:rgba(48,66,81,255);
-    text-align:left;
-    font-weight:bold;
-    padding-left:4px;
-    font-size:10px;
-    border-top: 2;
-    border-right: 2;
-    border-bottom: 2;
-    border-left: 5;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_dark_disabled.png") 2 2 2 5 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_dark_disabled.svg") 2 2 2 5 stretch stretch;
 }
 
 QPushButton[class=subbutton2_dark] {
@@ -621,7 +448,7 @@ QPushButton[class=subbutton2_dark] {
     padding: 4px;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_dark_normal.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_dark_normal.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=subbutton2_dark],
@@ -631,7 +458,7 @@ QPushButton:hover:checked[class=subbutton2_dark] {
     padding: 4px;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_dark_pressed.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_dark_pressed.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:hover[class=subbutton2_dark] {
@@ -639,7 +466,7 @@ QPushButton:hover[class=subbutton2_dark] {
     padding: 4px;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_dark_hover.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_dark_hover.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:disabled[class=subbutton2_dark] {
@@ -647,7 +474,7 @@ QPushButton:disabled[class=subbutton2_dark] {
     padding: 4px;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_dark_disabled.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_dark_disabled.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton[class=subbutton2] {
@@ -656,7 +483,7 @@ QPushButton[class=subbutton2] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_normal.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_normal.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=subbutton2],
@@ -667,7 +494,7 @@ QPushButton:hover:checked[class=subbutton2] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_pressed.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_pressed.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:hover[class=subbutton2] {
@@ -676,7 +503,7 @@ QPushButton:hover[class=subbutton2] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_hover.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_hover.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:disabled[class=subbutton2] {
@@ -685,7 +512,7 @@ QPushButton:disabled[class=subbutton2] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_disabled.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton2_disabled.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton[class=subbutton_left_dark] {
@@ -694,7 +521,7 @@ QPushButton[class=subbutton_left_dark] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_left_dark_normal.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_left_dark_normal.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=subbutton_left_dark],
@@ -705,7 +532,7 @@ QPushButton:hover:checked[class=subbutton_left_dark] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_left_dark_pressed.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_left_dark_pressed.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:hover[class=subbutton_left_dark] {
@@ -714,7 +541,7 @@ QPushButton:hover[class=subbutton_left_dark] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_left_dark_hover.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_left_dark_hover.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:disabled[class=subbutton_left_dark] {
@@ -723,7 +550,7 @@ QPushButton:disabled[class=subbutton_left_dark] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_left_dark_disabled.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_left_dark_disabled.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton[class=subbutton_right_dark] {
@@ -732,7 +559,7 @@ QPushButton[class=subbutton_right_dark] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_right_dark_normal.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_right_dark_normal.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=subbutton_right_dark],
@@ -743,7 +570,7 @@ QPushButton:hover:checked[class=subbutton_right_dark] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_right_dark_pressed.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_right_dark_pressed.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:hover[class=subbutton_right_dark] {
@@ -752,7 +579,7 @@ QPushButton:hover[class=subbutton_right_dark] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_right_dark_hover.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_right_dark_hover.svg") 2 2 2 2 stretch stretch;
 }
 
 QPushButton:disabled[class=subbutton_right_dark] {
@@ -761,7 +588,7 @@ QPushButton:disabled[class=subbutton_right_dark] {
     font-weight:bold;
     font-size:10px;
     border: 2;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_right_dark_disabled.png") 2 2 2 2 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/subbutton_right_dark_disabled.svg") 2 2 2 2 stretch stretch;
 }
 
 
@@ -771,7 +598,7 @@ QPushButton[class=keyboard_key] {
     color: rgba(48,66,81,255);
     text-align:left;
     font-weight:bold;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/keyboard_key_normal.png") 8 5 8 11 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/keyboard_key_normal.svg") 8 5 8 11 stretch stretch;
 }
 
 QPushButton:hover:pressed[class=keyboard_key],
@@ -782,7 +609,7 @@ QPushButton:hover:checked[class=keyboard_key] {
     color: rgba(48,66,81,255);
     text-align:left;
     font-weight:bold;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/keyboard_key_pressed.png") 8 5 8 11 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/keyboard_key_pressed.svg") 8 5 8 11 stretch stretch;
 }
 
 QPushButton:hover[class=keyboard_key] {
@@ -791,7 +618,7 @@ QPushButton:hover[class=keyboard_key] {
     color: rgba(48,66,81,255);
     text-align:left;
     font-weight:bold;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/keyboard_key_hover.png") 8 5 8 11 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/keyboard_key_hover.svg") 8 5 8 11 stretch stretch;
 }
 
 QPushButton:disabled[class=keyboard_key] {
@@ -800,7 +627,27 @@ QPushButton:disabled[class=keyboard_key] {
     color: rgba(48,66,81,255);
     text-align:left;
     font-weight:bold;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/keyboard_key_disabled.png") 8 5 8 11 stretch stretch;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/keyboard_key_disabled.svg") 8 5 8 11 stretch stretch;
+}
+
+QPushButton[borderless_left=true] {
+    border-left: 0;
+    padding-left: 6;
+}
+
+QPushButton[borderless_right=true] {
+    border-right: 0;
+    padding-right: 6;
+}
+
+QPushButton[borderless_top=true] {
+    border-top: 0;
+    padding-top: 6;
+}
+
+QPushButton[borderless_bottom=true] {
+    border-bottom: 0;
+    padding-bottom: 6;
 }
 
 #start_screen_recent_alert {
@@ -923,11 +770,8 @@ QScrollBar::sub-page:vertical {
 }
 
 #start_screen_top_shadow {
-    border-left: 0;
-    border-top: 1px;
-    border-right: 0;
-    border-bottom: 0;
-    border-image: url("PATH_SUBTITLD_GRAPHICS/start_screen_top_shadow.png") 1 0 0 0 stretch stretch;
+    border-width: 1 0 0 0;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/start_screen_top_shadow.svg") 1 0 0 0 stretch stretch;
     outline: none;
 }
 
@@ -999,7 +843,8 @@ QScrollBar::sub-page:vertical {
     qproperty-wordWrap: true;
 }
 
-#controls_qspinbox {
+QSpinBox,
+QDoubleSpinBox {
     padding-left:1px;
     border-width: 1;
     border-color: rgba(0,0,0,100);
@@ -1010,15 +855,59 @@ QScrollBar::sub-page:vertical {
     color:rgba(48,66,81,255)
 }
 
-#controls_qdoublespinbox {
-    padding-left:1px;
-    border-width: 1;
-    border-color: rgba(0,0,0,100);
-    background-color: rgba(255,255,255,50);
-    min-width: 5px;
-    border-radius: 2px;
-    font-size:10px;
-    color:rgba(48,66,81,255)
+QSpinBox::up-button,
+QDoubleSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    /* width: 32px; */
+    /* background-color: #e5e5e5; */
+    border: 0;
+    margin-top: 5px;
+    margin-right: 5px;
+    border-top-right-radius: 2px;
+    margin-bottom: 0;
+    image: url("PATH_SUBTITLD_GRAPHICS/spinbox_arrow_up.svg");
+}
+
+QSpinBox::up-button:pressed,
+QDoubleSpinBox::up-button:pressed {
+    /* background-color: #e5b3b3b3; */
+    image: url("PATH_SUBTITLD_GRAPHICS/spinbox_arrow_up.svg");
+}
+
+QSpinBox::up-button:disabled,
+QDoubleSpinBox::up-button:disabled,
+QSpinBox::up-button:off,
+QDoubleSpinBox::up-button:off {
+    background-color: white;
+    image: none;
+}
+
+QSpinBox::down-button,
+QDoubleSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    /* width: 32px; */
+    /* background-color: #e5e5e5; */
+    border: 0;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    border-bottom-right-radius: 2px;
+    image: url("PATH_SUBTITLD_GRAPHICS/spinbox_arrow_down.svg");
+}
+
+QSpinBox::down-button:pressed,
+QDoubleSpinBox::down-button:pressed {
+    /* background-color: #e5b3b3b3; */
+    image: url("PATH_SUBTITLD_GRAPHICS/spinbox_arrow_down.svg");
+}
+
+QSpinBox::down-button:disabled,
+QDoubleSpinBox::down-button:disabled,
+QSpinBox::down-button:off,
+QDoubleSpinBox::down-button:off {
+    /* background-color: white; */
+    image: none;
 }
 
 #controls_combobox {
@@ -1067,4 +956,194 @@ QTabWidget:pane {
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     border-top: 0
+}
+
+QPushButton[class=global_panel_menu] {
+    background-position: left center;
+    background-repeat: no-repeat;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    text-align: left;
+    padding: 20px;
+    color: #5f6875;
+    font-size: 12px;
+}
+
+QPushButton:hover[class=global_panel_menu] {
+    background-color: #555f6875;
+    border-left: 5px solid #5f6875;
+}
+
+QPushButton:checked[class=global_panel_menu],
+QPushButton:hover:pressed[class=global_panel_menu],
+QPushButton:hover:checked[class=global_panel_menu],
+QPushButton:pressed[class=global_panel_menu] {
+    background-color: #555f6875;
+    color: #fff;
+    border-left: 5px solid #5f6875;
+
+}
+
+#add_subtitle_button {
+    padding-right:105px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/add_subtitle_icon.svg");
+}
+
+#gap_add_subtitle_button {
+    padding-right: 27;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/gap_add_icon.svg");
+}
+
+#gap_remove_subtitle_button {
+    padding-left: 27;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/gap_remove_icon.svg");
+}
+
+#toppanel_save_button {
+    icon-size: 16px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/save_icon.svg");
+}
+
+#grid_seconds_button {
+    border-right:0;
+    border-top:0;
+    icon-size: 15px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/grid_seconds_icon.svg");
+}
+
+#grid_scenes_button {
+    border-top:0;
+    icon-size: 15px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/grid_scenes_icon.svg");
+}
+
+#grid_frames_button {
+    border-top:0;
+    border-right:0;
+    icon-size: 15px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/grid_frames_icon.svg");
+}
+
+#last_end_to_current_position_button {
+    border-bottom:0;
+    border-left:0;
+    padding-left:10px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/last_end_to_current_position_icon.svg");
+}
+
+#merge_back_selected_subtitle_button {
+    border-bottom:0;
+    border-right:0;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/merge_back_selected_subtitle_icon.svg");
+}
+
+#last_start_to_current_position_button {
+    border-bottom:0;
+    border-right:0;
+    border-left:0;
+    padding-left:10px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/last_start_to_current_position_icon.svg");
+}
+
+#merge_next_selected_subtitle_button {
+    border-bottom:0;
+    border-left:0;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/merge_next_selected_subtitle_icon.svg");
+}
+
+#next_end_to_current_position_button {
+    border-bottom:0;
+    border-left:0;
+    border-right:0;
+    padding-right:10px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/next_end_to_current_position_icon.svg");
+}
+
+#next_start_to_current_position_button {
+    border-bottom:0;
+    border-right:0;
+    padding-right:10px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/next_start_to_current_position_icon.svg");
+}
+
+#move_backward_subtitle {
+    border-bottom:0;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/move_backward_subtitle.svg");
+}
+
+#move_end_back_subtitle {
+    border-bottom:0;
+    border-right:0;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/move_end_back_subtitle.svg");
+}
+
+#move_end_forward_subtitle {
+    border-bottom:0;
+    border-left:0;
+    padding-left:2px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/move_end_forward_subtitle.svg");
+}
+
+#move_forward_subtitle {
+    border-bottom:0;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/move_forward_subtitle.svg");
+}
+
+#move_start_back_subtitle {
+    border-bottom:0;
+    border-right:0;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/move_start_back_subtitle.svg");
+}
+
+#move_start_forward_subtitle {
+    border-bottom:0;
+    border-left:0;
+    padding-left:2px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/move_start_forward_subtitle.svg");
+}
+
+#toppanel_open_button {
+    icon-size: 16px;
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/open_icon.svg");
+}
+
+#remove_selected_subtitle_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/remove_selected_subtitle_icon.svg");
+}
+
+#repeat_playback_icon_label {
+    image: url("PATH_SUBTITLD_GRAPHICS/playback_repeat_icon.svg");
+}
+
+#change_playback_speed_icon_label {
+    image: url("PATH_SUBTITLD_GRAPHICS/playback_speed_icon.svg");
+}
+
+#send_text_to_next_subtitle_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/send_text_to_next_subtitle_icon.svg");
+}
+
+#send_text_to_last_subtitle_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/send_text_to_last_subtitle_icon.svg");
+}
+
+#slice_selected_subtitle_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/slice_selected_subtitle_icon.svg");
+}
+
+#snap_grid_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/snap_grid_icon.svg");
+}
+
+#snap_limits_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/snap_limits_icon.svg");
+}
+
+#snap_move_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/snap_moving_icon.svg");
+}
+
+#snap_move_nereast_button {
+    qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/snap_move_next.svg");
 }

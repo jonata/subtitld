@@ -1,0 +1,20 @@
+<svg width="50" height="43" version="1.1" viewBox="0 0 50 43" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <radialGradient id="b" cx="-959.97" cy="2289.3" r="30" gradientTransform="matrix(4.6249 0 9.6663e-6 2.1084 4466 -4826.7)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#1a232b" offset="0"/>
+   <stop stop-color="#2e3e4c" offset="1"/>
+  </radialGradient>
+  <radialGradient id="c" cx="-1052.7" cy="2479.3" r="10" gradientTransform="matrix(1.3464e-6 -5.2624 -2.2196 0 5532.6 -5511.4)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <linearGradient id="a">
+   <stop stop-opacity="0" offset="0"/>
+   <stop stop-opacity="0" offset=".54631"/>
+   <stop stop-opacity=".031373" offset="1"/>
+  </linearGradient>
+  <radialGradient id="d" cx="-1052.7" cy="2479.3" r="10" gradientTransform="matrix(-1.3464e-6 -5.2624 2.2196 0 -5482.6 -5511.4)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+ </defs>
+ <path d="m0 1v42h50v-42z" fill="url(#b)" opacity=".8"/>
+ <path d="m0 0h1v43h-1z" fill-opacity=".2"/>
+ <path d="m49 0h1v43h-1z" fill="#fff" fill-opacity=".1"/>
+ <path d="m49 0h-20v43h20z" fill="url(#c)"/>
+ <path d="m1 0h20v43h-20z" fill="url(#d)"/>
+</svg>

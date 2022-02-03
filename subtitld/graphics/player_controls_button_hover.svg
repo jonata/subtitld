@@ -1,0 +1,17 @@
+<svg width="50" height="43" version="1.1" viewBox="0 0 50 43" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <radialGradient id="c" cx="-1052.7" cy="2479.3" r="10" gradientTransform="matrix(1.3464e-6 -5.2624 -2.2196 0 5532.6 -5511.4)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <linearGradient id="a">
+   <stop stop-opacity="0" offset="0"/>
+   <stop stop-opacity="0" offset=".54631"/>
+   <stop stop-opacity=".031373" offset="1"/>
+  </linearGradient>
+  <radialGradient id="b" cx="-1052.7" cy="2479.3" r="10" gradientTransform="matrix(-1.3464e-6 -5.2624 2.2196 0 -5482.6 -5511.4)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+ </defs>
+ <path d="m50 0h-1v43h1z" fill-opacity=".2"/>
+ <path d="m1 0h-1v43h1z" fill="#fff" fill-opacity=".1"/>
+ <path d="m49 0h-20v43h20z" fill="url(#c)"/>
+ <path d="m1 0h20v43h-20z" fill="url(#b)"/>
+ <path d="m0 22v21h50v-21z" fill="#fff" fill-opacity=".01"/>
+ <path d="m0 1v21h50v-21z" fill="#fff" fill-opacity=".08"/>
+</svg>

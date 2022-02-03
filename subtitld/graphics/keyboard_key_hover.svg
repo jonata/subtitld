@@ -1,0 +1,24 @@
+<svg width="40" height="40" version="1.1" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="c" x1="1885.9" x2="1845.9" y1="-179.51" y2="-219.51" gradientTransform="translate(-1845.9 219.51)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#999" offset="0"/>
+   <stop stop-color="#b3b3b3" offset=".4"/>
+   <stop stop-color="#f2f2f2" offset=".6"/>
+   <stop stop-color="#f2f2f2" offset="1"/>
+  </linearGradient>
+  <linearGradient id="b" x1="1851.9" x2="1928.7" y1="-202.51" y2="-202.51" gradientTransform="translate(-1845.9 219.51)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#ccc" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <radialGradient id="a" cx="1194.5" cy="412.95" r="13" gradientTransform="matrix(-1.1363e-5 -1.9455 3.2423 -2.0066e-6 -1306.7 2353.4)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </radialGradient>
+ </defs>
+ <path d="m5 0c-2.7435 0-5 2.2566-5 5v30c0 2.7434 2.2566 5 5 5h30c2.7434 0 5-2.2566 5-5v-30c0-2.7434-2.2566-5-5-5z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="url(#c)" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stop-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+ <path d="m5 0c-2.7435 0-5 2.2566-5 5v30c0 2.7434 2.2566 5 5 5h30c2.7434 0 5-2.2566 5-5v-30c0-2.7434-2.2566-5-5-5zm0 1h30c2.195 0 4 1.805 4 4v30c0 2.1951-1.805 4-4 4h-30c-2.1951 0-4-1.8049-4-4v-30c0-2.1951 1.8048-4 4-4z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill-opacity=".5" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stop-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+ <path d="m7.9994 2.9995h24c1.108 0 2 0.89201 2 2v24c0 1.108-0.892 2-2 2h-24c-1.108 0-2-0.892-2-2v-24c0-1.108 0.892-2 2-2z" color="#000000" color-rendering="auto" fill="#008000" fill-opacity=".2" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="isolation:auto;mix-blend-mode:normal;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-transform:none;white-space:normal"/>
+ <rect x="5.9986" y="2.9999" width="28" height="28" rx="2" ry="2" fill="url(#b)"/>
+ <path d="m7.9994 2.9995c-1.108 0-2 0.89201-2 2v24c0 1.108 0.892 2 2 2h24c1.108 0 2-0.892 2-2v-24c0-1.108-0.892-2-2-2zm0 1h24c0.5713 0 1 0.42872 1 1v24c0 0.5713-0.4287 1-1 1h-24c-0.5713 0-1-0.42869-1-1v-24c0-0.57128 0.4287-1 1-1z" fill="#fff" fill-opacity=".2"/>
+ <path d="m31.999 30c0.5713 0 1-0.42872 1-1v-24c0-0.57132-0.4287-1-1-1v25h-25c0 0.57128 0.4287 1 1 1z" color="#000000" color-rendering="auto" fill="url(#a)" image-rendering="auto" opacity=".2" shape-rendering="auto" solid-color="#000000" style="isolation:auto;mix-blend-mode:normal;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-transform:none;white-space:normal"/>
+</svg>

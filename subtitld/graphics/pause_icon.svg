@@ -1,0 +1,12 @@
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(950.16 -2611.4)">
+  <g transform="translate(-47.592 4.0886)">
+   <path transform="scale(1,-1)" d="m-902.57-2623.3h6v16h-6z" fill="#b8cee0"/>
+   <path d="m-902.57 2623.3v-1h6v1z" fill-opacity=".2"/>
+  </g>
+  <g transform="translate(-37.592 4.0886)">
+   <path transform="scale(1,-1)" d="m-902.57-2623.3h6v16h-6z" fill="#b8cee0"/>
+   <path d="m-902.57 2623.3v-1h6v1z" fill-opacity=".2"/>
+  </g>
+ </g>
+</svg>

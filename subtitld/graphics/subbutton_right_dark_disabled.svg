@@ -1,0 +1,19 @@
+<svg width="20" height="20" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="c" x1="403.23" x2="422.23" y1="749.58" y2="749.58" gradientTransform="matrix(-1 0 0 1 422.23 -739.58)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#6a7483" stop-opacity=".5" offset="0"/>
+   <stop stop-color="#6a7483" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <radialGradient id="a" cx="1192.2" cy="412.8" r="13" gradientTransform="matrix(-3.2651e-6 1.9455 1.3846 0 -553.57 -2317.4)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <linearGradient id="b" x1="5.5511e-17" x2="20" y1="10.245" y2="10.245" gradientTransform="matrix(-1,0,0,1,20,0)" gradientUnits="userSpaceOnUse">
+   <stop stop-opacity=".2" offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path d="m18 1c0.5713 0 1 0.4288 1 1v16c0 0.5714-0.4287 1-1 1h-18v-18z" fill="url(#c)"/>
+ <path d="m18 0c1.108 0 2 0.892 2 2v16c0 1.108-0.892 2-2 2h-18v-1h18c0.5713 0 1-0.4286 1-1v-16c0-0.5712-0.4287-1-1-1h-18v-1z" fill="url(#b)" opacity=".5"/>
+ <path d="m18 1c0.5713 0 1 0.4288 1 1v16c0 0.5714-0.4287 1-1 1v-17h-18v-1z" color="#000000" color-rendering="auto" fill="url(#a)" image-rendering="auto" opacity=".05" shape-rendering="auto" solid-color="#000000" style="isolation:auto;mix-blend-mode:normal;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-transform:none;white-space:normal"/>
+</svg>

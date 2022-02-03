@@ -5,7 +5,7 @@
 import time
 from bisect import bisect
 
-from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap
+from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap, QLinearGradient, QBrush
 from PyQt5.QtWidgets import QWidget, QScrollArea
 from PyQt5.QtCore import Qt, QRect, QPointF, QThread, pyqtSignal, QMargins
 
@@ -481,6 +481,10 @@ def load(self):
 
     class TimelineScroll(QScrollArea):
         """Class for timeline scroll area"""
+        def __init__(self, parent=None):
+            super().__init__(parent)
+            self.parent = parent
+
         def enterEvent(self, event):
             """Function to call when mouse cursor enters the area"""
             event.accept()
@@ -497,6 +501,7 @@ def load(self):
         # def keyPressEvent(self, event):
         #     """Function to call when keyboard press on timeline"""
         #     self.keyPressEvent(event)
+
 
     self.timeline_scroll = TimelineScroll(parent=self.playercontrols_widget)
     self.timeline_scroll.setObjectName('timeline_scroll')

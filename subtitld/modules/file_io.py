@@ -201,14 +201,14 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.startscreen.hide(self)
             self.playercontrols.show(self)
             self.subtitleslist.show(self)
-            self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
+            self.global_panel.hide_global_panel(self)
             player_qrect = self.player.resize_player_widget(self, just_get_qrect=True)
             original_qrect = [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()]
             self.generate_effect(self.start_screen_thumbnail_background_transparency_animation, 'opacity', 200, 1.0, 0.0)
             self.generate_effect(self.player_border_animation, 'geometry', 700, original_qrect, player_qrect)
             self.generate_effect(self.player_border_transparency_animation, 'opacity', 700, 0.5, 1.0)
 
-    self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
+    # self.global_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
     if os.path.isfile(os.path.join(os.path.dirname(self.actual_subtitle_file), os.path.basename(self.actual_subtitle_file).rsplit('.', 1)[0] + '.usf')):
         self.format_usf_present = True

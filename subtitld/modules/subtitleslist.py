@@ -128,7 +128,6 @@ def load(self):
     self.toppanel_save_button = QPushButton()
     self.toppanel_save_button.setObjectName('toppanel_save_button')
     self.toppanel_save_button.clicked.connect(lambda: toppanel_save_button_clicked(self))
-    self.toppanel_save_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'save_icon.png')))
     self.toppanel_save_button.setProperty('class', 'subbutton2_dark')
     self.toppanel_save_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
     self.toppanel_format_label.layout().addWidget(self.toppanel_save_button)
@@ -152,9 +151,9 @@ def load(self):
     self.subtitles_list_widget_top_bar.addWidget(self.toppanel_subtitle_file_info_label)
 
     self.toppanel_open_button = QPushButton('Open different file'.upper())
+    self.toppanel_open_button.setObjectName('toppanel_open_button')
     self.toppanel_open_button.setProperty('class', 'subbutton2_dark')
     self.toppanel_open_button.clicked.connect(lambda: toppanel_open_button_clicked(self))
-    self.toppanel_open_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'open_icon.png')))
     self.toppanel_open_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
     # self.toppanel_open_button.setProperty('class', 'button')
     self.toppanel_open_button.setVisible(False)
@@ -243,7 +242,6 @@ def load(self):
     self.send_text_to_last_subtitle_button.setObjectName('send_text_to_last_subtitle_button')
     self.send_text_to_last_subtitle_button.setLayout(QHBoxLayout(self.send_text_to_last_subtitle_button))
     self.send_text_to_last_subtitle_button.layout().setContentsMargins(3, 0, 3, 3)
-    self.send_text_to_last_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'send_text_to_last_subtitle_icon.png')))
     self.send_text_to_last_subtitle_button.setProperty('class', 'subbutton2_dark')
     self.send_text_to_last_subtitle_button.setStyleSheet('#send_text_to_last_subtitle_button {padding-left: 40px; border-top:0; border-right:0; padding-top:8px; padding-top:5px;}')
     self.send_text_to_last_subtitle_button.clicked.connect(lambda: send_text_to_last_subtitle_button_clicked(self))
@@ -262,7 +260,6 @@ def load(self):
     self.send_text_to_next_subtitle_button.setObjectName('send_text_to_next_subtitle_button')
     self.send_text_to_next_subtitle_button.setLayout(QHBoxLayout(self.send_text_to_next_subtitle_button))
     self.send_text_to_next_subtitle_button.layout().setContentsMargins(3, 0, 3, 3)
-    self.send_text_to_next_subtitle_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'send_text_to_next_subtitle_icon.png')))
     self.send_text_to_next_subtitle_button.setProperty('class', 'subbutton2_dark')
     self.send_text_to_next_subtitle_button.setStyleSheet('#send_text_to_next_subtitle_button {padding-top: 8px; padding-right: 40px; border-top:0; border-left:0; padding-top:5px;}')
     self.send_text_to_next_subtitle_button.clicked.connect(lambda: send_text_to_next_subtitle_button_clicked(self))
@@ -315,7 +312,7 @@ def resized(self):
 
     x = self.subtitles_list_widget.x() + self.subtitles_list_widget.width()
     if (self.subtitles_list or self.video_metadata) and self.subtitles_list_toggle_button.isChecked():
-        x = self.global_subtitlesvideo_panel_widget.x() + self.global_subtitlesvideo_panel_widget.width()
+        x = self.global_panel_widget.x() + self.global_panel_widget.width()
     x -= self.subtitles_list_toggle_button.width()
 
     self.subtitles_list_toggle_button.move(x, self.subtitles_list_widget.y())
@@ -325,10 +322,10 @@ def subtitles_list_toggle_button_clicked(self):
     """Function to call when clicking toggle button"""
     if self.subtitles_list_toggle_button.isChecked():
         subtitleslist_toggle_button_to_end(self)
-        self.global_subtitlesvideo_panel.show_global_subtitlesvideo_panel(self)
+        self.global_panel.show_global_panel(self)
         hide(self)
     else:
-        self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
+        self.global_panel.hide_global_panel(self)
         show(self)
 
 
@@ -340,7 +337,7 @@ def update_topbar_status(self):
 
 def subtitleslist_toggle_button_to_end(self):
     """Function to show subtitles list panel"""
-    self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.global_subtitlesvideo_panel_widget.width() - 22, self.global_subtitlesvideo_panel_widget.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
+    self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.global_panel_widget.width() - 22, self.global_panel_widget.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
 
 
 def update_subtitle_list_qlistwidget(self):
@@ -396,7 +393,7 @@ def show(self):
     """Function to show subtitle list panel"""
     self.generate_effect(self.subtitles_list_widget_animation, 'geometry', 700, [self.subtitles_list_widget.x(), self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()], [0, self.subtitles_list_widget.y(), self.subtitles_list_widget.width(), self.subtitles_list_widget.height()])
     self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.subtitles_list_widget.width() - 22, self.subtitles_list_widget.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
-    self.global_subtitlesvideo_panel.hide_global_subtitlesvideo_panel(self)
+    self.global_panel.hide_global_panel(self)
     update_toppanel_subtitle_file_info_label(self)
     update_properties_widget(self)
 
@@ -438,7 +435,7 @@ def toppanel_save_button_clicked(self):
             if not self.format_to_save == filedialog[1].split(' ', 1)[0]:
                 self.format_to_save = filedialog[1].split(' ', 1)[0]
 
-            self.global_subtitlesvideo_panel.update_global_subtitlesvideo_save_as_combobox(self)
+            self.global_panel.update_global_subtitlesvideo_save_as_combobox(self)
 
             self.actual_subtitle_file = filename
 

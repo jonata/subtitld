@@ -133,9 +133,9 @@ class Subtitld(QWidget):
         self.player = player
         self.player.load(self)
 
-        from subtitld.modules import global_subtitlesvideo_panel
-        self.global_subtitlesvideo_panel = global_subtitlesvideo_panel
-        self.global_subtitlesvideo_panel.load(self)
+        from subtitld.modules import global_panel
+        self.global_panel = global_panel
+        self.global_panel.load(self)
 
         from subtitld.modules import subtitleslist
         self.subtitleslist = subtitleslist
@@ -195,7 +195,7 @@ class Subtitld(QWidget):
         self.subtitleslist.resized(self)
         #self.properties.resized(self)
 
-        self.global_subtitlesvideo_panel.resized(self)
+        self.global_panel.resized(self)
         #self.global_properties_panel.resized(self)
 
         self.playercontrols.resized(self)
