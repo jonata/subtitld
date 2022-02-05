@@ -5,7 +5,7 @@
 import time
 from bisect import bisect
 
-from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap, QLinearGradient, QBrush
+from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap
 from PyQt5.QtWidgets import QWidget, QScrollArea
 from PyQt5.QtCore import Qt, QRect, QPointF, QThread, pyqtSignal, QMargins
 
@@ -15,6 +15,7 @@ from subtitld.modules import waveform
 from subtitld.modules import history
 from subtitld.modules import subtitles
 from subtitld.modules import quality_check
+from subtitld.modules import subtitleslist
 
 
 class ThreadGetWaveform(QThread):
@@ -66,10 +67,10 @@ class ThreadGetQImages(QThread):
                 x_position = 0
                 polygon = QPolygonF()
                 for point in self.waveform_up:
-                    polygon.append(QPointF(x_position, (self.height()*.5) + (point*(self.waveformsize*100))))
+                    polygon.append(QPointF(x_position, (self.height() * .5) + (point * (self.waveformsize * 100))))
                     x_position += 1
                 for point in reversed(self.waveform_down):
-                    polygon.append(QPointF(x_position, (self.height()*.5) + (point*(self.waveformsize*100))))
+                    polygon.append(QPointF(x_position, (self.height() * .5) + (point * (self.waveformsize * 100))))
                     x_position -= 1
                 painter.drawPolygon(polygon)
 
@@ -336,6 +337,7 @@ class Timeline(QWidget):
         self.is_cursor_pressing = False
         self.tug_of_war_pressed = False
         self.update()
+        subtitleslist.update_subtitles_list_widget_vision_content(self.parent)
         event.accept()
 
     def mouseMoveEvent(self, event):
@@ -502,7 +504,6 @@ def load(self):
         #     """Function to call when keyboard press on timeline"""
         #     self.keyPressEvent(event)
 
-
     self.timeline_scroll = TimelineScroll(parent=self.playercontrols_widget)
     self.timeline_scroll.setObjectName('timeline_scroll')
     self.timeline_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -524,14 +525,12 @@ def load(self):
     self.thread_get_waveform = ThreadGetWaveform(self)
     self.thread_get_waveform.command.connect(thread_get_waveform_ended)
 
-
     def thread_get_qimages_ended(command):
         self.video_metadata['waveform'][command[0]]['qimages'].append(command[1])
         self.timeline_widget.update()
 
     def thread_qimages_endcommand(command):
         self.videoinfo_label.setText(self.tr('Waveform optimized'))
-
 
     self.thread_get_qimages = ThreadGetQImages(self)
     self.thread_get_qimages.command.connect(thread_get_qimages_ended)
@@ -540,7 +539,8 @@ def load(self):
 
 def resized(self):
     """Function to call when timeline is resized"""
-    self.timeline_scroll.setGeometry(0, self.playercontrols_widget_central_bottom_background.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()-self.playercontrols_widget_central_bottom_background.y())
+    print('timeline resized')
+    self.timeline_scroll.setGeometry(0, self.playercontrols_widget_frame.y() + self.playercontrols_widget_frame.height() - 26, self.playercontrols_widget.width(), self.playercontrols_widget.height() - self.playercontrols_widget_frame.y() - self.playercontrols_widget_frame.height() + 26)
     update_timeline(self)
 
 

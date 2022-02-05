@@ -1,0 +1,22 @@
+<svg width="20" height="60" version="1.1" viewBox="0 0 20 60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="a">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <radialGradient id="d" cx="638.97" cy="1999.6" r="640" gradientTransform="matrix(-1 -5.7153e-7 1.781e-8 .015625 799.47 -21.245)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <radialGradient id="c" cx="638.97" cy="1999.6" r="640" gradientTransform="matrix(-1 -2.8576e-7 1.781e-8 .0078125 799.47 -5.6233)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <radialGradient id="b" cx="638.97" cy="1999.6" r="640" gradientTransform="matrix(-1 -1.4288e-7 1.781e-8 .0039062 799.47 2.1875)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <linearGradient id="e" x1="101.27" x2="-39.079" y1="391.67" y2="391.67" gradientTransform="rotate(-90 -160.52 201.2)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#b8cee0" offset="0"/>
+   <stop stop-color="#3e5363" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path d="m0 0v10h20v-10z" fill="url(#d)" fill-rule="evenodd" opacity=".09"/>
+ <path d="m0 5v5h20v-5z" fill="url(#c)" fill-rule="evenodd" opacity=".024"/>
+ <path d="m0 7.5v2.5h20v-2.5z" fill="url(#b)" fill-rule="evenodd" opacity=".03"/>
+ <path d="m0 10v1h20v-1z" color="#000000" color-rendering="auto" fill="#fff" fill-opacity=".05" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="isolation:auto;mix-blend-mode:normal;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-transform:none;white-space:normal"/>
+ <path d="m0 5v1h1c1.108 0 2.2402 0.89201 2.5371 2l12.057 45c0.2968 1.108 1.4291 2 2.5371 2h1.8691v-1h-1.8691c-0.5709 0-1.4024-0.63461-1.5704-1.2578l-12.057-45.002c-0.4267-1.5923-1.8592-2.7402-3.5039-2.7402z" color="#000000" color-rendering="auto" fill="#fff" fill-opacity=".2" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="isolation:auto;mix-blend-mode:normal;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-transform:none;white-space:normal"/>
+ <path d="m0 6v54h20v-5h-1.8691c-1.108 0-2.2404-0.892-2.5371-2l-12.057-45c-0.2969-1.108-1.4291-2-2.5371-2z" fill="url(#e)"/>
+ <path d="m0 6v1h1c0.5713 0 1.4032 0.63617 1.5703 1.2598l12.057 45c0.4266 1.5924 1.8592 2.7402 3.5039 2.7402h1.8691v-1h-1.8691c-1.108 0-2.2404-0.892-2.5371-2l-12.057-45c-0.2969-1.108-1.4291-2-2.5371-2z" color="#000000" color-rendering="auto" image-rendering="auto" opacity=".5" shape-rendering="auto" solid-color="#000000" style="isolation:auto;mix-blend-mode:normal;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-transform:none;white-space:normal"/>
+</svg>

@@ -188,7 +188,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
         if not self.actual_subtitle_file:
             if self.video_metadata.get('subtitles', ''):
                 self.subtitles_list, self.format_to_save = process_subtitles_file(self.video_metadata['subtitles'])
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.subtitleslist.update_subtitles_list_widget_vision_content(self)
         self.subtitleslist.update_topbar_status(self)
         self.settings['recent_files'][self.actual_subtitle_file] = {
             'last_opened': datetime.datetime.now().strftime("%Y%m%d%H%M%S"),

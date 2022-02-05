@@ -5,7 +5,7 @@
 import os
 
 from PyQt5.QtGui import QColor, QFont, QFontMetrics, QIcon
-from PyQt5.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QFileDialog, QListView, QMessageBox, QSizePolicy, QStackedWidget, QStyle, QStyledItemDelegate, QTextEdit, QVBoxLayout, QWidget, QLineEdit
+from PyQt5.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QFileDialog, QListView, QMessageBox, QSizePolicy, QStackedWidget, QStyle, QStyledItemDelegate, QTextEdit, QVBoxLayout, QWidget, QLineEdit, QFrame
 from PyQt5.QtCore import QAbstractListModel, QMargins, QPropertyAnimation, QEasingCurve, QRect, Qt, QSize
 
 from subtitld.modules import file_io, quality_check, subtitles
@@ -103,9 +103,13 @@ def load(self):
     self.subtitles_list_widget_animation = QPropertyAnimation(self.subtitles_list_widget, b'geometry')
     self.subtitles_list_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
     self.subtitles_list_widget.setAttribute(Qt.WA_LayoutOnEntireRect)
-    self.subtitles_list_widget.setLayout(QVBoxLayout(self.subtitles_list_widget))
-    self.subtitles_list_widget.layout().setContentsMargins(0, 20, 35, 210)
-    self.subtitles_list_widget.layout().setSpacing(20)
+    self.subtitles_list_widget.setLayout(QHBoxLayout())
+    self.subtitles_list_widget.layout().setContentsMargins(0, 20, 2, 210)
+    self.subtitles_list_widget.layout().setSpacing(0)
+
+    self.subtitles_list_widget_vbox = QVBoxLayout()
+    self.subtitles_list_widget_vbox.setContentsMargins(0, 0, 0, 0)
+    self.subtitles_list_widget_vbox.setSpacing(20)
 
     self.subtitles_list_widget_top_bar = QHBoxLayout()
     self.subtitles_list_widget_top_bar.setSpacing(8)
@@ -159,7 +163,7 @@ def load(self):
     self.toppanel_open_button.setVisible(False)
     self.toppanel_subtitle_file_info_label.layout().addWidget(self.toppanel_open_button, 0, Qt.AlignRight)
 
-    self.subtitles_list_widget.layout().addLayout(self.subtitles_list_widget_top_bar)
+    self.subtitles_list_widget_vbox.layout().addLayout(self.subtitles_list_widget_top_bar)
 
     self.subtitles_list_stackedwidgets = QStackedWidget()
 
@@ -179,7 +183,6 @@ def load(self):
     self.subtitles_list_qlistwidget.setSpacing(0)
     self.subtitles_list_qlistwidget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
     self.subtitles_list_qlistwidget.setFocusPolicy(Qt.NoFocus)
-    self.subtitles_list_qlistwidget.setIconSize(QSize(42, 42))
     self.subtitles_list_qlistwidget.setModel(self.subtitles_list_qlistwidget_model)
     self.subtitles_list_qlistwidget.setItemDelegate(self.subtitles_list_qlistwidget_delegate)
     self.subtitles_list_qlistwidget.clicked.connect(lambda: subtitles_list_qlistwidget_item_clicked(self))
@@ -278,15 +281,66 @@ def load(self):
 
     self.subtitles_list_simplelist_widget_vbox.addLayout(self.subtitles_list_simplelist_properties)
 
-    self.subtitles_list_stackedwidgets.addWidget(self.subtitles_list_simplelist_widget)
-
-    self.subtitles_list_widget.layout().addWidget(self.subtitles_list_stackedwidgets)
-
     self.properties_information = QLabel()
     self.properties_information.setWordWrap(True)
     self.properties_information.setObjectName('properties_information')
     self.subtitles_list_simplelist_widget_vbox.addWidget(self.properties_information)
 
+    self.subtitles_list_stackedwidgets.addWidget(self.subtitles_list_simplelist_widget)
+
+    self.subtitles_list_markdown_widget = QFrame()
+    self.subtitles_list_markdown_widget.setLayout(QVBoxLayout())
+    self.subtitles_list_markdown_widget.layout().setContentsMargins(0, 0, 0, 0)
+    self.subtitles_list_markdown_widget.layout().setSpacing(0)
+
+    self.subtitles_list_markdown_qtextedit = QTextEdit()
+    self.subtitles_list_markdown_qtextedit.setObjectName('subtitles_list_markdown_qtextedit')
+    self.subtitles_list_markdown_widget.layout().addWidget(self.subtitles_list_markdown_qtextedit)
+
+    self.subtitles_list_stackedwidgets.addWidget(self.subtitles_list_markdown_widget)
+
+    self.subtitles_list_timeline_widget = QLabel()
+    self.subtitles_list_stackedwidgets.addWidget(self.subtitles_list_timeline_widget)
+
+    self.subtitles_list_widget_vbox.layout().addWidget(self.subtitles_list_stackedwidgets)
+    self.subtitles_list_widget.layout().addLayout(self.subtitles_list_widget_vbox)
+
+    self.subtitles_list_widget_buttons_vbox = QVBoxLayout()
+    self.subtitles_list_widget_buttons_vbox.setContentsMargins(10, 51, 0, 0)
+    self.subtitles_list_widget_buttons_vbox.setSpacing(0)
+
+    self.subtitles_list_widget_button_list = QPushButton()
+    self.subtitles_list_widget_button_list.setObjectName('subtitles_list_widget_button_list')
+    self.subtitles_list_widget_button_list.setProperty('class', 'subtitles_list_left_button')
+    self.subtitles_list_widget_button_list.setCheckable(True)
+    self.subtitles_list_widget_button_list.setChecked(True)
+    self.subtitles_list_widget_button_list.setFixedWidth(23)
+    self.subtitles_list_widget_button_list.clicked.connect(lambda vision: update_subtitles_list_widget_vision(self, 'list'))
+    self.subtitles_list_widget_buttons_vbox.addWidget(self.subtitles_list_widget_button_list)
+
+    self.subtitles_list_widget_buttons_vbox.addSpacing(-10)
+
+    self.subtitles_list_widget_button_markdown = QPushButton()
+    self.subtitles_list_widget_button_markdown.setObjectName('subtitles_list_widget_button_markdown')
+    self.subtitles_list_widget_button_markdown.setProperty('class', 'subtitles_list_left_button')
+    self.subtitles_list_widget_button_markdown.setCheckable(True)
+    self.subtitles_list_widget_button_markdown.setFixedWidth(23)
+    self.subtitles_list_widget_button_markdown.clicked.connect(lambda vision: update_subtitles_list_widget_vision(self, 'markdown'))
+    self.subtitles_list_widget_buttons_vbox.addWidget(self.subtitles_list_widget_button_markdown)
+
+    self.subtitles_list_widget_buttons_vbox.addSpacing(-10)
+
+    self.subtitles_list_widget_button_timeline = QPushButton()
+    self.subtitles_list_widget_button_timeline.setObjectName('subtitles_list_widget_button_timeline')
+    self.subtitles_list_widget_button_timeline.setProperty('class', 'subtitles_list_left_button')
+    self.subtitles_list_widget_button_timeline.setCheckable(True)
+    self.subtitles_list_widget_button_timeline.setFixedWidth(23)
+    self.subtitles_list_widget_button_timeline.clicked.connect(lambda vision: update_subtitles_list_widget_vision(self, 'timeline'))
+    self.subtitles_list_widget_buttons_vbox.addWidget(self.subtitles_list_widget_button_timeline)
+
+    self.subtitles_list_widget_buttons_vbox.addStretch()
+
+    self.subtitles_list_widget.layout().addLayout(self.subtitles_list_widget_buttons_vbox)
     # self.properties_toggle_button = QPushButton(parent=self)
     # self.properties_toggle_button.clicked.connect(lambda: properties_toggle_button_clicked(self))
     # self.properties_toggle_button.setCheckable(True)
@@ -301,6 +355,8 @@ def load(self):
     self.subtitles_list_toggle_button.setObjectName('subtitles_list_toggle_button')
     self.subtitles_list_toggle_button_animation = QPropertyAnimation(self.subtitles_list_toggle_button, b'geometry')
     self.subtitles_list_toggle_button_animation.setEasingCurve(QEasingCurve.OutCirc)
+
+    update_subtitles_list_widget_vision(self)
 
 
 def resized(self):
@@ -340,11 +396,15 @@ def subtitleslist_toggle_button_to_end(self):
     self.generate_effect(self.subtitles_list_toggle_button_animation, 'geometry', 700, [self.subtitles_list_toggle_button.x(), self.subtitles_list_toggle_button.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()], [self.global_panel_widget.width() - 22, self.global_panel_widget.y(), self.subtitles_list_toggle_button.width(), self.subtitles_list_toggle_button.height()])
 
 
-def update_subtitle_list_qlistwidget(self):
-    None
-    # if self.selected_subtitle:
-    #     item, item_widget = generate_qlistwidget_item_widget(self, self.subtitles_list_qlistwidget.currentRow() + 1, self.selected_subtitle)
-    #     self.subtitles_list_qlistwidget.setItemWidget(self.subtitles_list_qlistwidget.currentRow(), item_widget)
+def update_subtitles_list_widget_vision_content(self):
+    if self.subtitles_list_stackedwidgets.currentWidget() == self.subtitles_list_simplelist_widget:
+        update_subtitles_list_qlistwidget(self)
+
+    elif self.subtitles_list_stackedwidgets.currentWidget() == self.subtitles_list_markdown_widget:
+        update_subtitles_list_markdown(self)
+
+    elif self.subtitles_list_stackedwidgets.currentWidget() == self.subtitles_list_timeline_widget:
+        update_subtitles_list_timeline(self)
 
 
 def update_subtitles_list_qlistwidget(self):
@@ -365,6 +425,25 @@ def update_subtitles_list_qlistwidget(self):
         #     counter += 1
     if self.selected_subtitle:
         self.subtitles_list_qlistwidget.setCurrentIndex(self.subtitles_list_qlistwidget_model.get_index(self.selected_subtitle))
+
+
+def update_subtitles_list_markdown(self):
+    markdown_text = ''
+    for subtitle in self.subtitles_list:
+        print(subtitle)
+        markdown_text += str("{:.3f}".format(subtitle[0]))
+        next_index = self.subtitles_list.index(subtitle) + 1
+        if not next_index >= len(self.subtitles_list) and not self.subtitles_list[next_index][0] - 0.001 == subtitle[0] + subtitle[1]:
+            markdown_text += ' - ' + str("{:.3f}".format(subtitle[0] + subtitle[1]))
+        markdown_text += '\n'
+
+        markdown_text += str(subtitle[2]) + '\n\n'
+
+    self.subtitles_list_markdown_qtextedit.setPlainText(markdown_text)
+
+
+def update_subtitles_list_timeline(self):
+    None
 
 
 def update_subtitleslist_format_label(self):
@@ -561,7 +640,7 @@ def properties_textedit_changed(self):
     if old_selected_subtitle:
         counter = self.subtitles_list.index(old_selected_subtitle)
         self.subtitles_list[counter][2] = self.properties_textedit.toPlainText()
-        update_subtitle_list_qlistwidget(self)
+        # update_subtitle_list_qlistwidget(self)
         self.timeline.update(self)
         self.player.update_subtitle_layer(self)
         update_properties_information(self)
@@ -573,7 +652,7 @@ def send_text_to_next_subtitle_button_clicked(self):
     last_text = self.properties_textedit.toPlainText()[:pos].strip()
     next_text = self.properties_textedit.toPlainText()[pos:].strip()
     subtitles.send_text_to_next_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, last_text=last_text, next_text=next_text)
-    update_subtitles_list_qlistwidget(self)
+    update_subtitles_list_widget_vision_content(self)
     self.timeline.update(self)
     update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
@@ -605,7 +684,24 @@ def send_text_to_last_subtitle_button_clicked(self):
     last_text = self.properties_textedit.toPlainText()[:pos].strip()
     next_text = self.properties_textedit.toPlainText()[pos:].strip()
     subtitles.send_text_to_last_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, last_text=last_text, next_text=next_text)
-    update_subtitles_list_qlistwidget(self)
+    update_subtitles_list_widget_vision_content(self)
     self.timeline.update(self)
     update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
+
+
+def update_subtitles_list_widget_vision(self, vision='list'):
+    if vision == 'list':
+        self.subtitles_list_stackedwidgets.setCurrentWidget(self.subtitles_list_simplelist_widget)
+    else:
+        self.subtitles_list_widget_button_list.setChecked(False)
+
+    if vision == 'markdown':
+        self.subtitles_list_stackedwidgets.setCurrentWidget(self.subtitles_list_markdown_widget)
+    else:
+        self.subtitles_list_widget_button_markdown.setChecked(False)
+
+    if vision == 'timeline':
+        self.subtitles_list_stackedwidgets.setCurrentWidget(self.subtitles_list_timeline_widget)
+    else:
+        self.subtitles_list_widget_button_timeline.setChecked(False)
