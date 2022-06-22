@@ -28,16 +28,22 @@ git clone https://gitlab.com/jonata/subtitld.git
 
 Considering that you have `ffmpeg` and `libmpv` installed, and Python 3 is available on your system, you can install all needed packages using `pip`.
 
-Using the terminal, go to the subtitld folder you just downloaded or cloned and run the `pip install` command:
+Using the terminal, go to the subtitld folder you just downloaded or cloned and run the command:
 
 ```
-sudo python3 -m pip install -r requirements.txt
+sudo python3 setup.py install
 ```
 
 Now you are able to run Subtitld from source. Run the following code:
 
 ```
-python3 subtitld.py
+python3 subtitld
+```
+
+or just
+
+```
+subtitld
 ```
 
 ## Made possible mainly by
