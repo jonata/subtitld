@@ -22,7 +22,7 @@ import chardet
 import pysubs2
 # from cleantext import clean
 import captionstransformer
-from subtitld import scc2srt, timecode
+from subtitld import timecode
 
 from subtitld.modules import waveform
 from subtitld.modules import usf
@@ -188,8 +188,8 @@ def open_filepath(self, files_to_open=False, update_interface=False):
         if not self.actual_subtitle_file:
             if self.video_metadata.get('subtitles', ''):
                 self.subtitles_list, self.format_to_save = process_subtitles_file(self.video_metadata['subtitles'])
-        self.subtitleslist.update_subtitles_list_widget_vision_content(self)
-        self.subtitleslist.update_topbar_status(self)
+        self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
+        self.subtitles_panel.update_topbar_status(self)
         self.settings['recent_files'][self.actual_subtitle_file] = {
             'last_opened': datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
             'video_filepath': self.video_metadata['filepath']
@@ -200,7 +200,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.timeline.update_timeline(self)
             self.startscreen.hide(self)
             self.playercontrols.show(self)
-            self.subtitleslist.show(self)
+            self.subtitles_panel.show(self)
             self.global_panel.hide_global_panel(self)
             player_qrect = self.player.resize_player_widget(self, just_get_qrect=True)
             original_qrect = [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()]
@@ -208,14 +208,12 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.generate_effect(self.player_border_animation, 'geometry', 700, original_qrect, player_qrect)
             self.generate_effect(self.player_border_transparency_animation, 'opacity', 700, 0.5, 1.0)
 
-    # self.global_panel.update_global_subtitlesvideo_save_as_combobox(self)
-
     if os.path.isfile(os.path.join(os.path.dirname(self.actual_subtitle_file), os.path.basename(self.actual_subtitle_file).rsplit('.', 1)[0] + '.usf')):
         self.format_usf_present = True
     else:
         self.format_usf_present = False
 
-    self.subtitleslist.update_subtitleslist_format_label(self)
+    self.subtitles_panel.update_subtitles_panel_format_label(self)
 
 
 def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
@@ -320,7 +318,17 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
 
         elif subtitle_file.lower().endswith(('.scc')):
             subtitle_format = 'SCC'
-            final_subtitles = scc2srt.get_list_of_captions(subtitle_file)
+
+            with open(subtitle_file, encoding='utf-8') as scc_file:
+                scc_reader = pycaption.SCCReader().read(scc_file.read())
+                languages = scc_reader.get_languages()
+                language = languages[0]
+                captions = scc_reader.get_captions(language)
+                for caption in captions:
+                    final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
+
+
+
 
         elif subtitle_file.lower().endswith(('.usf')):
             subtitle_format = 'USF'

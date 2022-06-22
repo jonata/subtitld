@@ -5,7 +5,7 @@
 from PyQt5.QtWidgets import QDoubleSpinBox, QLabel, QPushButton, QSpinBox, QWidget, QVBoxLayout, QCheckBox, QGridLayout, QSlider
 from PyQt5.QtCore import Qt
 
-from subtitld.modules import global_panel
+from subtitld.interface import global_panel
 
 
 def load_menu(self):

@@ -35,6 +35,9 @@ def load(config_file_path=False):
     if not config.get('quality_check', False):
         config['quality_check'] = {}
 
+    if not config.get('default_values', False):
+        config['default_values'] = {}
+
     return config
 
 

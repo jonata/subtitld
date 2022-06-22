@@ -38,42 +38,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modules/subtitleslist.py" line="151"/>
+        <location filename="../modules/subtitles_panel.py" line="151"/>
         <source>SRT file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modules/subtitleslist.py" line="154"/>
+        <location filename="../modules/subtitles_panel.py" line="154"/>
         <source>Select the subtitle file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modules/subtitleslist.py" line="181"/>
+        <location filename="../modules/subtitles_panel.py" line="181"/>
         <source>Unsaved changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modules/subtitleslist.py" line="182"/>
+        <location filename="../modules/subtitles_panel.py" line="182"/>
         <source>Do you want to save the changes you made on the subtitles?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modules/subtitleslist.py" line="185"/>
+        <location filename="../modules/subtitles_panel.py" line="185"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modules/subtitleslist.py" line="186"/>
+        <location filename="../modules/subtitles_panel.py" line="186"/>
         <source>Don&apos;t save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modules/subtitleslist.py" line="195"/>
+        <location filename="../modules/subtitles_panel.py" line="195"/>
         <source>Actual video does not have saved subtitle file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modules/subtitleslist.py" line="197"/>
+        <location filename="../modules/subtitles_panel.py" line="197"/>
         <source>Actual project</source>
         <translation type="unfinished"></translation>
     </message>

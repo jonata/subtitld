@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QWidget, QGridLayout
 from PyQt5.QtCore import Qt
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
-from subtitld.modules import global_panel
+from subtitld.interface import global_panel
 
 
 def load_menu(self):

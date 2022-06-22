@@ -6,7 +6,7 @@ from PyQt5.QtCore import QEvent, Qt
 from PyQt5.QtGui import QKeySequence
 
 from subtitld.modules.shortcuts import shortcuts_dict
-from subtitld.modules import global_panel
+from subtitld.interface import global_panel
 
 
 class GlobalSubtitlesvideoPanelTabwidgetShortkeysEditbox(QLineEdit):

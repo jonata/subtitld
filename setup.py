@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 #######################################################################
 #
 # Subtitld setup.py
@@ -27,7 +25,7 @@ def get_description(filename='README.md'):
 def get_data_files():
     files = []
     if sys.platform.startswith('linux') and 'QT_APPIMAGE' not in os.environ.keys():
-        appid = subtitld.__desktopid__
+        # appid = subtitld.__desktopid__
         files = [
             # ('share/icons/hicolor/16x16/apps', ['data/icons/hicolor/16x16/apps/{}.png'.format(appid)]),
             # ('share/icons/hicolor/16x16/apps', ['data/icons/hicolor/16x16/apps/{}.png'.format(appid)]),
@@ -49,6 +47,7 @@ def get_data_files():
 
     return files
 
+
 def get_package_files():
     files = {}
 
@@ -59,9 +58,10 @@ def get_package_files():
 
     return files
 
+
 def pip_notes():
-        os.system('cls' if sys.platform == 'win32' else 'clear')
-        pydoc.pager('''
+    os.system('cls' if sys.platform == 'win32' else 'clear')
+    pydoc.pager('''
     If installing via PyPi (Python Pip) on Linux then you need to know that subtitld
     depends on the following packages and distros. Install using your distro's
     software packager for a noticeably better integrated experience.
@@ -113,12 +113,10 @@ def pip_notes():
         mpv.cpython-36m-x86_64-linux-gnu.so [linux]
         mpv.cp36-win_amd64.pyd              [win32]
 
-    Windows users must do all this within a Visual Studio 2015/2017 Native x64/x86
-    Developer Command Prompt accessible from your Visual Studio program group
-    via the start menu. It's easier to just grab the pre-built Windows installers
-    directly from:
 
-        https://subtitld.org
+    Get more information on:
+
+    https://subtitld.org
 ''')
 
 
@@ -128,6 +126,7 @@ setup_requires = [
     'setuptools',
     'py2app'
 ]
+
 install_requires = [
     'PyQt5',
     'pyopengl',
@@ -148,7 +147,8 @@ install_requires = [
     'SpeechRecognition',
     'beautifulsoup4<4.10,>=4.8.1',
     'python-docx',
-    'python-mpv'
+    'python-mpv',
+    'ffms2',
 ]
 
 # --------------------------------------------------------------------------- #
@@ -164,7 +164,7 @@ try:
         description='Subtitld',
         long_description=get_description(),
         url=subtitld.__website__,
-        license='Proprietary',
+        license='GPL3',
         packages=find_packages(include=['subtitld', 'subtitld.*']),
         setup_requires=setup_requires,
         install_requires=install_requires,
@@ -184,11 +184,10 @@ try:
             'Programming Language :: Python :: 3 :: Only'
         ],
         options={'py2app': {
-                    'argv_emulation': True,
-                    #'iconfile': 'src/Icon.icns',  # optional
-                    #'plist': 'src/Info.plist',    # optional
-                    }
-                },
+            'argv_emulation': True,
+            # 'iconfile': 'src/Icon.icns',  # optional
+            # 'plist': 'src/Info.plist',    # optional
+        }},
     )
 except BaseException:
     if subtitld.__ispypi__:

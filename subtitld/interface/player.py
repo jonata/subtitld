@@ -4,16 +4,16 @@
 
 import os
 
-from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, pyqtSignal, pyqtSlot, Qt, QRect, QMargins
+from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, pyqtSignal, pyqtSlot, Qt, QMarginsF, QRectF, QRect
 from PyQt5.QtGui import QPainter, QPen, QColor
 from PyQt5.QtWidgets import QGraphicsOpacityEffect, QOpenGLWidget, QLabel, QVBoxLayout, QWidget
 from PyQt5.QtOpenGL import QGLContext
 
-# from subtitld.mpv import MPV, _mpv_get_sub_api, _mpv_opengl_cb_set_update_callback, _mpv_opengl_cb_init_gl, OpenGlCbGetProcAddrFn, _mpv_opengl_cb_draw, _mpv_opengl_cb_report_flip, MpvSubApi, OpenGlCbUpdateFn, _mpv_opengl_cb_uninit_gl
-# from subtitld.modules.mpv_widget import MpvWidget2
+# from subtitld.interface import playercontrols
+# from subtitld.interface import subtitles_panel
 
 # import mpv
-from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
+from mpv import MPV, MpvRenderContext, MpvGlGetProcAddressFn
 
 
 def get_proc_addr(_, name):
@@ -27,6 +27,7 @@ def get_proc_addr(_, name):
 class MpvWidget(QOpenGLWidget):
     """Main MPV widget class"""
     positionChanged = pyqtSignal(float, int)
+    eofReached = pyqtSignal()
 
     def __init__(widget, parent=None):
         super().__init__(parent)
@@ -38,7 +39,7 @@ class MpvWidget(QOpenGLWidget):
         )
 
         widget.mpv_gl = None
-        widget.get_proc_addr_c = OpenGlCbGetProcAddrFn(get_proc_addr)
+        widget.get_proc_addr_c = MpvGlGetProcAddressFn(get_proc_addr)
         widget.frameSwapped.connect(
             widget.swapped, Qt.ConnectionType.DirectConnection
         )
@@ -81,8 +82,8 @@ class MpvWidget(QOpenGLWidget):
             setattr(widget.mpv, key, value)
 
         widget.position = 0.0
-
         widget.mpv.observe_property('time-pos', widget.position_changed)
+        widget.mpv.observe_property('eof-reached', widget.eof_reached)
 
     def initializeGL(widget):
         widget.mpv_gl = MpvRenderContext(
@@ -144,13 +145,15 @@ class MpvWidget(QOpenGLWidget):
             widget.positionChanged.emit(pos, 1)
             # widget.parent.parent().timeline.update(widget.parent.parent())
 
+    def eof_reached(widget, _, property):
+        widget.eofReached.emit()
+
     def loadfile(widget, filepath) -> None:
         """Function to load a media file"""
         if os.path.isfile(filepath):
             widget.mpv.command('loadfile', filepath, 'replace')
             widget.mpv.wait_for_property('seekable')
         widget.mpv.pause = True
-        print('loaded')
 
     def frameStep(widget) -> None:
         """Function to move forward one step (frame)"""
@@ -163,12 +166,15 @@ class MpvWidget(QOpenGLWidget):
     def seek(widget, pos=0.0, method='absolute+exact') -> None:
         """Function to seek at some position"""
         widget.mpv.seek(pos, method)
+        widget.position = pos
 
     def stop(widget) -> None:
         """Function to stop playback (fake stop, it is pause + position 0)"""
         widget.mpv.pause = True
-        # widget.position = 0.0
-        widget.seek()
+        # print(dir(widget.mpv))
+        if widget.mpv.filename:
+            widget.position = 0.0
+            widget.seek()
 
     def pause(widget) -> None:
         """Function to pause playback (fake pause, it just changes actual playback status)"""
@@ -208,19 +214,20 @@ class PlayerSubtitleLayer(QLabel):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
         if self.show_title_safe_margin or self.subtitle_text:
-            title_safe_margin_qrect = QRect(self.width() * ((1.0 - self.title_safe_margin) * .5),
-                                            self.height() * ((1.0 - self.title_safe_margin) * .5),
-                                            self.width() * (self.title_safe_margin),
-                                            self.height() * (self.title_safe_margin)
-                                            )
+            title_safe_margin_qrect = QRectF(
+                self.width() * ((1.0 - self.title_safe_margin) * .5),
+                self.height() * ((1.0 - self.title_safe_margin) * .5),
+                self.width() * (self.title_safe_margin),
+                self.height() * (self.title_safe_margin)
+            )
         if self.subtitle_text:
             painter.setPen(QPen(QColor.fromRgb(0, 0, 0, 200)))
-            painter.drawText(title_safe_margin_qrect - QMargins(2, 2, -2, -2), Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
+            painter.drawText(title_safe_margin_qrect - QMarginsF(2, 2, -2, -2), Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
             painter.setPen(QPen(QColor.fromRgb(255, 255, 255)))
             painter.drawText(title_safe_margin_qrect, Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
 
         if self.show_action_safe_margin:
-            action_safe_margin_qrect = QRect(
+            action_safe_margin_qrect = QRectF(
                 self.width() * ((1.0 - self.action_safe_margin) * .5),
                 self.height() * ((1.0 - self.action_safe_margin) * .5),
                 self.width() * (self.action_safe_margin),
@@ -281,7 +288,7 @@ def load(self):
 
     # self.layer_player = QWidget(self)
     # self.layer_player.setLayout(QVBoxLayout())
-    # self.layer_player.setContentsMargins(self.subtitleslist_width_proportion * self.width(), 20, 20, 200)
+    # self.layer_player.setContentsMargins(self.subtitles_panel_width_proportion * self.width(), 20, 20, 200)
     # self.layer_player.layout().setSpacing(0)
 
     # self.layer_player_left_spacer = QWidget()
@@ -313,7 +320,8 @@ def load(self):
     # self.player_widget_transparency.setOpacity(1)
     # self.player_widget_animation = QPropertyAnimation(self.player_widget, b'geometry')
     # self.player_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
-    self.player_widget.positionChanged.connect(lambda: self.timeline.update(self))
+    self.player_widget.positionChanged.connect(lambda: update_timelines(self))
+    self.player_widget.eofReached.connect(lambda: eof_reached(self))
     self.player_widget.setLayout(QVBoxLayout(self.player_widget))
 
     self.player_subtitle_layer = PlayerSubtitleLayer()
@@ -399,9 +407,9 @@ def update(self):
 def resized(self):
     """Function to resize player widgets"""
     # self.layer_player.setGeometry(0, 0, self.width(), self.height())
-    # self.layer_player.layout().setContentsMargins(self.width()*self.subtitleslist_width_proportion, 20, 20, 200)
+    # self.layer_player.layout().setContentsMargins(self.width()*self.subtitles_panel_width_proportion, 20, 20, 200)
     # TODO
-    # self.layer_player_left_spacer.setMaximumWidth(self.width()*self.subtitleslist_width_proportion)
+    # self.layer_player_left_spacer.setMaximumWidth(self.width()*self.subtitles_panel_width_proportion)
     # self.player_widget_area.setGeometry(0, 0, self.width(), self.height()-self.playercontrols_widget.height())
     # self.videoinfo_label.setGeometry(self.player_widget_area.x(), 20, self.player_widget_area.width(), 50)
 
@@ -418,12 +426,15 @@ def update_safety_margins_subtitle_layer(self):
 #     old_selected_subtitle = self.selected_subtitle
 #     counter = self.subtitles_list.index(old_selected_subtitle)
 #     self.subtitles_list[counter][2] = self.player_subtitle_textedit.toPlainText()
-#     self.subtitleslist.update_subtitles_list_qlistwidget(self)
+#     self.subtitles_panel.update_subtitles_panel_qlistwidget(self)
 #     self.timeline.update(self)
 #     update_subtitle_layer(self)
 
-# def playpause(self):
-#     self.player_widget.pause = not self.player_widget.pause
+
+def eof_reached(self):
+    self.player_widget.mpv.pause = True
+    self.playercontrols_playpause_button.setChecked(False)
+    playercontrols.playercontrols_playpause_button_update(self)
 
 
 def update_speed(self):
@@ -446,7 +457,7 @@ def resize_player_widget(self, just_get_qrect=False):
     """Function to resize player widget (to accomodate video ratio inside screen space)"""
     # None
     if self.video_metadata:
-        x = self.subtitleslist_width_proportion * self.width()
+        x = int(self.subtitles_panel_width_proportion * self.width())
         y = 20
         w = self.width() - x - 20
         h = self.height() - y - 20 - 200
@@ -455,17 +466,18 @@ def resize_player_widget(self, just_get_qrect=False):
             aspect_ratio = self.video_metadata.get('width', 1920) / self.video_metadata.get('height', 1080)
             new_h = h
             new_w = h * aspect_ratio
-            qrect = QRect(x + (w - new_w) / 2, y, new_w, new_h)
+            qrect = QRect(int(x + (w - new_w) / 2), y, int(new_w), int(new_h))
         else:
             aspect_ratio = self.video_metadata.get('height', 1080) / self.video_metadata.get('width', 1920)
             new_h = w * aspect_ratio
             new_w = w
-            qrect = QRect(x, y + ((h - new_h) / 2), new_w, new_h)
+            qrect = QRect(x, int(y + ((h - new_h) / 2)), int(new_w), int(new_h))
 
         if just_get_qrect:
-            return [qrect.x(), qrect.y(), qrect.width(), qrect.height()]
+            return [int(qrect.x()), int(qrect.y()), int(qrect.width()), int(qrect.height())]
         else:
             self.player_border.setGeometry(qrect)
+
     # if self.video_metadata.get('width', 1920) > self.video_metadata.get('height', 1080):
     #     wp = 1
     #     hp = self.video_metadata.get('height', 1080) / self.video_metadata.get('width', 1920)
@@ -483,3 +495,13 @@ def resize_player_widget(self, just_get_qrect=False):
     # self.player_border.setGeometry(self.player_widget.x()-3, self.player_widget.y()-3, self.player_widget.width()+6, self.player_widget.height()+6)
     # self.player_subtitle_layer.setGeometry(self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height())
     # self.player_subtitle_textedit.setGeometry(self.player_widget.x()+(self.player_widget.width()*.1), self.player_widget.y()+(self.player_widget.height()*.5), self.player_widget.width()*.8, self.player_widget.height()*.4)
+
+
+def update_controls(self):
+    playercontrols.playercontrols_stop_button_clicked(self)
+
+
+def update_timelines(self):
+    self.timeline.update(self)
+    if not self.subtitles_panel_findandreplace_panel.isVisible():
+        subtitles_panel.update_subtitles_panel_widget_vision_content(self)

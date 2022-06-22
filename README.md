@@ -1,3 +1,5 @@
+[![subtitld](https://snapcraft.io/subtitld/badge.svg)](https://snapcraft.io/subtitld)
+
 # Subtitld
 
 An open source software to create, edit and transcribe subtitles. It is able to work with SRT, SSA, TTML, SBV, DFXP, VTT, XML, SCC and SAMI file formats.

@@ -11,22 +11,13 @@ import speech_recognition as sr
 
 from PyQt5.QtWidgets import QComboBox, QPushButton, QWidget, QMessageBox, QGridLayout
 from PyQt5.QtCore import QThread, pyqtSignal, Qt
+from subtitld.interface import global_panel
 
 from subtitld.modules.paths import LANGUAGE_DICT_LIST, STARTUPINFO, path_tmp
-from subtitld.modules import file_io, global_panel
+from subtitld.modules import file_io
+from subtitld.modules import utils
 
 LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
-
-
-def convert_ffmpeg_timecode_to_seconds(timecode):
-    """Function to convert ffmpeg timecode to seconds"""
-    if timecode:
-        final_value = float(timecode.split(':')[-1])
-        final_value += int(timecode.split(':')[-2]) * 60.0
-        final_value += int(timecode.split(':')[-3]) * 3600.0
-        return final_value
-    else:
-        return False
 
 
 class ThreadGeneratedBurnedVideo(QThread):
@@ -44,11 +35,11 @@ class ThreadGeneratedBurnedVideo(QThread):
                 # for output in proc.stdout.read().decode().split('\n'):
                 output = proc.stdout.readline()
                 if 'Duration: ' in output:
-                    duration = int(convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))
+                    duration = int(utils.convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))
                     if duration > number_of_steps:
                         number_of_steps = duration
                 if output[:6] == 'frame=':
-                    current_step = int(convert_ffmpeg_timecode_to_seconds(output.split('time=', 1)[1].split(' ', 1)[0]))
+                    current_step = int(utils.convert_ffmpeg_timecode_to_seconds(output.split('time=', 1)[1].split(' ', 1)[0]))
 
                 self.response.emit(str(current_step) + '|' + str(number_of_steps))
             self.response.emit('end')
@@ -71,7 +62,7 @@ def load_widgets(self):
     """Function to load subtitles panel widgets"""
 
     self.global_panel_transcription_content = QWidget()
-    self.global_panel_transcription_content.addLayout(QGridLayout())
+    self.global_panel_transcription_content.setLayout(QGridLayout())
 
     self.global_subtitlesvideo_autosync_lang_combobox = QComboBox()
     self.global_subtitlesvideo_autosync_lang_combobox.setProperty('class', 'button')
@@ -81,7 +72,7 @@ def load_widgets(self):
     self.global_subtitlesvideo_autosync_button = QPushButton(self.tr('AutoSync').upper())
     self.global_subtitlesvideo_autosync_button.setProperty('class', 'button')
     self.global_subtitlesvideo_autosync_button.clicked.connect(lambda: global_subtitlesvideo_autosync_button_clicked(self))
-    self.global_subtitlesvideo_autosync_button.setVisible(False)
+    # self.global_subtitlesvideo_autosync_button.setVisible(False)
     self.global_panel_transcription_content.layout().addWidget(self.global_subtitlesvideo_autosync_button, 1, 0, Qt.AlignTop)
 
     self.global_subtitlesvideo_autosub_button = QPushButton(self.tr('Auto Subtitle').upper())
@@ -93,7 +84,7 @@ def load_widgets(self):
     self.global_subtitlesvideo_autotranscribe_button.setProperty('class', 'button')
     self.global_subtitlesvideo_autotranscribe_button.clicked.connect(lambda: global_subtitlesvideo_autotranscribe_button_clicked(self))
     self.global_subtitlesvideo_autotranscribe_button.setVisible(True)
-    self.global_panel_transcription_content.layout().addWidget(self.global_subtitlesvideo_autotranscribe_button, 2, 0, Qt.AlignTop)
+    self.global_panel_transcription_content.layout().addWidget(self.global_subtitlesvideo_autotranscribe_button, 3, 0, Qt.AlignTop)
 
     self.global_panel_content_stacked_widgets.addWidget(self.global_panel_transcription_content)
 

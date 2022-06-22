@@ -4,7 +4,7 @@
 
 from PyQt5.QtWidgets import QPushButton, QWidget
 
-from subtitld.modules import global_panel
+from subtitld.interface import global_panel
 
 
 def load_menu(self):

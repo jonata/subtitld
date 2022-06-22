@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 """
 
 Subtitld - open source subtitle editor
@@ -13,11 +11,11 @@ import argparse
 
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import QEasingCurve, QMargins, Qt, QRect, QPropertyAnimation, QTranslator, QTimer
+from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTimer
 
 from subtitld.modules import config
 from subtitld.modules.history import history_redo, history_undo
-from subtitld.modules.paths import PATH_LOCALE, PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP, get_graphics_path
+from subtitld.modules.paths import PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP, get_graphics_path
 
 if ACTUAL_OS == 'darwin':
     from subtitld.modules.paths import NSURL
@@ -60,16 +58,6 @@ class Subtitld(QWidget):
         self.video_waveformsize = .7
         self.mediaplayer_opacity = .5
         self.video_length = 0.01
-        self.mediaplayer_view_mode = 'verticalform'
-        self.timeline_snap = True
-        self.timeline_snap_value = .1
-        self.timeline_snap_limits = True
-        self.timeline_snap_moving = True
-        self.timeline_snap_move_nereast = False
-        self.timeline_snap_grid = False
-        self.minimum_subtitle_width = 1
-        self.timeline_show_grid = False
-        self.timeline_grid_type = False
         self.playback_speed = 1.0
         self.default_new_subtitle_duration = 5.0
         self.repeat_duration = 5.0
@@ -80,7 +68,7 @@ class Subtitld(QWidget):
         self.format_to_save = 'SRT'
         self.format_usf_present = False
         self.selected_language = 'en'
-        self.subtitleslist_width_proportion = .3
+        self.subtitles_panel_width_proportion = .3
 
         self.background_label = QLabel(self)
         self.background_label.setObjectName('background_label')
@@ -110,7 +98,6 @@ class Subtitld(QWidget):
         # All the stylesheet properties are in a separate file, so importing it here
         self.setStyleSheet(open(os.path.join(PATH_SUBTITLD_GRAPHICS, 'stylesheet.qss')).read().replace('PATH_SUBTITLD_GRAPHICS/', get_graphics_path()))
 
-
         # The file io system
         from subtitld.modules import file_io
         self.file_io = file_io
@@ -123,28 +110,28 @@ class Subtitld(QWidget):
         #     self.update.load(self)
 
         # The start screen
-        from subtitld.modules import startscreen
+        from subtitld.interface import startscreen
         self.startscreen = startscreen
         self.startscreen.load(self)
         self.startscreen.show(self)
 
         # The mpv video player{
-        from subtitld.modules import player
+        from subtitld.interface import player
         self.player = player
         self.player.load(self)
 
-        from subtitld.modules import global_panel
+        from subtitld.interface import global_panel
         self.global_panel = global_panel
         self.global_panel.load(self)
 
-        from subtitld.modules import subtitleslist
-        self.subtitleslist = subtitleslist
-        self.subtitleslist.load(self)
+        from subtitld.interface import subtitles_panel
+        self.subtitles_panel = subtitles_panel
+        self.subtitles_panel.load(self)
 
-        from subtitld.modules import timeline
+        from subtitld.interface import timeline
         self.timeline = timeline
 
-        from subtitld.modules import playercontrols
+        from subtitld.interface import playercontrols
         self.playercontrols = playercontrols
         self.playercontrols.load(self)
 
@@ -152,8 +139,8 @@ class Subtitld(QWidget):
         # self.playercontrols_properties = playercontrols_properties
         # self.playercontrols_properties.load(self)
 
-        #self.subtitleslist.update_subtitles_list_qlistwidget(self)
-        #self.subtitleslist.update_properties_widget(self)
+        # self.subtitles_panel.update_subtitles_panel_qlistwidget(self)
+        # self.subtitles_panel.update_properties_widget(self)
         self.player.update(self)
 
         from subtitld.modules import shortcuts
@@ -192,16 +179,16 @@ class Subtitld(QWidget):
         self.background_label2.setGeometry(0, 0, self.width(), self.height())
 
         self.startscreen.resized(self)
-        self.subtitleslist.resized(self)
-        #self.properties.resized(self)
+        self.subtitles_panel.resized(self)
+        # self.properties.resized(self)
 
         self.global_panel.resized(self)
-        #self.global_properties_panel.resized(self)
+        # self.global_properties_panel.resized(self)
 
         self.playercontrols.resized(self)
         # self.playercontrols_properties.resized(self)
 
-        self.background_watermark_label.setGeometry(int((self.width()*.5)-129), int(((self.height()-self.playercontrols_widget.height())*.5)-129), 258, 258)
+        self.background_watermark_label.setGeometry(int((self.width() * .5) - 129), int(((self.height() - self.playercontrols_widget.height()) * .5) - 129), 258, 258)
         # self.background_watermark_label.setVisible(False)
 
         self.player.resized(self)
@@ -221,7 +208,7 @@ class Subtitld(QWidget):
             ret = save_message_box.exec_()
 
             if ret == QMessageBox.AcceptRole:
-                self.subtitleslist.toppanel_save_button_clicked(self)
+                self.subtitles_panel.toppanel_save_button_clicked(self)
 
         self.thread_get_waveform.quit()
         self.thread_get_qimages.quit()
@@ -254,8 +241,8 @@ class Subtitld(QWidget):
             elif event.modifiers() == Qt.ControlModifier:
                 history_undo(actual_subtitles=self.subtitles_list)
             self.selected_subtitle = False
-            self.subtitleslist.update_subtitles_list_qlistwidget(self)
-            self.properties.update_properties_widget(self)
+            self.subtitles_panel.update_subtitles_panel_qlistwidget(self)
+            # self.properties.update_properties_widget(self)
             self.timeline.update(self)
 
         if event.key() == Qt.Key_Left:

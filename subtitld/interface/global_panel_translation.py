@@ -9,21 +9,11 @@ from PyQt5.QtWidgets import QComboBox, QPushButton, QWidget, QMessageBox, QGridL
 from PyQt5.QtCore import QThread, pyqtSignal, Qt
 
 from subtitld.modules.paths import LANGUAGE_DICT_LIST, STARTUPINFO
-from subtitld.modules import global_panel
+from subtitld.modules import utils
+from subtitld.interface import global_panel
 
 
 LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
-
-
-def convert_ffmpeg_timecode_to_seconds(timecode):
-    """Function to convert ffmpeg timecode to seconds"""
-    if timecode:
-        final_value = float(timecode.split(':')[-1])
-        final_value += int(timecode.split(':')[-2]) * 60.0
-        final_value += int(timecode.split(':')[-3]) * 3600.0
-        return final_value
-    else:
-        return False
 
 
 class ThreadGeneratedBurnedVideo(QThread):
@@ -41,11 +31,11 @@ class ThreadGeneratedBurnedVideo(QThread):
                 # for output in proc.stdout.read().decode().split('\n'):
                 output = proc.stdout.readline()
                 if 'Duration: ' in output:
-                    duration = int(convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))
+                    duration = int(utils.convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))
                     if duration > number_of_steps:
                         number_of_steps = duration
                 if output[:6] == 'frame=':
-                    current_step = int(convert_ffmpeg_timecode_to_seconds(output.split('time=', 1)[1].split(' ', 1)[0]))
+                    current_step = int(utils.convert_ffmpeg_timecode_to_seconds(output.split('time=', 1)[1].split(' ', 1)[0]))
 
                 self.response.emit(str(current_step) + '|' + str(number_of_steps))
             self.response.emit('end')

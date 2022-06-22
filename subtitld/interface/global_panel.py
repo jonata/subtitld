@@ -3,8 +3,9 @@
 """
 from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QFrame, QStackedWidget, QPushButton
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
+from subtitld.interface import global_panel_general, global_panel_import, global_panel_interface, global_panel_keyboardshortcuts, global_panel_qualitycontrol, global_panel_translation, global_panel_transcription
 
-from subtitld.modules import global_panel_general, global_panel_interface, global_panel_keyboardshortcuts, global_panel_qualitycontrol, global_panel_translation, global_panel_import, global_panel_export
+from subtitld.interface import global_panel_export
 
 # from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat
 # from azure.cognitiveservices.speech.audio import AudioOutputConfig
@@ -32,6 +33,7 @@ def load(self):
     global_panel_keyboardshortcuts.load_menu(self)
     global_panel_qualitycontrol.load_menu(self)
     global_panel_translation.load_menu(self)
+    global_panel_transcription.load_menu(self)
     global_panel_import.load_menu(self)
     global_panel_export.load_menu(self)
 
@@ -52,6 +54,7 @@ def load(self):
     global_panel_keyboardshortcuts.load_widgets(self)
     global_panel_qualitycontrol.load_widgets(self)
     global_panel_translation.load_widgets(self)
+    global_panel_transcription.load_widgets(self)
     global_panel_import.load_widgets(self)
     global_panel_export.load_widgets(self)
 
@@ -60,32 +63,25 @@ def load(self):
 
 def resized(self):
     """Function on resizing widgets"""
-    x = -self.width() + 20
+    x = - self.width()
     if (self.subtitles_list or self.video_metadata):
-        if self.subtitles_list_toggle_button.isChecked():
+        if self.subtitles_panel_toggle_button.isChecked():
             x = 0
         else:
-            x = -(self.width() * .6) - 18
+            x = - self.width() + 20 + self.subtitles_panel_widget.width()
     self.global_panel_widget.setGeometry(x, 0, self.width() - 20, self.height() - self.playercontrols_widget.height() + 20)
 
 
 def show_global_panel(self):
     """Function to show subtitlesvideo panel"""
     self.generate_effect(self.global_panel_widget_animation, 'geometry', 700, [self.global_panel_widget.x(), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()], [0, self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()])
+    self.global_panel_general_menu_button.setChecked(True)
     global_panel_menu_changed(self, self.global_panel_general_menu_button, self.global_panel_general_content)
 
 
 def hide_global_panel(self):
     """Function to hide subtitlesvideo panel"""
-    self.generate_effect(self.global_panel_widget_animation, 'geometry', 700, [self.global_panel_widget.x(), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()], [int(-self.global_panel_widget.width() + self.subtitles_list_widget.width()), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()])
-
-
-def update_widgets(self):
-    self.unsaved = True
-    self.selected_subtitle = False
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
-    self.timeline.update(self)
-    self.properties.update_properties_widget(self)
+    self.generate_effect(self.global_panel_widget_animation, 'geometry', 700, [self.global_panel_widget.x(), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()], [int(-self.global_panel_widget.width() + self.subtitles_panel_widget.width()), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()])
 
 
 def global_panel_menu_changed(self, button, widget):

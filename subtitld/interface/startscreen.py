@@ -22,7 +22,6 @@ def load(self):
     self.start_screen_transparency_animation = QPropertyAnimation(self.start_screen_transparency, b'opacity')
     self.start_screen_transparency.setOpacity(0)
 
-
     self.start_screen_recentfiles_background = QLabel(parent=self.start_screen)
     self.start_screen_recentfiles_background.setObjectName('start_screen_recentfiles_background')
     self.start_screen_recentfiles_background.setAutoFillBackground(True)
@@ -64,18 +63,18 @@ def load(self):
 
 def resized(self):
     """Function to call when starting screen is resized"""
-    self.start_screen.setGeometry(0, self.height()-200, self.width(), 200)
-    self.start_screen_recentfiles_background.setGeometry((self.start_screen.width()*.5)-175, 0, 350, self.start_screen.height())
+    self.start_screen.setGeometry(0, self.height() - 200, self.width(), 200)
+    self.start_screen_recentfiles_background.setGeometry(int((self.start_screen.width() * .5) - 175), 0, 350, self.start_screen.height())
     self.start_screen_top_shadow.setGeometry(0, 0, self.start_screen.width(), 150)
-    self.start_screen_open_label.setGeometry(0, 20, (self.start_screen.width()*.5)-195, 20)
-    self.start_screen_recent_label.setGeometry((self.start_screen.width()*.5)-175, 20, 350, 20)
+    self.start_screen_open_label.setGeometry(0, 20, int((self.start_screen.width() * .5) - 195), 20)
+    self.start_screen_recent_label.setGeometry(int((self.start_screen.width() * .5) - 175), 20, 350, 20)
 
-    self.start_screen_open_button.setGeometry((self.start_screen.width()*.5)-195-200, 50, 200, 40)
-    self.start_screen_recent_listwidget.setGeometry((self.start_screen.width()*.5)-155, 50, 310, self.start_screen.height()-50-20)
-    self.start_screen_recent_alert.setGeometry((self.start_screen.width()*.5)-155, 50, 310, self.start_screen.height()-50-20)
+    self.start_screen_open_button.setGeometry(int((self.start_screen.width() * .5) - 195 - 200), 50, 200, 40)
+    self.start_screen_recent_listwidget.setGeometry(int((self.start_screen.width() * .5) - 155), 50, 310, self.start_screen.height() - 50 - 20)
+    self.start_screen_recent_alert.setGeometry(int((self.start_screen.width() * .5) - 155), 50, 310, self.start_screen.height() - 50 - 20)
 
-    self.start_screen_adver_label.setGeometry((self.start_screen.width()*.5)+195, 20, (self.start_screen.width()-((self.start_screen.width()*.5)+195)), 20)
-    self.start_screen_adver_label_details.setGeometry((self.start_screen.width()*.5)+195, 50, (self.start_screen.width()-((self.start_screen.width()*.5)+195)),  self.start_screen.height()-50-20)
+    self.start_screen_adver_label.setGeometry(int((self.start_screen.width() * .5) + 195), 20, int((self.start_screen.width() - ((self.start_screen.width() * .5) + 195))), 20)
+    self.start_screen_adver_label_details.setGeometry(int((self.start_screen.width() * .5) + 195), 50, int((self.start_screen.width() - ((self.start_screen.width() * .5) + 195))), self.start_screen.height() - 50 - 20)
 
 
 def show(self):
@@ -131,10 +130,9 @@ def start_screen_recent_listwidget_item_clicked(self):
     files_to_open = [self.start_screen_temp_recent_files_list[self.start_screen_recent_listwidget.currentRow()][-1]]
     file_io.open_filepath(self, files_to_open=files_to_open, update_interface=True)
     # self.start_screen_thumbnail_background.setVisible(False)
-    #self.generate_effect(self.player_widget_animation, 'geometry', 1000, [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()], [self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height()])
-    #self.generate_effect(self.player_widget_transparency_animation, 'opacity', 1000, 0.0, 1.0)
+    # self.generate_effect(self.player_widget_animation, 'geometry', 1000, [self.start_screen_thumbnail_background.x(), self.start_screen_thumbnail_background.y(), self.start_screen_thumbnail_background.width(), self.start_screen_thumbnail_background.height()], [self.player_widget.x(), self.player_widget.y(), self.player_widget.width(), self.player_widget.height()])
+    # self.generate_effect(self.player_widget_transparency_animation, 'opacity', 1000, 0.0, 1.0)
     # self.generate_effect(self.layer_player_vbox_animation, 'contentsMargins', 1000, self.layer_player_vbox.contentsMargins(), [300, 0, 0, 200])
-
 
 
 def start_screen_recent_listwidget_item_changed(self, item):
@@ -148,4 +146,4 @@ def start_screen_recent_listwidget_item_changed(self, item):
     else:
         self.start_screen_thumbnail_background.clear()
 
-    #print(self.settings['recent_files'][file_to_open])
+    # print(self.settings['recent_files'][file_to_open])

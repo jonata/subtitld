@@ -7,24 +7,14 @@ import os
 from PyQt5.QtWidgets import QPushButton, QFileDialog, QWidget
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_IMPORT_EXTENSIONS
-from subtitld.modules import file_io, global_panel
+from subtitld.interface import global_panel
+from subtitld.modules import file_io
 
 
 list_of_supported_import_extensions = []
 for exttype in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS:
     for ext in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS[exttype]['extensions']:
         list_of_supported_import_extensions.append(ext)
-
-
-def convert_ffmpeg_timecode_to_seconds(timecode):
-    """Function to convert ffmpeg timecode to seconds"""
-    if timecode:
-        final_value = float(timecode.split(':')[-1])
-        final_value += int(timecode.split(':')[-2]) * 60.0
-        final_value += int(timecode.split(':')[-3]) * 3600.0
-        return final_value
-    else:
-        return False
 
 
 def load_menu(self):

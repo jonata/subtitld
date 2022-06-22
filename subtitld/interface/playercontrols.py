@@ -7,8 +7,9 @@ from bisect import bisect
 from PyQt5.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpinBox, QComboBox, QTabWidget, QWidget, QStylePainter, QStyleOptionTab, QStyle, QTabBar, QColorDialog, QFrame, QHBoxLayout, QSizePolicy, QVBoxLayout, QLayout
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QRect, QPoint, QThread, QSize
 from PyQt5.QtGui import QIcon, QPainter, QLinearGradient, QBrush, QColor
+from subtitld.interface import subtitles_panel
 
-from subtitld.modules import subtitles, subtitleslist
+from subtitld.modules import subtitles
 from subtitld.modules.paths import PATH_SUBTITLD_GRAPHICS
 
 STEPS_LIST = ['Frames', 'Seconds']
@@ -732,13 +733,23 @@ def load(self):
 
     self.playercontrols_widget_frame_bottom_hbox.layout().addWidget(self.playercontrols_widget_frame_bottom_middle, 0)
 
+    self.playercontrols_widget_frame_bottom_right_absolute = QFrame()
+    self.playercontrols_widget_frame_bottom_right_absolute.setAttribute(Qt.WA_LayoutOnEntireRect)
+    # self.playercontrols_widget_frame_bottom_right_absolute.setObjectName('playercontrols_widget_frame_bottom_right')
+    self.playercontrols_widget_frame_bottom_right_absolute.setFixedHeight(26)
+    self.playercontrols_widget_frame_bottom_right_absolute.setLayout(QHBoxLayout())
+    self.playercontrols_widget_frame_bottom_right_absolute.layout().setContentsMargins(0, 0, 0, 0)
+    self.playercontrols_widget_frame_bottom_right_absolute.layout().setSpacing(0)
+
     self.playercontrols_widget_frame_bottom_right = QFrame()
-    self.playercontrols_widget_frame_bottom_right.setAttribute(Qt.WA_LayoutOnEntireRect)
+    # self.playercontrols_widget_frame_bottom_right.setAttribute(Qt.WA_LayoutOnEntireRect)
     self.playercontrols_widget_frame_bottom_right.setObjectName('playercontrols_widget_frame_bottom_right')
-    self.playercontrols_widget_frame_bottom_right.setFixedHeight(26)
+    # self.playercontrols_widget_frame_bottom_right.setFixedHeight(26)
     self.playercontrols_widget_frame_bottom_right.setLayout(QHBoxLayout())
-    self.playercontrols_widget_frame_bottom_right.layout().setContentsMargins(4, 0, 0, 2)
+    self.playercontrols_widget_frame_bottom_right.layout().setContentsMargins(0, 0, 0, 2)
     self.playercontrols_widget_frame_bottom_right.layout().setSpacing(0)
+
+    self.playercontrols_widget_frame_bottom_right.layout().addSpacing(-8)
 
     self.timeline_cursor_next_frame = QPushButton()
     self.timeline_cursor_next_frame.setObjectName('timeline_cursor_next_frame')
@@ -855,6 +866,7 @@ def load(self):
 
     self.step_unit = QComboBox()
     self.step_unit.setObjectName('controls_combobox')
+    self.step_unit.setProperty('class', 'combobox_playercontrols')
     self.step_unit.insertItems(0, STEPS_LIST)
     self.step_unit.activated.connect(lambda: step_value_changed(self))
     # self.step_unit.setFixedWidth(50)
@@ -885,12 +897,12 @@ def load(self):
 
     self.playercontrols_widget_frame_bottom_right.layout().addStretch()
 
-    self.playercontrols_widget_frame_bottom_hbox.layout().addWidget(self.playercontrols_widget_frame_bottom_right, 1)
+    self.playercontrols_widget_frame_bottom_right_absolute.layout().addWidget(self.playercontrols_widget_frame_bottom_right)
 
     self.playercontrols_widget_frame_bottom_right_corner = QFrame()
     self.playercontrols_widget_frame_bottom_right_corner.setObjectName('playercontrols_widget_frame_bottom_right_corner')
     self.playercontrols_widget_frame_bottom_right_corner.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
-    self.playercontrols_widget_frame_bottom_right_corner.setFixedWidth(40)
+    self.playercontrols_widget_frame_bottom_right_corner.setFixedWidth(35)
     self.playercontrols_widget_frame_bottom_right_corner.setLayout(QHBoxLayout())
     self.playercontrols_widget_frame_bottom_right_corner.layout().setContentsMargins(0, 0, 0, 0)
     self.playercontrols_widget_frame_bottom_right_corner.layout().setSpacing(0)
@@ -903,7 +915,9 @@ def load(self):
     self.playercontrols_properties_panel_toggle_animation = QPropertyAnimation(self.playercontrols_properties_panel_toggle, b'geometry')
     self.playercontrols_properties_panel_toggle_animation.setEasingCurve(QEasingCurve.OutCirc)
 
-    self.playercontrols_widget_frame_bottom_hbox.layout().addWidget(self.playercontrols_widget_frame_bottom_right_corner, 0)
+    self.playercontrols_widget_frame_bottom_right_absolute.layout().addWidget(self.playercontrols_widget_frame_bottom_right_corner, 0)
+
+    self.playercontrols_widget_frame_bottom_hbox.layout().addWidget(self.playercontrols_widget_frame_bottom_right_absolute, 1)
 
     self.playercontrols_widget_frame.layout().addLayout(self.playercontrols_widget_frame_bottom_hbox)
 
@@ -1021,33 +1035,33 @@ def zoom_buttons_update(self):
 
 def snap_button_clicked(self):
     """Function to call when snap button is clicked"""
-    self.timeline_snap = self.snap_button.isChecked()
+    self.settings['timeline']['snap'] = self.snap_button.isChecked()
     update_snap_buttons(self)
 
 
 def snap_move_button_clicked(self):
     """Function to call when snap move button is clicked"""
-    self.timeline_snap_moving = self.snap_move_button.isChecked()
+    self.settings['timeline']['snap_moving'] = self.snap_move_button.isChecked()
 
 
 def snap_move_nereast_button_clicked(self):
     """Function to call when snap move next button is clicked"""
-    self.timeline_snap_move_nereast = self.snap_move_nereast_button.isChecked()
+    self.settings['timeline']['snap_move_nereast'] = self.snap_move_nereast_button.isChecked()
 
 
 def snap_limits_button_clicked(self):
     """Function to call when snap limits button is clicked"""
-    self.timeline_snap_limits = self.snap_limits_button.isChecked()
+    self.settings['timeline']['snap_limits'] = self.snap_limits_button.isChecked()
 
 
 def snap_grid_button_clicked(self):
     """Function to call when snap to grid button is clicked"""
-    self.timeline_snap_grid = self.snap_grid_button.isChecked()
+    self.settings['timeline']['snap_grid'] = self.snap_grid_button.isChecked()
 
 
 def snap_value_changed(self):
     """Function to call when snap value is changed"""
-    self.timeline_snap_value = self.snap_value.value() if self.snap_value.value() else .1
+    self.settings['timeline']['snap_value'] = self.snap_value.value() if self.snap_value.value() else .1
 
 
 def step_value_changed(self):
@@ -1102,35 +1116,35 @@ def gap_add_subtitle_button_clicked(self):
     """Function to call when add gap button is clicked"""
     subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=self.gap_subtitle_duration.value())
     self.unsaved = True
+    subtitles_panel.update_topbar_status(self)
     self.selected_subtitle = False
     self.timeline.update(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def gap_remove_subtitle_button_clicked(self):
     """Function to call when remove gap button is clicked"""
     subtitles.set_gap(subtitles=self.subtitles_list, position=self.player_widget.position, gap=-(self.gap_subtitle_duration.value()))
     self.unsaved = True
+    subtitles_panel.update_topbar_status(self)
     self.selected_subtitle = False
     self.timeline.update(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def update_snap_buttons(self):
     """Function to update snap buttons"""
-    self.snap_button.setChecked(bool(self.timeline_snap))
+    self.snap_button.setChecked(bool(self.settings['timeline'].get('snap', True)))
     self.snap_limits_button.setEnabled(self.snap_button.isChecked())
-    self.snap_limits_button.setChecked(bool(self.timeline_snap_limits))
+    self.snap_limits_button.setChecked(bool(self.settings['timeline'].get('snap_limits', True)))
     self.snap_move_button.setEnabled(self.snap_button.isChecked())
-    self.snap_move_button.setChecked(bool(self.timeline_snap_moving))
+    self.snap_move_button.setChecked(bool(self.settings['timeline'].get('snap_moving', True)))
     self.snap_grid_button.setEnabled(self.snap_button.isChecked())
-    self.snap_grid_button.setChecked(bool(self.timeline_snap_grid))
+    self.snap_grid_button.setChecked(bool(self.settings['timeline'].get('snap_grid', False)))
     self.snap_move_nereast_button.setEnabled(self.snap_button.isChecked())
-    self.snap_move_nereast_button.setChecked(bool(self.timeline_snap_move_nereast))
+    self.snap_move_nereast_button.setChecked(bool(self.settings['timeline'].get('snap_move_nereast', False)))
     self.snap_value.setEnabled(self.snap_button.isChecked())
-    self.snap_value.setValue(self.timeline_snap_value if self.timeline_snap_value else .1)
+    self.snap_value.setValue(float(self.settings['timeline'].get('snap_value', .1)))
     self.timeline_widget.update()
 
 
@@ -1141,32 +1155,32 @@ def update_playback_speed_buttons(self):
     self.change_playback_speed_slider.setEnabled(self.change_playback_speed.isChecked())
     self.change_playback_speed_increase.setEnabled(self.change_playback_speed.isChecked())
     self.change_playback_speed_label.setText('x' + str(self.playback_speed))
-    self.change_playback_speed_slider.setValue(self.playback_speed * 100)
+    self.change_playback_speed_slider.setValue(int(self.playback_speed * 100))
 
 
 def grid_button_clicked(self):
     """Function to call when grid button is clicked"""
-    self.timeline_show_grid = self.grid_button.isChecked()
-    if not self.timeline_grid_type:
-        self.timeline_grid_type = 'seconds'
+    self.settings['timeline']['show_grid'] = self.grid_button.isChecked()
+    if not self.settings['timeline'].get('grid_type', False):
+        self.settings['timeline']['grid_type'] = 'seconds'
     update_grid_buttons(self)
 
 
 def grid_type_changed(self, gridtype):
     """Function to call when grid type button is clicked"""
-    self.timeline_grid_type = gridtype
+    self.settings['timeline']['grid_type'] = gridtype
     update_grid_buttons(self)
 
 
 def update_grid_buttons(self):
     """Function to update grid buttons"""
-    self.grid_button.setChecked(self.timeline_show_grid)
-    self.grid_frames_button.setEnabled(self.timeline_show_grid)
-    self.grid_frames_button.setChecked(True if self.timeline_grid_type == 'frames' else False)
-    self.grid_seconds_button.setEnabled(self.timeline_show_grid)
-    self.grid_seconds_button.setChecked(True if self.timeline_grid_type == 'seconds' else False)
-    self.grid_scenes_button.setEnabled(self.timeline_show_grid)
-    self.grid_scenes_button.setChecked(True if self.timeline_grid_type == 'scenes' else False)
+    self.grid_button.setChecked(self.settings['timeline'].get('show_grid', False))
+    self.grid_frames_button.setEnabled(self.settings['timeline'].get('show_grid', False))
+    self.grid_frames_button.setChecked(True if self.settings['timeline'].get('grid_type', False) == 'frames' else False)
+    self.grid_seconds_button.setEnabled(self.settings['timeline'].get('show_grid', False))
+    self.grid_seconds_button.setChecked(True if self.settings['timeline'].get('grid_type', False) == 'seconds' else False)
+    self.grid_scenes_button.setEnabled(self.settings['timeline'].get('show_grid', False))
+    self.grid_scenes_button.setChecked(True if self.settings['timeline'].get('grid_type', False) == 'scenes' else False)
     self.timeline_widget.update()
 
 
@@ -1203,25 +1217,25 @@ def add_subtitle_button_clicked(self):
     # start_position = False
     self.selected_subtitle = subtitles.add_subtitle(subtitles=self.subtitles_list, position=self.player_widget.position, duration=self.default_new_subtitle_duration, from_last_subtitle=self.add_subtitle_starting_from_last.isChecked())
     self.unsaved = True
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    subtitles_panel.update_topbar_status(self)
+    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
-    self.subtitleslist.update_properties_widget(self)
+    # self.subtitles_panel.update_properties_widget(self)
     self.properties_textedit.setFocus(Qt.TabFocusReason)
     if self.add_subtitle_and_play.isChecked():
         self.player_widget.play()
-    subtitleslist.update_topbar_status(self)
 
 
 def remove_selected_subtitle_button_clicked(self):
     """Function to call when remove selected subtitle button is clicked"""
     subtitles.remove_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
     self.unsaved = True
+    subtitles_panel.update_topbar_status(self)
     self.selected_subtitle = False
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
-    self.subtitleslist.update_properties_widget(self)
+    # self.subtitles_panel.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def slice_selected_subtitle_button_clicked(self):
@@ -1232,11 +1246,11 @@ def slice_selected_subtitle_button_clicked(self):
         next_text = self.properties_textedit.toPlainText()[pos:]
         self.selected_subtitle = subtitles.slice_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, position=self.player_widget.position, next_text=next_text, last_text=last_text)
         self.unsaved = True
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        subtitles_panel.update_topbar_status(self)
+        self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
         self.timeline.update(self)
-        self.subtitleslist.update_properties_widget(self)
+        # self.subtitles_panel.update_properties_widget(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
-        subtitleslist.update_topbar_status(self)
 
 
 def select_subtitle_in_current_position(self):
@@ -1244,9 +1258,9 @@ def select_subtitle_in_current_position(self):
     subtitle, _ = subtitles.subtitle_under_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     if subtitle:
         self.selected_subtitle = subtitle
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
         self.timeline.update(self)
-        self.subtitleslist.update_properties_widget(self)
+        # self.subtitles_panel.update_properties_widget(self)
 
 
 def select_next_subtitle_over_current_position(self):
@@ -1254,9 +1268,9 @@ def select_next_subtitle_over_current_position(self):
     subtitle = subtitles.next_subtitle_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     if subtitle:
         self.selected_subtitle = subtitle
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
         self.timeline.update(self)
-        self.subtitleslist.update_properties_widget(self)
+        # self.subtitles_panel.update_properties_widget(self)
 
 
 def select_last_subtitle_over_current_position(self):
@@ -1264,9 +1278,9 @@ def select_last_subtitle_over_current_position(self):
     subtitle = subtitles.last_subtitle_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     if subtitle:
         self.selected_subtitle = subtitle
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
         self.timeline.update(self)
-        self.subtitleslist.update_properties_widget(self)
+        # self.subtitles_panel.update_properties_widget(self)
 
 
 def merge_back_selected_subtitle_button_clicked(self):
@@ -1274,11 +1288,11 @@ def merge_back_selected_subtitle_button_clicked(self):
     if self.selected_subtitle:
         self.selected_subtitle = subtitles.merge_back_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
         self.unsaved = True
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        subtitles_panel.update_topbar_status(self)
+        self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
         self.timeline.update(self)
-        self.subtitleslist.update_properties_widget(self)
+        # self.subtitles_panel.update_properties_widget(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
-        subtitleslist.update_topbar_status(self)
 
 
 def merge_next_selected_subtitle_button_clicked(self):
@@ -1286,11 +1300,11 @@ def merge_next_selected_subtitle_button_clicked(self):
     if self.selected_subtitle:
         self.selected_subtitle = subtitles.merge_next_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle)
         self.unsaved = True
-        self.subtitleslist.update_subtitles_list_qlistwidget(self)
+        subtitles_panel.update_topbar_status(self)
+        self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
         self.timeline.update(self)
-        self.subtitleslist.update_properties_widget(self)
+        # self.subtitles_panel.update_properties_widget(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
-        subtitleslist.update_topbar_status(self)
 
 
 def move_backward_subtitle_clicked(self):
@@ -1304,9 +1318,9 @@ def move_backward_subtitle_clicked(self):
                 amount = float(self.settings['timeline'].get('step_value', 1.0))
         subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
         self.unsaved = True
+        subtitles_panel.update_topbar_status(self)
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
-        subtitleslist.update_topbar_status(self)
 
 
 def move_forward_subtitle_clicked(self):
@@ -1320,9 +1334,9 @@ def move_forward_subtitle_clicked(self):
                 amount = float(self.settings['timeline'].get('step_value', 1.0))
         subtitles.move_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
         self.unsaved = True
+        subtitles_panel.update_topbar_status(self)
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
-        subtitleslist.update_topbar_status(self)
 
 
 def move_start_back_subtitle_clicked(self):
@@ -1334,11 +1348,11 @@ def move_start_back_subtitle_clicked(self):
                 amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
             else:
                 amount = float(self.settings['timeline'].get('step_value', 1.0))
-        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount, move_nereast=bool(self.timeline_snap_move_nereast))
+        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount, move_nereast=bool(self.settings['timeline'].get('snap_move_nereast', False)))
         self.unsaved = True
+        subtitles_panel.update_topbar_status(self)
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
-        subtitleslist.update_topbar_status(self)
 
 
 def move_start_forward_subtitle_clicked(self):
@@ -1350,11 +1364,11 @@ def move_start_forward_subtitle_clicked(self):
                 amount = (int(self.settings['timeline'].get('step_value', 1)) / self.video_metadata['framerate'])
             else:
                 amount = float(self.settings['timeline'].get('step_value', 1.0))
-        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount, move_nereast=bool(self.timeline_snap_move_nereast))
+        subtitles.move_start_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount, move_nereast=bool(self.settings['timeline'].get('snap_move_nereast', False)))
         self.unsaved = True
+        subtitles_panel.update_topbar_status(self)
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
-        subtitleslist.update_topbar_status(self)
 
 
 def move_end_back_subtitle_clicked(self):
@@ -1368,6 +1382,7 @@ def move_end_back_subtitle_clicked(self):
                 amount = float(self.settings['timeline'].get('step_value', 1.0))
         subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=-amount)
         self.unsaved = True
+        subtitles_panel.update_topbar_status(self)
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
 
@@ -1383,9 +1398,9 @@ def move_end_forward_subtitle_clicked(self):
                 amount = float(self.settings['timeline'].get('step_value', 1.0))
         subtitles.move_end_subtitle(subtitles=self.subtitles_list, selected_subtitle=self.selected_subtitle, amount=amount)
         self.unsaved = True
+        subtitles_panel.update_topbar_status(self)
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
-        subtitleslist.update_topbar_status(self)
 
 
 def timeline_cursor_back_frame_clicked(self):
@@ -1404,66 +1419,66 @@ def next_start_to_current_position_button_clicked(self):
     """Function to move cursor one frame backward"""
     subtitles.next_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    subtitles_panel.update_topbar_status(self)
+    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
-    self.subtitleslist.update_properties_widget(self)
+    # self.subtitles_panel.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def last_end_to_current_position_button_clicked(self):
     """Function to move last ending position of selected subtitle to current cursor position"""
     subtitles.last_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    subtitles_panel.update_topbar_status(self)
+    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
-    self.subtitleslist.update_properties_widget(self)
+    # self.subtitles_panel.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def last_start_to_current_position_button_clicked(self):
     """Function to move last starting position subtitle to current cursor position"""
     subtitles.last_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    subtitles_panel.update_topbar_status(self)
+    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
-    self.subtitleslist.update_properties_widget(self)
+    # self.subtitles_panel.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def last_start_last_end_to_current_position_button_clicked(self):
     """Function to move starting position subtitle to current cursor position"""
     subtitles.subtitle_start_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    subtitles_panel.update_topbar_status(self)
+    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
-    self.subtitleslist.update_properties_widget(self)
+    # self.subtitles_panel.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def next_start_next_end_to_current_position_button_clicked(self):
     """Function to move ending position subtitle to current cursor position"""
     subtitles.subtitle_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    subtitles_panel.update_topbar_status(self)
+    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
-    self.subtitleslist.update_properties_widget(self)
+    # self.subtitles_panel.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def next_end_to_current_position_button_clicked(self):
     """Function to move next ending position to current cursor position"""
     subtitles.next_end_to_current_position(subtitles=self.subtitles_list, position=self.player_widget.position)
     self.unsaved = True
-    self.subtitleslist.update_subtitles_list_qlistwidget(self)
+    subtitles_panel.update_topbar_status(self)
+    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
-    self.subtitleslist.update_properties_widget(self)
+    # self.subtitles_panel.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
-    subtitleslist.update_topbar_status(self)
 
 
 def change_playback_speed_clicked(self):
@@ -1504,6 +1519,7 @@ def change_playback_speed_increase_clicked(self):
 def repeat_playback_clicked(self):
     """Function to call when playback repeat button is clicked"""
     self.repeat_activated = self.repeat_playback.isChecked()
+    self.repeat_duration_tmp = []
     self.timeline_widget.setFocus(Qt.TabFocusReason)
 
 
