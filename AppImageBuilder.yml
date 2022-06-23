@@ -1,16 +1,4 @@
 version: 1
-app: Subtitld
-
-ingredients:
-  dist: focal
-  sources:
-    - deb http://archive.ubuntu.com/ubuntu/ focal main universe
-  packages:
-    - python3-minimal
-    - python3-pip
-  script:
-    - python3 -m pip install setuptools
-
 script:
   - python3 setup.py install --root .
   # - ln -s /usr/local/bin/PythonTurtle ./usr/bin/
