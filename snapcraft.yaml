@@ -5,7 +5,7 @@ description: |
 icon: subtitld/graphics/subtitld.png
 confinement: strict
 adopt-info: subtitld
-base: core20
+base: core22
 
 plugs:
   gtk-3-themes:
@@ -74,7 +74,7 @@ parts:
         - qt5-style-plugins
         - libmpv1
         - ffmpeg
-        - libffms2-4
+        - libffms2-5
 
   subtitld:
     plugin: python
