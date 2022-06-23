@@ -34,27 +34,16 @@ snap-edge:amd64:
 
 appimage:amd64:
   image:
-    name: ubuntu:focal
+    name: appimagecrafters/appimage-builder
   stage: deploy
   before_script:
-    - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-    - export DEBIAN_FRONTEND=noninteractive
-    - apt update -qy
-    - apt install -y wget git sshpass python3-pip libmpv-dev ffmpeg python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libdrm2 libavresample4
-    - python3 -m pip install --upgrade pip
-    - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
-    - chmod +x /usr/local/bin/appimagetool
-    - python3 -m pip install -r requirements.txt
-    - python3 -m pip install pyinstaller appimage-builder
-    - mkdir AppDir
-    - mkdir -p AppDir/usr/local/share/icons
-    - cp subtitld/graphics/subtitld.png AppDir/usr/local/share/icons/.
+    # update appimage-builder (optional)
+    - apt-get update
+    - apt-get install -y git wget
+    - pip3 install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
   script:
-    - pyinstaller subtitld_linux.spec
-    - mv dist/subtitld AppDir/subtitld
+    - python3 setup.py install --prefix AppDir
     - appimage-builder --skip-test
-    - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no *.AppImage jonata@jonata.org:/home/jonata/subtitld.jonata.org/appimage/
   artifacts:
     paths:
       - '*.AppImage'
