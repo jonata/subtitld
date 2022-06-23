@@ -56,7 +56,7 @@ def global_subtitlesvideo_import_button_clicked(self):
     # self.global_subtitlesvideo_import_panel.setVisible(self.global_subtitlesvideo_import_button.isChecked())
 
     supported_import_files = self.tr('Text files') + ' ({})'.format(" ".join([" * .{}".format(fo) for fo in list_of_supported_import_extensions]))
-    file_to_open = QFileDialog.getOpenFileName(parent=self, caption=self.tr('Select the file to import'), directory=os.path.expanduser("~"), filter=supported_import_files, options=QFileDialog.DontUseNativeDialog)[0]
+    file_to_open = QFileDialog.getOpenFileName(parent=self, caption=self.tr('Select the file to import'), dir=os.path.expanduser("~"), filter=supported_import_files, options=QFileDialog.DontUseNativeDialog)[0]
     if file_to_open:
         self.subtitles_list += file_io.import_file(filename=file_to_open)[0]
         self.subtitles_list.sort()

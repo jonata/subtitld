@@ -334,7 +334,7 @@ def toppanel_save_button_clicked(self):
         suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
 
         # tem que reportar o bug que não retorna o selectedFilter se o dialogo for nativo
-        filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), directory=os.path.join(suggested_path, suggested_name), filter=save_formats, options=QFileDialog.DontUseNativeDialog)
+        filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats, options=QFileDialog.DontUseNativeDialog)
 
         if filedialog[0] and filedialog[1]:
             filename = filedialog[0]
