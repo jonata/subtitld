@@ -1,7 +1,7 @@
 name: subtitld
 summary: Subtitld
 description: |
- Subtitld is a software to create and edit subtitles. Visit http://subtitld.jonata.org/ for more information.
+ Subtitld is a software to create and edit subtitles. Visit http://subtitld.org/ for more information.
 icon: subtitld/graphics/subtitld.png
 confinement: strict
 adopt-info: subtitld
@@ -22,36 +22,36 @@ plugs:
     default-provider: gtk-common-themes:sounds-themes
   gsettings: null
 
+
 apps:
   subtitld:
     command: bin/desktop-launch $SNAP/bin/subtitld
     environment:
-        LC_ALL: C.UTF-8
-        PYTHONPATH: $SNAP/usr/lib/python3/dist-packages
-        LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
-        QT_QPA_PLATFORMTHEME: gtk3
+      LC_ALL: C.UTF-8
+      PYTHONPATH: $SNAP/usr/lib/python3/dist-packages
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/vdpau:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+      QT_QPA_PLATFORMTHEME: gtk3
+      # DISABLE_WAYLAND: 1
     plugs:
-      - audio-playback
       - gsettings
       - home
       - network
       - network-bind
-      - pulseaudio
+      - browser-support
       - unity7
       - x11
       - optical-drive
       - wayland
       - desktop
-      - opengl
       - removable-media
       - mount-observe
 
 parts:
   prepare:
-    plugin: nil
-    build-packages:
-        - software-properties-common
-    prime: [-*]
+      plugin: nil
+      build-packages:
+          - software-properties-common
+      prime: [-*]
   desktop-qt6:
       source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
       source-subdir: qt
@@ -72,10 +72,9 @@ parts:
         - qtwayland5
         - libqt5gui5
         - qt5-style-plugins
-        - python3-pyqt5
-        - python3-pyqt5.qtopengl
         - libmpv1
         - ffmpeg
+
   subtitld:
     plugin: python
     source: .
