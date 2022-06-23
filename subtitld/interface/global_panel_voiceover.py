@@ -3,8 +3,8 @@
 """
 import subprocess
 
-from PyQt5.QtWidgets import QPushButton, QWidget
-from PyQt5.QtCore import QThread, pyqtSignal
+from PySide6.QtWidgets import QPushButton, QWidget
+from PySide6.QtCore import QThread, Signal
 
 from subtitld.modules.paths import STARTUPINFO
 from subtitld.modules import utils
@@ -13,7 +13,7 @@ from subtitld.interface import global_panel
 
 class ThreadGeneratedBurnedVideo(QThread):
     """Thread to generate burned video"""
-    response = pyqtSignal(str)
+    response = Signal(str)
     commands = []
 
     def run(self):

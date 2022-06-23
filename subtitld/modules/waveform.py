@@ -5,8 +5,8 @@
 import os
 import subprocess
 import json
-from PyQt5.QtCore import QPointF, QThread, pyqtSignal, Qt
-from PyQt5.QtGui import QColor, QPainter, QPen, QPixmap, QPolygonF
+from PySide6.QtCore import QPointF, QThread, Signal, Qt
+from PySide6.QtGui import QColor, QPainter, QPen, QPixmap, QPolygonF
 import numpy
 import ffms2
 import asyncio
@@ -220,7 +220,7 @@ def return_waveform_zoom(self, qpixmap):
 
 class ThreadExtractWaveform2(QThread):
     """Thread to extract waveform"""
-    command = pyqtSignal(list)
+    command = Signal(list)
     filepath = ''
     duration = 60
     zoom = 100

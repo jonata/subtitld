@@ -10,7 +10,7 @@ If you need some more information on how to use the software, please visit the p
 
 ### Prerequisites
 
-Subtitld uses 2 main tools to work. The `ffmpeg` is used for internal processes and `libmpv` for video playback. Also, it uses PyQt5 for the GUI. Depending on your system you will need to install PyQt5 separatelly. For example, if you use a Ubuntu system, you can install this tools using `apt`:
+Subtitld uses 2 main tools to work. The `ffmpeg` is used for internal processes and `libmpv` for video playback. Also, it uses PySide6 for the GUI. Depending on your system you will need to install PySide6 separatelly. For example, if you use a Ubuntu system, you can install this tools using `apt`:
 
 ```
 sudo apt install ffmpeg libmpv1
@@ -48,7 +48,7 @@ subtitld
 
 ## Made possible mainly by
 
-* [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) - The Qt5 GUI library for Python
+* [PySide6](https://www.riverbankcomputing.com/software/pyqt/) - The Qt5 GUI library for Python
 * [ffmpeg](https://ffmpeg.org/) - The absolute solution for media manipulation
 * [libmpv](https://github.com/mpv-player/mpv) - The powerful MPV media playback engine
 

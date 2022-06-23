@@ -1,8 +1,8 @@
 """Module for subtitle list panel
 
 """
-from PyQt5.QtWidgets import QFrame, QTextEdit, QVBoxLayout, QPushButton
-from PyQt5.QtGui import QTextCursor
+from PySide6.QtWidgets import QFrame, QTextEdit, QVBoxLayout, QPushButton
+from PySide6.QtGui import QTextCursor
 
 from subtitld.interface import subtitles_panel
 from subtitld.modules import utils

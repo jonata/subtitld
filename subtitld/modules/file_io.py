@@ -1,15 +1,11 @@
-"""File input and output functions.
-
-"""
-
 import os
 import datetime
 import html
 import hashlib
 from docx import Document
 
-from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtCore import QThread, pyqtSignal
+from PySide6.QtWidgets import QFileDialog
+from PySide6.QtCore import QThread, Signal
 
 from scenedetect.video_manager import VideoManager
 from scenedetect.scene_manager import SceneManager
@@ -36,7 +32,7 @@ for exttype in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
 
 class ThreadExtractSceneTimePositions(QThread):
     """Thread to extract time positions of scenes"""
-    command = pyqtSignal(list)
+    command = Signal(list)
     filepath = ''
 
     def run(self):
@@ -65,7 +61,7 @@ class ThreadExtractSceneTimePositions(QThread):
 
 class ThreadExtractWaveform(QThread):
     """Thread to extract waveform"""
-    command = pyqtSignal(list)
+    command = Signal(list)
     filepath = ''
     audio = ''
     duration = ''
@@ -82,7 +78,7 @@ class ThreadExtractWaveform(QThread):
 
 class ThreadGenerateHashOfVideo(QThread):
     """Thread to extract time positions of scenes"""
-    response = pyqtSignal(list)
+    response = Signal(list)
     filepath = ''
 
     def run(self):

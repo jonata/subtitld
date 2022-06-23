@@ -122,15 +122,13 @@ def pip_notes():
 
 # --------------------------------------------------------------------------- #
 
-setup_requires = [
-    'setuptools'
-]
-
+setup_requires = ['setuptools']
 install_requires = [
-    'PyQt5',
+    'PySide6==6.2.4',
     'pyopengl',
+    'ffms2',
+    'python-mpv',
     'numpy',
-    'sip',
     'cffi',
     'requests',
     'pycaption',
@@ -146,8 +144,6 @@ install_requires = [
     'SpeechRecognition',
     'beautifulsoup4<4.10,>=4.8.1',
     'python-docx',
-    'python-mpv',
-    'ffms2',
 ]
 
 # --------------------------------------------------------------------------- #

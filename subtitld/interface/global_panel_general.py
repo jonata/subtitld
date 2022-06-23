@@ -1,8 +1,8 @@
 """Subtitles Video panel
 
 """
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QWidget, QGridLayout, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QWidget, QGridLayout, QHBoxLayout
+from PySide6.QtCore import Qt
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
 from subtitld.interface import global_panel

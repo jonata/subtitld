@@ -1,8 +1,8 @@
 """Subtitles Video panel
 
 """
-from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QFrame, QStackedWidget, QPushButton
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QFrame, QStackedWidget, QPushButton
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve
 from subtitld.interface import global_panel_general, global_panel_import, global_panel_interface, global_panel_keyboardshortcuts, global_panel_qualitycontrol, global_panel_translation, global_panel_transcription
 
 from subtitld.interface import global_panel_export

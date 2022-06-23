@@ -818,15 +818,11 @@ QLabel[class=qlabel_for_buttons] {
 #start_screen_recent_label {
     font-size: 10px;
     color:rgb(106, 116, 131);
-    qproperty-alignment: "AlignCenter";
-    qproperty-wordWrap: true;
 }
 
 #start_screen_adver_label {
     font-size: 10px;
     color:rgb(106, 116, 131);
-    qproperty-alignment: "AlignVCenter | AlignLeft";
-    qproperty-wordWrap: true;
 }
 
 #start_screen_adver_panel_label {

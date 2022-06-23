@@ -5,9 +5,9 @@
 import os
 import sys
 from datetime import datetime
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsOpacityEffect, QListWidget, QListWidgetItem
-from PyQt5.QtCore import QPropertyAnimation, Qt, QSize
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QPushButton, QLabel, QGraphicsOpacityEffect, QListWidget, QListWidgetItem
+from PySide6.QtCore import QPropertyAnimation, Qt, QSize
 
 from subtitld.modules import file_io
 from subtitld.modules.paths import PATH_SUBTITLD_DATA_THUMBNAILS, VERSION_NUMBER
@@ -30,6 +30,7 @@ def load(self):
     self.start_screen_top_shadow.setObjectName('start_screen_top_shadow')
 
     self.start_screen_open_label = QLabel(self.tr('Open a subtitle or a video').upper(), parent=self.start_screen)
+    self.start_screen_open_label.setAlignment(Qt.AlignRight)
     self.start_screen_open_label.setObjectName('start_screen_open_label')
 
     self.start_screen_open_button = QPushButton(self.tr('Open').upper(), parent=self.start_screen)
@@ -37,6 +38,7 @@ def load(self):
     self.start_screen_open_button.setProperty('class', 'button_dark')
 
     self.start_screen_recent_label = QLabel(self.tr('Recent subtitles').upper(), parent=self.start_screen)
+    self.start_screen_recent_label.setAlignment(Qt.AlignCenter)
     self.start_screen_recent_label.setObjectName('start_screen_recent_label')
 
     self.start_screen_recent_listwidget = QListWidget(parent=self.start_screen)

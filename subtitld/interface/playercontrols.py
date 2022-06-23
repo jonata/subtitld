@@ -4,9 +4,9 @@
 
 import os
 from bisect import bisect
-from PyQt5.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpinBox, QComboBox, QTabWidget, QWidget, QStylePainter, QStyleOptionTab, QStyle, QTabBar, QColorDialog, QFrame, QHBoxLayout, QSizePolicy, QVBoxLayout, QLayout
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QRect, QPoint, QThread, QSize
-from PyQt5.QtGui import QIcon, QPainter, QLinearGradient, QBrush, QColor
+from PySide6.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpinBox, QComboBox, QTabWidget, QWidget, QStylePainter, QStyleOptionTab, QStyle, QTabBar, QColorDialog, QFrame, QHBoxLayout, QSizePolicy, QVBoxLayout, QLayout
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QRect, QPoint, QThread, QSize
+from PySide6.QtGui import QIcon, QPainter, QLinearGradient, QBrush, QColor
 from subtitld.interface import subtitles_panel
 
 from subtitld.modules import subtitles
@@ -84,7 +84,7 @@ def load(self):
 
     self.playercontrols_properties_panel_tabwidget = QTabWidget(parent=self.playercontrols_properties_panel)
     self.playercontrols_properties_panel_tabwidget.setTabBar(QLeftTabBar(self.playercontrols_properties_panel_tabwidget))
-    self.playercontrols_properties_panel_tabwidget.setTabPosition(2)
+    self.playercontrols_properties_panel_tabwidget.setTabPosition(QTabWidget.West)
     self.playercontrols_properties_panel_tabwidget.setStyleSheet('''
                             QTabBar:tab                                    { background: rgba(184,206,224,150); color: rgba(46,62,76,150); border: 1px solid rgba(106, 116, 131, 100); padding: 10px; border-top-left-radius: 2px; border-top-right-radius: 0; border-bottom-left-radius: 2px; border-left:0; padding-top: -16px; padding-left: 4px; padding-bottom:6px; padding-right:2px; }
                             QTabBar:tab:selected                           { background: rgb(184,206,224); color: rgb(46,62,76); border: 1px solid rgb(106, 116, 131); border-right:0; }

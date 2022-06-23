@@ -5,8 +5,8 @@
 import subprocess
 from google_trans_new import google_translator
 
-from PyQt5.QtWidgets import QComboBox, QPushButton, QWidget, QMessageBox, QGridLayout
-from PyQt5.QtCore import QThread, pyqtSignal, Qt
+from PySide6.QtWidgets import QComboBox, QPushButton, QWidget, QMessageBox, QGridLayout
+from PySide6.QtCore import QThread, Signal, Qt
 
 from subtitld.modules.paths import LANGUAGE_DICT_LIST, STARTUPINFO
 from subtitld.modules import utils
@@ -18,7 +18,7 @@ LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
 
 class ThreadGeneratedBurnedVideo(QThread):
     """Thread to generate burned video"""
-    response = pyqtSignal(str)
+    response = Signal(str)
     commands = []
 
     def run(self):

@@ -3,9 +3,9 @@
 """
 import os
 
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QLabel, QSizePolicy, QTextEdit, QVBoxLayout, QWidget, QStyledItemDelegate, QStyle, QListView, QLineEdit, QFrame
-from PyQt5.QtGui import QIcon, QFontMetrics, QFont, QColor
-from PyQt5.QtCore import Qt, QSize, QAbstractListModel, QRect, QMargins
+from PySide6.QtWidgets import QHBoxLayout, QPushButton, QLabel, QSizePolicy, QTextEdit, QVBoxLayout, QWidget, QStyledItemDelegate, QStyle, QListView, QLineEdit, QFrame
+from PySide6.QtGui import QIcon, QFontMetrics, QFont, QColor
+from PySide6.QtCore import Qt, QSize, QAbstractListModel, QRect, QMargins
 
 from subtitld.interface import subtitles_panel
 from subtitld.modules import utils

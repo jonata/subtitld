@@ -2,7 +2,7 @@
 
 """
 
-from PyQt5.QtWidgets import QAction
+from PySide6.QtGui import QAction
 
 
 shortcuts_dict = {

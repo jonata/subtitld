@@ -4,9 +4,9 @@
 
 from bisect import bisect
 # from multiprocessing.spawn import old_main_modules
-from PyQt5.QtWidgets import QWidget, QPushButton, QScrollArea, QLineEdit, QTextEdit
-from PyQt5.QtGui import QColor, QPen, QPainter, QPolygonF, QTransform, QPainterPath, QFont, QFontMetrics
-from PyQt5.QtCore import QMarginsF, QRectF, Qt, QPointF, pyqtSignal
+from PySide6.QtWidgets import QWidget, QPushButton, QScrollArea, QLineEdit, QTextEdit
+from PySide6.QtGui import QColor, QPen, QPainter, QPolygonF, QTransform, QPainterPath, QFont, QFontMetrics
+from PySide6.QtCore import QMarginsF, QRectF, Qt, QPointF, Signal
 
 from subtitld.modules import quality_check
 from subtitld.modules import history
@@ -17,7 +17,7 @@ from subtitld.interface import subtitles_panel
 
 class subtitles_panel_timeline_widget_timeline(QWidget):
     """Class for timeline QWidget"""
-    seek = pyqtSignal(float)
+    seek = Signal(float)
 
     def __init__(widget, self):
         super().__init__()

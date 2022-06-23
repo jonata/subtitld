@@ -2,8 +2,8 @@
 
 """
 
-from PyQt5.QtWidgets import QDoubleSpinBox, QLabel, QPushButton, QSpinBox, QWidget, QVBoxLayout, QCheckBox, QGridLayout, QSlider
-from PyQt5.QtCore import Qt
+from PySide6.QtWidgets import QDoubleSpinBox, QLabel, QPushButton, QSpinBox, QWidget, QVBoxLayout, QCheckBox, QGridLayout, QSlider
+from PySide6.QtCore import Qt
 
 from subtitld.interface import global_panel
 

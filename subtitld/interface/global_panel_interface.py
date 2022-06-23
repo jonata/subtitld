@@ -2,7 +2,7 @@
 
 """
 
-from PyQt5.QtWidgets import QPushButton, QWidget
+from PySide6.QtWidgets import QPushButton, QWidget
 
 from subtitld.interface import global_panel
 

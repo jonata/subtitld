@@ -1,9 +1,9 @@
 """Subtitles Video panel
 
 """
-from PyQt5.QtWidgets import QPushButton, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QVBoxLayout
-from PyQt5.QtCore import QEvent, Qt
-from PyQt5.QtGui import QKeySequence
+from PySide6.QtWidgets import QPushButton, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QVBoxLayout
+from PySide6.QtCore import QEvent, Qt
+from PySide6.QtGui import QKeySequence
 
 from subtitld.modules.shortcuts import shortcuts_dict
 from subtitld.interface import global_panel

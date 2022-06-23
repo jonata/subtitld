@@ -4,7 +4,7 @@
 
 import os
 
-from PyQt5.QtWidgets import QPushButton, QFileDialog, QWidget
+from PySide6.QtWidgets import QPushButton, QFileDialog, QWidget
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_IMPORT_EXTENSIONS
 from subtitld.interface import global_panel

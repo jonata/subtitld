@@ -9,9 +9,9 @@ import sys
 import datetime
 import argparse
 
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
-from PyQt5.QtGui import QIcon, QFont, QFontDatabase
-from PyQt5.QtCore import Qt, QRect, QPropertyAnimation, QTimer
+from PySide6.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
+from PySide6.QtGui import QIcon, QFont, QFontDatabase
+from PySide6.QtCore import Qt, QRect, QPropertyAnimation, QTimer
 
 from subtitld.modules import config
 from subtitld.modules.history import history_redo, history_undo

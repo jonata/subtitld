@@ -1,33 +1,21 @@
-"""MPV Player
-
-"""
-
 import os
+from mpv import MPV, MpvRenderContext, MpvGlGetProcAddressFn
 
-from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, pyqtSignal, pyqtSlot, Qt, QMarginsF, QRectF, QRect
-from PyQt5.QtGui import QPainter, QPen, QColor
-from PyQt5.QtWidgets import QGraphicsOpacityEffect, QOpenGLWidget, QLabel, QVBoxLayout, QWidget
-from PyQt5.QtOpenGL import QGLContext
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QGraphicsOpacityEffect
+from PySide6.QtCore import Signal, Qt, QRectF, QPropertyAnimation, QEasingCurve, QMarginsF
+from PySide6.QtGui import QPainter, QPen, QColor
+from PySide6.QtOpenGLWidgets import QOpenGLWidget
 
-# from subtitld.interface import playercontrols
-# from subtitld.interface import subtitles_panel
-
+from subtitld.modules.utils import GetProcAddressGetter
+from subtitld.interface import playercontrols, subtitles_panel
 # import mpv
 from mpv import MPV, MpvRenderContext, MpvGlGetProcAddressFn
 
 
-def get_proc_addr(_, name):
-    glctx = QGLContext.currentContext()
-    if glctx is None:
-        return None
-    addr = int(glctx.getProcAddress(name.decode("utf-8")))
-    return addr
-
-
 class MpvWidget(QOpenGLWidget):
     """Main MPV widget class"""
-    positionChanged = pyqtSignal(float, int)
-    eofReached = pyqtSignal()
+    positionChanged = Signal(float, int)
+    eofReached = Signal()
 
     def __init__(widget, parent=None):
         super().__init__(parent)
@@ -39,7 +27,7 @@ class MpvWidget(QOpenGLWidget):
         )
 
         widget.mpv_gl = None
-        widget.get_proc_addr_c = MpvGlGetProcAddressFn(get_proc_addr)
+        widget.get_proc_addr_c = MpvGlGetProcAddressFn(GetProcAddressGetter().wrap)
         widget.frameSwapped.connect(
             widget.swapped, Qt.ConnectionType.DirectConnection
         )
@@ -88,7 +76,7 @@ class MpvWidget(QOpenGLWidget):
     def initializeGL(widget):
         widget.mpv_gl = MpvRenderContext(
             widget.mpv,
-            "opengl",
+            api_type="opengl",
             opengl_init_params={"get_proc_address": widget.get_proc_addr_c},
         )
         widget.mpv_gl.update_cb = widget.on_update
@@ -98,26 +86,27 @@ class MpvWidget(QOpenGLWidget):
             ratio = widget.devicePixelRatioF()
             w = int(widget.width() * ratio)
             h = int(widget.height() * ratio)
+            fbo = widget.defaultFramebufferObject()
             widget.mpv_gl.render(
                 flip_y=True,
                 opengl_fbo={
-                    "fbo": widget.defaultFramebufferObject(),
+                    "fbo": fbo,
                     "w": w,
                     "h": h,
                 },
             )
 
-    @pyqtSlot()
-    def maybe_update(widget):
-        """Maybeupdate function"""
-        if widget.window().isMinimized():
-            widget.makeCurrent()
-            widget.paintGL()
-            widget.context().swapBuffers(widget.context().surface())
-            widget.swapped()
-            widget.doneCurrent()
-        else:
-            widget.update()
+    # @Slot()
+    # def maybe_update(widget):
+    #     """Maybeupdate function"""
+    #     if widget.window().isMinimized():
+    #         widget.makeCurrent()
+    #         widget.paintGL()
+    #         widget.context().swapBuffers(widget.context().surface())
+    #         widget.swapped()
+    #         widget.doneCurrent()
+    #     else:
+    #         widget.update()
 
     def on_update(widget, ctx=None):
         widget.update()
@@ -466,12 +455,12 @@ def resize_player_widget(self, just_get_qrect=False):
             aspect_ratio = self.video_metadata.get('width', 1920) / self.video_metadata.get('height', 1080)
             new_h = h
             new_w = h * aspect_ratio
-            qrect = QRect(int(x + (w - new_w) / 2), y, int(new_w), int(new_h))
+            qrect = QRectF(int(x + (w - new_w) / 2), y, int(new_w), int(new_h))
         else:
             aspect_ratio = self.video_metadata.get('height', 1080) / self.video_metadata.get('width', 1920)
             new_h = w * aspect_ratio
             new_w = w
-            qrect = QRect(x, int(y + ((h - new_h) / 2)), int(new_w), int(new_h))
+            qrect = QRectF(x, int(y + ((h - new_h) / 2)), int(new_w), int(new_h))
 
         if just_get_qrect:
             return [int(qrect.x()), int(qrect.y()), int(qrect.width()), int(qrect.height())]

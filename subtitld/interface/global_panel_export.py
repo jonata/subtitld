@@ -4,9 +4,9 @@
 import os
 import subprocess
 
-from PyQt5.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QWidget, QTableWidgetItem
-from PyQt5.QtCore import QMargins, QSize, QThread, pyqtSignal, Qt
-from PyQt5.QtGui import QBrush, QColor, QFont, QFontDatabase, QPainter, QPen
+from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QWidget, QTableWidgetItem
+from PySide6.QtCore import QMargins, QSize, QThread, Signal, Qt
+from PySide6.QtGui import QBrush, QColor, QFont, QFontDatabase, QPainter, QPen
 from subtitld.interface import global_panel
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_EXPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
@@ -17,7 +17,7 @@ from subtitld.modules import utils
 
 class ThreadGeneratedBurnedVideo(QThread):
     """Thread to generate burned video"""
-    response = pyqtSignal(str)
+    response = Signal(str)
     commands = []
 
     def run(self):

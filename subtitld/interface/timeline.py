@@ -5,9 +5,9 @@
 import time
 from bisect import bisect
 
-from PyQt5.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap, QPainterPath, QLinearGradient, QFontMetrics
-from PyQt5.QtWidgets import QWidget, QScrollArea
-from PyQt5.QtCore import Qt, QRectF, QPointF, QThread, pyqtSignal, QMarginsF
+from PySide6.QtGui import QPainter, QPen, QColor, QPolygonF, QFont, QPixmap, QPainterPath, QLinearGradient, QFontMetrics
+from PySide6.QtWidgets import QWidget, QScrollArea
+from PySide6.QtCore import Qt, QRectF, QPointF, QThread, Signal, QMarginsF
 
 from subtitld import timecode
 
@@ -21,7 +21,7 @@ from subtitld.interface import subtitles_panel
 
 class ThreadGetWaveform(QThread):
     """Class of qtread to get waveform data"""
-    command = pyqtSignal(list)
+    command = Signal(list)
     zoom = False
     audio = False
     duration = False
@@ -37,8 +37,8 @@ class ThreadGetWaveform(QThread):
 
 class ThreadGetQImages(QThread):
     """Class to generate QThread for QImages"""
-    command = pyqtSignal(list)
-    endcommand = pyqtSignal(str)
+    command = Signal(list)
+    endcommand = Signal(str)
     values_list = []
     zoom = 100.0
     width = 32767
@@ -97,7 +97,7 @@ class ThreadGetQImages(QThread):
 
 class Timeline(QWidget):
     """Class for timeline QWidget"""
-    seek = pyqtSignal(float)
+    seek = Signal(float)
 
     def __init__(widget, self):
         super().__init__()

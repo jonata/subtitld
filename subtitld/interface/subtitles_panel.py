@@ -5,9 +5,9 @@
 # from multiprocessing.spawn import old_main_modules
 import os
 
-from PyQt5.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QFileDialog, QMessageBox, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget, QLineEdit
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
-from PyQt5.QtGui import QTextCursor
+from PySide6.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QFileDialog, QMessageBox, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget, QLineEdit
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
+from PySide6.QtGui import QTextCursor
 
 from subtitld.interface import subtitles_panel_widget_markdown, subtitles_panel_widget_qlistwidget, subtitles_panel_widget_timeline, timeline
 from subtitld.modules import file_io
