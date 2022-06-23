@@ -42,7 +42,6 @@ appimage:amd64:
     - apt-get install -y git wget
     - pip3 install appimage-builder
   script:
-    - python3 setup.py install --prefix AppDir
     - appimage-builder --skip-test
   artifacts:
     paths:
