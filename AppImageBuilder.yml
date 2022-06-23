@@ -1,5 +1,6 @@
 version: 1
 script:
+  - cp subtitld/graphics/subtitld.png usr/share/icons/.
   - python3 setup.py install --root .
   # - ln -s /usr/local/bin/PythonTurtle ./usr/bin/
   # - cp ../../pythonturtle/resources/turtle.png ./pythonturtle.png
