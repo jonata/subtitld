@@ -12,7 +12,7 @@
 !define MUI_WELCOMEFINISHPAGE_BITMAP "subtitld\graphics\installer_welcome.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "subtitld\graphics\installer_uninstall.bmp"
 !define MUI_COMPONENTSPAGE_NODESC
-!define MUI_VERSION $%VERSION_NUMBER%
+!define /date MUI_VERSION "%y.%m.%d.%H%M"
 
 Name "${MUI_PRODUCT} - Installer"
 Outfile "${MUI_PRODUCT} ${MUI_VERSION} Installer.exe"
