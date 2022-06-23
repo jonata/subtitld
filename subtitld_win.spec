@@ -16,6 +16,8 @@ a = Analysis(['subtitld/__main__.py'],
         ( 'ffmpeg-*/bin/ffprobe.exe', '.'),
         ( 'subtitld/ftfy/char_classes.dat', 'ftfy' ),
         ( 'c:/python37/lib/site-packages/glfw/glfw3.dll', '.'),
+        ( 'c:/python37/Scripts/ffms2.dll', '.'),
+        ( 'c:/python37/Scripts/ffms2.lib', '.'),
     ],
     hiddenimports=[
         'ffms2'
