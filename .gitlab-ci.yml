@@ -61,7 +61,7 @@ windows-nsis:
   - wine "c:\Python37\python.exe" -m pip install -U pip
   - wine pip3 install -r requirements.txt
   - wine pip3 install https://github.com/pyinstaller/pyinstaller/tarball/develop
-  - wine pip3 install glfw pythoncom
+  - wine pip3 install glfw pywin32
   - wine pyinstaller subtitld_win.spec
   - makensis subtitld_win.nsi
   - export SSHPASS=$USER_PASS
