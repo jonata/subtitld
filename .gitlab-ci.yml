@@ -42,7 +42,7 @@ appimage:amd64:
     - apt-get install -y git wget
     - pip3 install appimage-builder
   script:
-    - appimage-builder --skip-test
+    - appimage-builder --skip-test --recipe AppImageBuilder.yml
   artifacts:
     paths:
       - '*.AppImage'
