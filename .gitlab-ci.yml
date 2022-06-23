@@ -1,19 +1,19 @@
-snap:amd64:
-  image:
-    name: ubuntudesktop/gnome-3-38-2004
-  stage: deploy
-  script:
-  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-  - snapcraft
-  - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
-  - snapcraft login --with snapcraft.login
-  - snapcraft upload *.snap --release beta
-  artifacts:
-    paths:
-    - subtitld*.snap
-    expire_in: 1 week
-  only:
-  - master
+# snap:amd64:
+#   image:
+#     name: ubuntudesktop/gnome-3-38-2004
+#   stage: deploy
+#   script:
+#   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+#   - snapcraft
+#   - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
+#   - snapcraft login --with snapcraft.login
+#   - snapcraft upload *.snap --release beta
+#   artifacts:
+#     paths:
+#     - subtitld*.snap
+#     expire_in: 1 week
+#   only:
+#   - master
 
 snap-edge:amd64:
   image:
