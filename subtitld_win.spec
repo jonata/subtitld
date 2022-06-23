@@ -9,18 +9,19 @@ a = Analysis(['subtitld/__main__.py'],
     excludes=['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter'],
     binaries=[
         ( 'resources/mpv-1.dll', '.')
+        ( 'c:/python37/Scripts/ffms2.dll', '.'),
+        ( 'c:/python37/Scripts/ffms2.lib', '.'),
+        ( 'c:/python37/lib/site-packages/glfw/glfw3.dll', '.'),
     ],
     datas=[
         ( 'subtitld/graphics/*', 'graphics' ),
         ( 'ffmpeg-*/bin/ffmpeg.exe', '.'),
         ( 'ffmpeg-*/bin/ffprobe.exe', '.'),
         ( 'subtitld/ftfy/char_classes.dat', 'ftfy' ),
-        ( 'c:/python37/lib/site-packages/glfw/glfw3.dll', '.'),
-        ( 'c:/python37/Scripts/ffms2.dll', '.'),
-        ( 'c:/python37/Scripts/ffms2.lib', '.'),
     ],
     hiddenimports=[
-        'ffms2'
+        'ffms2',
+        'pythoncom'
     ],
     hookspath=[],
     runtime_hooks=[] )
