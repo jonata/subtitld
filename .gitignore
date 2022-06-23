@@ -52,7 +52,7 @@ pip-log.txt
 #Translations
 *.mo
 
-*.dll
+# *.dll
 *.exe
 
 #Mr Developer
