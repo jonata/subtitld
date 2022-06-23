@@ -70,7 +70,7 @@ windows-nsis:
   - apt-get install -y nsis openssh-client sshpass unzip
   - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
   - unzip ffmpeg-release-essentials.zip
-  - wine pip3 install -U pip
+  - wine "c:\Python37\python.exe" -m pip install -U pip
   - wine pip3 install -r requirements.txt
   - wine pip3 install https://github.com/pyinstaller/pyinstaller/tarball/develop
   - wine pip3 install glfw
