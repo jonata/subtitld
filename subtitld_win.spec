@@ -8,7 +8,7 @@ a = Analysis(['subtitld/__main__.py'],
     pathex=['/Users/admin/Documents/subtitld', 'C:\Python36\Lib\site-packages\scipy\extra-dll'],
     excludes=['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter'],
     binaries=[
-        ( 'resources/mpv-1.dll', '.')
+        ( 'resources/mpv-1.dll', '.'),
         ( 'c:/python37/Scripts/ffms2.dll', '.'),
         ( 'c:/python37/Scripts/ffms2.lib', '.'),
         ( 'c:/python37/lib/site-packages/glfw/glfw3.dll', '.'),
