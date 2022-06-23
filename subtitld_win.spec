@@ -8,13 +8,14 @@ a = Analysis(['subtitld/__main__.py'],
     pathex=['/Users/admin/Documents/subtitld', 'C:\Python36\Lib\site-packages\scipy\extra-dll'],
     excludes=['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter'],
     binaries=[
-        ( 'mpv/x86_64/mpv-1.dll', '.')
+        ( 'resources/mpv-1.dll', '.')
     ],
     datas=[
         ( 'subtitld/graphics/*', 'graphics' ),
         ( 'ffmpeg-*/bin/ffmpeg.exe', '.'),
         ( 'ffmpeg-*/bin/ffprobe.exe', '.'),
         ( 'subtitld/ftfy/char_classes.dat', 'ftfy' ),
+        ( 'c:/python37/lib/site-packages/glfw/glfw3.dll', '.'),
     ],
     hiddenimports=['_cffi_backend',
                    'cleantext',
