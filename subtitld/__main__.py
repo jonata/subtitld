@@ -212,7 +212,7 @@ class Subtitld(QWidget):
 
         self.thread_get_waveform.quit()
         self.thread_get_qimages.quit()
-        self.thread_extract_scene_time_positions.quit()
+        # self.thread_extract_scene_time_positions.quit()
         self.thread_generated_burned_video.quit()
         self.thread_extract_waveform.quit()
         if self.actual_subtitle_file and 'hash' in self.video_metadata:

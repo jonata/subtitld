@@ -7,10 +7,10 @@ from docx import Document
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtCore import QThread, Signal
 
-from scenedetect.video_manager import VideoManager
-from scenedetect.scene_manager import SceneManager
-from scenedetect.stats_manager import StatsManager
-from scenedetect.detectors import ContentDetector
+# from scenedetect.video_manager import VideoManager
+# from scenedetect.scene_manager import SceneManager
+# from scenedetect.stats_manager import StatsManager
+# from scenedetect.detectors import ContentDetector
 
 import pycaption
 from pycaption.exceptions import CaptionReadSyntaxError, CaptionReadNoCaptions
@@ -116,11 +116,11 @@ def load(self):
     self.thread_extract_waveform2 = waveform.ThreadExtractWaveform2(self)
     self.thread_extract_waveform2.command.connect(thread_extract_waveform_ended2)
 
-    def thread_extract_scene_time_positions_ended(command):
-        self.video_metadata['scenes'] = command
+    # def thread_extract_scene_time_positions_ended(command):
+    #     self.video_metadata['scenes'] = command
 
-    self.thread_extract_scene_time_positions = ThreadExtractSceneTimePositions(self)
-    self.thread_extract_scene_time_positions.command.connect(thread_extract_scene_time_positions_ended)
+    # self.thread_extract_scene_time_positions = ThreadExtractSceneTimePositions(self)
+    # self.thread_extract_scene_time_positions.command.connect(thread_extract_scene_time_positions_ended)
 
     def thread_generate_hash_of_video(response):
         if self.video_metadata.get('filepath', '') == response[0] and 'hash' not in self.video_metadata:
