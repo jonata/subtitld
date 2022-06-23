@@ -49,6 +49,8 @@ apps:
 parts:
   prepare:
       plugin: nil
+      build-environment:
+        - LTS: jammy
       build-packages:
           - software-properties-common
       prime: [-*]
