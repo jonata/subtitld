@@ -132,7 +132,7 @@ install_requires = [
     'cffi',
     'requests',
     'pycaption',
-    'captionstransformer @ git+ssh://git@github.com/toutpt/captionstransformer',
+    # 'captionstransformer @ git+ssh://git@github.com/toutpt/captionstransformer',
     'pysubs2',
     'lxml',
     'clean-text[gpl]',
