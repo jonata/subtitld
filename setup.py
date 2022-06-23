@@ -126,7 +126,7 @@ setup_requires = ['setuptools']
 install_requires = [
     'PySide6==6.2.4',
     'pyopengl',
-    'ffms2==0.4.3',
+    'ffms2==0.4',
     'python-mpv',
     'numpy',
     'cffi',
