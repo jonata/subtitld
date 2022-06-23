@@ -48,7 +48,7 @@ appimage:amd64:
     - python3 -m pip install pyinstaller appimage-builder
     - mkdir AppDir
     - mkdir -p AppDir/usr/local/share/icons
-    - cp subtitld/graphics/subtitld.png AppDir/usr/local/share/icons.
+    - cp subtitld/graphics/subtitld.png AppDir/usr/local/share/icons/.
   script:
     - pyinstaller subtitld_linux.spec
     - mv dist/subtitld AppDir/subtitld
