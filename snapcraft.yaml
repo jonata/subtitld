@@ -74,7 +74,7 @@ parts:
         - qt5-style-plugins
         - libmpv1
         - ffmpeg
-        - libffms2-5
+        - libffms2-4
 
   subtitld:
     plugin: python
