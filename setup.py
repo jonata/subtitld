@@ -127,7 +127,7 @@ install_requires = [
     'PySide6==6.2.4',
     'pyopengl',
     'ffms2',
-    'python-mpv',
+    'python-mpv==0.5.2',
     'numpy',
     'cffi',
     'requests',
