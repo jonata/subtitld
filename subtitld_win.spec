@@ -17,7 +17,9 @@ a = Analysis(['subtitld/__main__.py'],
         ( 'subtitld/ftfy/char_classes.dat', 'ftfy' ),
         ( 'c:/python37/lib/site-packages/glfw/glfw3.dll', '.'),
     ],
-    hiddenimports=[],
+    hiddenimports=[
+        'ffms2'
+    ],
     hookspath=[],
     runtime_hooks=[] )
 
