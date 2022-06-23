@@ -26,7 +26,7 @@ AppDir:
   app_info:
     id: org.jonata.Subtitld
     name: Subtitld
-    # icon: subtitld
+    icon: subtitld.png
     version: 0.1.0
     # Set the python executable as entry point
     exec: usr/bin/python3
