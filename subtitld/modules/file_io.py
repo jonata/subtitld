@@ -17,8 +17,7 @@ from pycaption.exceptions import CaptionReadSyntaxError, CaptionReadNoCaptions
 import chardet
 import pysubs2
 # from cleantext import clean
-import captionstransformer
-from subtitld import timecode
+from subtitld import timecode, captionstransformer
 
 from subtitld.modules import waveform
 from subtitld.modules import usf
