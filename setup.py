@@ -123,8 +123,7 @@ def pip_notes():
 # --------------------------------------------------------------------------- #
 
 setup_requires = [
-    'setuptools',
-    'py2app'
+    'setuptools'
 ]
 
 install_requires = [
