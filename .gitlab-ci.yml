@@ -32,7 +32,7 @@ snap-edge:amd64:
   only:
   - master
 
-appimage-amd64:
+appimage:amd64:
   image:
     name: ubuntu:focal
   stage: deploy
@@ -47,8 +47,8 @@ appimage-amd64:
     - python3 -m pip install -r requirements.txt
     - python3 -m pip install pyinstaller appimage-builder
     - mkdir AppDir
-    - mkdir -p /usr/share/icons/hicolor/512x512/
-    - cp subtitld/graphics/subtitld.png /usr/share/icons/hicolor/512x512/.
+    - mkdir -p AppDir/usr/local/share/icons
+    - cp subtitld/graphics/subtitld.png AppDir/usr/local/share/icons.
   script:
     - pyinstaller subtitld_linux.spec
     - mv dist/subtitld AppDir/subtitld
@@ -70,6 +70,7 @@ windows-nsis:
   - apt-get install -y nsis openssh-client sshpass unzip
   - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
   - unzip ffmpeg-release-essentials.zip
+  - wine pip3 install -U pip
   - wine pip3 install -r requirements.txt
   - wine pip3 install https://github.com/pyinstaller/pyinstaller/tarball/develop
   - wine pip3 install glfw
