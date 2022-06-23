@@ -45,7 +45,7 @@ elif sys.platform == 'win32' or os.name == 'nt':
     STARTUPINFO.wShowWindow = subprocess.SW_HIDE
 else:
     if 'APPIMAGE' in os.environ or 'SNAP' in os.environ:
-        PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
+        # PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
         FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg')
         FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe')
 
