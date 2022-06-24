@@ -59,7 +59,7 @@ appimage:amd64:
 
 windows-nsis:
   # image: schnouki/pyinstaller-windows-ci:python3
-  image: jeromemartin/pyinstaller-windows:latest
+  image: cheaterman/pyinstaller-windows:latest
   stage: deploy
   script:
   - apt-get update -qy
