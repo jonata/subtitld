@@ -61,6 +61,7 @@ snap-edge:amd64:
 
 appimage-amd64:
   image: appimagecrafters/appimage-builder
+  stage: deploy
   before_script:
     # update appimage-builder (optional)
     - apt-get update
