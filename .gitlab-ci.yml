@@ -80,8 +80,8 @@ appimage-amd64:
     - mkdir AppDir
     - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
     - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
-    - python3 setup.py clean --all install --prefix=/usr --root=AppDir
-    - appimage-builder --skip-test
+    # - python3 setup.py clean --all install --prefix=/usr --root=AppDir
+    - appimage-builder --skip-test --recipe AppImageBuilder.yml
   artifacts:
     paths:
       - '*.AppImage*'
