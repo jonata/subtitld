@@ -60,7 +60,8 @@ snap-edge:amd64:
 #   - master
 
 appimage-amd64:
-  image: appimagecrafters/appimage-builder
+  # image: appimagecrafters/appimage-builder
+  image: ubuntudesktop/gnome-3-38-2004:latest
   stage: deploy
   before_script:
     # update appimage-builder (optional)
