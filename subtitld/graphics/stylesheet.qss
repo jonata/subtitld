@@ -1343,9 +1343,7 @@ QLabel[class=qlabel_for_buttons] {
 #playercontrols_timecode_label {
     font-size: 14px;
     color: rgba(106, 116, 131,100);
-    qproperty-alignment: "AlignCenter";
     font-family:"Ubuntu Mono";
-    /* margin-bottom: 2px; */
 }
 
 #playercontrols_playpause_button {

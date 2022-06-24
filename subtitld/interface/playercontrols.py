@@ -728,6 +728,7 @@ def load(self):
     self.playercontrols_timecode_label = QLabel()
     self.playercontrols_timecode_label.setObjectName('playercontrols_timecode_label')
     self.playercontrols_timecode_label.setFixedWidth(100)
+    self.playercontrols_timecode_label.setAlignment(Qt.AlignCenter)
     # self.playercontrols_timecode_label.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum))
     self.playercontrols_widget_frame_bottom_middle.layout().addWidget(self.playercontrols_timecode_label)
 
