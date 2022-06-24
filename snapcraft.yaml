@@ -62,7 +62,7 @@ parts:
         - build-essential
         - qtbase5-dev
         - dpkg-dev
-      build-environment:
+      stage-environment:
         - LTS: jammy
       stage-packages:
         - libopengl0
