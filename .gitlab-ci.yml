@@ -41,6 +41,7 @@ appimage:amd64:
     - apt-get update
     - apt-get install -y git wget
     - pip3 install appimage-builder
+    - pwd
     - mkdir -p AppDir/usr/share/icons/
     - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/.
   script:
