@@ -2,7 +2,7 @@ version: 1
 script:
   # - mkdir -p usr/share/icons
   # - cp subtitld/graphics/subtitld.png ./usr/share/icons/
-  - mkdir AppDir
+  # - mkdir AppDir
   - python3 setup.py install --prefix=/usr --root=AppDir
   # - ln -s /usr/local/bin/PythonTurtle ./usr/bin/
   # - cp ../../pythonturtle/resources/turtle.png ./pythonturtle.png
