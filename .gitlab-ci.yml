@@ -44,10 +44,12 @@ appimage:amd64:
     - apt-get update
     - apt-get install -y git wget
     - pip3 install appimage-builder
-    - pwd
-    - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
-    - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
-    - ls /builds/jonata/subtitld/AppDir/usr/share/icons/hicolor/512x512/apps
+    # - pwd
+    - mkdir AppDir
+    - python3 setup.py install --prefix=/usr --root=AppDir
+    # - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
+    # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
+    # - ls /builds/jonata/subtitld/AppDir/usr/share/icons/hicolor/512x512/apps
   script:
     - appimage-builder --skip-test --recipe AppImageBuilder.yml
   artifacts:
