@@ -17,7 +17,7 @@ from pycaption.exceptions import CaptionReadSyntaxError, CaptionReadNoCaptions
 import chardet
 import pysubs2
 # from cleantext import clean
-from subtitld import timecode, captionstransformer
+from subtitld import timecode  # , captionstransformer
 
 from subtitld.modules import waveform
 from subtitld.modules import usf
@@ -257,25 +257,25 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                     # error_message.setWindowTitle(self.tr('There is a problem with this file and can not be opened.'))
 
         elif subtitle_file.lower().endswith(('.ttml', '.dfxp', '.xml', '.itt')):
-            if subtitle_file.lower().endswith(('.xml')) and '<transcript>' in open(subtitle_file).read():
-                subtitle_format = 'XML'
-                with open(subtitle_file, encoding='utf-8') as xml_file:
-                    captions = captionstransformer.transcript.Reader(xml_file).read()
-                    for caption in captions:
-                        final_subtitles.append([(caption.start - datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
+            # if subtitle_file.lower().endswith(('.xml')) and '<transcript>' in open(subtitle_file).read():
+            #     subtitle_format = 'XML'
+            #     with open(subtitle_file, encoding='utf-8') as xml_file:
+            #         captions = captionstransformer.transcript.Reader(xml_file).read()
+            #         for caption in captions:
+            #             final_subtitles.append([(caption.start - datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), html.unescape(caption.text)])
+            # else:
+            if '<tt ' in open(subtitle_file).read():
+                subtitle_format = 'TTML'
             else:
-                if '<tt ' in open(subtitle_file).read():
-                    subtitle_format = 'TTML'
-                else:
-                    subtitle_format = 'DFXP'
+                subtitle_format = 'DFXP'
 
-                with open(subtitle_file, encoding='utf-8') as dfxp_file:
-                    dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
-                    languages = dfxp_reader.get_languages()
-                    language = languages[0]
-                    captions = dfxp_reader.get_captions(language)
-                    for caption in captions:
-                        final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
+            with open(subtitle_file, encoding='utf-8') as dfxp_file:
+                dfxp_reader = pycaption.DFXPReader().read(dfxp_file.read())
+                languages = dfxp_reader.get_languages()
+                language = languages[0]
+                captions = dfxp_reader.get_captions(language)
+                for caption in captions:
+                    final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
 
         elif subtitle_file.lower().endswith(('.smi', '.sami')):
             subtitle_format = 'SAMI'
@@ -287,13 +287,13 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                 for caption in captions:
                     final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
 
-        elif subtitle_file.lower().endswith(('.sbv')):
-            subtitle_format = 'SBV'
-            with open(subtitle_file, encoding='utf-8') as sbv_file:
-                from captionstransformer.sbv import Reader
-                captions = Reader(sbv_file).read()
-                for caption in captions:
-                    final_subtitles.append([(caption.start - datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text.strip()])
+        # elif subtitle_file.lower().endswith(('.sbv')):
+        #     subtitle_format = 'SBV'
+        #     with open(subtitle_file, encoding='utf-8') as sbv_file:
+        #         from captionstransformer.sbv import Reader
+        #         captions = Reader(sbv_file).read()
+        #         for caption in captions:
+        #             final_subtitles.append([(caption.start - datetime.datetime(1900, 1, 1)).total_seconds(), caption.duration.total_seconds(), caption.text.strip()])
 
         elif subtitle_file.lower().endswith(('.ass', '.ssa', '.sub')):
             if subtitle_file.lower().endswith(('.ass', '.ssa')):
@@ -620,21 +620,21 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
                     assfile.save(final_file, subtitle_format='microdvd')
                 else:
                     assfile.save(final_file)
-            else:
-                if subtitle_format == 'SBV':
-                    from captionstransformer.sbv import Writer
-                elif subtitle_format == 'XML':
-                    from captionstransformer.transcript import Writer
-                writer = Writer(open(final_file, mode='w', encoding='utf-8'))
-                captions = []
-                for cap in subtitles_list:
-                    caption = captionstransformer.core.Caption()
-                    caption.start = captionstransformer.core.get_date(second=int(cap[0] // 1), millisecond=int((cap[0] % 1) * 1000))
-                    caption.duration = captionstransformer.core.get_date(second=int(cap[1] // 1), millisecond=int((cap[1] % 1) * 1000)) - captionstransformer.core.get_date()
-                    caption.text = cap[2]
-                    captions.append(caption)
-                writer.set_captions(captions)
-                writer.write()
+            # else:
+            #     if subtitle_format == 'SBV':
+            #         from captionstransformer.sbv import Writer
+            #     elif subtitle_format == 'XML':
+            #         from captionstransformer.transcript import Writer
+            #     writer = Writer(open(final_file, mode='w', encoding='utf-8'))
+            #     captions = []
+            #     for cap in subtitles_list:
+            #         caption = captionstransformer.core.Caption()
+            #         caption.start = captionstransformer.core.get_date(second=int(cap[0] // 1), millisecond=int((cap[0] % 1) * 1000))
+            #         caption.duration = captionstransformer.core.get_date(second=int(cap[1] // 1), millisecond=int((cap[1] % 1) * 1000)) - captionstransformer.core.get_date()
+            #         caption.text = cap[2]
+            #         captions.append(caption)
+            #     writer.set_captions(captions)
+            #     writer.write()
 
         elif subtitle_format in ['USF']:
             open(final_file, mode='w', encoding='utf-8').write(usf.USFWriter().write(subtitles_list))
