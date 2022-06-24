@@ -21,19 +21,19 @@ snap-edge:amd64:
     # name: diddledan/snapcraft:core20
   stage: deploy
   script:
-  - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-  # - apt-get update
-  # - apt-get install -y libffms2-4
-  - snapcraft
-  - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
-  - snapcraft login --with snapcraft.login
-  - snapcraft upload *.snap --release edge
+    - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
+    # - apt-get update
+    # - apt-get install -y libffms2-4
+    - snapcraft
+    - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
+    - snapcraft login --with snapcraft.login
+    - snapcraft upload *.snap --release edge
   artifacts:
     paths:
-    - subtitld*.snap
+      - subtitld*.snap
     expire_in: 1 week
   only:
-  - master
+    - master
 
 # appimage:amd64:
 #   image:
@@ -65,6 +65,7 @@ appimage-amd64:
     # update appimage-builder (optional)
     - apt-get update
     - apt-get install -y git wget
+    - export GIT_SSL_NO_VERIFY=1
     - pip3 install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
 
     # app build requirements
@@ -88,22 +89,22 @@ windows-nsis:
   image: cheaterman/pyinstaller-windows:latest
   stage: deploy
   script:
-  - apt-get update -qy
-  # - apt-get upgrade -y
-  - apt-get install -y nsis openssh-client sshpass unzip
-  - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
-  - unzip ffmpeg-release-essentials.zip
-  # - wine "c:\Python37\python.exe" -m pip install -U pip
-  - wine pip3 install -r requirements.txt
-  # - wine pip3 install https://github.com/pyinstaller/pyinstaller/tarball/develop
-  - wine pip3 install -U pyinstaller glfw pywin32
-  - wine pyinstaller subtitld_win.spec
-  - makensis subtitld_win.nsi
-  - export SSHPASS=$USER_PASS
-  - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
+    - apt-get update -qy
+    # - apt-get upgrade -y
+    - apt-get install -y nsis openssh-client sshpass unzip
+    - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
+    - unzip ffmpeg-release-essentials.zip
+    # - wine "c:\Python37\python.exe" -m pip install -U pip
+    - wine pip3 install -r requirements.txt
+    # - wine pip3 install https://github.com/pyinstaller/pyinstaller/tarball/develop
+    - wine pip3 install -U pyinstaller glfw pywin32
+    - wine pyinstaller subtitld_win.spec
+    - makensis subtitld_win.nsi
+    - export SSHPASS=$USER_PASS
+    - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/subtitld.jonata.org/packages/
   artifacts:
     paths:
-    - Subtitld*Installer.exe
+      - Subtitld*Installer.exe
     expire_in: 1 week
   only:
-  - master
+    - master
