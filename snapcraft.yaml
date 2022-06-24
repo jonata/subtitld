@@ -74,7 +74,7 @@ parts:
         - qt5-style-plugins
         - libmpv1
         - ffmpeg
-        - libffms2-4
+        # - libffms2-4
 
   subtitld:
     plugin: python
@@ -83,7 +83,7 @@ parts:
     build-packages:
       - python3-dev
       - python3-setuptools
-      - python3-venv
+      # - python3-venv
     build-environment:
       - LTS: jammy
     override-pull: |
