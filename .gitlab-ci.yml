@@ -57,11 +57,12 @@ appimage:amd64:
   - master
 
 windows-nsis:
-  image: schnouki/pyinstaller-windows-ci:python3
+  # image: schnouki/pyinstaller-windows-ci:python3
+  image: batonogov/pyinstaller-windows:latest
   stage: deploy
   script:
   - apt-get update -qy
-  - apt-get upgrade -y
+  # - apt-get upgrade -y
   - apt-get install -y nsis openssh-client sshpass unzip
   - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
   - unzip ffmpeg-release-essentials.zip
