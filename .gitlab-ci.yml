@@ -59,8 +59,7 @@ windows-nsis:
   stage: deploy
   script:
   - apt-get update -qy
-  # - apt-get remove -y winbind
-  - apt-get install -y nsis openssh-client sshpass unzip winbind
+  - apt-get install -y nsis openssh-client sshpass unzip
   - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
   - unzip ffmpeg-release-essentials.zip
   - wine "c:\Python37\python.exe" -m pip install -U pip
