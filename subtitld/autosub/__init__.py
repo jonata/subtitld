@@ -241,9 +241,6 @@ def generate_subtitles(
         api_key=None,
         ffmpeg_executable='ffmpeg'
     ):
-    """
-    Given an input audio/video file, generate subtitles in the specified language and format.
-    """
     audio_filename, audio_rate = extract_audio(source_path, ffmpeg_executable=ffmpeg_executable)
 
     regions = find_speech_regions(audio_filename)
@@ -255,52 +252,29 @@ def generate_subtitles(
 
     transcripts = []
     if regions:
-        try:
-            widgets = ["Converting speech regions to FLAC files: ", Percentage(), ' ', Bar(), ' ',
-                       ETA()]
-            pbar = ProgressBar(widgets=widgets, maxval=len(regions)).start()
-            extracted_regions = []
-            for i, extracted_region in enumerate(pool.imap(converter, regions)):
-                extracted_regions.append(extracted_region)
-                pbar.update(i)
-            pbar.finish()
+        extracted_regions = []
+        for i, extracted_region in enumerate(pool.imap(converter, regions)):
+            extracted_regions.append(extracted_region)
 
-            widgets = ["Performing speech recognition: ", Percentage(), ' ', Bar(), ' ', ETA()]
-            pbar = ProgressBar(widgets=widgets, maxval=len(regions)).start()
+        for i, transcript in enumerate(pool.imap(recognizer, extracted_regions)):
+            transcripts.append(transcript)
 
-            for i, transcript in enumerate(pool.imap(recognizer, extracted_regions)):
-                transcripts.append(transcript)
-                pbar.update(i)
-            pbar.finish()
-
-            if src_language.split("-")[0] != dst_language.split("-")[0]:
-                if api_key:
-                    google_translate_api_key = api_key
-                    translator = Translator(dst_language, google_translate_api_key,
-                                            dst=dst_language,
-                                            src=src_language)
-                    prompt = "Translating from {0} to {1}: ".format(src_language, dst_language)
-                    widgets = [prompt, Percentage(), ' ', Bar(), ' ', ETA()]
-                    pbar = ProgressBar(widgets=widgets, maxval=len(regions)).start()
-                    translated_transcripts = []
-                    for i, transcript in enumerate(pool.imap(translator, transcripts)):
-                        translated_transcripts.append(transcript)
-                        pbar.update(i)
-                    pbar.finish()
-                    transcripts = translated_transcripts
-                else:
-                    print(
-                        "Error: Subtitle translation requires specified Google Translate API key. "
-                        "See --help for further information."
-                    )
-                    return 1
-
-        except KeyboardInterrupt:
-            pbar.finish()
-            pool.terminate()
-            pool.join()
-            print("Cancelling transcription")
-            raise
+        if src_language.split("-")[0] != dst_language.split("-")[0]:
+            if api_key:
+                google_translate_api_key = api_key
+                translator = Translator(dst_language, google_translate_api_key,
+                                        dst=dst_language,
+                                        src=src_language)
+                translated_transcripts = []
+                for i, transcript in enumerate(pool.imap(translator, transcripts)):
+                    translated_transcripts.append(transcript)
+                transcripts = translated_transcripts
+            else:
+                print(
+                    "Error: Subtitle translation requires specified Google Translate API key. "
+                    "See --help for further information."
+                )
+                return 1
 
     timed_subtitles = [(r, t) for r, t in zip(regions, transcripts) if t]
     formatter = FORMATTERS.get(subtitle_file_format)

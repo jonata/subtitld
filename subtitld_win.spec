@@ -18,6 +18,7 @@ a = Analysis(['subtitld/__main__.py'],
         ( 'c:/python39/Scripts/ffms2.dll', '.'),
         ( 'c:/python39/Scripts/ffms2.lib', '.'),
         ( 'c:/python39/lib/site-packages/glfw/glfw3.dll', '.'),
+        ( 'c:/python39/lib/site-packages/glfw/msvcr110.dll', '.'),
     ],
     hiddenimports=[
         'ffms2',
