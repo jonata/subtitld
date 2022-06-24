@@ -44,7 +44,7 @@ appimage:amd64:
     - pip3 install appimage-builder
     - pwd
     - mkdir -p AppDir/usr/share/icons/
-    - cp subtitld/graphics/subtitld_256.png AppDir/usr/share/icons/subtitld.png
+    - cp subtitld/graphics/subtitld.png AppDir/usr/share/pixmaps/subtitld.png
     - ls /builds/jonata/subtitld/AppDir/usr/share/icons
   script:
     - appimage-builder --skip-test --recipe AppImageBuilder.yml
