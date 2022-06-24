@@ -182,6 +182,7 @@ def global_subtitlesvideo_autosub_button_clicked(self):
         # audio_out.wait()
 
         # autosub.generate_subtitles(os.path.join(path_tmp, 'subtitle.opus'), output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
+
         autosub.generate_subtitles(self.video_metadata['filepath'], output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
 
         if os.path.isfile(os.path.join(path_tmp, 'subtitle.json')):
