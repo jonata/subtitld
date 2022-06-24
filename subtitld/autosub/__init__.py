@@ -24,10 +24,10 @@ except ImportError:
 
 from googleapiclient.discovery import build
 
-from autosub.constants import (
+from subtitld.autosub.constants import (
     LANGUAGE_CODES, GOOGLE_SPEECH_API_KEY, GOOGLE_SPEECH_API_URL,
 )
-from autosub.formatters import FORMATTERS
+from subtitld.autosub.formatters import FORMATTERS
 
 DEFAULT_SUBTITLE_FORMAT = 'srt'
 DEFAULT_CONCURRENCY = 10
