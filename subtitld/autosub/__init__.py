@@ -23,7 +23,6 @@ except ImportError:
     JSONDecodeError = ValueError
 
 from googleapiclient.discovery import build
-from progressbar import ProgressBar, Percentage, Bar, ETA
 
 from autosub.constants import (
     LANGUAGE_CODES, GOOGLE_SPEECH_API_KEY, GOOGLE_SPEECH_API_URL,

@@ -145,7 +145,8 @@ install_requires = [
     'beautifulsoup4<4.10,>=4.8.1',
     'python-docx',
     'chardet',
-    'googleapiclient'
+    'google-api-python-client',
+    'pysrt'
 ]
 
 # --------------------------------------------------------------------------- #
