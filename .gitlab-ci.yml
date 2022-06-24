@@ -66,7 +66,7 @@ appimage-amd64:
   before_script:
     # update appimage-builder (optional)
     - apt-get update
-    - apt-get install -y git wget python3-pip
+    - apt-get install -y git wget python3-pip libglib2.0-dev
     - export GIT_SSL_NO_VERIFY=1
     - pip3 install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
 
