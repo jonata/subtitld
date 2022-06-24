@@ -78,6 +78,8 @@ appimage-amd64:
     # - cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
     # - make install DESTDIR=AppDir
     - mkdir AppDir
+    - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
+    - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
     - python3 setup.py install --root=AppDir
     - appimage-builder --skip-test
   artifacts:
