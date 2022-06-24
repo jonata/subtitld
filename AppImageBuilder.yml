@@ -3,7 +3,7 @@ script:
   # - mkdir -p usr/share/icons
   # - cp subtitld/graphics/subtitld.png ./usr/share/icons/
   # - mkdir AppDir
-  - python3 setup.py install --prefix=/usr --root=AppDir
+  - python3 setup.py install --prefix=AppDir/usr --root=AppDir
   # - ln -s /usr/local/bin/PythonTurtle ./usr/bin/
   # - cp ../../pythonturtle/resources/turtle.png ./pythonturtle.png
   # - cat > pythonturtle.desktop <<EOF
