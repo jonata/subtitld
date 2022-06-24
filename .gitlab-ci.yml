@@ -35,29 +35,53 @@ snap-edge:amd64:
   only:
   - master
 
-appimage:amd64:
-  image:
-    name: appimagecrafters/appimage-builder
-  stage: deploy
+# appimage:amd64:
+#   image:
+#     name: appimagecrafters/appimage-builder
+#   stage: deploy
+#   before_script:
+#     # update appimage-builder (optional)
+#     - apt-get update
+#     - apt-get install -y git wget
+#     - pip3 install appimage-builder
+#     # - pwd
+#     - mkdir AppDir
+#     - python3 setup.py install --prefix=/usr --root=AppDir
+#     # - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
+#     # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
+#     # - ls /builds/jonata/subtitld/AppDir/usr/share/icons/hicolor/512x512/apps
+#   script:
+#     - appimage-builder --skip-test --recipe AppImageBuilder.yml
+#   artifacts:
+#     paths:
+#       - '*.AppImage'
+#     expire_in: 1 week
+#   only:
+#   - master
+
+appimage-amd64:
+  image: appimagecrafters/appimage-builder
   before_script:
     # update appimage-builder (optional)
     - apt-get update
     - apt-get install -y git wget
-    - pip3 install appimage-builder
-    # - pwd
-    - mkdir AppDir
-    - python3 setup.py install --prefix=/usr --root=AppDir
-    # - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
-    # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
-    # - ls /builds/jonata/subtitld/AppDir/usr/share/icons/hicolor/512x512/apps
+    - pip3 install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
+
+    # app build requirements
+    # - echo 'deb http://archive.neon.kde.org/user/ bionic main' > /etc/apt/sources.list.d/neon.list
+    # - wget -qO - https://archive.neon.kde.org/public.key | apt-key add -
+    # - apt-get update
+    # - apt-get install -y qt5-default qtdeclarative5-dev cmake
   script:
-    - appimage-builder --skip-test --recipe AppImageBuilder.yml
+    # - cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+    # - make install DESTDIR=AppDir
+    - mkdir AppDir
+    - python3 setup.py install --root=AppDir
+    - appimage-builder --skip-test
   artifacts:
     paths:
-      - '*.AppImage'
+      - '*.AppImage*'
     expire_in: 1 week
-  only:
-  - master
 
 windows-nsis:
   # image: schnouki/pyinstaller-windows-ci:python3
