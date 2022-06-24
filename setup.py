@@ -144,7 +144,8 @@ install_requires = [
     'SpeechRecognition',
     'beautifulsoup4<4.10,>=4.8.1',
     'python-docx',
-    'chardet'
+    'chardet',
+    'googleapiclient'
 ]
 
 # --------------------------------------------------------------------------- #
