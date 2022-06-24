@@ -139,7 +139,7 @@ install_requires = [
     'html5lib==1.0b8',
     # 'scenedetect',
     # 'opencv-python',
-    'autosub3',
+    # 'autosub3',
     'google-trans-new',
     'SpeechRecognition',
     'beautifulsoup4<4.10,>=4.8.1',

@@ -5,7 +5,6 @@
 import os
 import subprocess
 import json
-import autosub
 
 import speech_recognition as sr
 
@@ -13,9 +12,10 @@ from PySide6.QtWidgets import QComboBox, QPushButton, QWidget, QMessageBox, QGri
 from PySide6.QtCore import QThread, Signal, Qt
 from subtitld.interface import global_panel
 
-from subtitld.modules.paths import LANGUAGE_DICT_LIST, STARTUPINFO, path_tmp
+from subtitld.modules.paths import LANGUAGE_DICT_LIST, STARTUPINFO, path_tmp, FFMPEG_EXECUTABLE
 from subtitld.modules import file_io
 from subtitld.modules import utils
+from subtitld import autosub
 
 LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
 
@@ -183,7 +183,14 @@ def global_subtitlesvideo_autosub_button_clicked(self):
 
         # autosub.generate_subtitles(os.path.join(path_tmp, 'subtitle.opus'), output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
 
-        autosub.generate_subtitles(self.video_metadata['filepath'], output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
+        autosub.generate_subtitles(
+            self.video_metadata['filepath'],
+            output=os.path.join(path_tmp, 'subtitle.json'),
+            src_language=language,
+            dst_language=language,
+            subtitle_file_format='json',
+            ffmpeg_executable=FFMPEG_EXECUTABLE
+        )
 
         if os.path.isfile(os.path.join(path_tmp, 'subtitle.json')):
             final_subtitles = read_json_subtitles(filename=os.path.join(path_tmp, 'subtitle.json'), transcribed=True)
