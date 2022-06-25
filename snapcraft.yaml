@@ -25,7 +25,7 @@ plugs:
 
 apps:
   subtitld:
-    command: bin/desktop-launch $SNAP/bin/subtitld
+    command: env $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET && bin/desktop-launch $SNAP/bin/subtitld
     environment:
       LC_ALL: C.UTF-8
       PYTHONPATH: $SNAP/lib/python3.8/site-packages:$PYTHONPATH
