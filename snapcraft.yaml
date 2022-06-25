@@ -86,5 +86,6 @@ parts:
       - python3-setuptools
     override-pull: |
       snapcraftctl pull
+      ln -sf libffms2.so.4.0.0 $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libffms2.so.4.0.0
       snapcraftctl set-version "$VERSION_NUMBER"
       snapcraftctl set-grade "stable"
