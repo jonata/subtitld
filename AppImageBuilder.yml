@@ -3,8 +3,8 @@ script:
   # - mkdir -p usr/share/icons
   # - cp subtitld/graphics/subtitld.png ./usr/share/icons/
   # - mkdir AppDir
-  - pip3 install --prefix=/usr --root=AppDir --upgrade --force-reinstall -r requirements.txt
-  - python3 setup.py clean --all install --prefix=/usr --root=AppDir
+  - pip3.8 install --prefix=/usr --root=AppDir --upgrade --force-reinstall -r requirements.txt
+  - python3.8 setup.py clean --all install --prefix=/usr --root=AppDir
   # - ln -s /usr/local/bin/PythonTurtle ./usr/bin/
   # - cp ../../pythonturtle/resources/turtle.png ./pythonturtle.png
   # - cat > pythonturtle.desktop <<EOF
