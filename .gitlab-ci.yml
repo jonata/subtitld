@@ -22,8 +22,8 @@ snap-edge:amd64:
   stage: deploy
   script:
     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-    # - apt-get update
-    # - apt-get install -y libffms2-4
+    - apt-get update
+    - apt-get install -y python3-dev
     - snapcraft
     - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
     - snapcraft login --with snapcraft.login
