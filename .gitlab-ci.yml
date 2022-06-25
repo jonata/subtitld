@@ -66,10 +66,14 @@ appimage-amd64:
   before_script:
     # update appimage-builder (optional)
     - apt-get update
-    - apt-get install -y git wget  python3.8 python3-pip  # libglib2.0-dev gtk-update-icon-cache
-    - export GIT_SSL_NO_VERIFY=1
+    - apt-get install -y python3.8 python3-pip  # libglib2.0-dev gtk-update-icon-cache
+    # - export GIT_SSL_NO_VERIFY=1
     # - python3 --version
-    - python3.8 -m pip install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
+    - python3.8 -m pip install PyInstaller
+    - python3.8 -m PyInstaller subtitld_linux.spec
+    - mkdir AppDir
+    - mv dist/subtitld AppDir/subtitld
+    # - python3.8 -m pip install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
     # app build requirements
     # - echo 'deb http://archive.neon.kde.org/user/ bionic main' > /etc/apt/sources.list.d/neon.list
     # - wget -qO - https://archive.neon.kde.org/public.key | apt-key add -
@@ -79,10 +83,10 @@ appimage-amd64:
     # - cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
     # - make install DESTDIR=AppDir
     # - mkdir AppDir
-    # - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
-    # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
+    - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
+    - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
     # - python3 setup.py clean --all install --prefix=/usr --root=AppDir
-    - python3.8 appimage-builder --skip-test --recipe AppImageBuilder.yml
+    - appimage-builder --skip-test --recipe AppImageBuilder.yml
   artifacts:
     paths:
       - '*.AppImage*'
