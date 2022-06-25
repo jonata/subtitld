@@ -52,6 +52,7 @@ parts:
       plugin: nil
       build-packages:
         - software-properties-common
+        - python3.8-venv
       prime: [-*]
   desktop-qt6:
       source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
