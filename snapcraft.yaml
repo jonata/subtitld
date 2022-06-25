@@ -5,7 +5,7 @@ description: |
 icon: subtitld/graphics/subtitld.png
 confinement: strict
 adopt-info: subtitld
-base: core20
+base: core22
 
 plugs:
   gtk-3-themes:
@@ -25,7 +25,7 @@ plugs:
 
 apps:
   subtitld:
-    command: env LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET bin/desktop-launch $SNAP/bin/subtitld
+    command: bin/desktop-launch $SNAP/bin/subtitld
     environment:
       LC_ALL: C.UTF-8
       PYTHONPATH: $SNAP/lib/python3.8/site-packages:$PYTHONPATH
