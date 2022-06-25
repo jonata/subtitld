@@ -3,7 +3,7 @@ script:
   - rm -rf AppDir | true
   - mkdir -p AppDir/usr
   - apt update
-  - apt install -y python3.8 python3-dev
+  - apt install -y python3.8 python3.8-dev
   # - python3.8 -m pip install scikit-build --ignore-installed --prefix=/usr --root=AppDir
   # - python3.8 -m pip install cmake --ignore-installed --prefix=/usr --root=AppDir
   # - python3.8 -m pip install PyQt5 numpy opencv-python qimage2ndarray python-i18n rpyc --ignore-installed --prefix=/usr --root=AppDir
