@@ -69,7 +69,7 @@ appimage-amd64:
     - apt-get install -y git wget  # python3.8 # python3-pip libglib2.0-dev gtk-update-icon-cache
     - export GIT_SSL_NO_VERIFY=1
     # - python3 --version
-    - python3.8 -m pip install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
+    - python3 -m pip install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
     # app build requirements
     # - echo 'deb http://archive.neon.kde.org/user/ bionic main' > /etc/apt/sources.list.d/neon.list
     # - wget -qO - https://archive.neon.kde.org/public.key | apt-key add -
