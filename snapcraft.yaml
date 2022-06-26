@@ -5,13 +5,15 @@ description: |
 icon: subtitld/graphics/subtitld.png
 confinement: strict
 adopt-info: subtitld
-base: core18
+base: core20
 
 compression: lzo
 
 layout:
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET:
-    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+  /etc/ld.so.cache:
+    bind-file: $SNAP_DATA/etc/ld.so.cache
+  # /usr/lib/$SNAPCRAFT_ARCH_TRIPLET:
+  #   bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
 
 plugs:
   gtk-3-themes:
