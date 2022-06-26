@@ -10,10 +10,10 @@ base: core20
 compression: lzo
 
 layout:
-  /etc/ld.so.cache:
-    bind-file: $SNAP_DATA/etc/ld.so.cache
-  # /usr/lib/$SNAPCRAFT_ARCH_TRIPLET:
-  #   bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+  # /etc/ld.so.cache:
+  #   bind-file: $SNAP_DATA/etc/ld.so.cache
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libffms2.so.4.0.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libffms2.so.4.0.0
 
 plugs:
   gtk-3-themes:
