@@ -66,7 +66,7 @@ appimage-amd64:
   before_script:
     # update appimage-builder (optional)
     - apt-get update
-    - apt-get install -y python3.8 python3-pip  # libglib2.0-dev gtk-update-icon-cache
+    - apt-get install -y python3.8 python3-pip python3-dev # libglib2.0-dev gtk-update-icon-cache
     # - export GIT_SSL_NO_VERIFY=1
     # - python3 --version
     - python3.8 -m pip install PyInstaller
