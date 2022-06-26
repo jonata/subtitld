@@ -9,11 +9,11 @@ base: core20
 
 compression: lzo
 
-layout:
-  # /etc/ld.so.cache:
-  #   bind-file: $SNAP_DATA/etc/ld.so.cache
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libffms2.so.4.0.0:
-    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libffms2.so.4.0.0
+# layout:
+#   # /etc/ld.so.cache:
+#   #   bind-file: $SNAP_DATA/etc/ld.so.cache
+#   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET:
+#     bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
 
 plugs:
   gtk-3-themes:
@@ -94,5 +94,6 @@ parts:
       - python3-setuptools
     override-pull: |
       snapcraftctl pull
+      ln -s $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libffms2.so.4.0.0 $SNAP/lib/python3.8/site-packages/subtitld/libffms2.so.4.0.0
       snapcraftctl set-version "$VERSION_NUMBER"
       snapcraftctl set-grade "stable"
