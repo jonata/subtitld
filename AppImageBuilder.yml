@@ -39,8 +39,7 @@ AppDir:
       - qt515base
       - libfreetype6
       - libfontconfig1
-      - libxcb-xinerama0
-      - libxkbcommon-x11-0
+      - qt6-wayland
     exclude: []
 
   runtime:
