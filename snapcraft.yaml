@@ -48,6 +48,7 @@ apps:
       - desktop
       - removable-media
       - mount-observe
+      - audio-playback
 
 parts:
   prepare:
