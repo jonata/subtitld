@@ -40,6 +40,7 @@ AppDir:
       - libfreetype6
       - libfontconfig1
       - libxcb-xinerama0
+      - libxkbcommon-x11-0
     exclude: []
 
   runtime:
