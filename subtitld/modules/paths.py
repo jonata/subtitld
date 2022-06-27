@@ -46,10 +46,10 @@ elif sys.platform == 'win32' or os.name == 'nt':
     import multiprocessing
     multiprocessing.freeze_support()
 else:
-    if 'APPIMAGE' in os.environ or 'SNAP' in os.environ:
-        # PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
-        FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg')
-        FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe')
+    # if 'APPIMAGE' in os.environ or 'SNAP' in os.environ:
+    # PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
+    # FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg')
+    # FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe')
 
     if 'SNAP_REAL_HOME' in os.environ:
         REAL_PATH_HOME = os.environ['SNAP_REAL_HOME']

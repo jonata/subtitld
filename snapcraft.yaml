@@ -93,5 +93,3 @@ parts:
     override-build: |
       snapcraftctl build
       sed -i 's/find_library(name)/"libffms2.so.4.0.0"/g' $SNAPCRAFT_PART_INSTALL/lib/python3.8/site-packages/ffms2/get_library.py
-      ln -s $SNAPCRAFT_PART_INSTALL/bin/ffprobe $SNAPCRAFT_PART_INSTALL/usr/bin/ffprobe
-      ln -s $SNAPCRAFT_PART_INSTALL/bin/ffmpeg $SNAPCRAFT_PART_INSTALL/usr/bin/ffmpeg
