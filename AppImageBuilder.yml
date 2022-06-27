@@ -39,6 +39,7 @@ AppDir:
       - qt515base
       - libfreetype6
       - libfontconfig1
+      - libxcb-xinerama0
     exclude: []
 
   runtime:
@@ -50,6 +51,7 @@ AppDir:
       PYTHONHOME: '${APPDIR}/usr'
       PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages'
       GDK_BACKEND: x11
+      # QT_QPA_PLATFORM: wayland
 
   test:
     fedora:
