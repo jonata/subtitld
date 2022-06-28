@@ -39,7 +39,7 @@ AppDir:
       - qt515base
       - libfreetype6
       - libfontconfig1
-      - qt5-wayland
+      - qtwayland5
     exclude: []
 
   runtime:

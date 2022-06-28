@@ -494,7 +494,7 @@ def update_properties_widget(self):
             self.subtitles_panel_simplelist_properties_ending_timing_qlineedit.setText(utils.get_timeline_time_str(self.selected_subtitle[0] + self.selected_subtitle[1], ms=True))
 
         self.properties_textedit.setText(text)
-        self.properties_information.setVisible(bool(self.selected_subtitle) and self.settings['quality_check']['show_statistics'])
+        self.properties_information.setVisible(bool(self.selected_subtitle) and self.settings.get('quality_check', {}).get('show_statistics', False))
 
 
 def subtitles_panel_simplelist_properties_start_timing_qlineedit_text_edited(self):

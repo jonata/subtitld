@@ -79,6 +79,7 @@ parts:
         - libmpv1
         - ffmpeg
         - libffms2-4
+        - binutils
 
   subtitld:
     plugin: python
@@ -91,6 +92,6 @@ parts:
       snapcraftctl pull
       snapcraftctl set-version "$VERSION_NUMBER"
       snapcraftctl set-grade "stable"
-    override-build: |
-      snapcraftctl build
-      sed -i 's/find_library(name)/"libffms2.so.4.0.0"/g' $SNAPCRAFT_PART_INSTALL/lib/python3.8/site-packages/ffms2/get_library.py
+    # override-build: |
+    #   snapcraftctl build
+    #   sed -i 's/find_library(name)/"libffms2.so.4.0.0"/g' $SNAPCRAFT_PART_INSTALL/lib/python3.8/site-packages/ffms2/get_library.py
