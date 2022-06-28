@@ -79,7 +79,6 @@ parts:
         - libmpv1
         - ffmpeg
         - libffms2-4
-        # - binutils
 
   subtitld:
     plugin: python
