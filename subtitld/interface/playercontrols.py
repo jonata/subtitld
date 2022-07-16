@@ -928,7 +928,7 @@ def load(self):
 
 def resized(self):
     """Function to call when resizing widgets"""
-    if self.subtitles_list or self.video_metadata:
+    if (self.subtitles_list or self.video_metadata) and not self.subtitles_panel_toggle_button.isChecked():
         self.playercontrols_widget.setGeometry(0, self.height() - 200, self.width(), 200)
     else:
         self.playercontrols_widget.setGeometry(0, self.height(), self.width(), 200)
@@ -1003,7 +1003,7 @@ def playercontrols_playpause_button_update(self):
 
 def show(self):
     """Function that shows the entire panel"""
-    self.generate_effect(self.playercontrols_widget_animation, 'geometry', 800, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height() - 200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
+    show_playercontrols(self)
     update_snap_buttons(self)
     update_grid_buttons(self)
     update_step_buttons(self)
@@ -1013,6 +1013,14 @@ def show(self):
     self.gap_subtitle_duration.setValue(2.0)
     self.repeat_playback_duration.setValue(self.repeat_duration)
     self.repeat_playback_times.setValue(self.repeat_times)
+
+
+def show_playercontrols(self):
+    self.generate_effect(self.playercontrols_widget_animation, 'geometry', 800, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height() - 200, self.playercontrols_widget.width(), self.playercontrols_widget.height()])
+
+
+def hide_playercontrols(self):
+    self.generate_effect(self.playercontrols_widget_animation, 'geometry', 800, [self.playercontrols_widget.x(), self.playercontrols_widget.y(), self.playercontrols_widget.width(), self.playercontrols_widget.height()], [self.playercontrols_widget.x(), self.height(), self.playercontrols_widget.width(), self.playercontrols_widget.height()])
 
 
 def zoomin_button_clicked(self):

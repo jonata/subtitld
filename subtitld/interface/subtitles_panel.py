@@ -243,17 +243,17 @@ def load(self):
 
 def resized(self):
     """Function to call when resizing subtitles list"""
-    if self.subtitles_list or self.video_metadata:
-        self.subtitles_panel_widget.setGeometry(0, 0, int((self.width() * self.subtitles_panel_width_proportion) - 15), int(self.height()))
-    else:
-        self.subtitles_panel_widget.setGeometry(int(-((self.width() * self.subtitles_panel_width_proportion) - 15)), 0, int((self.width() * self.subtitles_panel_width_proportion) - 15), int(self.height()))
+    x = int(-((self.width() * self.subtitles_panel_width_proportion) - 15))
+    if (self.subtitles_list or self.video_metadata) and not self.subtitles_panel_toggle_button.isChecked():
+            x = 0
+    self.subtitles_panel_widget.setGeometry(x, 0, int((self.width() * self.subtitles_panel_width_proportion) - 15), int(self.height()))
 
-    x = self.subtitles_panel_widget.x() + self.subtitles_panel_widget.width()
-    if (self.subtitles_list or self.video_metadata) and self.subtitles_panel_toggle_button.isChecked():
-        x = self.global_panel_widget.x() + self.global_panel_widget.width()
-    x -= self.subtitles_panel_toggle_button.width()
+    # x = self.subtitles_panel_widget.x() + self.subtitles_panel_widget.width()
+    # if (self.subtitles_list or self.video_metadata) and self.subtitles_panel_toggle_button.isChecked():
+    #     x = self.global_panel_widget.x() + self.global_panel_widget.width() - self.subtitles_panel_toggle_button.width()
+    # x -= self.subtitles_panel_toggle_button.width()
 
-    self.subtitles_panel_toggle_button.move(x, self.subtitles_panel_widget.y())
+    self.subtitles_panel_toggle_button.move(self.global_panel_widget.x() + self.global_panel_widget.width() - self.subtitles_panel_toggle_button.width(), self.subtitles_panel_widget.y())
     subtitles_panel_widget_timeline.timeline_resized(self)
 
 
@@ -262,9 +262,11 @@ def subtitles_panel_toggle_button_clicked(self):
     if self.subtitles_panel_toggle_button.isChecked():
         subtitles_panel_toggle_button_to_end(self)
         self.global_panel.show_global_panel(self)
+        self.playercontrols.hide_playercontrols(self)
         hide(self)
     else:
         self.global_panel.hide_global_panel(self)
+        self.playercontrols.show_playercontrols(self)
         show(self)
 
 

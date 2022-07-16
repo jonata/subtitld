@@ -69,7 +69,7 @@ def resized(self):
             x = 0
         else:
             x = - self.width() + 20 + self.subtitles_panel_widget.width()
-    self.global_panel_widget.setGeometry(x, 0, self.width() - 20, self.height() - self.playercontrols_widget.height() + 20)
+    self.global_panel_widget.setGeometry(x, 0, self.width() - 20, self.height())
 
 
 def show_global_panel(self):
