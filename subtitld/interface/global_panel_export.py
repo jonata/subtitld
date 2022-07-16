@@ -4,7 +4,7 @@
 import os
 import subprocess
 
-from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QWidget, QTableWidgetItem
+from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QWidget, QTableWidgetItem, QVBoxLayout, QStackedWidget
 from PySide6.QtCore import QMargins, QSize, QThread, Signal, Qt
 from PySide6.QtGui import QBrush, QColor, QFont, QFontDatabase, QPainter, QPen
 from subtitld.interface import global_panel
@@ -57,79 +57,126 @@ def load_widgets(self):
     """Function to load subtitles panel widgets"""
 
     self.global_panel_export_content = QWidget()
+    self.global_panel_export_content.setLayout(QVBoxLayout())
+    self.global_panel_export_content.layout().setContentsMargins(0, 0, 0, 0)
 
-    self.global_subtitlesvideo_export_button = QPushButton(self.tr('Export').upper(), parent=self.global_panel_export_content)
+    self.global_panel_export_types_combobox = QComboBox()
+    self.global_panel_export_types_combobox.addItems(
+        [
+            'txt',
+            'mp4'
+        ]
+    )
+    self.global_panel_export_types_combobox.activated.connect(lambda: global_panel_export_types_combobox_activated(self))
+    self.global_panel_export_content.layout().addWidget(self.global_panel_export_types_combobox, 0, Qt.AlignLeft)
+
+    self.global_panel_export_content_stackedwidgets = QStackedWidget()
+
+    self.global_panel_export_content_txt_panel = QWidget()
+    self.global_panel_export_content_txt_panel.setLayout(QVBoxLayout())
+
+    self.global_panel_export_content_txt_panel_export_button = QPushButton(self.tr('Export').upper())
+    self.global_panel_export_content_txt_panel_export_button.setProperty('class', 'button')
+    self.global_panel_export_content_txt_panel_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
+    self.global_panel_export_content_txt_panel.layout().addWidget(self.global_panel_export_content_txt_panel_export_button)
+
+    self.global_panel_export_content_stackedwidgets.addWidget(self.global_panel_export_content_txt_panel)
+
+    self.global_panel_export_content_mp4_panel = QWidget()
+    self.global_panel_export_content_mp4_panel.setLayout(QVBoxLayout())
+
+    self.global_subtitlesvideo_export_button = QPushButton(self.tr('Export').upper())
     self.global_subtitlesvideo_export_button.setProperty('class', 'button')
     self.global_subtitlesvideo_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_export_button)
 
-    self.global_subtitlesvideo_video_burn_label = QLabel(self.tr('Export burned video').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_label = QLabel(self.tr('Export burned video').upper())
     self.global_subtitlesvideo_video_burn_label.setStyleSheet('QLabel { font-size:14px; font-weight:bold; }')
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_label)
 
-    self.global_subtitlesvideo_video_burn_fontname_label = QLabel(self.tr('Font name').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_fontname_label = QLabel(self.tr('Font name').upper())
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_fontname_label)
 
     fonts = QFontDatabase().families()
     self.global_subtitlesvideo_video_burn_fontname = QComboBox(parent=self.global_panel_export_content)
     self.global_subtitlesvideo_video_burn_fontname.setProperty('class', 'button')
     self.global_subtitlesvideo_video_burn_fontname.addItems(fonts)
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_fontname)
     # self.global_subtitlesvideo_video_burn_fontname.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
 
-    self.global_subtitlesvideo_video_burn_fontsize_label = QLabel(self.tr('Font size').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_fontsize_label = QLabel(self.tr('Font size').upper())
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_fontsize_label)
 
     self.global_subtitlesvideo_video_burn_fontsize = QSpinBox(parent=self.global_panel_export_content)
     self.global_subtitlesvideo_video_burn_fontsize.setMinimum(8)
     self.global_subtitlesvideo_video_burn_fontsize.setMaximum(200)
     self.global_subtitlesvideo_video_burn_fontsize.setValue(20)
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_fontsize)
 
-    self.global_subtitlesvideo_video_burn_shadowdistance_label = QLabel(self.tr('Shadow distance').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_shadowdistance_label = QLabel(self.tr('Shadow distance').upper())
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_shadowdistance_label)
 
     self.global_subtitlesvideo_video_burn_shadowdistance = QSpinBox(parent=self.global_panel_export_content)
     self.global_subtitlesvideo_video_burn_shadowdistance.setMinimum(0)
     self.global_subtitlesvideo_video_burn_shadowdistance.setMaximum(20)
     self.global_subtitlesvideo_video_burn_shadowdistance.setValue(1)
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_shadowdistance)
 
-    self.global_subtitlesvideo_video_burn_outline_label = QLabel(self.tr('Outline').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_outline_label = QLabel(self.tr('Outline').upper())
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_outline_label)
 
     self.global_subtitlesvideo_video_burn_outline = QSpinBox(parent=self.global_panel_export_content)
     self.global_subtitlesvideo_video_burn_outline.setMinimum(0)
     self.global_subtitlesvideo_video_burn_outline.setMaximum(20)
     self.global_subtitlesvideo_video_burn_outline.setValue(2)
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_outline)
 
-    self.global_subtitlesvideo_video_burn_marvinv_label = QLabel(self.tr('Margin from bottom').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_marvinv_label = QLabel(self.tr('Margin from bottom').upper())
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_marvinv_label)
 
     self.global_subtitlesvideo_video_burn_marvinv = QSpinBox(parent=self.global_panel_export_content)
     self.global_subtitlesvideo_video_burn_marvinv.setMinimum(0)
     self.global_subtitlesvideo_video_burn_marvinv.setMaximum(500)
     self.global_subtitlesvideo_video_burn_marvinv.setValue(20)
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_marvinv)
 
-    self.global_subtitlesvideo_video_burn_marvinl_label = QLabel(self.tr('Margin from left').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_marvinl_label = QLabel(self.tr('Margin from left').upper())
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_marvinl_label)
 
     self.global_subtitlesvideo_video_burn_marvinl = QSpinBox(parent=self.global_panel_export_content)
     self.global_subtitlesvideo_video_burn_marvinl.setMinimum(0)
     self.global_subtitlesvideo_video_burn_marvinl.setMaximum(500)
     self.global_subtitlesvideo_video_burn_marvinl.setValue(50)
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_marvinl)
 
-    self.global_subtitlesvideo_video_burn_marvinr_label = QLabel(self.tr('Margin from right').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_marvinr_label = QLabel(self.tr('Margin from right').upper())
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_marvinr_label)
 
     self.global_subtitlesvideo_video_burn_marvinr = QSpinBox(parent=self.global_panel_export_content)
     self.global_subtitlesvideo_video_burn_marvinr.setMinimum(0)
     self.global_subtitlesvideo_video_burn_marvinr.setMaximum(500)
     self.global_subtitlesvideo_video_burn_marvinr.setValue(50)
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_marvinr)
 
     self.global_subtitlesvideo_video_burn_pcolor_selected_color = '#ffffff'
 
-    self.global_subtitlesvideo_video_burn_pcolor_label = QLabel(self.tr('Font color').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_pcolor_label = QLabel(self.tr('Font color').upper())
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_pcolor_label)
 
     self.global_subtitlesvideo_video_burn_pcolor = QPushButton(parent=self.global_panel_export_content)
     self.global_subtitlesvideo_video_burn_pcolor.clicked.connect(lambda: global_subtitlesvideo_video_burn_pcolor_clicked(self))
     self.global_subtitlesvideo_video_burn_pcolor.setStyleSheet('background-color:' + self.global_subtitlesvideo_video_burn_pcolor_selected_color)
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_pcolor)
 
-    self.global_subtitlesvideo_video_burn_convert = QPushButton(self.tr('Generate video').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_burn_convert = QPushButton(self.tr('Generate video').upper())
     self.global_subtitlesvideo_video_burn_convert.setProperty('class', 'button_dark')
     self.global_subtitlesvideo_video_burn_convert.clicked.connect(lambda: global_subtitlesvideo_video_burn_convert_clicked(self))
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_burn_convert)
 
-    self.global_subtitlesvideo_video_generate_transparent_video_button = QPushButton(self.tr('Generate transparent video').upper(), parent=self.global_panel_export_content)
+    self.global_subtitlesvideo_video_generate_transparent_video_button = QPushButton(self.tr('Generate transparent video').upper())
     self.global_subtitlesvideo_video_generate_transparent_video_button.setProperty('class', 'button_dark')
     self.global_subtitlesvideo_video_generate_transparent_video_button.clicked.connect(lambda: global_subtitlesvideo_video_generate_transparent_video_button_clicked(self))
+    self.global_panel_export_content_mp4_panel.layout().addWidget(self.global_subtitlesvideo_video_generate_transparent_video_button)
     # self.global_subtitlesvideo_video_generate_transparent_video_button.setVisible(False)
 
     def thread_generated_burned_video_ended(response):
@@ -141,6 +188,10 @@ def load_widgets(self):
 
     self.thread_generated_burned_video = ThreadGeneratedBurnedVideo(self)
     self.thread_generated_burned_video.response.connect(thread_generated_burned_video_ended)
+
+    self.global_panel_export_content_stackedwidgets.addWidget(self.global_panel_export_content_mp4_panel)
+
+    self.global_panel_export_content.layout().addWidget(self.global_panel_export_content_stackedwidgets)
 
     self.global_panel_content_stacked_widgets.addWidget(self.global_panel_export_content)
 
@@ -315,3 +366,11 @@ def global_subtitlesvideo_export_button_clicked(self):
         format_to_export = filedialog[1].rsplit('(', 1)[-1].split(')', 1)[0]
 
         file_io.export_file(filename=filename, subtitles_list=self.subtitles_list, export_format=format_to_export)
+
+
+def global_panel_export_types_combobox_activated(self):
+    if self.global_panel_export_types_combobox.currentText() == 'txt':
+        self.global_panel_export_content_stackedwidgets.setCurrentWidget(self.global_panel_export_content_txt_panel)
+    elif self.global_panel_export_types_combobox.currentText() == 'mp4':
+        self.global_panel_export_content_stackedwidgets.setCurrentWidget(self.global_panel_export_content_mp4_panel)
+

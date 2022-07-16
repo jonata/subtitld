@@ -552,7 +552,6 @@ QFrame[class=qframe_timings] {
     background-color: rgba(255, 255, 255, 180);
 }
 
-
 QComboBox {
     min-width: 70px;
     border: 1px solid rgba(48,66,81,100);
@@ -560,18 +559,105 @@ QComboBox {
     background-color: rgba(255,255,255,200);
     border-radius: 2px;
     font-size: 10px;
-    color:rgba(48,66,81,255);
+    color:rgba(48,66,81);
     padding: 6px;
+}
+
+QComboBox::indicator{
+    background-color:transparent;
+    selection-background-color:transparent;
+    color:transparent;
+    selection-color:transparent;
 }
 
 QComboBox::drop-down {
     border: 0;
+    border-radius: 2px;
+    padding: 5px;
+    color: rgb(48,66,81);
 }
 
 QComboBox::down-arrow {
     image: url("PATH_SUBTITLD_GRAPHICS/spinbox_arrow_down.svg");
     right: 4px;
+    border-radius: 2px;
 }
+
+
+QComboBox QAbstractScrollArea {
+    background-color: white;
+    border: 0;
+    outline: 0;
+    padding: 2px;
+}
+
+QComboBox QAbstractItemView {
+    margin: 1px;
+    border-radius: 2px;
+}
+
+QComboBox QFrame {
+    background-color: transparent;
+}
+
+QComboBox::item {
+    padding: 2px;
+    margin: 0;
+    /* padding-left: 0; */
+    height: 22px;
+    background-color: white;
+    border-radius: 2px;
+    color: rgb(48, 66, 81);
+
+    padding-left: -20px;
+}
+
+QComboBox::item:selected {
+    background-color: rgba(48, 66, 81, 200);
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 QComboBox[class=combobox_playercontrols] {
     padding: 1px;

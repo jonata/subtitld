@@ -38,6 +38,8 @@ def load_widgets(self):
     self.global_subtitlesvideo_save_as_combobox = QComboBox(parent=self.global_panel_general_content)
     self.global_subtitlesvideo_save_as_combobox.setProperty('class', 'button')
     self.global_subtitlesvideo_save_as_combobox.addItems(list_of_subtitle_extensions)
+    # self.global_subtitlesvideo_save_as_combobox.view().window().setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+    # self.global_subtitlesvideo_save_as_combobox.view().window().setAttribute(Qt.WA_TranslucentBackground)
     self.global_subtitlesvideo_save_as_combobox.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
     self.global_panel_general_content_grid.addWidget(self.global_subtitlesvideo_save_as_combobox, 0, 1, Qt.AlignTop)
 
