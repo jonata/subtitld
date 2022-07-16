@@ -559,7 +559,7 @@ QComboBox {
     background-color: rgba(255,255,255,200);
     border-radius: 2px;
     font-size: 10px;
-    color:rgba(48,66,81);
+    color: rgb(48,66,81);
     padding: 6px;
 }
 
@@ -617,48 +617,6 @@ QComboBox::item:selected {
     color: white;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 QComboBox[class=combobox_playercontrols] {
     padding: 1px;
     background-color: rgba(255,255,255,50);
@@ -691,6 +649,11 @@ QDoubleSpinBox::up-button {
     image: url("PATH_SUBTITLD_GRAPHICS/spinbox_arrow_up.svg");
 }
 
+QSpinBox::up-button[class=spin_playercontrols],
+QDoubleSpinBox::up-button[class=spin_playercontrols] {
+    margin-top: 3px;
+}
+
 QSpinBox::up-button:pressed,
 QDoubleSpinBox::up-button:pressed {
     /* background-color: #e5b3b3b3; */
@@ -716,6 +679,11 @@ QDoubleSpinBox::down-button {
     margin-right: 5px;
     border-bottom-right-radius: 2px;
     image: url("PATH_SUBTITLD_GRAPHICS/spinbox_arrow_down.svg");
+}
+
+QSpinBox::down-button[class=spin_playercontrols],
+QDoubleSpinBox::down-button[class=spin_playercontrols] {
+    margin-bottom: 3px;
 }
 
 QSpinBox::down-button:pressed,
@@ -1571,4 +1539,8 @@ QLabel[class=qlabel_for_buttons] {
 #subtitles_panel_simplelist_properties_duration_timing_lock_button:pressed,
 #subtitles_panel_simplelist_properties_duration_timing_lock_button:checked {
     qproperty-icon: url("PATH_SUBTITLD_GRAPHICS/subtitles_panel_simplelist_properties_duration_timing_lock_closed_icon.svg");
+}
+
+#step_unit {
+    padding: 0 0 0 2;
 }
