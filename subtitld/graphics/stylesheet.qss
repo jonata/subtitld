@@ -781,6 +781,13 @@ QPushButton[class=subtitles_panel_left_button]:hover:checked {
     border-image: url("PATH_SUBTITLD_GRAPHICS/subtitles_panel_left_button_pressed.svg")          11 2 11 2 stretch stretch;
 }
 
+QLabel[class=widget_label] {
+    font-size:9px;
+    color: rgba(48,66,81, 200);
+    text-transform: uppercase;
+    padding-left: 1px;
+}
+
 QLabel[class=properties_timing_labels] {
     font-size:8px;
     color: grey;

@@ -1,7 +1,7 @@
 """Subtitles Video panel
 
 """
-from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QWidget, QGridLayout, QHBoxLayout
+from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QWidget, QVBoxLayout, QHBoxLayout
 from PySide6.QtCore import Qt
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
@@ -25,12 +25,17 @@ def load_widgets(self):
     """Function to load subtitles panel widgets"""
 
     self.global_panel_general_content = QWidget()
-    self.global_panel_general_content.setLayout(QHBoxLayout())
+    self.global_panel_general_content.setLayout(QVBoxLayout())
+    self.global_panel_general_content.layout().setContentsMargins(0, 0, 0, 0)
+    self.global_panel_general_content.layout().setSpacing(10)
 
-    self.global_panel_general_content_grid = QGridLayout()
+    self.global_panel_general_save_as_line = QVBoxLayout()
+    self.global_panel_general_save_as_line.setContentsMargins(0, 0, 0, 0)
+    self.global_panel_general_save_as_line.setSpacing(2)
 
     self.global_subtitlesvideo_save_as_label = QLabel(self.tr('Default format to save:').upper(), parent=self.global_panel_general_content)
-    self.global_panel_general_content_grid.addWidget(self.global_subtitlesvideo_save_as_label, 0, 0, Qt.AlignTop)
+    self.global_subtitlesvideo_save_as_label.setProperty('class', 'widget_label')
+    self.global_panel_general_save_as_line.addWidget(self.global_subtitlesvideo_save_as_label, 0, Qt.AlignLeft)
 
     list_of_subtitle_extensions = []
     for extformat in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
@@ -41,9 +46,9 @@ def load_widgets(self):
     # self.global_subtitlesvideo_save_as_combobox.view().window().setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
     # self.global_subtitlesvideo_save_as_combobox.view().window().setAttribute(Qt.WA_TranslucentBackground)
     self.global_subtitlesvideo_save_as_combobox.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
-    self.global_panel_general_content_grid.addWidget(self.global_subtitlesvideo_save_as_combobox, 0, 1, Qt.AlignTop)
+    self.global_panel_general_save_as_line.addWidget(self.global_subtitlesvideo_save_as_combobox, 0, Qt.AlignLeft)
 
-    self.global_panel_general_content.layout().addLayout(self.global_panel_general_content_grid)
+    self.global_panel_general_content.layout().addLayout(self.global_panel_general_save_as_line)
     self.global_panel_general_content.layout().addStretch()
 
     self.global_panel_content_stacked_widgets.addWidget(self.global_panel_general_content)
@@ -51,4 +56,4 @@ def load_widgets(self):
 
 def global_subtitlesvideo_save_as_combobox_activated(self):
     """Function to change format as combobox selection"""
-    self.format_to_save = self.global_subtitlesvideo_save_as_combobox.currentText().split(' ', 1)[0]
+    self.settings['default_values']['subtitle_format'] = self.global_subtitlesvideo_save_as_combobox.currentText().split(' ', 1)[0]

@@ -49,4 +49,4 @@ def save(config=False, config_file_path=False):
         if not config_file_path:
             config_file_path = os.path.join(PATH_SUBTITLD_USER_CONFIG_FILE)
         with open(config_file_path, 'w') as fileobj:
-            json.dump(config, fileobj)
+            json.dump(config, fileobj, indent=4, sort_keys=True, ensure_ascii=False)
