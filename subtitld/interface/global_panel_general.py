@@ -53,7 +53,16 @@ def load_widgets(self):
 
     self.global_panel_content_stacked_widgets.addWidget(self.global_panel_general_content)
 
+    update_widgets(self)
+
 
 def global_subtitlesvideo_save_as_combobox_activated(self):
     """Function to change format as combobox selection"""
     self.settings['default_values']['subtitle_format'] = self.global_subtitlesvideo_save_as_combobox.currentText().split(' ', 1)[0]
+
+
+def update_widgets(self):
+    for item in [self.global_subtitlesvideo_save_as_combobox.itemText(i) for i in range(self.global_subtitlesvideo_save_as_combobox.count())]:
+        if item.startswith(self.settings['default_values'].get('subtitle_format', 'USF')):
+            self.global_subtitlesvideo_save_as_combobox.setCurrentText(item)
+            break

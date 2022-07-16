@@ -320,40 +320,46 @@ def hide(self):
 def toppanel_save_button_clicked(self):
     """Function to call when save button on subtitles list panel is clicked"""
     actual_subtitle_file = False
+    subtitle_format = self.settings['default_values'].get('subtitle_format', 'USF')
     if self.actual_subtitle_file:
-        for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']:
-            if self.actual_subtitle_file.endswith(ext):
-                actual_subtitle_file = self.actual_subtitle_file
-                break
+        for formt in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+            for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[formt]['extensions']:
+                if self.actual_subtitle_file.endswith(ext):
+                    actual_subtitle_file = self.actual_subtitle_file
+                    subtitle_format = formt
+                    break
 
     if not actual_subtitle_file:
         suggested_path = os.path.dirname(self.video_metadata['filepath'])
-        save_formats = self.format_to_save + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']]))
+        suggested_filename = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[subtitle_format]['extensions'][0]
 
-        for extformat in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
-            if not extformat == self.format_to_save:
-                save_formats += ';;' + extformat + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['extensions']]))
-        suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
+        # save_formats = self.format_to_save + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']]))
+        # for extformat in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+        #     if not extformat == self.format_to_save:
+        #         save_formats += ';;' + extformat + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['extensions']]))
+        # suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
 
         # tem que reportar o bug que não retorna o selectedFilter se o dialogo for nativo
-        filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats, options=QFileDialog.DontUseNativeDialog)
+        # filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats, options=QFileDialog.DontUseNativeDialog)
 
-        if filedialog[0] and filedialog[1]:
-            filename = filedialog[0]
-            exts = []
-            for ext in filedialog[1].split('(', 1)[1].split(')', 1)[0].split('*'):
-                if ext:
-                    exts.append(ext.strip())
-            if not filename.endswith(tuple(exts)):
-                filename += exts[0]
-            if not self.format_to_save == filedialog[1].split(' ', 1)[0]:
-                self.format_to_save = filedialog[1].split(' ', 1)[0]
+        # if filedialog[0] and filedialog[1]:
+        #     filename = filedialog[0]
+        #     exts = []
+        #     for ext in filedialog[1].split('(', 1)[1].split(')', 1)[0].split('*'):
+        #         if ext:
+        #             exts.append(ext.strip())
+        #     if not filename.endswith(tuple(exts)):
+        #         filename += exts[0]
+        #     if not self.format_to_save == filedialog[1].split(' ', 1)[0]:
+        #         self.format_to_save = filedialog[1].split(' ', 1)[0]
 
-            self.actual_subtitle_file = filename
+        #     self.actual_subtitle_file = filename
+
+        self.actual_subtitle_file = os.path.join(suggested_path, suggested_filename)
 
     if self.actual_subtitle_file:
-        file_io.save_file(self.actual_subtitle_file, self.subtitles_list, self.format_to_save, self.selected_language)
-        file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.usf', self.subtitles_list, 'USF', self.selected_language)
+        file_io.save_file(self.actual_subtitle_file, self.subtitles_list, subtitle_format, self.selected_language)
+        # file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.usf', self.subtitles_list, 'USF', self.selected_language)
         self.format_usf_present = True
         update_subtitles_panel_format_label(self)
         update_toppanel_subtitle_file_info_label(self)

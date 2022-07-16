@@ -506,7 +506,7 @@ class subtitles_panel_timeline_widget_timeline(QWidget):
         event.accept()
 
     def qlineedit_editing_finished(widget):
-        if widget.main_self.selected_subtitle:
+        if widget.show_editing_widgets and widget.main_self.selected_subtitle and widget.starting_time_qlineedit.text() and widget.ending_time_qlineedit.text():
             widget.main_self.selected_subtitle[0] = float(widget.starting_time_qlineedit.text())
             widget.main_self.selected_subtitle[1] = float(widget.ending_time_qlineedit.text()) - widget.main_self.selected_subtitle[0]
             widget.main_self.selected_subtitle[2] = widget.text_qtextedit.toPlainText()
