@@ -23,7 +23,6 @@ class ThreadGeneratedBurnedVideo(QThread):
             number_of_steps = 0.001
             current_step = 0.0
             while proc.poll() is None:
-                # for output in proc.stdout.read().decode().split('\n'):
                 output = proc.stdout.readline()
                 if 'Duration: ' in output:
                     duration = int(utils.convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))
@@ -46,6 +45,7 @@ def load_menu(self):
 
 
 def global_panel_menu_changed(self):
+    self.global_panel_voiceover_menu_button.setEnabled(False)
     global_panel.global_panel_menu_changed(self, self.global_panel_voiceover_menu_button, self.global_panel_voiceover_content)
 
 

@@ -280,7 +280,7 @@ def main():
     #     translator.load(os.path.join(PATH_LOCALE, 'en_US.qm'))
     #     app.installTranslator(translator)
     # app.setDesktopSettingsAware(False)
-    app.setStyle("plastique")
+    # app.setStyle("plastique")
     app.setApplicationName("Subtitld")
 
     font_database = QFontDatabase()

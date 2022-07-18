@@ -3,7 +3,7 @@ from mpv import MPV, MpvRenderContext, MpvGlGetProcAddressFn
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QGraphicsOpacityEffect
 from PySide6.QtCore import Signal, Qt, QRectF, QPropertyAnimation, QEasingCurve, QMarginsF
-from PySide6.QtGui import QPainter, QPen, QColor
+from PySide6.QtGui import QPainter, QPen, QColor, QFont
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
 
 from subtitld.modules.utils import GetProcAddressGetter
@@ -197,11 +197,15 @@ class PlayerSubtitleLayer(QLabel):
         self.title_safe_margin = .8
         self.show_action_safe_margin = False
         self.show_title_safe_margin = False
+        self.font_size = 40
 
     def paintEvent(self, event):
         """Function to paint subtitle layer"""
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
+
+        painter.setFont(QFont('Ubuntu', self.font_size))
+
         if self.show_title_safe_margin or self.subtitle_text:
             title_safe_margin_qrect = QRectF(
                 self.width() * ((1.0 - self.title_safe_margin) * .5),
@@ -315,6 +319,7 @@ def load(self):
 
     self.player_subtitle_layer = PlayerSubtitleLayer()
     self.player_subtitle_layer.setWordWrap(True)
+    self.player_subtitle_layer.font_size = self.settings['videoplayer'].get('font_size', 40)
     self.player_subtitle_layer.setObjectName('player_subtitle_layer')
     self.player_widget.layout().addWidget(self.player_subtitle_layer)
 

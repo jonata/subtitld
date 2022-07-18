@@ -88,4 +88,5 @@ def global_panel_menu_changed(self, button, widget):
     for w in self.global_panel_menu.findChildren(QPushButton):
         if w != button:
             w.setChecked(False)
+            w.setEnabled(True)
     self.global_panel_content_stacked_widgets.setCurrentWidget(widget)

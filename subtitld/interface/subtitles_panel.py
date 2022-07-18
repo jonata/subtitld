@@ -359,7 +359,8 @@ def toppanel_save_button_clicked(self):
 
     if self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list, subtitle_format, self.selected_language)
-        # file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.usf', self.subtitles_list, 'USF', self.selected_language)
+        if self.settings['default_values'].get('save_automatic_copy', False) and not subtitle_format == self.settings['default_values'].get('subtitle_format', 'USF'):
+            file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.usf', self.subtitles_list, self.settings['default_values'].get('subtitle_format', 'USF'), self.selected_language)
         self.format_usf_present = True
         update_subtitles_panel_format_label(self)
         update_toppanel_subtitle_file_info_label(self)
@@ -509,18 +510,24 @@ def update_toppanel_subtitle_file_info_label(self):
 def update_subtitles_panel_widget_vision(self, vision='list'):
     if vision == 'list':
         self.subtitles_panel_stackedwidgets.setCurrentWidget(self.subtitles_panel_simplelist_widget)
+        self.subtitles_panel_widget_button_list.setEnabled(False)
     else:
+        self.subtitles_panel_widget_button_list.setEnabled(True)
         self.subtitles_panel_widget_button_list.setChecked(False)
 
     if vision == 'markdown':
         self.subtitles_panel_stackedwidgets.setCurrentWidget(self.subtitles_panel_markdown_widget)
+        self.subtitles_panel_widget_button_markdown.setEnabled(False)
     else:
+        self.subtitles_panel_widget_button_markdown.setEnabled(True)
         self.subtitles_panel_widget_button_markdown.setChecked(False)
 
     if vision == 'timeline':
         self.subtitles_panel_stackedwidgets.setCurrentWidget(self.subtitles_panel_timeline_widget)
+        self.subtitles_panel_widget_button_timeline.setEnabled(False)
         subtitles_panel_widget_timeline.timeline_resized(self)
     else:
+        self.subtitles_panel_widget_button_timeline.setEnabled(True)
         self.subtitles_panel_widget_button_timeline.setChecked(False)
 
     update_subtitles_panel_widget_vision_content(self)

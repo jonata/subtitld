@@ -239,7 +239,7 @@ def load(self):
     self.gap_hbox.layout().addSpacing(-21)
 
     self.gap_subtitle_duration = QDoubleSpinBox()
-    self.gap_subtitle_duration.setObjectName('controls_qdoublespinbox')
+    self.gap_subtitle_duration.setProperty('class', 'spin_playercontrols')
     self.gap_subtitle_duration.setMinimum(.1)
     self.gap_subtitle_duration.setMaximum(60.)
     self.gap_subtitle_duration.setFixedSize(QSize(40, 20))
@@ -288,11 +288,13 @@ def load(self):
 
     self.add_subtitle_duration = QDoubleSpinBox()
     self.add_subtitle_duration.setObjectName('add_subtitle_duration')
+    self.add_subtitle_duration.setProperty('class', 'spin_playercontrols')
     self.add_subtitle_duration.setMinimum(.1)
     self.add_subtitle_duration.setMaximum(60.)
-    self.add_subtitle_duration.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
+    # self.add_subtitle_duration.setFixedSize(QSize(40, 20))
+    # self.add_subtitle_duration.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
     self.add_subtitle_duration.valueChanged.connect(lambda: add_subtitle_duration_changed(self))
-    self.add_subtitle_button.layout().addWidget(self.add_subtitle_duration)
+    self.add_subtitle_button.layout().addWidget(self.add_subtitle_duration)  # , 0, Qt.AlignBottom)
 
     self.add_subtitle_button.layout().addSpacing(6)
 
@@ -442,6 +444,7 @@ def load(self):
     self.repeat_playback.clicked.connect(lambda: repeat_playback_clicked(self))
 
     self.repeat_playback_duration = QDoubleSpinBox()
+    self.repeat_playback_duration.setProperty('class', 'spin_playercontrols')
     self.repeat_playback_duration.setMinimum(.1)
     self.repeat_playback_duration.setMaximum(60.)
     self.repeat_playback_duration.valueChanged.connect(lambda: repeat_playback_duration_changed(self))
@@ -453,6 +456,7 @@ def load(self):
     self.repeat_playback.layout().addWidget(self.repeat_playback_x_label)
 
     self.repeat_playback_times = QSpinBox()
+    self.repeat_playback_times.setProperty('class', 'spin_playercontrols')
     self.repeat_playback_times.setMinimum(1)
     self.repeat_playback_times.setMaximum(20)
     self.repeat_playback_times.valueChanged.connect(lambda: repeat_playback_times_changed(self))

@@ -1,7 +1,7 @@
 """Subtitles Video panel
 
 """
-from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QWidget, QVBoxLayout, QHBoxLayout
+from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QWidget, QVBoxLayout, QCheckBox, QDoubleSpinBox, QHBoxLayout
 from PySide6.QtCore import Qt
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
@@ -18,6 +18,7 @@ def load_menu(self):
 
 
 def global_panel_menu_changed(self):
+    self.global_panel_general_menu_button.setEnabled(False)
     global_panel.global_panel_menu_changed(self, self.global_panel_general_menu_button, self.global_panel_general_content)
 
 
@@ -27,11 +28,11 @@ def load_widgets(self):
     self.global_panel_general_content = QWidget()
     self.global_panel_general_content.setLayout(QVBoxLayout())
     self.global_panel_general_content.layout().setContentsMargins(0, 0, 0, 0)
-    self.global_panel_general_content.layout().setSpacing(10)
+    self.global_panel_general_content.layout().setSpacing(20)
 
     self.global_panel_general_save_as_line = QVBoxLayout()
     self.global_panel_general_save_as_line.setContentsMargins(0, 0, 0, 0)
-    self.global_panel_general_save_as_line.setSpacing(2)
+    self.global_panel_general_save_as_line.setSpacing(5)
 
     self.global_subtitlesvideo_save_as_label = QLabel(self.tr('Default format to save:').upper(), parent=self.global_panel_general_content)
     self.global_subtitlesvideo_save_as_label.setProperty('class', 'widget_label')
@@ -48,7 +49,40 @@ def load_widgets(self):
     self.global_subtitlesvideo_save_as_combobox.activated.connect(lambda: global_subtitlesvideo_save_as_combobox_activated(self))
     self.global_panel_general_save_as_line.addWidget(self.global_subtitlesvideo_save_as_combobox, 0, Qt.AlignLeft)
 
+    self.global_panel_general_save_copy = QCheckBox('Save a copy of the default format regardless of the original format')
+    self.global_panel_general_save_copy.stateChanged.connect(lambda: global_panel_general_save_copy_changed(self))
+    self.global_panel_general_save_as_line.addWidget(self.global_panel_general_save_copy, 0, Qt.AlignLeft)
+
     self.global_panel_general_content.layout().addLayout(self.global_panel_general_save_as_line)
+
+    self.global_panel_general_minimum_duration_line = QVBoxLayout()
+    self.global_panel_general_minimum_duration_line.setContentsMargins(0, 0, 0, 0)
+    self.global_panel_general_minimum_duration_line.setSpacing(2)
+
+    self.global_panel_general_minimum_duration_label = QLabel('Minimum duration of individual subtitles')
+    self.global_panel_general_minimum_duration_label.setProperty('class', 'widget_label')
+    self.global_panel_general_minimum_duration_line.addWidget(self.global_panel_general_minimum_duration_label, 0, Qt.AlignLeft)
+
+    self.global_panel_general_minimum_duration_line_2 = QHBoxLayout()
+    self.global_panel_general_minimum_duration_line_2.setContentsMargins(0, 0, 0, 0)
+    self.global_panel_general_minimum_duration_line_2.setSpacing(5)
+
+    self.global_panel_general_minimum_duration_spinbox = QDoubleSpinBox()
+    self.global_panel_general_minimum_duration_spinbox.setMinimum(.1)
+    self.global_panel_general_minimum_duration_spinbox.setMaximum(999.999)
+    self.global_panel_general_minimum_duration_spinbox.valueChanged.connect(lambda: global_panel_general_minimum_duration_spinbox_changed(self))
+    self.global_panel_general_minimum_duration_line_2.addWidget(self.global_panel_general_minimum_duration_spinbox, 0, Qt.AlignLeft)
+
+    self.global_panel_general_minimum_duration_seconds_label = QLabel('Seconds')
+    self.global_panel_general_minimum_duration_seconds_label.setProperty('class', 'units_label')
+    self.global_panel_general_minimum_duration_line_2.addWidget(self.global_panel_general_minimum_duration_seconds_label, 0, Qt.AlignLeft)
+
+    self.global_panel_general_minimum_duration_line_2.addStretch()
+
+    self.global_panel_general_minimum_duration_line.addLayout(self.global_panel_general_minimum_duration_line_2)
+
+    self.global_panel_general_content.layout().addLayout(self.global_panel_general_minimum_duration_line)
+
     self.global_panel_general_content.layout().addStretch()
 
     self.global_panel_content_stacked_widgets.addWidget(self.global_panel_general_content)
@@ -61,8 +95,20 @@ def global_subtitlesvideo_save_as_combobox_activated(self):
     self.settings['default_values']['subtitle_format'] = self.global_subtitlesvideo_save_as_combobox.currentText().split(' ', 1)[0]
 
 
+def global_panel_general_save_copy_changed(self):
+    self.settings['default_values']['save_automatic_copy'] = self.global_panel_general_save_copy.isChecked()
+
+
+def global_panel_general_minimum_duration_spinbox_changed(self):
+    self.settings['default_values']['minimum_subtitle_width'] = self.global_panel_general_minimum_duration_spinbox.value()
+
+
 def update_widgets(self):
     for item in [self.global_subtitlesvideo_save_as_combobox.itemText(i) for i in range(self.global_subtitlesvideo_save_as_combobox.count())]:
         if item.startswith(self.settings['default_values'].get('subtitle_format', 'USF')):
             self.global_subtitlesvideo_save_as_combobox.setCurrentText(item)
             break
+
+    self.global_panel_general_save_copy.setChecked(self.settings['default_values'].get('save_automatic_copy', False))
+
+    self.global_panel_general_minimum_duration_spinbox.setValue(self.settings['default_values'].get('minimum_subtitle_width', 1.0))

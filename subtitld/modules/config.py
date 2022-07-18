@@ -32,6 +32,9 @@ def load(config_file_path=False):
     if not config.get('timeline', False):
         config['timeline'] = {}
 
+    if not config.get('videoplayer', False):
+        config['videoplayer'] = {}
+
     if not config.get('quality_check', False):
         config['quality_check'] = {}
 

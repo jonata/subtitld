@@ -27,6 +27,7 @@ def load_menu(self):
 
 
 def global_panel_menu_changed(self):
+    self.global_panel_import_menu_button.setEnabled(False)
     global_panel.global_panel_menu_changed(self, self.global_panel_import_menu_button, self.global_panel_import_content)
 
 

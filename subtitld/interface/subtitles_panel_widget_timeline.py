@@ -5,7 +5,7 @@
 from bisect import bisect
 # from multiprocessing.spawn import old_main_modules
 from PySide6.QtWidgets import QWidget, QPushButton, QScrollArea, QLineEdit, QTextEdit
-from PySide6.QtGui import QColor, QPen, QPainter, QPolygonF, QTransform, QPainterPath, QFont, QFontMetrics
+from PySide6.QtGui import QColor, QPen, QPainter, QPolygonF, QTransform, QPainterPath, QFont, QFontMetrics, QPalette
 from PySide6.QtCore import QMarginsF, QRectF, Qt, QPointF, Signal
 
 from subtitld.modules import quality_check
@@ -561,6 +561,7 @@ def add_button(self):
     self.subtitles_panel_widget_button_timeline.setProperty('class', 'subtitles_panel_left_button')
     self.subtitles_panel_widget_button_timeline.setCheckable(True)
     self.subtitles_panel_widget_button_timeline.setFixedWidth(23)
+    # self.subtitles_panel_widget_button_timeline.icon().addPixmap(self.subtitles_panel_widget_button_timeline.icon(), QIcon.Disable)
     self.subtitles_panel_widget_button_timeline.clicked.connect(lambda vision: subtitles_panel.update_subtitles_panel_widget_vision(self, 'timeline'))
     self.subtitles_panel_widget_buttons_vbox.addWidget(self.subtitles_panel_widget_button_timeline)
 
