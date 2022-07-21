@@ -121,6 +121,31 @@ def add_widgets(self):
     self.subtitles_panel_qlistwidget.clicked.connect(lambda: subtitles_panel_qlistwidget_item_clicked(self))
     self.subtitles_panel_simplelist_widget_vbox.addWidget(self.subtitles_panel_qlistwidget, 1)
 
+    self.properties_information = QFrame()
+    self.properties_information.setObjectName('properties_information')
+    self.properties_information.setLayout(QHBoxLayout())
+    self.properties_information.layout().setContentsMargins(20, 0, 0, 0)
+    self.properties_information.layout().setSpacing(5)
+
+    self.properties_information_word_counter = QLabel()
+    self.properties_information_word_counter.setObjectName('properties_information_word_counter')
+
+    self.properties_information.layout().addWidget(self.properties_information_word_counter, 0, Qt.AlignLeft)
+
+    self.properties_information_character_counter = QLabel()
+    self.properties_information_character_counter.setObjectName('properties_information_character_counter')
+
+    self.properties_information.layout().addWidget(self.properties_information_character_counter, 0, Qt.AlignLeft)
+
+    self.properties_information_reason = QLabel()
+    self.properties_information_reason.setObjectName('properties_information_reason')
+
+    self.properties_information.layout().addWidget(self.properties_information_reason, 1)
+
+    # self.properties_information.layout().addStretch()
+
+    self.subtitles_panel_simplelist_widget_vbox.addWidget(self.properties_information)
+
     self.subtitles_panel_simplelist_properties = QFrame()
     self.subtitles_panel_simplelist_properties.setLayout(QVBoxLayout())
     self.subtitles_panel_simplelist_properties.layout().setContentsMargins(20, 0, 0, 0)
@@ -227,19 +252,20 @@ def add_widgets(self):
     self.send_text_to_last_subtitle_button = QPushButton(self.tr('Send to last').upper())
     self.send_text_to_last_subtitle_button.setObjectName('send_text_to_last_subtitle_button')
     self.send_text_to_last_subtitle_button.setLayout(QHBoxLayout(self.send_text_to_last_subtitle_button))
+    # self.send_text_to_last_subtitle_button.setMinimumHeight(30)
     self.send_text_to_last_subtitle_button.layout().setContentsMargins(3, 0, 3, 3)
     self.send_text_to_last_subtitle_button.setProperty('class', 'subbutton2_dark')
-    self.send_text_to_last_subtitle_button.setStyleSheet('#send_text_to_last_subtitle_button {padding-left: 40px; border-top:0; border-right:0; padding-top:8px; padding-top:5px;}')
+    # self.send_text_to_last_subtitle_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
     self.send_text_to_last_subtitle_button.clicked.connect(lambda: send_text_to_last_subtitle_button_clicked(self))
     self.subtitles_panel_simplelist_properties_buttons_line.addWidget(self.send_text_to_last_subtitle_button)
 
     self.send_text_to_last_subtitle_and_slice_button = QPushButton()
     self.send_text_to_last_subtitle_and_slice_button.setObjectName('send_text_to_last_subtitle_and_slice_button')
-    self.send_text_to_last_subtitle_and_slice_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'slice_selected_subtitle_icon.png')))
     self.send_text_to_last_subtitle_and_slice_button.setProperty('class', 'subbutton2_dark')
-    self.send_text_to_last_subtitle_and_slice_button.setStyleSheet('#send_text_to_last_subtitle_and_slice_button {border-top:0; padding-top: 6px;}')
+    # self.send_text_to_last_subtitle_and_slice_button.setIconSize(QSize(48, 48))
+    # self.send_text_to_last_subtitle_and_slice_button.setMinimumHeight(40)
     self.send_text_to_last_subtitle_and_slice_button.clicked.connect(lambda: send_text_to_last_subtitle_and_slice_button_clicked(self))
-    self.send_text_to_last_subtitle_and_slice_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
+    self.send_text_to_last_subtitle_and_slice_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum))
     self.send_text_to_last_subtitle_button.layout().addWidget(self.send_text_to_last_subtitle_and_slice_button, 0, Qt.AlignLeft)
 
     self.send_text_to_next_subtitle_button = QPushButton(self.tr('Send to next').upper())
@@ -247,15 +273,12 @@ def add_widgets(self):
     self.send_text_to_next_subtitle_button.setLayout(QHBoxLayout(self.send_text_to_next_subtitle_button))
     self.send_text_to_next_subtitle_button.layout().setContentsMargins(3, 0, 3, 3)
     self.send_text_to_next_subtitle_button.setProperty('class', 'subbutton2_dark')
-    self.send_text_to_next_subtitle_button.setStyleSheet('#send_text_to_next_subtitle_button {padding-top: 8px; padding-right: 40px; border-top:0; border-left:0; padding-top:5px;}')
     self.send_text_to_next_subtitle_button.clicked.connect(lambda: send_text_to_next_subtitle_button_clicked(self))
     self.subtitles_panel_simplelist_properties_buttons_line.addWidget(self.send_text_to_next_subtitle_button)
 
     self.send_text_to_next_subtitle_and_slice_button = QPushButton()
     self.send_text_to_next_subtitle_and_slice_button.setObjectName('send_text_to_next_subtitle_and_slice_button')
-    self.send_text_to_next_subtitle_and_slice_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'slice_selected_subtitle_icon.png')))
     self.send_text_to_next_subtitle_and_slice_button.setProperty('class', 'subbutton2_dark')
-    self.send_text_to_next_subtitle_and_slice_button.setStyleSheet('#send_text_to_next_subtitle_and_slice_button {border-top:0; padding-top: 6px;}')
     self.send_text_to_next_subtitle_and_slice_button.clicked.connect(lambda: send_text_to_next_subtitle_and_slice_button_clicked(self))
     self.send_text_to_next_subtitle_and_slice_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
     self.send_text_to_next_subtitle_button.layout().addWidget(self.send_text_to_next_subtitle_and_slice_button, 0, Qt.AlignRight)
@@ -263,11 +286,6 @@ def add_widgets(self):
     self.subtitles_panel_simplelist_properties.layout().addLayout(self.subtitles_panel_simplelist_properties_buttons_line)
 
     self.subtitles_panel_simplelist_widget_vbox.addWidget(self.subtitles_panel_simplelist_properties, 0)
-
-    self.properties_information = QLabel()
-    self.properties_information.setWordWrap(True)
-    self.properties_information.setObjectName('properties_information')
-    self.subtitles_panel_simplelist_widget_vbox.addWidget(self.properties_information)
 
     self.subtitles_panel_stackedwidgets.addWidget(self.subtitles_panel_simplelist_widget)
 
@@ -467,15 +485,19 @@ def properties_textedit_changed(self):
 
 def update_properties_information(self):
     if self.selected_subtitle:
-        info_text = '<small>' + self.tr('Words').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))) + '</b></big><br><br><small>' + self.tr('Characters').upper() + ':</small><br><big><b>' + str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))) + '</b></big>'
+        approved = True
+        reason = 'No problem.'
+
         if self.settings['quality_check'].get('enabled', False):
             approved, reasons = quality_check.check_subtitle(self.selected_subtitle, self.settings['quality_check'])
-            if not approved:
-                info_text += '<br><br><font color="#9e1a1a"><small>' + self.tr('Quality check').upper() + ':</small><br><big><b>'
-                for reason in reasons:
-                    info_text += str(reason) + '<br><br>'
-                info_text += '</b></big></font>'
-        self.properties_information.setText(info_text)
+
+        self.properties_information_word_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43' if approved else '#aa9e1a1a') + '}')
+        self.properties_information_character_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43' if approved else '#aa9e1a1a') + '}')
+        self.properties_information_reason.setStyleSheet('QLabel { background-color: ' + ('#22ffffff' if approved else '#109e1a1a') + '}')
+
+        self.properties_information_word_counter.setText(str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))))
+        self.properties_information_character_counter.setText(str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))))
+        self.properties_information_reason.setText('\n'.join(reasons))
 
 
 def update_properties_widget(self):

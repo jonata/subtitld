@@ -146,7 +146,8 @@ install_requires = [
     'python-docx',
     'chardet',
     'google-api-python-client',
-    'pysrt'
+    'pysrt',
+    'certifi'
 ]
 
 # --------------------------------------------------------------------------- #

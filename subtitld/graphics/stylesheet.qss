@@ -49,6 +49,22 @@ QPushButton[class=timeline_top_controls_button_left]:hover {
     border-image: url("PATH_SUBTITLD_GRAPHICS/timeline_top_controls_button_left_hover.svg") 0 13 2 2 stretch stretch;
 }
 
+QPushButton[class=color_pick_button] {
+    border: 1px solid rgba(48, 66, 81, 100);
+    border-radius: 2px;
+}
+
+QPushButton[class=color_pick_button]::hover {
+    border: 1px solid rgba(48, 66, 81, 150);
+    border-radius: 2px;
+}
+
+QPushButton[class=color_pick_button]::pressed,
+QPushButton[class=color_pick_button]::hover::pressed {
+    border: 1px solid rgba(48, 66, 81, 150);
+    border-radius: 2px;
+}
+
 QSlider::groove:horizontal {
     outline: none;
     margin: 0;
@@ -561,6 +577,51 @@ QComboBox {
     padding: 4px;
 }
 
+QTableWidget {
+    background-color: rgba(255,255,255,200);
+    border-radius: 2px;
+    font-size: 11px;
+    color: rgb(48, 66, 81);
+    outline: 0;
+}
+
+QTableWidget::item {
+    border-bottom: 1px solid rgba(48, 66, 81, 50);
+    padding: 6 4 6 4;
+    outline: 0;
+}
+
+QTableWidget::item:selected,
+QTableWidget::item:focus {
+    background-color: rgba(48, 66, 81, 200);
+    color: white;
+    outline: 0;
+    border: 0;
+}
+
+QHeaderView {
+    border: 0;
+    background-color:  rgba(48, 66, 81, 200);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+QHeaderView::section {
+    border: 0;
+    background-color: transparent;
+    padding: 2 6 2 6;
+    color: white;
+    font-size: 10px;
+    text-transform: uppercase;
+    text-align: left;
+    outline: 0;
+}
+
+QHeaderView::section:selected {
+    font-weight: normal;
+    outline: 0;
+}
+
 QComboBox::indicator{
     background-color:transparent;
     selection-background-color:transparent;
@@ -795,6 +856,14 @@ QLabel[class=widget_label] {
     text-transform: uppercase;
 }
 
+QGroupBox {
+    font-size:10px;
+    color: rgba(48,66,81, 200);
+    /* border-radius: 2px; */
+    /* border: 1px solid rgba(48, 66, 81, 100); */
+    text-transform: uppercase;
+}
+
 QLabel[class=units_label] {
     font-size:10px;
     color: rgba(48,66,81, 200);
@@ -805,6 +874,7 @@ QCheckBox {
     color: rgba(48, 66, 81, 230);
 }
 
+QGroupBox::indicator,
 QCheckBox::indicator {
     border: 1px solid rgba(48, 66, 81, 100);
     background-color: rgba(255, 255, 255, 200);
@@ -812,6 +882,7 @@ QCheckBox::indicator {
     padding: 2px;
 }
 
+QGroupBox::indicator:checked,
 QCheckBox::indicator:checked {
     background-color: rgba(48, 66, 81, 200);
 }
@@ -847,13 +918,6 @@ QLabel[class=qlabel_for_buttons] {
     qproperty-alignment: "AlignCenter";
     padding: 40px;
 }
-
-#properties_information {
-    font-size: 12px;
-    color: white;
-    qproperty-alignment: "AlignTop";
-}
-
 
 #player_subtitle_layer {
     /* font-size:40px; */
@@ -1064,14 +1128,6 @@ QLabel[class=qlabel_for_buttons] {
 #toppanel_open_button {
     icon-size: 16px;
     icon: url("PATH_SUBTITLD_GRAPHICS/open_icon.svg");
-}
-
-#send_text_to_next_subtitle_button {
-    icon: url("PATH_SUBTITLD_GRAPHICS/send_text_to_next_subtitle_icon.svg");
-}
-
-#send_text_to_last_subtitle_button {
-    icon: url("PATH_SUBTITLD_GRAPHICS/send_text_to_last_subtitle_icon.svg");
 }
 
 #slice_selected_subtitle_button {
@@ -1581,4 +1637,62 @@ QLabel[class=qlabel_for_buttons] {
 
 #step_unit {
     padding: 0 0 0 2;
+}
+
+#send_text_to_last_subtitle_and_slice_button {
+    border-top:0;
+    padding-bottom: 6px;
+    icon: url('PATH_SUBTITLD_GRAPHICS/slice_selected_subtitle_icon.svg');
+}
+
+#send_text_to_last_subtitle_button {
+    border-top:0;
+    border-right:0;
+    padding-bottom: 8px;
+    padding-left: 40px;
+    icon: url("PATH_SUBTITLD_GRAPHICS/send_text_to_last_subtitle_icon.svg");
+}
+
+#send_text_to_next_subtitle_button {
+    border-top:0;
+    border-left:0;
+    padding-bottom: 8px;
+    padding-right: 40px;
+    icon: url("PATH_SUBTITLD_GRAPHICS/send_text_to_next_subtitle_icon.svg");
+}
+
+#send_text_to_next_subtitle_and_slice_button {
+    border-top:0;
+    padding-bottom: 6px;
+    icon: url('PATH_SUBTITLD_GRAPHICS/slice_selected_subtitle_icon.svg');
+}
+
+#properties_information_word_counter {
+    border-radius: 2px;
+    padding: 6 6 6 30;
+    background-image: url('PATH_SUBTITLD_GRAPHICS/word_count_icon.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+#properties_information_character_counter {
+    border-radius: 2px;
+    padding: 6 6 6 30;
+    background-image: url('PATH_SUBTITLD_GRAPHICS/character_count_icon.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+#properties_information_reason {
+    border-radius: 2px;
+    padding: 6;
+    color: #304251;
+    font-size: 9px;
+    qproperty-wordWrap: true;
 }

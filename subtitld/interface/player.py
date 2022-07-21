@@ -2,14 +2,12 @@ import os
 from mpv import MPV, MpvRenderContext, MpvGlGetProcAddressFn
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QGraphicsOpacityEffect
-from PySide6.QtCore import Signal, Qt, QRectF, QPropertyAnimation, QEasingCurve, QMarginsF
-from PySide6.QtGui import QPainter, QPen, QColor, QFont
+from PySide6.QtCore import Signal, Qt, QRectF, QPropertyAnimation, QEasingCurve, QMargins
+from PySide6.QtGui import QPainter, QPen, QColor, QFont, QBrush
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
 
 from subtitld.modules.utils import GetProcAddressGetter
 from subtitld.interface import playercontrols, subtitles_panel
-# import mpv
-from mpv import MPV, MpvRenderContext, MpvGlGetProcAddressFn
 
 
 class MpvWidget(QOpenGLWidget):
@@ -110,8 +108,8 @@ class MpvWidget(QOpenGLWidget):
 
     def on_update(widget, ctx=None):
         widget.update()
-        # print(widget.width())
-        # print(widget.height())
+        #  print(widget.width())
+        #  print(widget.height())
 
     def on_update_fake(widget, ctx=None):
         pass
@@ -132,7 +130,7 @@ class MpvWidget(QOpenGLWidget):
             widget.position = pos
         if pos is not None:
             widget.positionChanged.emit(pos, 1)
-            # widget.parent.parent().timeline.update(widget.parent.parent())
+            #  widget.parent.parent().timeline.update(widget.parent.parent())
 
     def eof_reached(widget, _, property):
         widget.eofReached.emit()
@@ -190,79 +188,106 @@ class MpvWidget(QOpenGLWidget):
 
 class PlayerSubtitleLayer(QLabel):
     """Lass of subtitle layer"""
-    def __init__(self, parent=None):
+    def __init__(widget, parent=None):
         super().__init__(parent)
-        self.subtitle_text = ''
-        self.action_safe_margin = .9
-        self.title_safe_margin = .8
-        self.show_action_safe_margin = False
-        self.show_title_safe_margin = False
-        self.font_size = 40
+        widget.subtitle_text = ''
+        widget.action_safe_margin = .9
+        widget.title_safe_margin = .8
+        widget.style = {}
 
-    def paintEvent(self, event):
+    def paintEvent(widget, event):
         """Function to paint subtitle layer"""
-        painter = QPainter(self)
+        painter = QPainter(widget)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        painter.setFont(QFont('Ubuntu', self.font_size))
+        painter.setFont(QFont(widget.style.get('font_family', 'Ubuntu'), widget.style.get('font_size', 40)))
 
-        if self.show_title_safe_margin or self.subtitle_text:
-            title_safe_margin_qrect = QRectF(
-                self.width() * ((1.0 - self.title_safe_margin) * .5),
-                self.height() * ((1.0 - self.title_safe_margin) * .5),
-                self.width() * (self.title_safe_margin),
-                self.height() * (self.title_safe_margin)
-            )
-        if self.subtitle_text:
-            painter.setPen(QPen(QColor.fromRgb(0, 0, 0, 200)))
-            painter.drawText(title_safe_margin_qrect - QMarginsF(2, 2, -2, -2), Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
-            painter.setPen(QPen(QColor.fromRgb(255, 255, 255)))
-            painter.drawText(title_safe_margin_qrect, Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, self.subtitle_text)
+        title_safe_margin_qrect = widget.rect() - QMargins(
+            (widget.style.get('safe_margin_title_x', 10) / 100) * widget.width(),
+            (widget.style.get('safe_margin_title_y', 10) / 100) * widget.height(),
+            (widget.style.get('safe_margin_title_x', 10) / 100) * widget.width(),
+            (widget.style.get('safe_margin_title_y', 10) / 100) * widget.height()
+        )
 
-        if self.show_action_safe_margin:
-            action_safe_margin_qrect = QRectF(
-                self.width() * ((1.0 - self.action_safe_margin) * .5),
-                self.height() * ((1.0 - self.action_safe_margin) * .5),
-                self.width() * (self.action_safe_margin),
-                self.height() * (self.action_safe_margin)
+        # QRectF(
+        #     widget.width() * (widget.style.get('safe_margin_title_x', 10) / 100.0),
+        #     widget.height() * (widget.style.get('safe_margin_title_y', 10) / 100.0),
+        #     widget.width() * (1.0 - ((widget.style.get('safe_margin_title_x', 10) * 2) / 100)),
+        #     widget.height() * (1.0 - ((widget.style.get('safe_margin_title_y', 10) * 2) / 100))
+        # )
+
+        if widget.subtitle_text:
+
+            if widget.style.get('backgroundbox_enabled', True):
+                text_rect = painter.boundingRect(title_safe_margin_qrect, Qt.AlignBottom | Qt.AlignHCenter | Qt.TextWordWrap, widget.subtitle_text)
+
+                painter.setPen(Qt.NoPen)
+                painter.setBrush(QBrush(QColor(widget.style.get('backgroundbox_color', '#55000000'))))
+
+                if widget.style.get('backgroundbox_border_radius', 5):
+                    painter.drawRoundedRect(text_rect.marginsAdded(QMargins(widget.style.get('backgroundbox_padding', 10), widget.style.get('backgroundbox_padding', 10), widget.style.get('backgroundbox_padding', 10), widget.style.get('backgroundbox_padding', 10))), widget.style.get('backgroundbox_border_radius', 5), widget.style.get('backgroundbox_border_radius', 5))
+                else:
+                    painter.drawRect(text_rect.marginsAdded(QMargins(widget.style.get('backgroundbox_padding', 10), widget.style.get('backgroundbox_padding', 10), widget.style.get('backgroundbox_padding', 10), widget.style.get('backgroundbox_padding', 10))))
+
+                painter.setBrush(Qt.NoBrush)
+
+            if widget.style.get('shadow_enabled', True):
+                painter.setPen(QPen(widget.style.get('shadow_color', '#ff000000')))
+                painter.drawText(title_safe_margin_qrect - QMargins(widget.style.get('shadow_x', 2), widget.style.get('shadow_y', 2), -widget.style.get('shadow_x', 2), -widget.style.get('shadow_y', 2)), Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, widget.subtitle_text)
+
+            painter.setPen(QPen(widget.style.get('color', '#ffffffff')))
+            painter.drawText(title_safe_margin_qrect, Qt.AlignHCenter | Qt.AlignBottom | Qt.TextWordWrap, widget.subtitle_text)
+
+        if widget.style.get('safe_margin_action_enabled', False):
+            action_safe_margin_qrect = widget.rect() - QMargins(
+                (widget.style.get('safe_margin_action_x', 5) / 100) * widget.width(),
+                (widget.style.get('safe_margin_action_y', 5) / 100) * widget.height(),
+                (widget.style.get('safe_margin_action_x', 5) / 100) * widget.width(),
+                (widget.style.get('safe_margin_action_y', 5) / 100) * widget.height()
             )
-            painter.setPen(QPen(QColor.fromRgb(103, 255, 77, 240), 1, Qt.SolidLine))
+
+            painter.setPen(QPen(QColor(widget.style.get('safe_margin_action_color', '#dd67FF4D')), 1, Qt.SolidLine))
             painter.drawRect(action_safe_margin_qrect)
+
             painter.drawLine(
-                self.width() * .5,
+                widget.width() * .5,
                 action_safe_margin_qrect.y(),
-                self.width() * .5,
-                action_safe_margin_qrect.y() + (self.height() * .025)
+                widget.width() * .5,
+                action_safe_margin_qrect.y() + (widget.height() * .025)
             )
             painter.drawLine(
-                self.width() * .5,
+                widget.width() * .5,
                 action_safe_margin_qrect.y() + action_safe_margin_qrect.height(),
-                self.width() * .5,
-                action_safe_margin_qrect.y() + action_safe_margin_qrect.height() - (self.height() * .025)
+                widget.width() * .5,
+                action_safe_margin_qrect.y() + action_safe_margin_qrect.height() - (widget.height() * .025)
             )
             painter.drawLine(
                 action_safe_margin_qrect.x(),
-                self.height() * .5,
-                action_safe_margin_qrect.x() + (self.width() * .025),
-                self.height() * .5
+                widget.height() * .5,
+                action_safe_margin_qrect.x() + (widget.width() * .025),
+                widget.height() * .5
             )
             painter.drawLine(
                 action_safe_margin_qrect.x() + action_safe_margin_qrect.width(),
-                self.height() * .5,
-                action_safe_margin_qrect.x() + action_safe_margin_qrect.width() - (self.width() * .025),
-                self.height() * .5
+                widget.height() * .5,
+                action_safe_margin_qrect.x() + action_safe_margin_qrect.width() - (widget.width() * .025),
+                widget.height() * .5
             )
 
-        if self.show_title_safe_margin:
-            painter.setPen(QPen(QColor.fromRgb(255, 0, 0, 240), 1, Qt.SolidLine))
+        if widget.style.get('safe_margin_title_enabled', False):
+            painter.setPen(QPen(QColor(widget.style.get('safe_margin_title_color', '#ddff0000')), 1, Qt.SolidLine))
             painter.drawRect(title_safe_margin_qrect)
 
         painter.end()
         event.accept()
 
-    def setSubtitleText(self, text):
+    def setSubtitleText(widget, text):
         """Function to change subtitle layer text"""
-        self.subtitle_text = text
+        widget.subtitle_text = text
+
+    def update_style(widget, style):
+        widget.style = style
+        widget.update()
 
 
 class PlayerWidgetArea(QWidget):
@@ -319,7 +344,7 @@ def load(self):
 
     self.player_subtitle_layer = PlayerSubtitleLayer()
     self.player_subtitle_layer.setWordWrap(True)
-    self.player_subtitle_layer.font_size = self.settings['videoplayer'].get('font_size', 40)
+    self.player_subtitle_layer.update_style(self.settings['videoplayer'])
     self.player_subtitle_layer.setObjectName('player_subtitle_layer')
     self.player_widget.layout().addWidget(self.player_subtitle_layer)
 

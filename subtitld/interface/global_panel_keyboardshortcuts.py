@@ -1,7 +1,7 @@
 """Subtitles Video panel
 
 """
-from PySide6.QtWidgets import QPushButton, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QVBoxLayout
+from PySide6.QtWidgets import QPushButton, QWidget, QTableWidget, QAbstractItemView, QLineEdit, QTableWidgetItem, QHeaderView, QVBoxLayout, QHBoxLayout
 from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QKeySequence
 
@@ -63,38 +63,47 @@ def load_widgets(self):
     """Function to load subtitles panel widgets"""
 
     self.global_panel_keyboardshortcuts_content = QWidget()
-    self.global_panel_keyboardshortcuts_content.setLayout(QVBoxLayout())
+    self.global_panel_keyboardshortcuts_content.setLayout(QHBoxLayout())
     self.global_panel_keyboardshortcuts_content.layout().setContentsMargins(0, 0, 0, 0)
+
+    self.global_panel_tabwidget_shortkeys_table = QTableWidget()
+    self.global_panel_tabwidget_shortkeys_table.setObjectName('global_panel_tabwidget_shortkeys_table')
+    self.global_panel_tabwidget_shortkeys_table.setColumnCount(2)
+    self.global_panel_tabwidget_shortkeys_table.verticalHeader().setVisible(False)
+    # self.global_panel_tabwidget_shortkeys_table.horizontalHeader().setVisible(False)
+    self.global_panel_tabwidget_shortkeys_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+    self.global_panel_tabwidget_shortkeys_table.horizontalHeader().setHighlightSections(False)
+    self.global_panel_tabwidget_shortkeys_table.horizontalHeader().setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+    self.global_panel_tabwidget_shortkeys_table.setShowGrid(False)
+    self.global_panel_tabwidget_shortkeys_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+    # self.global_panel_tabwidget_shortkeys_table.clicked.connect(lambda:project_new_panel_info_panel_options_pmaterials_panel_files_clicked(self))
+    self.global_panel_keyboardshortcuts_content.layout().addWidget(self.global_panel_tabwidget_shortkeys_table)
+
+    self.global_panel_tabwidget_shortkeys_details = QVBoxLayout()
 
     self.global_panel_tabwidget_shortkeys_editbox = GlobalSubtitlesvideoPanelTabwidgetShortkeysEditbox()
     self.global_panel_tabwidget_shortkeys_editbox.setStyleSheet('QLineEdit { background-color:rgb(255, 255, 255); border: 1px solid silver; border-radius: 5px; padding: 5px 5px 5px 5px; font-size:16px; color:black; qproperty-alignment: "AlignCenter";}')
-    self.global_panel_keyboardshortcuts_content.layout().addWidget(self.global_panel_tabwidget_shortkeys_editbox)
+    self.global_panel_tabwidget_shortkeys_details.addWidget(self.global_panel_tabwidget_shortkeys_editbox)
 
     self.global_panel_tabwidget_shortkeys_editbox_confirm = QPushButton(self.tr('Confirm').upper())
     self.global_panel_tabwidget_shortkeys_editbox_confirm.setProperty('class', 'button_dark')
     self.global_panel_tabwidget_shortkeys_editbox_confirm.clicked.connect(lambda: global_panel_tabwidget_shortkeys_editbox_confirm_clicked(self))
-    self.global_panel_keyboardshortcuts_content.layout().addWidget(self.global_panel_tabwidget_shortkeys_editbox_confirm)
+    self.global_panel_tabwidget_shortkeys_details.addWidget(self.global_panel_tabwidget_shortkeys_editbox_confirm)
 
     self.global_panel_tabwidget_shortkeys_editbox_cancel = QPushButton(self.tr('Cancel').upper())
     self.global_panel_tabwidget_shortkeys_editbox_cancel.setProperty('class', 'button_dark')
     self.global_panel_tabwidget_shortkeys_editbox_cancel.clicked.connect(lambda: global_panel_tabwidget_shortkeys_editbox_cancel_clicked(self))
-    self.global_panel_keyboardshortcuts_content.layout().addWidget(self.global_panel_tabwidget_shortkeys_editbox_cancel)
-
-    self.global_panel_tabwidget_shortkeys_table = QTableWidget()
-    self.global_panel_tabwidget_shortkeys_table.setColumnCount(2)
-    self.global_panel_tabwidget_shortkeys_table.verticalHeader().setVisible(False)
-    self.global_panel_tabwidget_shortkeys_table.horizontalHeader().setVisible(False)
-    self.global_panel_tabwidget_shortkeys_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-    # self.global_panel_tabwidget_shortkeys_table.setShowGrid(False)
-    self.global_panel_tabwidget_shortkeys_table.setSelectionBehavior(QAbstractItemView.SelectRows)
-    # self.global_panel_tabwidget_shortkeys_table.clicked.connect(lambda:project_new_panel_info_panel_options_pmaterials_panel_files_clicked(self))
-    self.global_panel_keyboardshortcuts_content.layout().addWidget(self.global_panel_tabwidget_shortkeys_table)
+    self.global_panel_tabwidget_shortkeys_details.addWidget(self.global_panel_tabwidget_shortkeys_editbox_cancel)
 
     self.global_panel_tabwidget_shortkeys_set_button = QPushButton(self.tr('Set shortcut').upper())
     # self.global_panel_tabwidget_shortkeys_set_button.setCheckable(True)
     self.global_panel_tabwidget_shortkeys_set_button.setProperty('class', 'button_dark')
     self.global_panel_tabwidget_shortkeys_set_button.clicked.connect(lambda: global_panel_tabwidget_shortkeys_set_button_clicked(self))
-    self.global_panel_keyboardshortcuts_content.layout().addWidget(self.global_panel_tabwidget_shortkeys_set_button)
+    self.global_panel_tabwidget_shortkeys_details.addWidget(self.global_panel_tabwidget_shortkeys_set_button)
+
+
+
+    self.global_panel_keyboardshortcuts_content.layout().addLayout(self.global_panel_tabwidget_shortkeys_details)
 
     self.global_panel_content_stacked_widgets.addWidget(self.global_panel_keyboardshortcuts_content)
 
@@ -105,6 +114,7 @@ def global_panel_tabwidget_shortkeys_table_update(self):
     """Function to update subtitlesvideo panel shorkeys table"""
     self.global_panel_tabwidget_shortkeys_table.clear()
     self.global_panel_tabwidget_shortkeys_table.setRowCount(len(shortcuts_dict))
+    self.global_panel_tabwidget_shortkeys_table.setHorizontalHeaderLabels(['Command', 'Shortkeys'])
     inverted_shortcuts_dict = {value: key for key, value in shortcuts_dict.items()}
     i = 0
     for item in shortcuts_dict:
