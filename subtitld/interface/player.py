@@ -2,7 +2,7 @@ import os
 from mpv import MPV, MpvRenderContext, MpvGlGetProcAddressFn
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QGraphicsOpacityEffect
-from PySide6.QtCore import Signal, Qt, QRectF, QPropertyAnimation, QEasingCurve, QMargins
+from PySide6.QtCore import Signal, Qt, QRect, QPropertyAnimation, QEasingCurve, QMargins
 from PySide6.QtGui import QPainter, QPen, QColor, QFont, QBrush
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
 
@@ -209,7 +209,7 @@ class PlayerSubtitleLayer(QLabel):
             (widget.style.get('safe_margin_title_y', 10) / 100) * widget.height()
         )
 
-        # QRectF(
+        # QRect(
         #     widget.width() * (widget.style.get('safe_margin_title_x', 10) / 100.0),
         #     widget.height() * (widget.style.get('safe_margin_title_y', 10) / 100.0),
         #     widget.width() * (1.0 - ((widget.style.get('safe_margin_title_x', 10) * 2) / 100)),
@@ -485,12 +485,12 @@ def resize_player_widget(self, just_get_qrect=False):
             aspect_ratio = self.video_metadata.get('width', 1920) / self.video_metadata.get('height', 1080)
             new_h = h
             new_w = h * aspect_ratio
-            qrect = QRectF(int(x + (w - new_w) / 2), y, int(new_w), int(new_h))
+            qrect = QRect(int(x + (w - new_w) / 2), y, int(new_w), int(new_h))
         else:
             aspect_ratio = self.video_metadata.get('height', 1080) / self.video_metadata.get('width', 1920)
             new_h = w * aspect_ratio
             new_w = w
-            qrect = QRectF(x, int(y + ((h - new_h) / 2)), int(new_w), int(new_h))
+            qrect = QRect(x, int(y + ((h - new_h) / 2)), int(new_w), int(new_h))
 
         if just_get_qrect:
             return [int(qrect.x()), int(qrect.y()), int(qrect.width()), int(qrect.height())]

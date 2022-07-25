@@ -1,17 +1,11 @@
-"""Module for subtitle list panel
-
-"""
-import os
-
 from PySide6.QtWidgets import QHBoxLayout, QPushButton, QLabel, QSizePolicy, QTextEdit, QVBoxLayout, QWidget, QStyledItemDelegate, QStyle, QListView, QLineEdit, QFrame
-from PySide6.QtGui import QIcon, QFontMetrics, QFont, QColor
+from PySide6.QtGui import QFontMetrics, QFont, QColor
 from PySide6.QtCore import Qt, QSize, QAbstractListModel, QRect, QMargins
 
 from subtitld.interface import subtitles_panel
 from subtitld.modules import utils
 from subtitld.modules import quality_check
 from subtitld.modules import subtitles
-from subtitld.modules.paths import PATH_SUBTITLD_GRAPHICS
 
 
 class subtitles_panel_qlistwidget_model(QAbstractListModel):
@@ -486,13 +480,13 @@ def properties_textedit_changed(self):
 def update_properties_information(self):
     if self.selected_subtitle:
         approved = True
-        reason = 'No problem.'
+        reasons = ['No problem.']
 
         if self.settings['quality_check'].get('enabled', False):
             approved, reasons = quality_check.check_subtitle(self.selected_subtitle, self.settings['quality_check'])
 
-        self.properties_information_word_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43' if approved else '#aa9e1a1a') + '}')
-        self.properties_information_character_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43' if approved else '#aa9e1a1a') + '}')
+        self.properties_information_word_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43f' if approved else '#aa9e1a1a') + '}')
+        self.properties_information_character_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43f' if approved else '#aa9e1a1a') + '}')
         self.properties_information_reason.setStyleSheet('QLabel { background-color: ' + ('#22ffffff' if approved else '#109e1a1a') + '}')
 
         self.properties_information_word_counter.setText(str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))))
