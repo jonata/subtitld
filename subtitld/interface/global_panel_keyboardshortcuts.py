@@ -31,14 +31,22 @@ class global_panel_keyboardshortcut_qlineedit(QLineEdit):
 
         command_string = widget.command
 
-        if command_string == '+':
-            command_string = '＋'
         widget.layout().addStretch()
-        for key in command_string.replace('++', '+＋').split('+'):
-            if key:
-                button = QPushButton(key)
-                button.setProperty('class', 'keyboard_key')
-                widget.layout().addWidget(button, 0, Qt.AlignCenter | Qt.AlignBottom)
+
+        if not command_string:
+            qlabel = QLabel('Press the shorkey combination for this command' if widget.isEnabled() else 'No shorkey for this command.')
+            qlabel.setProperty('class', 'units_label')
+            qlabel.setAlignment(Qt.AlignCenter)
+            widget.layout().addWidget(qlabel, 0, Qt.AlignCenter | Qt.AlignBottom)
+        else:
+            if command_string == '+':
+                command_string = '＋'
+            for key in command_string.replace('++', '+＋').split('+'):
+                if key:
+                    button = QPushButton(key)
+                    button.setProperty('class', 'keyboard_key')
+                    widget.layout().addWidget(button, 0, Qt.AlignCenter | Qt.AlignBottom)
+
         widget.layout().addStretch()
 
     def keyPressEvent(widget, event):
@@ -188,6 +196,8 @@ def global_panel_keyboardshortcut_change_button_clicked(self):
     self.global_panel_keyboardshortcut_clear_button.setVisible(False)
 
     self.global_panel_keyboardshortcut_qlineedit.setEnabled(True)
+    self.global_panel_keyboardshortcut_qlineedit.command = ''
+    self.global_panel_keyboardshortcut_qlineedit.update_shortcuts()
     shortcuts.disable_actions(self)
     self.global_panel_keyboardshortcut_qlineedit.setFocus()
 
