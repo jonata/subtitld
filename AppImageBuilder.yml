@@ -41,6 +41,7 @@ AppDir:
       - libfontconfig1
       - qtwayland5
       - libxcb1
+      - libqt5gui5
     exclude: []
 
   runtime:
