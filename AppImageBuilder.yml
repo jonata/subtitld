@@ -20,7 +20,7 @@ AppDir:
     id: org.jonata.Subtitld
     name: Subtitld
     icon: subtitld
-    version: 22.05.01.01
+    version: 22.09.01.01
     exec: "subtitld/subtitld"
     # exec_args: "$APPDIR/usr/bin/subtitld $@"
     exec_args: "$@"
@@ -30,8 +30,6 @@ AppDir:
     sources:
       - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse'
         key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
-      - sourceline: 'deb https://ppa.launchpadcontent.net/beineri/opt-qt-5.15.0-focal/ubuntu focal main'
-        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xC65D51784EDC19A871DBDBB710C56D0DE9977759'
 
     include:
       - python3
@@ -42,6 +40,8 @@ AppDir:
       - qtwayland5
       - libxcb1
       - libqt5gui5
+      - libqt5gui5-gles
+
     exclude: []
 
   runtime:
