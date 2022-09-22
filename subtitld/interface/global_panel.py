@@ -32,8 +32,8 @@ def load(self):
     global_panel_interface.load_menu(self)
     global_panel_keyboardshortcuts.load_menu(self)
     global_panel_qualitycontrol.load_menu(self)
-    global_panel_translation.load_menu(self)
     global_panel_transcription.load_menu(self)
+    global_panel_translation.load_menu(self)
     global_panel_import.load_menu(self)
     global_panel_export.load_menu(self)
 
@@ -60,6 +60,7 @@ def load(self):
 
     self.global_panel_widget.layout().addWidget(self.global_panel_content)
 
+    global_panel_menu_changed(self, self.global_panel_general_menu_button, self.global_panel_general_content)
 
 def resized(self):
     """Function on resizing widgets"""
@@ -77,7 +78,6 @@ def show_global_panel(self):
     self.generate_effect(self.global_panel_widget_animation, 'geometry', 700, [self.global_panel_widget.x(), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()], [0, self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()])
     self.global_panel_general_menu_button.setChecked(True)
     # self.player_widget.hold_update = True
-    global_panel_menu_changed(self, self.global_panel_general_menu_button, self.global_panel_general_content)
 
 
 def hide_global_panel(self):

@@ -207,7 +207,7 @@ class Timeline(QWidget):
 
                     painter.drawRoundedRect(subtitle_rect, 2.0, 2.0, Qt.AbsoluteSize)
 
-                    approved, _ = quality_check.check_subtitle(subtitle, widget.main_self.settings['quality_check'])
+                    approved, _, _ = quality_check.check_subtitle(subtitle, widget.main_self.settings['quality_check'])
                     if widget.main_self.settings['quality_check'].get('enabled', False) and not approved:
                         painter.setPen(QColor('#9e1a1a'))
                     elif widget.main_self.selected_subtitle == subtitle:

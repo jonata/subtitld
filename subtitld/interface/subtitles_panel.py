@@ -37,25 +37,27 @@ def load(self):
     self.toppanel_format_label = QLabel()
     self.toppanel_format_label.setObjectName('toppanel_format_label')
     self.toppanel_format_label.setProperty('class', 'unsaved')
-    self.toppanel_format_label.setLayout(QHBoxLayout(self.toppanel_format_label))
-    self.toppanel_format_label.setMinimumHeight(40)
+    self.toppanel_format_label.setLayout(QHBoxLayout())
+    # self.toppanel_format_label.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum))
+    # self.toppanel_format_label.setMinimumHeight(40)
     self.toppanel_format_label.layout().setSpacing(8)
-    self.toppanel_format_label.layout().setContentsMargins(0, 0, 0, 0)
-    self.toppanel_format_label.layout().setSizeConstraint(QLayout.SetMaximumSize)
+    self.toppanel_format_label.layout().setContentsMargins(20, 5, 5, 5)
+    self.toppanel_format_label.layout().setSizeConstraint(QLayout.SetMinAndMaxSize)
 
     self.toppanel_format_label_text = QLabel()
     self.toppanel_format_label_text.setObjectName('toppanel_format_label_text')
-    self.toppanel_format_label_text.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum))
-    self.toppanel_format_label.layout().addWidget(self.toppanel_format_label_text)
+    self.toppanel_format_label_text.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
+    self.toppanel_format_label.layout().addWidget(self.toppanel_format_label_text, 0)
 
     self.toppanel_save_button = QPushButton()
     self.toppanel_save_button.setObjectName('toppanel_save_button')
     self.toppanel_save_button.clicked.connect(lambda: toppanel_save_button_clicked(self))
     self.toppanel_save_button.setProperty('class', 'subbutton2_dark')
+    # self.toppanel_save_button.setFixedSize(QSize(48, 48))
     self.toppanel_save_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
-    self.toppanel_format_label.layout().addWidget(self.toppanel_save_button)
+    self.toppanel_format_label.layout().addWidget(self.toppanel_save_button, 0)
 
-    self.subtitles_panel_widget_top_bar.addWidget(self.toppanel_format_label)
+    self.subtitles_panel_widget_top_bar.addWidget(self.toppanel_format_label, 0)
 
     class toppanel_subtitle_file_info_label(QLabel):
         def enterEvent(widget, event):
@@ -68,19 +70,20 @@ def load(self):
 
     self.toppanel_subtitle_file_info_label = toppanel_subtitle_file_info_label()
     self.toppanel_subtitle_file_info_label.setLayout(QHBoxLayout(self.toppanel_subtitle_file_info_label))
-    # self.toppanel_subtitle_file_info_label.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum))
-    self.toppanel_subtitle_file_info_label.layout().setContentsMargins(0, 5, 5, 5)
+    self.toppanel_subtitle_file_info_label.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum))
+    self.toppanel_subtitle_file_info_label.layout().setContentsMargins(0, 0, 0, 0)
     self.toppanel_subtitle_file_info_label.setObjectName('toppanel_subtitle_file_info_label')
-    self.subtitles_panel_widget_top_bar.addWidget(self.toppanel_subtitle_file_info_label)
 
     self.toppanel_open_button = QPushButton('Open different file'.upper())
     self.toppanel_open_button.setObjectName('toppanel_open_button')
     self.toppanel_open_button.setProperty('class', 'subbutton2_dark')
     self.toppanel_open_button.clicked.connect(lambda: toppanel_open_button_clicked(self))
-    self.toppanel_open_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
+    # self.toppanel_open_button.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum))
     # self.toppanel_open_button.setProperty('class', 'button')
     self.toppanel_open_button.setVisible(False)
     self.toppanel_subtitle_file_info_label.layout().addWidget(self.toppanel_open_button, 0, Qt.AlignRight)
+
+    self.subtitles_panel_widget_top_bar.addWidget(self.toppanel_subtitle_file_info_label, 1)
 
     self.subtitles_panel_widget_vbox.layout().addLayout(self.subtitles_panel_widget_top_bar)
 
@@ -271,7 +274,7 @@ def subtitles_panel_toggle_button_clicked(self):
 
 
 def update_topbar_status(self):
-    self.toppanel_format_label.setObjectName('toppanel_format_label')
+    # self.toppanel_format_label.setObjectName('toppanel_format_label')
     self.toppanel_format_label.setProperty('class', 'unsaved' if self.unsaved else 'saved')
     self.toppanel_format_label.setStyleSheet(self.toppanel_format_label.styleSheet())
 
@@ -340,7 +343,7 @@ def toppanel_save_button_clicked(self):
         # suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
 
         # tem que reportar o bug que não retorna o selectedFilter se o dialogo for nativo
-        # filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats, options=QFileDialog.DontUseNativeDialog)
+        # filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats)
 
         # if filedialog[0] and filedialog[1]:
         #     filename = filedialog[0]

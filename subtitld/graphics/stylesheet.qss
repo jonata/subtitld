@@ -491,6 +491,10 @@ QLineEdit {
     background-color: white;
 }
 
+QLineEdit::disabled {
+    background-color: rgba(255, 255, 255, 50);
+}
+
 QLineEdit[borderless_right=true] {
     border-right: 0;
     padding-right: 2;
@@ -561,6 +565,11 @@ QComboBox {
     font-size: 11px;
     color: rgb(48,66,81);
     padding: 4px;
+}
+
+QComboBox::disabled {
+    min-width: 70px;
+    background-color: rgba(255,255,255,50);
 }
 
 QTableWidget {
@@ -681,6 +690,11 @@ QDoubleSpinBox {
     padding: 4px;
 }
 
+QSpinBox::disabled,
+QDoubleSpinBox::disabled {
+    background-color: rgba(255,255,255,0);
+}
+
 QSpinBox[class=spin_playercontrols],
 QDoubleSpinBox[class=spin_playercontrols] {
     padding: 0;
@@ -767,7 +781,8 @@ QMessageBox QPushButton {
 QTabBar:tab {
     background: rgba(255, 255, 255, 50);
     color: rgba(48,66,81, 200);
-    border: 1px solid rgba(106, 116, 131, 100);
+    /* border: 1px solid rgba(106, 116, 131, 100); */
+    border: 0;
     padding: 6px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
@@ -843,11 +858,11 @@ QLabel[class=widget_label] {
 }
 
 QGroupBox {
-    font-size:10px;
+    font-size:11px;
     color: rgba(48,66,81, 200);
     /* border-radius: 2px; */
     /* border: 1px solid rgba(48, 66, 81, 100); */
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 QLabel[class=units_label] {
@@ -1309,24 +1324,23 @@ QLabel[class=qlabel_for_buttons] {
             url("PATH_SUBTITLD_GRAPHICS/subtitles_panel_widget_button_timeline.svg") disabled;
 }
 
-#toppanel_format_label[class=saved] {
-    padding: 5 5 5 20;
+#toppanel_format_label {
+    /* padding: 5 5 5 20; */
     border-bottom-right-radius: 3px;
     border-top-right-radius: 3px;
+}
+
+#toppanel_format_label[class=saved] {
     background-color: rgb(62,83,99);
     color: white;
 }
 
 #toppanel_format_label[class=unsaved] {
-    padding: 5 5 5 20;
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
     background-color: rgb(85, 212, 63);
     color: rgba(48,66,81,255);
 }
 
 #toppanel_format_label_text {
-    qproperty-alignment: "AlignCenter";
     font-weight: bold;
     font-size: 10px;
     color: white;
@@ -1654,7 +1668,8 @@ QLabel[class=qlabel_for_buttons] {
 }
 
 #properties_information_word_counter {
-    border-radius: 2px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
     padding: 6 6 6 30;
     background-image: url('PATH_SUBTITLD_GRAPHICS/word_count_icon.svg');
     background-repeat: no-repeat;
@@ -1664,8 +1679,47 @@ QLabel[class=qlabel_for_buttons] {
     font-weight: bold;
 }
 
-#properties_information_character_counter {
+#properties_information_wpm {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    padding: 6 6 6 24;
+    background-image: url('PATH_SUBTITLD_GRAPHICS/wpm_icon.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: silver;
+}
+
+#properties_information_cps {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    padding: 6 6 6 24;
+    background-image: url('PATH_SUBTITLD_GRAPHICS/cps_icon.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: silver;
+}
+
+#properties_information_sub_duration {
     border-radius: 2px;
+    padding: 6 6 6 24;
+    background-image: url('PATH_SUBTITLD_GRAPHICS/cps_icon.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: silver;
+}
+
+#properties_information_character_counter {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
     padding: 6 6 6 30;
     background-image: url('PATH_SUBTITLD_GRAPHICS/character_count_icon.svg');
     background-repeat: no-repeat;
@@ -1675,9 +1729,29 @@ QLabel[class=qlabel_for_buttons] {
     font-weight: bold;
 }
 
+#properties_information_number_of_lines {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    padding: 6 6 6 30;
+    background-image: url('PATH_SUBTITLD_GRAPHICS/new_line_icon.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+#properties_information_cpl {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-image: url('PATH_SUBTITLD_GRAPHICS/character_count_icon.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
 #properties_information_reason {
-    border-radius: 2px;
-    padding: 6;
+    /* border-radius: 2px; */
+    /* padding: 6; */
     color: #304251;
     font-size: 9px;
     qproperty-wordWrap: true;
@@ -1685,4 +1759,25 @@ QLabel[class=qlabel_for_buttons] {
 
 #global_panel_keyboardshortcut_qlineedit {
     background-color: transparent;
+}
+
+
+#global_panel_tabwidget_quality_balanceratio_slider::groove:horizontal {
+    outline: none;
+    margin: 0;
+    border: 3;
+    padding: 0;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_disabled.svg") 3 3 3 3 stretch stretch;
+}
+
+#global_panel_tabwidget_quality_balanceratio_slider::handle:horizontal {
+    outline: none;
+    margin: -3;
+    border: 3;
+    width: 10px;
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_normal.svg") 3 3 3 3 stretch stretch;
+}
+
+#global_panel_tabwidget_quality_balanceratio_slider::handle:horizontal:disabled {
+    border-image: url("PATH_SUBTITLD_GRAPHICS/button_disabled.svg") 3 3 3 3 stretch stretch;
 }

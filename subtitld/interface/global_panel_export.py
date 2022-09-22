@@ -218,7 +218,7 @@ def global_subtitlesvideo_video_burn_convert_clicked(self):
     save_formats = self.tr('Video file') + ' (.' + extformat + ')'
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
 
-    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats, options=QFileDialog.DontUseNativeDialog)[0]
+    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
 
     if generated_video_filepath:
         file_io.save_file(os.path.join(path_tmp, 'subtitle.srt'), self.subtitles_list, subtitle_format='SRT', language='en')
@@ -264,7 +264,7 @@ def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
     save_formats = self.tr('Video file') + ' (.' + extformat + ')'
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
 
-    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats, options=QFileDialog.DontUseNativeDialog)[0]
+    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
 
     # print(path_tmp)
 
@@ -354,7 +354,7 @@ def global_subtitlesvideo_export_button_clicked(self):
 
     supported_export_files = ';;'.join(['{description} ({extension})'.format(extension=' '.join(['.{ext}'.format(ext=ext) for ext in LIST_OF_SUPPORTED_EXPORT_EXTENSIONS[export_format]['extensions']]), description=LIST_OF_SUPPORTED_EXPORT_EXTENSIONS[export_format]['description']) for export_format in LIST_OF_SUPPORTED_EXPORT_EXTENSIONS])
 
-    filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Export to file'), dir=os.path.join(suggested_path, suggested_name), filter=supported_export_files, options=QFileDialog.DontUseNativeDialog)
+    filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Export to file'), dir=os.path.join(suggested_path, suggested_name), filter=supported_export_files)
 
     if filedialog[0] and filedialog[1]:
         filename = filedialog[0]

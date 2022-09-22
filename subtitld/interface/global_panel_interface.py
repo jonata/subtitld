@@ -246,7 +246,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_backgroundbox_border_radius.valueChanged.connect(lambda: global_panel_interface_videoplayer_backgroundbox_border_radius_changed(self))
     self.global_panel_interface_videoplayer_backgroundbox_border_radius_line.addWidget(self.global_panel_interface_videoplayer_backgroundbox_border_radius, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_backgroundbox_border_radius_pixels_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_backgroundbox_border_radius_pixels_label = QLabel('%')
     self.global_panel_interface_videoplayer_backgroundbox_border_radius_pixels_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_backgroundbox_border_radius_line.addWidget(self.global_panel_interface_videoplayer_backgroundbox_border_radius_pixels_label, 0, Qt.AlignLeft)
 
@@ -300,7 +300,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_action_x_margin.valueChanged.connect(lambda: global_panel_interface_videoplayer_safe_margin_action_x_margin_changed(self))
     self.global_panel_interface_videoplayer_safe_margin_action_x_margin_line.addWidget(self.global_panel_interface_videoplayer_safe_margin_action_x_margin, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_safe_margin_action_x_margin_pixels_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_safe_margin_action_x_margin_pixels_label = QLabel('%')
     self.global_panel_interface_videoplayer_safe_margin_action_x_margin_pixels_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_safe_margin_action_x_margin_line.addWidget(self.global_panel_interface_videoplayer_safe_margin_action_x_margin_pixels_label, 0, Qt.AlignLeft)
 

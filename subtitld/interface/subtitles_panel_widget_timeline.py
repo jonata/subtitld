@@ -162,7 +162,7 @@ class subtitles_panel_timeline_widget_timeline(QWidget):
                         painter.setPen(QColor(widget.main_self.settings['timeline'].get('time_text_color', '#806a7483')))
                         painter.drawText(start_time_rect, Qt.AlignLeft | Qt.AlignVCenter, start_time)
 
-                        approved, _ = quality_check.check_subtitle(subtitle, widget.main_self.settings['quality_check'])
+                        approved, _, _ = quality_check.check_subtitle(subtitle, widget.main_self.settings['quality_check'])
                         if widget.main_self.settings['quality_check'].get('enabled', False) and not approved:
                             painter.setPen(QColor('#9e1a1a'))
                         elif widget.main_self.selected_subtitle == subtitle:
@@ -229,7 +229,7 @@ class subtitles_panel_timeline_widget_timeline(QWidget):
                         painter.setPen(QColor(widget.main_self.settings['timeline'].get('time_text_color', '#806a7483')))
                         painter.drawText(end_time_rect, Qt.AlignLeft | Qt.AlignVCenter, end_time)
 
-                        approved, _ = quality_check.check_subtitle(subtitle, widget.main_self.settings['quality_check'])
+                        approved, _, _ = quality_check.check_subtitle(subtitle, widget.main_self.settings['quality_check'])
                         if widget.main_self.settings['quality_check'].get('enabled', False) and not approved:
                             painter.setPen(QColor('#9e1a1a'))
                         elif widget.main_self.selected_subtitle == subtitle:

@@ -58,7 +58,7 @@ class subtitles_panel_qlistwidget_delegate(QStyledItemDelegate):
 
         sub_is_ok = True
         if self.settings['quality_check'].get('enabled', False):
-            sub_is_ok, reasons = quality_check.check_subtitle(index.model().subtitles[index.row()], self.settings['quality_check'])
+            sub_is_ok, _, _ = quality_check.check_subtitle(index.model().subtitles[index.row()], self.settings['quality_check'])
 
         painter.setPen(Qt.NoPen)
         painter.setBrush(QColor(self.settings.get('subtitle_list', {}).get('number_background_color', '#aa2e3e4c') if sub_is_ok else self.settings.get('subtitle_list', {}).get('number_background_warning_color', '#aa9e1a1a')))
@@ -117,24 +117,62 @@ def add_widgets(self):
 
     self.properties_information = QFrame()
     self.properties_information.setObjectName('properties_information')
-    self.properties_information.setLayout(QHBoxLayout())
+    self.properties_information.setLayout(QVBoxLayout())
     self.properties_information.layout().setContentsMargins(20, 0, 0, 0)
     self.properties_information.layout().setSpacing(5)
 
-    self.properties_information_word_counter = QLabel()
-    self.properties_information_word_counter.setObjectName('properties_information_word_counter')
+    self.properties_information_stats = QFrame()
+    self.properties_information_stats.setObjectName('properties_information')
+    self.properties_information_stats.setLayout(QHBoxLayout())
+    self.properties_information_stats.layout().setContentsMargins(0, 0, 0, 0)
+    self.properties_information_stats.layout().setSpacing(5)
 
-    self.properties_information.layout().addWidget(self.properties_information_word_counter, 0, Qt.AlignLeft)
+    self.properties_information_word_counter = QLabel()
+    self.properties_information_word_counter.setAlignment(Qt.AlignCenter)
+    self.properties_information_word_counter.setObjectName('properties_information_word_counter')
+    self.properties_information_stats.layout().addWidget(self.properties_information_word_counter)
+
+    self.properties_information_stats.layout().addSpacing(-5)
+
+    self.properties_information_wpm = QLabel()
+    self.properties_information_wpm.setAlignment(Qt.AlignCenter)
+    self.properties_information_wpm.setObjectName('properties_information_wpm')
+    self.properties_information_stats.layout().addWidget(self.properties_information_wpm)
 
     self.properties_information_character_counter = QLabel()
+    self.properties_information_character_counter.setAlignment(Qt.AlignCenter)
     self.properties_information_character_counter.setObjectName('properties_information_character_counter')
+    self.properties_information_stats.layout().addWidget(self.properties_information_character_counter)
 
-    self.properties_information.layout().addWidget(self.properties_information_character_counter, 0, Qt.AlignLeft)
+    self.properties_information_stats.layout().addSpacing(-5)
+
+    self.properties_information_cps = QLabel()
+    self.properties_information_cps.setAlignment(Qt.AlignCenter)
+    self.properties_information_cps.setObjectName('properties_information_cps')
+    self.properties_information_stats.layout().addWidget(self.properties_information_cps)
+
+    self.properties_information_sub_duration = QLabel()
+    self.properties_information_sub_duration.setAlignment(Qt.AlignCenter)
+    self.properties_information_sub_duration.setObjectName('properties_information_sub_duration')
+    self.properties_information_stats.layout().addWidget(self.properties_information_sub_duration)
+
+    self.properties_information_number_of_lines = QLabel()
+    self.properties_information_number_of_lines.setAlignment(Qt.AlignCenter)
+    self.properties_information_number_of_lines.setObjectName('properties_information_number_of_lines')
+    self.properties_information_stats.layout().addWidget(self.properties_information_number_of_lines)
+
+    self.properties_information_stats.layout().addSpacing(-5)
+
+    self.properties_information_cpl = QLabel()
+    self.properties_information_cpl.setObjectName('properties_information_cpl')
+    self.properties_information_cpl.setFixedWidth(30)
+    self.properties_information_stats.layout().addWidget(self.properties_information_cpl)
+
+    self.properties_information.layout().addWidget(self.properties_information_stats)
 
     self.properties_information_reason = QLabel()
     self.properties_information_reason.setObjectName('properties_information_reason')
-
-    self.properties_information.layout().addWidget(self.properties_information_reason, 1)
+    self.properties_information.layout().addWidget(self.properties_information_reason)
 
     # self.properties_information.layout().addStretch()
 
@@ -475,18 +513,31 @@ def properties_textedit_changed(self):
 
 def update_properties_information(self):
     if self.selected_subtitle:
-        approved = True
-        reasons = ['No problem.']
+        reasons = []
+        issues = []
 
         if self.settings['quality_check'].get('enabled', False):
-            approved, reasons = quality_check.check_subtitle(self.selected_subtitle, self.settings['quality_check'])
+            _, reasons, issues = quality_check.check_subtitle(self.selected_subtitle, self.settings['quality_check'])
 
-        self.properties_information_word_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43f' if approved else '#aa9e1a1a') + '}')
-        self.properties_information_character_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43f' if approved else '#aa9e1a1a') + '}')
-        self.properties_information_reason.setStyleSheet('QLabel { background-color: ' + ('#22ffffff' if approved else '#109e1a1a') + '}')
+        n_words = len(self.selected_subtitle[2].replace('\n', ' ').split(' '))
+        n_char = len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))
 
-        self.properties_information_word_counter.setText(str(len(self.selected_subtitle[2].replace('\n', ' ').split(' '))))
-        self.properties_information_character_counter.setText(str(len(self.selected_subtitle[2].replace('\n', '').replace(' ', ''))))
+        self.properties_information_word_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43f' if 'wpm' not in issues else '#aa9e1a1a') + '}')
+        self.properties_information_wpm.setStyleSheet('QLabel { background-color: ' + ('#bb55d43f' if 'wpm' not in issues else '#bb9e1a1a') + '}')
+        self.properties_information_character_counter.setStyleSheet('QLabel { background-color: ' + ('#55d43f' if 'cps' not in issues else '#aa9e1a1a') + '}')
+        self.properties_information_cps.setStyleSheet('QLabel { background-color: ' + ('#bb55d43f' if 'cps' not in issues else '#bb9e1a1a') + '}')
+        self.properties_information_sub_duration.setStyleSheet('QLabel { background-color: ' + ('#55d43f' if 'duration' not in issues else '#bb9e1a1a') + '}')
+        self.properties_information_number_of_lines.setStyleSheet('QLabel { background-color: ' + ('#55d43f' if 'number_of_lines' not in issues else '#bb9e1a1a') + '}')
+        self.properties_information_cpl.setStyleSheet('QLabel { background-color: ' + ('#bb55d43f' if 'cpl' not in issues else '#bb9e1a1a') + '}')
+
+        self.properties_information_word_counter.setText(str(n_words))
+        self.properties_information_wpm.setText(str(int(n_words / (self.selected_subtitle[1] / 60))))
+        self.properties_information_character_counter.setText(str(n_char))
+        self.properties_information_cps.setText(str(int(n_char / (self.selected_subtitle[1]))))
+        self.properties_information_sub_duration.setText(str(round(self.selected_subtitle[1], 3)))
+        self.properties_information_number_of_lines.setText(str(int(len(self.selected_subtitle[2].split('\n')))))
+
+        self.properties_information_reason.setVisible(bool(reasons))
         self.properties_information_reason.setText('\n'.join(reasons))
 
 
@@ -505,8 +556,9 @@ def update_properties_widget(self):
             self.subtitles_panel_simplelist_properties_duration_timing_qlineedit.setText(utils.get_timeline_time_str(self.selected_subtitle[1], ms=True))
             self.subtitles_panel_simplelist_properties_ending_timing_qlineedit.setText(utils.get_timeline_time_str(self.selected_subtitle[0] + self.selected_subtitle[1], ms=True))
 
-        self.properties_textedit.setText(text)
-        self.properties_information.setVisible(bool(self.selected_subtitle) and self.settings.get('quality_check', {}).get('show_statistics', False))
+        if not self.properties_textedit.hasFocus():
+            self.properties_textedit.setText(text)
+        self.properties_information_stats.setVisible(bool(self.selected_subtitle) and self.settings.get('quality_check', {}).get('show_statistics', False))
 
 
 def subtitles_panel_simplelist_properties_start_timing_qlineedit_text_edited(self):
