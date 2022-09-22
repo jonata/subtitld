@@ -79,6 +79,7 @@ parts:
         - libmpv1
         - ffmpeg
         - libffms2-4
+        - libgl1-mesa-glx
 
   subtitld:
     plugin: python
