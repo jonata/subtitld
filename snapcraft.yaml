@@ -79,7 +79,18 @@ parts:
         - libmpv1
         - ffmpeg
         - libffms2-4
+        - freeglut3
+        - libglu1-mesa
         - libgl1-mesa-glx
+        - libegl1-mesa
+        - libwayland-egl1-mesa
+        - libva-glx2
+        - libvdpau-va-gl1
+        - libegl1
+        - libgl1
+        - libglvnd0
+        - libglx0
+        - libxcb-glx0
 
   subtitld:
     plugin: python
