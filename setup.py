@@ -39,7 +39,7 @@ def get_data_files():
             # ('share/icons/hicolor/512x512/apps', ['data/icons/hicolor/512x512/apps/{}.png'.format(appid)]),
             # ('share/icons/hicolor/scalable/apps', ['subtitld/graphics/subtitld.svg']),
             ('share/icons/hicolor/512x512/apps', ['subtitld/graphics/subtitld.png']),
-            # ('share/applications', ['data/desktop/{}.desktop'.format(appid)]),
+            ('share/applications', ['subtitld.desktop']),
             # ('share/metainfo', ['data/appdata/{}.appdata.xml'.format(appid)]),
             # ('share/mime/packages', ['data/mime/{}.xml'.format(appid)]),
             # ('share/doc/subtitld', ['CHANGELOG', 'LICENSE', 'README.md'])

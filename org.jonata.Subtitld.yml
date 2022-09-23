@@ -1,14 +1,422 @@
 app-id: org.jonata.Subtitld
-runtime: org.freedesktop.Platform
-runtime-version: '21.08'
-sdk: org.freedesktop.Sdk
+
+runtime: org.kde.Platform
+runtime-version: '6.3'
+sdk: org.kde.Sdk
+base: com.riverbankcomputing.PyQt.BaseApp
+base-version: '6.3'
+
 command: subtitld
+rename-desktop-file: subtitld.desktop
+rename-icon: subtitld
+finish-args:
+  - --device=dri
+  - --filesystem=xdg-download
+  - --filesystem=xdg-music
+  - --filesystem=xdg-pictures
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --socket=wayland
+
 modules:
+
+  # - name: setuptools
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "setuptools" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/cc/83/7ea9d9b3a6ff3225aca2fce5e4df373bee7e0a74c539711a4fbfda53374f/setuptools-65.3.0.tar.gz
+  #       sha256: 7732871f4f7fa58fb6bdcaeadb0161b2bd046c85905dbaa066bdcbcc81953b57
+
+  # - name: urllib3
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "urllib3" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/b2/56/d87d6d3c4121c0bcec116919350ca05dc3afd2eeb7dc88d07e8083f8ea94/urllib3-1.26.12.tar.gz
+  #       sha256: 3fa96cf423e6987997fc326ae8df396db2a8b7c667747d47ddd8ecba91f4a74e
+
+  # - name: certifi
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "certifi" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/ca/48/88ec470f8b68319b6782ca3a0570789886ad5ca24c1af2f3771699135baa/certifi-2022.9.14.tar.gz
+  #       sha256: 36973885b9542e6bd01dea287b2b4b3b21236307c56324fcc3f1160f2d655ed5
+
+  # - name: charset-normalizer
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "charset-normalizer" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/a1/34/44964211e5410b051e4b8d2869c470ae8a68ae274953b1c7de6d98bbcf94/charset-normalizer-2.1.1.tar.gz
+  #       sha256: 5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845
+
+  # - name: idna
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "idna" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/8b/e1/43beb3d38dba6cb420cefa297822eac205a277ab43e5ba5d5c46faf96438/idna-3.4.tar.gz
+  #       sha256: 814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4
+
+  # - name: requests
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "requests" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/a5/61/a867851fd5ab77277495a8709ddda0861b28163c4613b011bc00228cc724/requests-2.28.1.tar.gz
+  #       sha256: 7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983
+
+  # - name: requests-toolbelt
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "requests-toolbelt" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/28/30/7bf7e5071081f761766d46820e52f4b16c8a08fef02d2eb4682ca7534310/requests-toolbelt-0.9.1.tar.gz
+  #       sha256: 968089d4584ad4ad7c171454f0a5c6dac23971e9472521ea3b6d49d610aa6fc0
+
+  # - name: poetry-core
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "poetry-core" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/27/ba/611a561ef300abdae81a576445334fb7a41e62c295b050338a4f54fa76d4/poetry-core-1.2.0.tar.gz
+  #       sha256: ceccec95487e46c63a41761fbac5211b809bca22658e25a049f4c7da96269f71
+
+  # - name: webencodings
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "webencodings" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/0b/02/ae6ceac1baeda530866a85075641cec12989bd8d31af6d5ab4a3e8c92f47/webencodings-0.5.1.tar.gz
+  #       sha256: b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923
+
+  # - name: msgpack
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "msgpack" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/22/44/0829b19ac243211d1d2bd759999aa92196c546518b0be91de9cacc98122a/msgpack-1.0.4.tar.gz
+  #       sha256: f5d869c18f030202eb412f08b28d2afeea553d6613aee89e200d7aca7ef01f5f
+
+  # - name: cachecontrol
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "cachecontrol" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/46/9b/34215200b0c2b2229d7be45c1436ca0e8cad3b10de42cfea96983bd70248/CacheControl-0.12.11.tar.gz
+  #       sha256: a5b9fcc986b184db101aa280b42ecdcdfc524892596f606858e0b7a8b4d9e144
+
+  # - name: tomlkit
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "tomlkit" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/84/51/092a8b945edc3b93f2de091ab9596006673caac063e3fac14f0fa6c69b1c/tomlkit-0.11.4.tar.gz
+  #       sha256: 3235a9010fae54323e727c3ac06fb720752fe6635b3426e379daec60fbd44a83
+
+  # - name: html5lib
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "html5lib" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/ac/b6/b55c3f49042f1df3dcd422b7f224f939892ee94f22abcf503a9b7339eaf2/html5lib-1.1.tar.gz
+  #       sha256: b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f
+
+  # - name: dulwich
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "dulwich" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/4c/61/85f17dd9e744e027d23bee2bbafc8438fab26c175a089b1a06b664deae21/dulwich-0.20.46.tar.gz
+  #       sha256: 4f0e88ffff5db1523d93d92f1525fe5fa161318ffbaad502c1b9b3be7a067172
+
+  # - name: cachy
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "cachy" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/a0/0c/45b249b0efce50a430b8810ec34c5f338d853c31c24b0b297597fd28edda/cachy-0.3.0.tar.gz
+  #       sha256: 186581f4ceb42a0bbe040c407da73c14092379b1e4c0e327fdb72ae4a9b269b1
+
+  # - name: filelock
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "filelock" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/95/55/b897882bffb8213456363e646bf9e9fa704ffda5a7d140edf935a9e02c7b/filelock-3.8.0.tar.gz
+  #       sha256: 55447caa666f2198c5b6b13a26d2084d26fa5b115c00d065664b2124680c4edc
+
+  # - name: distlib
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "distlib" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/58/07/815476ae605bcc5f95c87a62b95e74a1bce0878bc7a3119bc2bf4178f175/distlib-0.3.6.tar.gz
+  #       sha256: 14bad2d9b04d3a36127ac97f30b12a19268f211063d8f8ee4f47108896e11b46
+
+  # - name: pathspec
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "pathspec" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/24/9f/a9ae1e6efa11992dba2c4727d94602bd2f6ee5f0dedc29ee2d5d572c20f7/pathspec-0.10.1.tar.gz
+  #       sha256: 7ace6161b621d31e7902eb6b5ae148d12cfd23f4a249b9ffb6b9fee12084323d
+
+  # - name: pluggy
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "pluggy" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/a1/16/db2d7de3474b6e37cbb9c008965ee63835bba517e22cdb8c35b5116b5ce1/pluggy-1.0.0.tar.gz
+  #       sha256: 4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159
+
+  # - name: editables
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "editables" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/01/b0/a2a87db4b6cb8e7d57004b6836faa634e0747e3e39ded126cdbe5a33ba36/editables-0.3.tar.gz
+  #       sha256: 167524e377358ed1f1374e61c268f0d7a4bf7dbd046c656f7b410cde16161b1a
+
+  # - name: hatchling
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "hatchling" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/3a/27/fe3419237a30e84f7ef8fd187770f09e3f689a406f078ecc3bf2056035ea/hatchling-1.10.0.tar.gz
+  #       sha256: 5d31f43dffaf6265c808e1b5353662ffa5146d844278b55caa6c7f74f427ec50
+
+  # - name: hatch-vcs
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "hatch-vcs" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/ac/13/b3d83564c0cc0f1d45b4ea2a78b87b383a8165797613fedf11f1a7e49b48/hatch_vcs-0.2.0.tar.gz
+  #       sha256: 9913d733b34eec9bb0345d0626ca32165a4ad2de15d1ce643c36d09ca908abff
+
+  # - name: platformdirs
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "platformdirs" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/ff/7b/3613df51e6afbf2306fc2465671c03390229b55e3ef3ab9dd3f846a53be6/platformdirs-2.5.2.tar.gz
+  #       sha256: 58c8abb07dcb441e6ee4b11d8df0ac856038f944ab98b7be6b27b2a3c7feef19
+
+  # - name: virtualenv
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "virtualenv" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/07/a3/bd699eccc596c3612c67b06772c3557fda69815972eef4b22943d7535c68/virtualenv-20.16.5.tar.gz
+  #       sha256: 227ea1b9994fdc5ea31977ba3383ef296d7472ea85be9d6732e42a91c04e80da
+
+  # - name: jeepney
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "jeepney" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/d6/f4/154cf374c2daf2020e05c3c6a03c91348d59b23c5366e968feb198306fdf/jeepney-0.8.0.tar.gz
+  #       sha256: 5efe48d255973902f6badc3ce55e2aa6c5c3b3bc642059ef3a91247bcfcc5806
+
+  # - name: zipp
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "zipp" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/3b/e3/fb79a1ea5f3a7e9745f688855d3c673f2ef7921639a380ec76f7d4d83a85/zipp-3.8.1.tar.gz
+  #       sha256: 05b45f1ee8f807d0cc928485ca40a07cb491cf092ff587c0df9cb1fd154848d2
+
+  # - name: importlib_metadata
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "importlib_metadata" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/1a/16/441080c907df829016729e71d8bdd42d99b9bdde48b01492ed08912c0aa9/importlib_metadata-4.12.0.tar.gz
+  #       sha256: 637245b8bab2b6502fcbc752cc4b7a6f6243bb02b31c5c26156ad103d3d45670
+
+  # - name: setuptools-rust
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "setuptools-rust" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/99/db/e4ecb483ffa194d632ed44bda32cb740e564789fed7e56c2be8e2a0e2aa6/setuptools-rust-1.5.2.tar.gz
+  #       sha256: d8daccb14dc0eae1b6b6eb3ecef79675bd37b4065369f79c35393dd5c55652c7
+
+  # - name: semantic-version
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "semantic-version" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/7d/31/f2289ce78b9b473d582568c234e104d2a342fd658cc288a7553d83bb8595/semantic_version-2.10.0.tar.gz
+  #       sha256: bdabb6d336998cbb378d4b9db3a4b56a1e3235701dc05ea2690d9a997ed5041c
+
+  # - name: cryptography
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "cryptography" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/6d/0c/5e67831007ba6cd7e52c4095f053cf45c357739b0a7c46a45ddd50049019/cryptography-38.0.1.tar.gz
+  #       sha256: 1db3d807a14931fa317f96435695d9ec386be7b84b618cc61cfa5d08b0ae33d7
+
+  # - name: SecretStorage
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "SecretStorage" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/53/a4/f48c9d79cb507ed1373477dbceaba7401fd8a23af63b837fa61f1dcd3691/SecretStorage-3.3.3.tar.gz
+  #       sha256: 2403533ef369eca6d2ba81718576c5e0f564d5cca1b58f73a8b23e7d4eeebd77
+
+  # - name: keyring
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "keyring" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/2a/ef/28d3d5428108111dae4304a2ebec80d113aea9e78c939e25255425d486ff/keyring-23.9.3.tar.gz
+  #       sha256: 69b01dd83c42f590250fe7a1f503fc229b14de83857314b1933a3ddbf595c4a5
+
+  # - name: poetry
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "poetry" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/fa/73/e0870cd0049aff899a03ed04b9f3dc2642cce083f2c0eb6e276906b5c1ea/poetry-1.2.1.tar.gz
+  #       sha256: 2750bb2b636ef435d8beac51dde0b13d06199017a1d9b96cba899863d1e81024
+
+  # - name: poetry-plugin-export
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "poetry-plugin-export" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/af/ba/17455f3fb81eb2518f3d52c85de0b3c36a9d5111cf24bf4968aa900260cc/poetry-plugin-export-1.0.7.tar.gz
+  #       sha256: f6ac707ae227b06b2481249ed2678ff6b810b3487cac0fbb66eb0dc2bfd6ecf1
+
+  # - name: rsa
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "rsa" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/aa/65/7d973b89c4d2351d7fb232c2e452547ddfa243e93131e7cfa766da627b52/rsa-4.9.tar.gz
+  #       sha256: e38464a49c6c85d7f1351b0126661487a7e0a14a50f1675ec50eb34d4f20ef21
+
+  # - name: pyasn1
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "pyasn1" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/a4/db/fffec68299e6d7bad3d504147f9094830b704527a7fc098b721d38cc7fa7/pyasn1-0.4.8.tar.gz
+  #       sha256: aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba
+
+  # - name: pyasn1-modules
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "pyasn1-modules" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/88/87/72eb9ccf8a58021c542de2588a867dbefc7556e14b2866d1e40e9e2b587e/pyasn1-modules-0.2.8.tar.gz
+  #       sha256: 905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e
+
+  # - name: cachetools
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "cachetools" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/c2/6f/278225c5a070a18a76f85db5f1238f66476579fa9b04cda3722331dcc90f/cachetools-5.2.0.tar.gz
+  #       sha256: 6a94c6402995a99c3970cc7e4884bb60b4a8639938157eeed436098bf9831757
+
+  # - name: google-auth
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "google-auth" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/78/30/5f73a9a960dc888f44577f76c34e8437e24b441eadbebabde3d213eccfe3/google-auth-2.11.1.tar.gz
+  #       sha256: 516e6623038b81430dd062a1a25ecd24f173d7c15cdf4e48a9e78bc87e97aeec
+
+  # - name: httplib2
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "httplib2" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/9c/65/57ad964eb8d45cc3d1316ce5ada2632f74e35863a0e57a52398416a182a1/httplib2-0.20.4.tar.gz
+  #       sha256: 58a98e45b4b1a48273073f905d2961666ecf0fbac4250ea5b47aef259eb5c585
+
+  # - name: google-api-python-client
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "google-api-python-client" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/d8/cb/632663fe7ee39501f8f38b7ade635a23c9449ca57e458c3cf57361ed4a61/google-api-python-client-2.62.0.tar.gz
+  #       sha256: 8307b85f0b8f84252747326de50eda279220cc1a3966d6b82e94486618275637
+
+  # - name: chardet
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "chardet" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/31/a2/12c090713b3d0e141f367236d3a8bdc3e5fca0d83ff3647af4892c16c205/chardet-5.0.0.tar.gz
+  #       sha256: 0368df2bfd78b5fc20572bb4e9bb7fb53e2c094f60ae9993339e8671d0afb8aa
+
+  # - name: pysrt
+  #   buildsystem: simple
+  #   build-commands:
+  #     - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "pysrt" --no-build-isolation
+  #   sources:
+  #     - type: file
+  #       url: https://files.pythonhosted.org/packages/31/1a/0d858da1c6622dcf16011235a2639b0a01a49cecf812f8ab03308ab4de37/pysrt-1.1.2.tar.gz
+  #       sha256: b4f844ba33e4e7743e9db746492f3a193dc0bc112b153914698e7c1cdeb9b0b9
+
   - name: Subtitld
     buildsystem: simple
     build-commands:
-      - python3 setup.py install --prefix=/app
+      - python3 setup.py install --prefix=${FLATPAK_DEST} --root=/ --optimize=1
+      # - install -Dm644 /app/share/icons/hicolor/512x512/apps/subtitld.png
+    build-options:
+      build-args:
+        - --share=network
     sources:
       - type: archive
         url: https://gitlab.com/jonata/subtitld/-/archive/master/subtitld-master.tar.gz
-        sha256: 94220a747691f1d0bf91b7c6561171501e83cd6921d26c77197bc423862a125c
+        sha256: f46fb208c1af06c14af65b6e7bdb52b60eb80703c3468f88f62f0a93e81cbe48
