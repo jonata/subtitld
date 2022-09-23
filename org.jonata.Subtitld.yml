@@ -408,15 +408,30 @@ modules:
   #       url: https://files.pythonhosted.org/packages/31/1a/0d858da1c6622dcf16011235a2639b0a01a49cecf812f8ab03308ab4de37/pysrt-1.1.2.tar.gz
   #       sha256: b4f844ba33e4e7743e9db746492f3a193dc0bc112b153914698e7c1cdeb9b0b9
 
+  # - name: Subtitld
+  #   buildsystem: simple
+  #   build-commands:
+  #     - python3 setup.py install --prefix=${FLATPAK_DEST} --root=/ --optimize=1
+  #     # - install -Dm644 /app/share/icons/hicolor/512x512/apps/subtitld.png
+  #   build-options:
+  #     build-args:
+  #       - --share=network
+  #   sources:
+  #     - type: archive
+  #       url: https://gitlab.com/jonata/subtitld/-/archive/master/subtitld-master.tar.gz
+  #       sha256: e97303a932bcf18daf03dce58c2abd1913795cd6ec8702e2d1e3c3cbaba47dac
+
   - name: Subtitld
     buildsystem: simple
     build-commands:
-      - python3 setup.py install --prefix=${FLATPAK_DEST} --root=/ --optimize=1
-      # - install -Dm644 /app/share/icons/hicolor/512x512/apps/subtitld.png
+      - pip3 install --prefix=${FLATPAK_DEST} .
+      # - install -Dm644 share/icons/${FLATPAK_ID}.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
+      # - install -Dm644 share/applications/${FLATPAK_ID}.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      # - install -Dm644 share/metainfo/${FLATPAK_ID}.appdata.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.appdata.xml
     build-options:
       build-args:
         - --share=network
     sources:
-      - type: archive
-        url: https://gitlab.com/jonata/subtitld/-/archive/master/subtitld-master.tar.gz
-        sha256: f46fb208c1af06c14af65b6e7bdb52b60eb80703c3468f88f62f0a93e81cbe48
+      - type: git
+        url: https://gitlab.com/jonata/subtitld.git
+        branch: master

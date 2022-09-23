@@ -41,7 +41,6 @@ AppDir:
       - qtwayland5
       - libxcb1
       - libqt5gui5
-      - libqt5gui5-gles
 
     exclude: []
 
