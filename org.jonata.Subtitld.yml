@@ -1,0 +1,14 @@
+app-id: org.jonata.Subtitld
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+command: subtitld
+modules:
+  - name: Subtitld
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py install --prefix=/app
+    sources:
+      - type: archive
+        url: https://gitlab.com/jonata/subtitld/-/archive/master/subtitld-master.tar.gz
+        sha256: 94220a747691f1d0bf91b7c6561171501e83cd6921d26c77197bc423862a125c

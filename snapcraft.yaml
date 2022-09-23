@@ -86,10 +86,7 @@ parts:
         - libwayland-egl1-mesa
         - libva-glx2
         - libvdpau-va-gl1
-        - libegl1
-        - libgl1
         - libglvnd0
-        - libglx0
         - libxcb-glx0
 
   subtitld:
