@@ -51,7 +51,7 @@ class MpvWidget(QOpenGLWidget):
             "input-cursor": False,
             "input-vo-keyboard": False,
             "input-default-bindings": False,
-            "ytdl": False,
+            # "ytdl": False,
             "sub-auto": False,
             "audio-file-auto": False,
             "vo": "libmpv",
