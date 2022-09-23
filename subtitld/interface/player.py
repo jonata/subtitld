@@ -19,7 +19,7 @@ class MpvWidget(QOpenGLWidget):
         super().__init__(parent)
 
         widget.mpv = MPV(
-            ytdl=False,
+            # ytdl=False,
             loglevel='info',
             log_handler=print
         )
