@@ -21,9 +21,9 @@ AppDir:
     name: Subtitld
     icon: subtitld
     version: 22.09.01.01
-    exec: "usr/bin/subtitld"
-    # exec_args: "$APPDIR/usr/bin/subtitld $@"
-    exec_args: "$@"
+    exec: "usr/bin/python3"
+    exec_args: "$APPDIR/usr/bin/subtitld $@"
+    # exec_args: "$@"
 
   apt:
     arch: amd64
