@@ -1,4 +1,5 @@
 # -*- mode: python -*-
+import os
 
 VERSION = '20.07.0.0'
 if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
@@ -27,6 +28,7 @@ a = Analysis(['subtitld/__main__.py'],
              ],
              datas=[
                      ( 'subtitld/graphics/*', 'graphics' ),
+                     ( os.path.join(os.getenv('PYTHON_DIRECTORY'), '/Lib/site-packages/PySide6/plugins'), 'PySide6/plugins/')
                     #  ( 'subtitld/ftfy/char_classes.dat', 'ftfy' ),
                  ],
              hiddenimports=['PySide6'],

@@ -34,11 +34,11 @@ AppDir:
     include:
       - python3
       - python3-pkg-resources
-      - libfreetype6
-      - libfontconfig1
-      - qtwayland5
-      - libxcb1
-      - libqt5gui5
+      # - libfreetype6
+      # - libfontconfig1
+      # - qtwayland5
+      # - libxcb1
+      # - libqt5gui5
 
     exclude: []
 
@@ -51,7 +51,7 @@ AppDir:
       PYTHONHOME: '${APPDIR}/usr'
       PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages'
       # GDK_BACKEND: x11
-      QT_QPA_PLATFORM_PLUGIN_PATH: '${APPDIR}/usr/lib/x86_64-linux-gnu/qt5/plugins/platforms'
+      # QT_QPA_PLATFORM_PLUGIN_PATH: '${APPDIR}/usr/lib/x86_64-linux-gnu/qt5/plugins/platforms'
       # QT_QPA_PLATFORM: wayland
 
   test:
