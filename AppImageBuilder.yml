@@ -1,16 +1,15 @@
 version: 1
-# script:
-  # - rm -rf AppDir | true
-  # - mkdir -p AppDir/usr
-  # - apt update
-  # - apt install -y python3.8 python3.8-dev libffi-dev
-  # - python3.8 -m pip install cython
-  # - python3.8 -m pip install scikit-build --ignore-installed --prefix=/usr --root=AppDir
-  # - python3.8 -m pip install cmake --ignore-installed --prefix=/usr --root=AppDir
-  # - python3.8 -m pip install PyQt5 numpy opencv-python qimage2ndarray python-i18n rpyc --ignore-installed --prefix=/usr --root=AppDir
-
-  # - python3.8 -m pip install --ignore-installed --prefix=/usr --root=AppDir -r requirements.txt
-  # - python3.8 setup.py install --prefix=/usr --root=AppDir
+script:
+  - rm -rf AppDir | true
+  - python3 setup.py install --prefix=/usr --root=AppDir
+  # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/qml/
+  # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/examples/
+  # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/resources/
+  # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/translations/qtwebengine_locales/
+  # - rm -f AppDir/usr/lib/python3.8/site-packages/PySide6/{assistant,designer,linguist,lrelease,lupdate}
+  # - rm -f AppDir/usr/lib/python3.8/site-packages/PySide6/{Qt3D*,QtBluetooth*,QtCharts*,QtConcurrent*,QtDataVisualization*,QtDBus*,QtDesigner*,QtHelp*,QtMultimedia*,QtNetwork*,QtOpenGL*,QtPositioning*,QtPrintSupport*,QtQml*,QtQuick*,QtRemoteObjects*,QtScxml*,QtSensors*,QtSerialPort*,QtSql*,QtStateMachine*,QtSvg*,QtTest*,QtWeb*,QtXml*}
+  # - shopt -s extglob
+  # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/lib/!(libQt6OpenGL*|libQt6XcbQpa*|libQt6Wayland*|libQt6Egl*|libicudata*|libicuuc*|libicui18n*|libQt6DBus*|libQt6Network*|libQt6Qml*|libQt6Core*|libQt6Gui*|libQt6Widgets*|libQt6Svg*|libQt6UiTools*)
 
 
 AppDir:
@@ -28,53 +27,23 @@ AppDir:
   apt:
     arch: amd64
     sources:
-      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse'
+      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse'
         key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
 
     include:
       - python3
       - python3-pkg-resources
-      # - libfreetype6
-      # - libfontconfig1
-      # - qtwayland5
-      # - libxcb1
-      # - libqt5gui5
-
-    exclude: []
+      # - libopengl0
+      # - libssl1.1
+      # - libk5crypto3
+      # - libkrb5-3
+      # - libgssapi-krb5-2
 
   runtime:
     env:
-      # QTDIR: '${APPDIR}/opt/qt515:${QTDIR}'
-      # LD_LIBRARY_PATH: '${APPDIR}/opt/qt515/lib/x86_64-linux-gnu:${APPDIR}/opt/qt515/lib:${LD_LIBRARY_PATH}'
-      # PKG_CONFIG_PATH: '${APPDIR}/opt/qt515/lib/pkgconfig:${PKG_CONFIG_PATH}'
-      # PATH: '${APPDIR}/usr/bin:${APPDIR}/opt/qt515/bin:${PATH}'
       PYTHONHOME: '${APPDIR}/usr'
       PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages'
-      # GDK_BACKEND: x11
-      # QT_QPA_PLATFORM_PLUGIN_PATH: '${APPDIR}/usr/lib/x86_64-linux-gnu/qt5/plugins/platforms'
-      # QT_QPA_PLATFORM: wayland
 
-  test:
-    fedora:
-      image: appimagecrafters/tests-env:fedora-30
-      command: ./AppRun
-      use_host_x: true
-    debian:
-      image: appimagecrafters/tests-env:debian-stable
-      command: ./AppRun
-      use_host_x: true
-    arch:
-      image: appimagecrafters/tests-env:archlinux-latest
-      command: ./AppRun
-      use_host_x: true
-    centos:
-      image: appimagecrafters/tests-env:centos-7
-      command: ./AppRun
-      use_host_x: true
-    ubuntu:
-      image: appimagecrafters/tests-env:ubuntu-xenial
-      command: ./AppRun
-      use_host_x: true
 
 AppImage:
   update-information: 'gh-releases-zsync|AppImageCrafters|subtitld|latest|Subtitld-*x86_64.AppImage.zsync'
