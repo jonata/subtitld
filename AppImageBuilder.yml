@@ -21,7 +21,7 @@ AppDir:
     name: Subtitld
     icon: subtitld
     version: 22.09.01.01
-    exec: "bin/subtitld"
+    exec: "usr/bin/subtitld"
     # exec_args: "$APPDIR/usr/bin/subtitld $@"
     exec_args: "$@"
 
