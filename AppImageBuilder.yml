@@ -2,6 +2,7 @@ version: 1
 script:
   - rm -rf AppDir | true
   - python3 setup.py install --prefix=/usr --root=AppDir
+  - tree
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/qml/
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/examples/
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/resources/
@@ -20,7 +21,7 @@ AppDir:
     name: Subtitld
     icon: subtitld
     version: 22.09.01.01
-    exec: "usr/bin/subtitld"
+    exec: "bin/subtitld"
     # exec_args: "$APPDIR/usr/bin/subtitld $@"
     exec_args: "$@"
 
