@@ -37,6 +37,7 @@ apps:
       # DISABLE_WAYLAND: 1
     plugs:
       - gsettings
+      - opengl
       - home
       - network
       - network-bind
@@ -88,6 +89,8 @@ parts:
         - libvdpau-va-gl1
         - libglvnd0
         - libxcb-glx0
+        - python3-opengl
+
 
   subtitld:
     plugin: python
