@@ -100,7 +100,7 @@ appimage-amd64:
     - mkdir -p ~/.local/bin
     - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O ~/.local/bin/appimagetool
     - chmod +x ~/.local/bin/appimagetool
-    - python --version
+    - python3 --version
     - python3 -m pip install appimage-builder
     - appimage-builder --skip-test --recipe AppImageBuilder.yml
   artifacts:
