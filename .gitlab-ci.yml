@@ -63,7 +63,8 @@ appimage-amd64:
   image:
     # name: ubuntudesktop/gnome-3-38-2004:latest
     # name: ubuntu:jammy
-    name: owncloudci/appimage-build:latest
+    # name: owncloudci/appimage-build:latest
+    name: appimagecrafters/appimage-builder:1.1.0
   # image: appimagecrafters/appimage-builder
   # image: ubuntudesktop/gnome-3-38-2004:latest
   stage: deploy
