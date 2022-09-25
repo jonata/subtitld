@@ -42,6 +42,7 @@ AppDir:
     include:
       - python3
       - python3-pkg-resources
+      - gtk-update-icon-cache
       # - libopengl0
       # - libssl1.1
       # - libk5crypto3
