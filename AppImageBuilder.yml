@@ -16,12 +16,20 @@ script:
 AppDir:
   path: ./AppDir
 
+  # after_bundle: |
+  #   # Set python 3.10 env
+  #   export PYTHONHOME=${APPDIR}/usr
+  #   export PYTHONPATH=${APPDIR}/usr/lib/python3.10/site-packages:$APPDIR/usr/lib/python3.10
+  #   export PATH=${APPDIR}/usr/bin:$PATH
+  #   # Set python 3.10 as default
+  #   ln -fs python3.10 $APPDIR/usr/bin/python3
+
   app_info:
     id: org.jonata.Subtitld
     name: Subtitld
     icon: subtitld
     version: 22.09.01.01
-    exec: "usr/bin/python3.6"
+    exec: "usr/bin/python3"
     exec_args: "$APPDIR/usr/bin/subtitld $@"
     # exec_args: "$@"
 
