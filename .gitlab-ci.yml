@@ -93,9 +93,9 @@ appimage-amd64:
     # - python3 setup.py clean --all install --prefix=/usr --root=AppDir
     - apt-get update
     - apt-get install -y wget python3-pip
-    - mkdir -p ~/.local/bin
-    - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O ~/.local/bin/appimagetool
-    - chmod +x ~/.local/bin/appimagetool
+    # - mkdir -p ~/.local/bin
+    # - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O ~/.local/bin/appimagetool
+    # - chmod +x ~/.local/bin/appimagetool
     - pip3 install appimage-builder
     - appimage-builder --skip-test --recipe AppImageBuilder.yml
   artifacts:
