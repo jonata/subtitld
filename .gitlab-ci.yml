@@ -86,6 +86,8 @@ appimage-amd64:
     # - wget -qO - https://archive.neon.kde.org/public.key | apt-key add -
     # - apt-get update
     # - apt-get install -y qt5-default qtdeclarative5-dev cmake
+  before_script:
+    - DEBIAN_FRONTEND=noninteractive apt-get update
   script:
     # - cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
     # - make install DESTDIR=AppDir
@@ -93,7 +95,7 @@ appimage-amd64:
     # - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
     # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
     # - python3 setup.py clean --all install --prefix=/usr --root=AppDir
-    - apt-get update
+    # - apt-get update
     - apt-get install -y python3.10
     # - mkdir -p ~/.local/bin
     # - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O ~/.local/bin/appimagetool
