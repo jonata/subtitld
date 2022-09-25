@@ -62,9 +62,9 @@ snap-edge:amd64:
 appimage-amd64:
   image:
     # name: ubuntudesktop/gnome-3-38-2004:latest
-    # name: ubuntu:jammy
+    name: ubuntu:jammy
     # name: owncloudci/appimage-build:latest
-    name: appimagecrafters/appimage-builder
+    # name: appimagecrafters/appimage-builder
   # image: appimagecrafters/appimage-builder
   # image: ubuntudesktop/gnome-3-38-2004:latest
   stage: deploy
@@ -87,7 +87,7 @@ appimage-amd64:
     # - apt-get update
     # - apt-get install -y qt5-default qtdeclarative5-dev cmake
   before_script:
-    - DEBIAN_FRONTEND=noninteractive apt-get update
+    - DEBIAN_FRONTEND=noninteractive apt update
   script:
     # - cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
     # - make install DESTDIR=AppDir
@@ -96,11 +96,11 @@ appimage-amd64:
     # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
     # - python3 setup.py clean --all install --prefix=/usr --root=AppDir
     # - apt-get update
-    - DEBIAN_FRONTEND=noninteractive apt-get install -y python3.10
-    # - mkdir -p ~/.local/bin
-    # - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O ~/.local/bin/appimagetool
-    # - chmod +x ~/.local/bin/appimagetool
-    # - pip3 install appimage-builder
+    # - DEBIAN_FRONTEND=noninteractive apt-get install -y python3.10
+    - mkdir -p ~/.local/bin
+    - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O ~/.local/bin/appimagetool
+    - chmod +x ~/.local/bin/appimagetool
+    - python3.10 -m pip install appimage-builder
     - appimage-builder --skip-test --recipe AppImageBuilder.yml
   artifacts:
     paths:
