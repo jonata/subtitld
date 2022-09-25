@@ -96,7 +96,7 @@ appimage-amd64:
     # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
     # - python3 setup.py clean --all install --prefix=/usr --root=AppDir
     # - apt-get update
-    # - DEBIAN_FRONTEND=noninteractive apt-get install -y python3.10
+    - DEBIAN_FRONTEND=noninteractive apt-get install -y wget
     - mkdir -p ~/.local/bin
     - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O ~/.local/bin/appimagetool
     - chmod +x ~/.local/bin/appimagetool
