@@ -3,8 +3,8 @@ script:
   - rm -rf AppDir | true
   - python3.10 -m pip install --upgrade --force-reinstall --prefix=/usr --root=AppDir .
   - python3.10 setup.py install --prefix=/usr --root=AppDir
-  - ls -R
-  - sed -i 's/find_library(name)/"libffms2.so.5.0.0"/g' AppDir/usr/lib/python3.10/site-packages/ffms2/get_library.py
+  # - ls -R
+  - sed -i 's/find_library(name)/"libffms2.so.5.0.0"/g' AppDir/usr/local/lib/python3.10/dist-packages/ffms2/get_library.py
   # - ls -R  --ignore-installed --no-deps --no-cache-dir
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/qml/
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/examples/
