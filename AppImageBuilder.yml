@@ -1,8 +1,8 @@
 version: 1
 script:
   - rm -rf AppDir | true
+  - python3.10 -m pip install --upgrade --force-reinstall --no-deps --no-cache-dir --prefix=/usr --root=AppDir -r requirements.txt
   - python3.10 setup.py install --prefix=/usr --root=AppDir
-  - python3.10 -m pip install --upgrade --force-reinstall --no-deps --no-cache-dir lxml --prefix=/usr --root=AppDir
   # - ls -R
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/qml/
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/examples/
