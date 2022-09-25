@@ -1,7 +1,7 @@
 version: 1
 script:
   - rm -rf AppDir | true
-  - python3 setup.py install --prefix=/usr --root=AppDir
+  - python3.10 setup.py install --prefix=/usr --root=AppDir
   - ls -R
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/qml/
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/examples/
@@ -51,7 +51,7 @@ AppDir:
   runtime:
     env:
       PYTHONHOME: '${APPDIR}/usr'
-      PYTHONPATH: '${APPDIR}/usr/lib/python3.8/site-packages'
+      PYTHONPATH: '${APPDIR}/usr/lib/python3.10/site-packages'
 
 
 AppImage:
