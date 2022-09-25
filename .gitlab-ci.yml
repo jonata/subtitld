@@ -62,7 +62,8 @@ snap-edge:amd64:
 appimage-amd64:
   image:
     # name: ubuntudesktop/gnome-3-38-2004:latest
-    name: ubuntu:jammy
+    # name: ubuntu:jammy
+    name: owncloudci/appimage-build:latest
   # image: appimagecrafters/appimage-builder
   # image: ubuntudesktop/gnome-3-38-2004:latest
   stage: deploy
@@ -91,12 +92,12 @@ appimage-amd64:
     # - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
     # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
     # - python3 setup.py clean --all install --prefix=/usr --root=AppDir
-    - apt-get update
-    - apt-get install -y wget python3-pip
+    # - apt-get update
+    # - apt-get install -y wget python3-pip
     # - mkdir -p ~/.local/bin
     # - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O ~/.local/bin/appimagetool
     # - chmod +x ~/.local/bin/appimagetool
-    - pip3 install appimage-builder
+    # - pip3 install appimage-builder
     - appimage-builder --skip-test --recipe AppImageBuilder.yml
   artifacts:
     paths:
