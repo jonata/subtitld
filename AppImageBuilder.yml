@@ -5,10 +5,10 @@ script:
   - python3.10 setup.py install --prefix=/usr --root=AppDir
   # - ls -R
   - sed -i 's/find_library(name)/"libffms2.so.5.0.0"/g' AppDir/usr/local/lib/python3.10/dist-packages/ffms2/get_library.py
-  - sed -i 's/raise OSError("Cannot find libmpv in the usual places. Depending on your distro, you may try installing an "
-                "mpv-devel or mpv-libs package. If you have libmpv around but this script can't find it, consult "
-                "the documentation for ctypes.util.find_library which this script uses to look up the library "
-                "filename.")/"sofile = 'libmpv.so.1'"/g' AppDir/usr/local/lib/python3.10/dist-packages/mpv.py
+  - sed -i 's/raise OSError("Cannot find libmpv in the usual places. Depending on your distro, you may try installing an "/sofile = 'libmpv.so.1'/g' AppDir/usr/local/lib/python3.10/dist-packages/mpv.py
+  - sed -i 's/"mpv-devel or mpv-libs package. If you have libmpv around but this script can't find it, consult "/sofile = 'libmpv.so.1'/g' AppDir/usr/local/lib/python3.10/dist-packages/mpv.py
+  - sed -i 's/"the documentation for ctypes.util.find_library which this script uses to look up the library "/sofile = 'libmpv.so.1'/g' AppDir/usr/local/lib/python3.10/dist-packages/mpv.py
+  - sed -i 's/"filename.")/sofile = 'libmpv.so.1'/g' AppDir/usr/local/lib/python3.10/dist-packages/mpv.py
   # - ls -R  --ignore-installed --no-deps --no-cache-dir
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/Qt/qml/
   # - rm -rf AppDir/usr/lib/python3.8/site-packages/PySide6/examples/
