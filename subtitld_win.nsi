@@ -50,7 +50,6 @@ Section "install" Installation
 
     CreateDirectory "$SMPROGRAMS\${MUI_BRANDINGTEXT}"
     CreateShortCut "$SMPROGRAMS\${MUI_BRANDINGTEXT}\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "" "$INSTDIR\Uninstall.exe" 0
-    CreateShortCut "$SMPROGRAMS\${MUI_BRANDINGTEXT}\${MUI_BRANDINGTEXT}.lnk" "$INSTDIR\${MUI_BRANDINGTEXT}.exe" "" "$INSTDIR\${MUI_BRANDINGTEXT}.exe" 0
 
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "DisplayName" "${MUI_PRODUCT} (remove only)"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "UninstallString" "$INSTDIR\Uninstall.exe"
