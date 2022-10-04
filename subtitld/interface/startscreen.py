@@ -82,11 +82,11 @@ def resized(self):
 def show(self):
     """Function to show starting panel"""
     if self.settings['recent_files']:
-        # Deprecate this in the future
-        if self.settings['recent_files'] and isinstance(self.settings['recent_files'][[*self.settings['recent_files']][0]], str):
-            inv_rf = {v: k for k, v in self.settings['recent_files'].items()}
-        else:
-            inv_rf = {v['last_opened']: k for k, v in self.settings['recent_files'].items()}
+        for item in self.settings['recent_files']:
+            if (self.settings['recent_files'][item], str):
+                del self.settings['recent_files'][item]
+
+        inv_rf = {v['last_opened']: k for k, v in self.settings['recent_files'].items()}
         for item in reversed(sorted(inv_rf)):
             if os.path.isfile(inv_rf[item]):
                 for filename in self.start_screen_temp_recent_files_list:
