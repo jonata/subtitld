@@ -106,7 +106,6 @@ parts:
     override-build: |
       snapcraftctl build
       sed -i 's/find_library(name)/"libffms2.so.4.0.0"/g' $SNAPCRAFT_PART_INSTALL/lib/python3.8/site-packages/ffms2/get_library.py
-      sed -i 's/find_library(name)/"libffms2.so.5.0.0"/g' AppDir/usr/local/lib/python3.10/dist-packages/ffms2/get_library.py
       sed -i 's/raise OSError("Cannot find libmpv in the usual places. Depending on your distro, you may try installing an "/sofile = "libmpv.so.1"/g' $SNAPCRAFT_PART_INSTALL/lib/python3.8/site-packages/mpv.py
       sed -i 's/                "mpv-devel or mpv-libs package. If you have libmpv around but this script can/        \#/g' $SNAPCRAFT_PART_INSTALL/lib/python3.8/site-packages/mpv.py
       sed -i 's/                "the documentation for ctypes/        \#/g' $SNAPCRAFT_PART_INSTALL/lib/python3.8/site-packages/mpv.py
