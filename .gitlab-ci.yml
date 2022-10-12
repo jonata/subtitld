@@ -127,7 +127,7 @@ windows-nsis:
     - wine pyinstaller subtitld_win.spec
     - makensis subtitld_win.nsi
     - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/builds.subtitld.org/appimage/
+    - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/builds.subtitld.org/windows/
   artifacts:
     paths:
       - Subtitld*Installer.exe
