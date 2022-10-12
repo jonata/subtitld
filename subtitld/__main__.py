@@ -17,7 +17,7 @@ from subtitld.modules import config
 from subtitld.modules.history import history_redo, history_undo
 from subtitld.modules.paths import PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
 
-from .resources import *
+from subtitld import resources_rc
 
 if ACTUAL_OS == 'darwin':
     from subtitld.modules.paths import NSURL
