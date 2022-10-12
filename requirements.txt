@@ -1,3 +1,4 @@
+PySide6
 pyopengl
 python-mpv==0.5.2
 ffms2
