@@ -15,7 +15,9 @@ from PySide6.QtCore import Qt, QRect, QPropertyAnimation, QTimer
 
 from subtitld.modules import config
 from subtitld.modules.history import history_redo, history_undo
-from subtitld.modules.paths import PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP, get_graphics_path
+from subtitld.modules.paths import PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
+
+from resources import *
 
 if ACTUAL_OS == 'darwin':
     from subtitld.modules.paths import NSURL
@@ -38,7 +40,7 @@ class Subtitld(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Subtitld')
-        self.setWindowIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'subtitld.png')))
+        self.setWindowIcon(QIcon(":/graphics/subtitld.png"))
         self.setAcceptDrops(True)
 
         self.setMinimumSize(860, 450)
@@ -96,7 +98,7 @@ class Subtitld(QWidget):
         self.background_watermark_label.setObjectName('background_watermark_label')
 
         # All the stylesheet properties are in a separate file, so importing it here
-        self.setStyleSheet(open(os.path.join(PATH_SUBTITLD_GRAPHICS, 'stylesheet.qss')).read().replace('PATH_SUBTITLD_GRAPHICS/', get_graphics_path()))
+        self.setStyleSheet(open(os.path.join(PATH_SUBTITLD_GRAPHICS, 'stylesheet.qss')).read())
 
         # The file io system
         from subtitld.modules import file_io
