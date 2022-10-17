@@ -118,13 +118,16 @@ windows-nsis:
   script:
     - apt-get update -qy
     # - apt-get upgrade -y
-    - apt-get install -y nsis openssh-client sshpass unzip
+    - apt-get install -y nsis openssh-client sshpass unzip librsvg2-bin
     - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
     - unzip ffmpeg-release-essentials.zip
     # - wine "c:\Python37\python.exe" -m pip install -U pip
     - wine pip3 install -r requirements.txt
     # - wine pip3 install https://github.com/pyinstaller/pyinstaller/tarball/develop
     - wine pip3 install -U pyinstaller glfw pywin32
+    - for f in subtitld/graphics/*.svg; do rsvg-convert "$f" -o "${f%.*}.png"; done
+    - ls subtitld/graphics/
+    - sed -i 's/.svg/.png/g' subtitld/graphics/stylesheet.qss
     - wine pyinstaller subtitld_win.spec
     - makensis subtitld_win.nsi
     - export SSHPASS=$USER_PASS
