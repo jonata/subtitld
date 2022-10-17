@@ -126,8 +126,10 @@ windows-nsis:
     # - wine pip3 install https://github.com/pyinstaller/pyinstaller/tarball/develop
     - wine pip3 install -U pyinstaller glfw pywin32
     - for f in subtitld/graphics/*.svg; do rsvg-convert "$f" -o "${f%.*}.png"; done
-    - ls subtitld/graphics/
     - sed -i 's/.svg/.png/g' subtitld/graphics/stylesheet.qss
+    - sed -i 's/.svg/.png/g' subtitld/resources.qrc
+    - rm subtitld/resources_rc.py
+    - wine 'c:/python39/Scripts/pyside6-rcc.exe' subtitld/resources.qrc -o subtitld/resources_rc.py
     - wine pyinstaller subtitld_win.spec
     - makensis subtitld_win.nsi
     - export SSHPASS=$USER_PASS
