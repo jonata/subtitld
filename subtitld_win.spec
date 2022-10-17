@@ -22,7 +22,9 @@ a = Analysis(['subtitld/__main__.py'],
     ],
     hiddenimports=[
         'ffms2',
-        'pythoncom'
+        'pythoncom',
+		'pywin32',
+		'glfw'
     ],
     hookspath=[],
     runtime_hooks=[] )
