@@ -58,7 +58,7 @@ def load(self):
 
     self.start_screen_adver_label_details = QLabel(parent=self.start_screen)
     self.start_screen_adver_label_details.setObjectName('start_screen_adver_label_details')
-    self.start_screen_adver_label_details.setText(self.tr('Visit <b>subtitld.jonata.org</b> for<br>more information.'))
+    self.start_screen_adver_label_details.setText(self.tr('Visit <b>subtitld.org</b> for<br>more information.'))
 
     self.start_screen_temp_recent_files_list = []
 
@@ -83,7 +83,7 @@ def show(self):
     """Function to show starting panel"""
     if self.settings['recent_files']:
         delete = [item for item in self.settings['recent_files'] if isinstance(self.settings['recent_files'][item], str)]
- 
+
         for item in delete:
             del self.settings['recent_files'][item]
 

@@ -19,7 +19,7 @@ from subtitld.modules.paths import VERSION_NUMBER, PATH_SUBTITLD_DATA_UPDATE
 class ThreadCheckVersion(QThread):
     """Class for QThread for checking version"""
     command = Signal(dict)
-    url = 'https://api2.jonata.org/subtitld/windows_version'
+    url = 'https://api2.subtitld.org/subtitld/windows_version'
 
     def run(self):
         """Function for running QThread"""
@@ -31,7 +31,7 @@ class ThreadCheckVersion(QThread):
 class ThreadDownloadInstaller(QThread):
     """Class for QThread for download installer"""
     command = Signal(str)
-    url = 'https://api2.jonata.org/subtitld/get_windows_installer'
+    url = 'https://api2.subtitld.org/subtitld/get_windows_installer'
     downloadfolder = os.path.join(PATH_SUBTITLD_DATA_UPDATE, 'subtitld_update.exe')
 
     def run(self):

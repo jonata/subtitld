@@ -6,7 +6,7 @@ An open source software to create, edit and transcribe subtitles. It is able to 
 
 ## Getting Started
 
-If you need some more information on how to use the software, please visit the project website at [subtitld.jonata.org](https://subtitld.jonata.org). Here are the instructions to install Subtitld from the source. Please note that you need to follow this intructions only if you really want to run Subtitld from source. If you are not familiar with the terminal and just want to install and use it in a easy way, you are encouraged to use the Snap package (available on Ubuntu Software) on Linux distributions or the Windows Installer (available from the website).
+If you need some more information on how to use the software, please visit the project website at [subtitld.org](https://subtitld.org). Here are the instructions to install Subtitld from the source. Please note that you need to follow this intructions only if you really want to run Subtitld from source. If you are not familiar with the terminal and just want to install and use it in a easy way, you are encouraged to use the Snap package (available on Ubuntu Software) on Linux distributions or the Windows Installer (available from the website).
 
 ### Prerequisites
 
@@ -54,7 +54,7 @@ subtitld
 
 ## Contributing
 
-If you find a bug or want to suggest a new feature, feel free to [report an issue](https://gitlab.com/jonata/subtitld/-/issues). Also, consider [supporting the project](https://subtitld.jonata.org/support).
+If you find a bug or want to suggest a new feature, feel free to [report an issue](https://gitlab.com/jonata/subtitld/-/issues). Also, consider [supporting the project](https://subtitld.org/support).
 
 ## License
 

@@ -192,18 +192,6 @@ modules:
               - type: archive
                 url: https://github.com/mstorsjo/fdk-aac/archive/v2.0.2.tar.gz
                 sha256: 7812b4f0cf66acda0d0fe4302545339517e702af7674dd04e5fe22a5ade16a90
-          - name: lame
-            cleanup:
-              - "/share/doc"
-            config-opts:
-              - "--enable-shared"
-              - "--disable-static"
-              - "--disable-frontend"
-              - "--enable-nasm"
-            sources:
-              - type: archive
-                url: https://downloads.sourceforge.net/lame/lame-3.100.tar.gz
-                sha256: ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 
   - name: python3-pyopengl
     buildsystem: simple
@@ -487,15 +475,11 @@ modules:
             url: https://files.pythonhosted.org/packages/da/b7/ced7a41f2a7eb2b0f8ae4aa48233d74375d0e433351cc11c96f4224f2d29/shiboken6-6.3.2-cp36-abi3-manylinux_2_28_x86_64.whl
             sha256: e242361886679cde47c4cb367f2e3124274201ca8bf01049235861d032666320
 
-
   - name: Subtitld
     buildsystem: simple
     build-commands:
       # - pip3 install --prefix=${FLATPAK_DEST} .
       - python3 setup.py install --prefix=${FLATPAK_DEST} --root=/ --optimize=1
-    build-options:
-      build-args:
-        - --share=network
     sources:
       - type: git
         tag: "22.10"
