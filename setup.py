@@ -134,7 +134,7 @@ install_requires = [
     'pycaption',
     # 'captionstransformer @ git+ssh://git@github.com/toutpt/captionstransformer',
     'pysubs2',
-    'lxml',
+    'lxml==4.9.1',
     'clean-text[gpl]',
     'html5lib==1.0b8',
     # 'scenedetect',
