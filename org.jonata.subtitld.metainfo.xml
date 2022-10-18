@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.jonata.subtitld</id>
+
+  <name>Subtitld</name>
+  <summary>Subtitld is a software to create and edit subtitles</summary>
+
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <project_license>LGPL-3.0-or-later</project_license>
+
+  <description>
+    <p>
+      Subtitld is an open source software to edit, transcribe and create subtitles. It is able to read and write various formats like SRT, SSA, TTML, SBV, DFXP, VTT, XML, SCC and SAMI.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">subtitld.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://subtitld.org/user/pages/01.home/subtitld_screenshot_.webp</image>
+    </screenshot>
+  </screenshots>
+</component>
