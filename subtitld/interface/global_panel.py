@@ -76,6 +76,7 @@ def resized(self):
 def show_global_panel(self):
     """Function to show subtitlesvideo panel"""
     self.generate_effect(self.global_panel_widget_animation, 'geometry', 700, [self.global_panel_widget.x(), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()], [0, self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()])
+    self.generate_effect(self.player_border_transparency_animation, 'opacity', 200, 1.0, 0.0)
     self.global_panel_general_menu_button.setChecked(True)
     # self.player_widget.hold_update = True
 
@@ -83,6 +84,7 @@ def show_global_panel(self):
 def hide_global_panel(self):
     # self.player_widget.hold_update = False
     self.generate_effect(self.global_panel_widget_animation, 'geometry', 700, [self.global_panel_widget.x(), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()], [int(-self.global_panel_widget.width() + self.subtitles_panel_widget.width()), self.global_panel_widget.y(), self.global_panel_widget.width(), self.global_panel_widget.height()])
+    self.generate_effect(self.player_border_transparency_animation, 'opacity', 200, 0.0, 1.0)
 
 
 def global_panel_menu_changed(self, button, widget):
