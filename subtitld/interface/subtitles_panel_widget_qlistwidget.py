@@ -419,21 +419,12 @@ def update_subtitles_panel_qlistwidget(self):
     if current_sub and not (self.subtitles_panel_qlistwidget.verticalScrollBar().value() + self.subtitles_panel_qlistwidget.verticalScrollBar().pageStep() > index > self.subtitles_panel_qlistwidget.verticalScrollBar().value()):
         self.subtitles_panel_qlistwidget.verticalScrollBar().setValue(index - 1)
 
-    if self.subtitles_list:
-        self.subtitles_panel_qlistwidget_model.subtitles = sorted(self.subtitles_list)
-        self.subtitles_panel_qlistwidget_model.layoutChanged.emit()
+    self.subtitles_panel_qlistwidget_model.subtitles = sorted(self.subtitles_list)
+    self.subtitles_panel_qlistwidget_model.layoutChanged.emit()
 
-        # counter = 1
-        # for sub in sorted(self.subtitles_list):
-        #     print(sub)
-        #     item, item_widget = generate_qlistwidget_item_widget(self, counter, sub)
-
-        #     self.subtitles_panel_qlistwidget.addItem(item)
-        #     self.subtitles_panel_qlistwidget.setItemWidget(item, item_widget)
-
-        #     counter += 1
     if self.selected_subtitle:
         self.subtitles_panel_qlistwidget.setCurrentIndex(self.subtitles_panel_qlistwidget_model.get_index(self.selected_subtitle))
+
 
     update_properties_widget(self)
 
