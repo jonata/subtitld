@@ -137,12 +137,6 @@ class Subtitld(QWidget):
         self.playercontrols = playercontrols
         self.playercontrols.load(self)
 
-        # from subtitld.modules import playercontrols_properties
-        # self.playercontrols_properties = playercontrols_properties
-        # self.playercontrols_properties.load(self)
-
-        # self.subtitles_panel.update_subtitles_panel_qlistwidget(self)
-        # self.subtitles_panel.update_properties_widget(self)
         self.player.update(self)
 
         from subtitld.modules import shortcuts
@@ -243,7 +237,7 @@ class Subtitld(QWidget):
             elif event.modifiers() == Qt.ControlModifier:
                 history_undo(actual_subtitles=self.subtitles_list)
             self.selected_subtitle = False
-            self.subtitles_panel.update_subtitles_panel_qlistwidget(self)
+            self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
             # self.properties.update_properties_widget(self)
             self.timeline.update(self)
 
