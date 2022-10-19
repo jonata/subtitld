@@ -266,3 +266,13 @@ def change_subtitle_text(subtitles=[], selected_subtitle=False, text=''):
     if selected_subtitle:
         history.history_append(subtitles)
         subtitles[subtitles.index(selected_subtitle)][2] = text
+
+
+def is_current_position_above_subtitle(subtitles=[], position=0.0):
+    subt = [item[0] for item in subtitles]
+    index = bisect(subt, position)
+
+    if position < subtitles[index - 1][0] + subtitles[index - 1][1]:
+        return True
+
+    return False

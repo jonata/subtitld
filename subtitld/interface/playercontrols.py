@@ -1248,7 +1248,7 @@ def remove_selected_subtitle_button_clicked(self):
     self.unsaved = True
     subtitles_panel.update_topbar_status(self)
     self.selected_subtitle = False
-    self.subtitles_panel.update_subtitles_panel_widget_vision_content(self)
+    subtitles_panel.update_subtitles_panel_widget_vision_content(self)
     self.timeline.update(self)
     # self.subtitles_panel.update_properties_widget(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)

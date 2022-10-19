@@ -41,6 +41,9 @@ def load(config_file_path=False):
     if not config.get('default_values', False):
         config['default_values'] = {}
 
+    if not config.get('export', False):
+        config['export'] = {}
+
     return config
 
 

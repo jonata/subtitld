@@ -5,7 +5,7 @@
 # from multiprocessing.spawn import old_main_modules
 import os
 
-from PySide6.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QFileDialog, QMessageBox, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget, QLineEdit
+from PySide6.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QMessageBox, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget, QLineEdit, QProgressBar
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 from PySide6.QtGui import QTextCursor
 
@@ -74,6 +74,7 @@ def load(self):
     self.toppanel_subtitle_file_info_label.layout().setContentsMargins(0, 0, 0, 0)
     self.toppanel_subtitle_file_info_label.setObjectName('toppanel_subtitle_file_info_label')
 
+
     self.toppanel_open_button = QPushButton('Open different file'.upper())
     self.toppanel_open_button.setObjectName('toppanel_open_button')
     self.toppanel_open_button.setProperty('class', 'subbutton2_dark')
@@ -84,6 +85,14 @@ def load(self):
     self.toppanel_subtitle_file_info_label.layout().addWidget(self.toppanel_open_button, 0, Qt.AlignRight)
 
     self.subtitles_panel_widget_top_bar.addWidget(self.toppanel_subtitle_file_info_label, 1)
+
+    self.toppanel_subtitle_file_progress_bar = QProgressBar()
+    self.toppanel_subtitle_file_progress_bar.setObjectName('toppanel_subtitle_file_progress_bar')
+    self.toppanel_subtitle_file_progress_bar.setSizePolicy(QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum))
+    self.toppanel_subtitle_file_progress_bar.setValue(40)
+    self.toppanel_subtitle_file_progress_bar.setAlignment(Qt.AlignCenter)
+    self.toppanel_subtitle_file_progress_bar.setVisible(False)
+    self.subtitles_panel_widget_top_bar.addWidget(self.toppanel_subtitle_file_progress_bar, 1)
 
     self.subtitles_panel_widget_vbox.layout().addLayout(self.subtitles_panel_widget_top_bar)
 
@@ -534,3 +543,9 @@ def update_subtitles_panel_widget_vision(self, vision='list'):
         self.subtitles_panel_widget_button_timeline.setChecked(False)
 
     update_subtitles_panel_widget_vision_content(self)
+
+
+def update_processing_status(self, show=False, value=0):
+    self.toppanel_subtitle_file_progress_bar.setVisible(show)
+    self.toppanel_subtitle_file_progress_bar.setValue(value)
+    self.toppanel_subtitle_file_info_label.setVisible(not show)

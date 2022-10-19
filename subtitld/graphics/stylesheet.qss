@@ -1781,3 +1781,15 @@ QLabel[class=qlabel_for_buttons] {
 #global_panel_tabwidget_quality_balanceratio_slider::handle:horizontal:disabled {
     border-image: url(:/graphics/button_disabled.svg) 3 3 3 3 stretch stretch;
 }
+
+#toppanel_subtitle_file_progress_bar {
+    border: 0;
+    border-radius: 2px;
+    color: #aab8cee0;
+    background-color: rgba(62, 83, 99, 100);
+}
+#toppanel_subtitle_file_progress_bar::chunk {
+    background-color: rgb(62, 83, 99);
+    border-radius: 2px;
+}
+
