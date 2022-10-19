@@ -170,10 +170,6 @@ def load_widgets(self):
 
     self.global_panel_interface_videoplayer_shadow_y_position_vbox.addLayout(self.global_panel_interface_videoplayer_shadow_y_position_line)
 
-    self.global_panel_interface_videoplayer_shadow_group.layout().addLayout(self.global_panel_interface_videoplayer_shadow_y_position_vbox)
-
-    self.global_panel_interface_tabwidget_videoplayer.layout().addWidget(self.global_panel_interface_videoplayer_shadow_group)
-
     self.global_panel_interface_videoplayer_shadow_color_vbox = QVBoxLayout()
     self.global_panel_interface_videoplayer_shadow_color_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_shadow_color_vbox.setSpacing(2)
