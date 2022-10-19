@@ -139,7 +139,16 @@ def load_widgets(self):
 
     self.global_panel_export_video_tabwidget = QTabWidget()
 
-    self.global_panel_export_video_ffmpeg_panel = QWidget()
+    class global_panel_export_video_ffmpeg_panel(QWidget):
+        """The main window (QWidget) class"""
+        def __init__(widget):
+            super().__init__()
+
+        def showEvent(widget, event):
+            update_preview(self)
+            return event
+
+    self.global_panel_export_video_ffmpeg_panel = global_panel_export_video_ffmpeg_panel()
     self.global_panel_export_video_ffmpeg_panel.setLayout(QGridLayout())
     self.global_panel_export_video_ffmpeg_panel.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_export_video_ffmpeg_panel.layout().setSpacing(20)
@@ -641,7 +650,7 @@ def global_panel_export_video_ffmpeg_color_button_clicked(self):
     color = QColorDialog.getColor(options=QColorDialog.ShowAlphaChannel)
     if color.isValid():
         self.settings['export']['ffmpeg_color'] = color.name(QColor.HexArgb)
-    update_widgets(self)
+    update_preview(self)
 
 
 def global_panel_export_video_ffmpeg_fontsize_spinbox_changed(self):
