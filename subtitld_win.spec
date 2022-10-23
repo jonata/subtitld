@@ -31,7 +31,8 @@ a = Analysis(['subtitld/__main__.py'],
 
 pyz = PYZ(a.pure)
 
-exe = EXE(pyz,
+exe = EXE(
+    pyz,
     a.scripts,
     exclude_binaries=True,
     name='Subtitld.exe',
@@ -39,14 +40,40 @@ exe = EXE(pyz,
     upx=True,
     console=False,
     debug=False,
-    icon='subtitld/graphics/subtitld.ico' )
+    icon='subtitld/graphics/subtitld.ico'
+)
 
-coll = COLLECT( exe,
-                a.binaries,
-                a.zipfiles,
-                a.datas,
-                strip=False,
-                upx=True,
-                name='Subtitld')
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    name='Subtitld'
+)
 
 open('dist/subtitld/current_version', mode='w', encoding='utf-8').write(VERSION)
+
+exe_port = EXE(
+    pyz,
+    a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    [],
+    name='Subtitld Portable.exe',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    icon='subtitld/graphics/subtitld.ico'
+)
