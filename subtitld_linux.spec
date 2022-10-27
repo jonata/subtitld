@@ -1,7 +1,7 @@
 # -*- mode: python -*-
 import os
 
-VERSION = '20.07.0.0'
+VERSION = '22.11.0.0'
 if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
     VERSION = os.environ['VERSION_NUMBER']
 

@@ -1,6 +1,6 @@
 # -*- mode: python -*-
 
-VERSION = '20.10.0.0'
+VERSION = '22.11.0.0'
 if 'VERSION_NUMBER' in [*os.environ] and not os.environ['VERSION_NUMBER'] == '':
     VERSION = os.environ['VERSION_NUMBER']
 
@@ -62,7 +62,7 @@ exe_port = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='Subtitld Portable.exe',
+    name='Subtitld_Portable.exe',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

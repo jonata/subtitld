@@ -116,6 +116,7 @@ windows-nsis:
   image: cheaterman/pyinstaller-windows:latest
   stage: deploy
   script:
+    - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
     - apt-get update -qy
     # - apt-get upgrade -y
     - apt-get install -y nsis openssh-client sshpass unzip librsvg2-bin
@@ -132,8 +133,9 @@ windows-nsis:
     - wine 'c:/python39/Scripts/pyside6-rcc.exe' subtitld/resources.qrc -o subtitld/resources_rc.py
     - wine pyinstaller subtitld_win.spec
     - makensis subtitld_win.nsi
+    - mv "dist/Subtitld Portable.exe" "Subtitld ${VERSION_NUMBER} Portable.exe"
     - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no Subtitld*Installer.exe jonata@jonata.org:/home/jonata/builds.subtitld.org/windows/
+    - sshpass -e scp -o stricthostkeychecking=no Subtitld*.exe jonata@jonata.org:/home/jonata/builds.subtitld.org/windows/
   artifacts:
     paths:
       - Subtitld*Installer.exe
