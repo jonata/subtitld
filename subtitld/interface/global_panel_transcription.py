@@ -11,7 +11,7 @@ import speech_recognition as sr
 from PySide6.QtWidgets import QComboBox, QPushButton, QWidget, QMessageBox, QVBoxLayout, QTabWidget, QHBoxLayout, QLabel, QGroupBox, QProgressBar
 from PySide6.QtCore import QThread, Signal, Qt, QSize, QRect, QMargins
 from PySide6.QtGui import QPainter, QPen, QColor, QFont
-from subtitld.interface import global_panel
+from subtitld.interface import global_panel, subtitles_panel, player
 
 from subtitld.modules.paths import LANGUAGE_DICT_LIST, STARTUPINFO, path_tmp, FFMPEG_EXECUTABLE
 from subtitld.modules import file_io
@@ -19,6 +19,25 @@ from subtitld.modules import utils
 from subtitld import autosub
 
 LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
+
+
+class global_panel_transcription_autosubtitles_thread(QThread):
+    """Thread to generate burned video"""
+    response = Signal(str)
+    original_file = ''
+    language = 'en'
+
+    def run(self):
+        if self.original_file:
+            autosub.generate_subtitles(
+                self.original_file,
+                output=os.path.join(path_tmp, 'subtitle.json'),
+                src_language=self.language,
+                dst_language=self.language,
+                subtitle_file_format='json',
+                ffmpeg_executable=FFMPEG_EXECUTABLE
+            )
+            self.response.emit('end')
 
 
 class global_panel_transcription_transcript_thread(QThread):
@@ -209,6 +228,32 @@ class ThreadGeneratedBurnedVideo(QThread):
             self.response.emit('end')
 
 
+def read_json_transcribed_subtitles(filename='', transcribed=False):
+            final_subtitles = []
+            if filename:
+                with open(filename, encoding='utf-8') as json_file:
+                    data = json.loads(json_file.read())
+                    if transcribed:
+                        for fragment in data:
+                            subtitle = []
+                            subtitle.append(float(fragment['start']))
+                            subtitle.append(float(fragment['end']) - subtitle[0])
+                            subtitle.append(str(fragment['content']))
+                            final_subtitles.append(subtitle)
+                    else:
+                        for fragment in data['fragments']:
+                            subtitle = []
+                            subtitle.append(float(fragment['begin']))
+                            subtitle.append(float(fragment['end']) - float(fragment['begin']))
+                            # subtitle.append(codecs.decode(fragment['lines'][0], 'unicode-escape'))
+                            # print(fragment['lines'][0])
+                            subtitle.append(str(fragment['lines'][0]))
+                            final_subtitles.append(subtitle)
+
+            return final_subtitles
+
+
+
 def load_menu(self):
     """Function to load subtitles panel widgets"""
     self.global_panel_transcription_menu_button = QPushButton('Transcription')
@@ -262,6 +307,20 @@ def load_widgets(self):
     self.global_panel_transcription_autosubtitle_widget.layout().addWidget(self.global_panel_transcription_autosubtitle_groupbox)
 
     self.global_panel_transcription_autosubtitle_widget.layout().addStretch()
+
+    def global_panel_transcription_autosubtitles_thread_ended(response):
+        if 'end' in response:
+            if os.path.isfile(os.path.join(path_tmp, 'subtitle.json')):
+                final_subtitles = read_json_transcribed_subtitles(filename=os.path.join(path_tmp, 'subtitle.json'), transcribed=True)
+                if final_subtitles:
+                    self.subtitles_list = final_subtitles
+            subtitles_panel.update_processing_status(self, show=False, value=0)
+            self.global_panel_transcription_autosubtitle_button.setEnabled(True)
+            player.update_timelines(self)
+
+    self.global_panel_transcription_autosubtitles_thread = global_panel_transcription_autosubtitles_thread(self)
+    self.global_panel_transcription_autosubtitles_thread.response.connect(global_panel_transcription_autosubtitles_thread_ended)
+
 
     self.global_panel_transcription_tabwidget.addTab(self.global_panel_transcription_autosubtitle_widget, 'Autosubtitle')
 
@@ -413,64 +472,15 @@ def global_panel_transcription_autosubtitle_button_clicked(self):
         run_command = True
 
     if run_command:
-        def read_json_subtitles(filename='', transcribed=False):
-            final_subtitles = []
-            if filename:
-                with open(filename, encoding='utf-8') as json_file:
-                    data = json.loads(json_file.read())
-                    if transcribed:
-                        for fragment in data:
-                            subtitle = []
-                            subtitle.append(float(fragment['start']))
-                            subtitle.append(float(fragment['end']) - subtitle[0])
-                            subtitle.append(str(fragment['content']))
-                            final_subtitles.append(subtitle)
-                    else:
-                        for fragment in data['fragments']:
-                            subtitle = []
-                            subtitle.append(float(fragment['begin']))
-                            subtitle.append(float(fragment['end']) - float(fragment['begin']))
-                            # subtitle.append(codecs.decode(fragment['lines'][0], 'unicode-escape'))
-                            # print(fragment['lines'][0])
-                            subtitle.append(str(fragment['lines'][0]))
-                            final_subtitles.append(subtitle)
-
-            return final_subtitles
 
         language = LANGUAGE_DICT_LIST[self.global_panel_transcription_language_combobox.currentText()]
-        #
-        # command = [
-        #     FFMPEG_EXECUTABLE,
-        #     '-y',
-        #     '-f', 'f32le',
-        #     '-ac', '1',
-        #     '-ar', '48000',
-        #     '-i', '-',
-        #     '-vn',
-        #     os.path.join(path_tmp, 'subtitle.opus')]
-        #
-        # audio_out = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, startupinfo=STARTUPINFO)
-        # audio_out.stdin.write(self.video_metadata['audio'].tobytes())
-        # audio_out.stdin.close()
-        # audio_out.wait()
 
-        # autosub.generate_subtitles(os.path.join(path_tmp, 'subtitle.opus'), output=os.path.join(path_tmp, 'subtitle.json'), src_language=language, dst_language=language, subtitle_file_format='json')
+        self.global_panel_transcription_autosubtitles_thread.original_file = self.video_metadata['filepath']
+        self.global_panel_transcription_autosubtitles_thread.language = language
+        self.global_panel_transcription_autosubtitles_thread.start()
 
-        autosub.generate_subtitles(
-            self.video_metadata['filepath'],
-            output=os.path.join(path_tmp, 'subtitle.json'),
-            src_language=language,
-            dst_language=language,
-            subtitle_file_format='json',
-            ffmpeg_executable=FFMPEG_EXECUTABLE
-        )
-
-        if os.path.isfile(os.path.join(path_tmp, 'subtitle.json')):
-            final_subtitles = read_json_subtitles(filename=os.path.join(path_tmp, 'subtitle.json'), transcribed=True)
-            if final_subtitles:
-                self.subtitles_list = final_subtitles
-
-        # update_widgets(self)
+        subtitles_panel.update_processing_status(self, show=True, value=33)
+        self.global_panel_transcription_autosubtitle_button.setEnabled(False)
 
 
 def global_panel_transcription_transcript_apply_transcript_button_clicked(self):
