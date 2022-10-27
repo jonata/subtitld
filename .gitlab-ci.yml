@@ -63,7 +63,7 @@ windows:
     - sshpass -e scp -o stricthostkeychecking=no Subtitld*.exe jonata@jonata.org:/home/jonata/builds.subtitld.org/windows/
   artifacts:
     paths:
-      - Subtitld*Installer.exe
+      - Subtitld*.exe
     expire_in: 1 week
   only:
     - master
