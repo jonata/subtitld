@@ -1,24 +1,6 @@
-# snap:amd64:
-#   image:
-#     name: ubuntudesktop/gnome-3-38-2004
-#   stage: deploy
-#   script:
-#   - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
-#   - snapcraft
-#   - echo ${SNAPCRAFT_LOGIN_FILE} | base64 --decode --ignore-garbage > snapcraft.login
-#   - snapcraft login --with snapcraft.login
-#   - snapcraft upload *.snap --release beta
-#   artifacts:
-#     paths:
-#     - subtitld*.snap
-#     expire_in: 1 week
-#   only:
-#   - master
-
 snap-edge:amd64:
   image:
     name: ubuntudesktop/gnome-3-38-2004:latest
-    # name: diddledan/snapcraft:core20
   stage: deploy
   script:
     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
@@ -35,66 +17,13 @@ snap-edge:amd64:
   only:
     - master
 
-# appimage:amd64:
-#   image:
-#     name: appimagecrafters/appimage-builder
-#   stage: deploy
-#   before_script:
-#     # update appimage-builder (optional)
-#     - apt-get update
-#     - apt-get install -y git wget
-#     - pip3 install appimage-builder
-#     # - pwd
-#     - mkdir AppDir
-#     - python3 setup.py install --prefix=/usr --root=AppDir
-#     # - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
-#     # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
-#     # - ls /builds/jonata/subtitld/AppDir/usr/share/icons/hicolor/512x512/apps
-#   script:
-#     - appimage-builder --skip-test --recipe AppImageBuilder.yml
-#   artifacts:
-#     paths:
-#       - '*.AppImage'
-#     expire_in: 1 week
-#   only:
-#   - master
-
-appimage-amd64:
+appimage:
   image:
-    # name: ubuntudesktop/gnome-3-38-2004:latest
     name: ubuntu:jammy
-    # name: owncloudci/appimage-build:latest
-    # name: appimagecrafters/appimage-builder
-  # image: appimagecrafters/appimage-builder
-  # image: ubuntudesktop/gnome-3-38-2004:latest
   stage: deploy
-  # before_script:
-    # update appimage-builder (optional)
-    # - apt-get update
-    # - apt-get install -y python3.8 python3-pip python3.8-dev libffi-dev  # libglib2.0-dev gtk-update-icon-cache
-    # - export GIT_SSL_NO_VERIFY=1
-    # - python3 --version
-    # - python3.8 -m pip install cython
-    # - python3.8 -m pip install -r requirements.txt
-    # - python3.8 -m pip install PyInstaller
-    # - python3.8 -m PyInstaller subtitld_linux.spec
-    # - mkdir AppDir
-    # - mv dist/subtitld AppDir/subtitld
-    # - python3.8 -m pip install --upgrade git+https://www.opencode.net/azubieta/appimagecraft.git
-    # app build requirements
-    # - echo 'deb http://archive.neon.kde.org/user/ bionic main' > /etc/apt/sources.list.d/neon.list
-    # - wget -qO - https://archive.neon.kde.org/public.key | apt-key add -
-    # - apt-get update
-    # - apt-get install -y qt5-default qtdeclarative5-dev cmake
   before_script:
     - DEBIAN_FRONTEND=noninteractive apt update
   script:
-    # - cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
-    # - make install DESTDIR=AppDir
-    # - mkdir AppDir
-    # - mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
-    # - cp subtitld/graphics/subtitld.png AppDir/usr/share/icons/hicolor/512x512/apps/subtitld.png
-    # - python3 setup.py clean --all install --prefix=/usr --root=AppDir
     - apt-get update -qy
     - apt-get install -y sshpass
     - DEBIAN_FRONTEND=noninteractive apt-get install -y wget python3-pip gtk-update-icon-cache libgdk-pixbuf-2.0-0 squashfs-tools zsync libglib2.0-bin
@@ -111,20 +40,16 @@ appimage-amd64:
       - '*.AppImage*'
     expire_in: 1 week
 
-windows-nsis:
-  # image: schnouki/pyinstaller-windows-ci:python3
+windows:
   image: cheaterman/pyinstaller-windows:latest
   stage: deploy
   script:
     - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
     - apt-get update -qy
-    # - apt-get upgrade -y
     - apt-get install -y nsis openssh-client sshpass unzip librsvg2-bin
     - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
     - unzip ffmpeg-release-essentials.zip
-    # - wine "c:\Python37\python.exe" -m pip install -U pip
     - wine pip3 install -r requirements.txt
-    # - wine pip3 install https://github.com/pyinstaller/pyinstaller/tarball/develop
     - wine pip3 install -U pyinstaller glfw pywin32
     - for f in subtitld/graphics/*.svg; do rsvg-convert "$f" -o "${f%.*}.png"; done
     - sed -i 's/.svg/.png/g' subtitld/graphics/stylesheet.qss
