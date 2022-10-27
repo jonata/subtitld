@@ -38,8 +38,8 @@ elif sys.platform == 'win32' or os.name == 'nt':
     PATH_SUBTITLD_USER_CONFIG = os.path.join(os.getenv('LOCALAPPDATA'), 'subtitld')
     FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
     FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')
-    if getattr(sys, "frozen", False):
-        PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
+    # if getattr(sys, "frozen", False):
+    #     PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
     STARTUPINFO = subprocess.STARTUPINFO()
     STARTUPINFO.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     STARTUPINFO.wShowWindow = subprocess.SW_HIDE
