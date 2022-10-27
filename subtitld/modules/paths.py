@@ -36,12 +36,14 @@ if sys.platform == 'darwin':
 elif sys.platform == 'win32' or os.name == 'nt':
     ACTUAL_OS = 'windows'
     PATH_SUBTITLD_USER_CONFIG = os.path.join(os.getenv('LOCALAPPDATA'), 'subtitld')
-    FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
-    FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')
     if getattr(sys, "frozen", False):
         PATH_SUBTITLD = os.path.dirname(PATH_SUBTITLD)
         PATH_SUBTITLD_GRAPHICS = os.path.join(PATH_SUBTITLD, 'graphics')
-    #     PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
+        FFMPEG_EXECUTABLE = os.path.join(PATH_SUBTITLD, 'ffmpeg.exe')
+        FFPROBE_EXECUTABLE = os.path.join(PATH_SUBTITLD, 'ffprobe.exe')
+    else:
+        FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
+        FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')
     STARTUPINFO = subprocess.STARTUPINFO()
     STARTUPINFO.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     STARTUPINFO.wShowWindow = subprocess.SW_HIDE
