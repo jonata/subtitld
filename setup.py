@@ -140,7 +140,7 @@ install_requires = [
     # 'scenedetect',
     # 'opencv-python',
     # 'autosub3',
-    'google-trans-new',
+    'translate',
     'SpeechRecognition',
     'beautifulsoup4<4.10,>=4.8.1',
     'python-docx',

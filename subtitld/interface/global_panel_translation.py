@@ -2,43 +2,15 @@
 
 """
 
-import subprocess
-from google_trans_new import google_translator
+from translate import Translator
 
 from PySide6.QtWidgets import QComboBox, QPushButton, QWidget, QMessageBox, QGridLayout
-from PySide6.QtCore import QThread, Signal, Qt
+from PySide6.QtCore import Qt
 
-from subtitld.modules.paths import LANGUAGE_DICT_LIST, STARTUPINFO
-from subtitld.modules import utils
+from subtitld.modules.paths import LANGUAGE_DICT_LIST
 from subtitld.interface import global_panel
 
-
 LANGUAGE_DESCRIPTIONS = LANGUAGE_DICT_LIST.keys()
-
-
-class ThreadGeneratedBurnedVideo(QThread):
-    """Thread to generate burned video"""
-    response = Signal(str)
-    commands = []
-
-    def run(self):
-        """Run function of thread to generate burned video"""
-        if self.commands:
-            proc = subprocess.Popen(self.commands, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, startupinfo=STARTUPINFO, bufsize=4096)
-            number_of_steps = 0.001
-            current_step = 0.0
-            while proc.poll() is None:
-                # for output in proc.stdout.read().decode().split('\n'):
-                output = proc.stdout.readline()
-                if 'Duration: ' in output:
-                    duration = int(utils.convert_ffmpeg_timecode_to_seconds(output.split('Duration: ', 1)[1].split(',', 1)[0]))
-                    if duration > number_of_steps:
-                        number_of_steps = duration
-                if output[:6] == 'frame=':
-                    current_step = int(utils.convert_ffmpeg_timecode_to_seconds(output.split('time=', 1)[1].split(' ', 1)[0]))
-
-                self.response.emit(str(current_step) + '|' + str(number_of_steps))
-            self.response.emit('end')
 
 
 def load_menu(self):
@@ -61,15 +33,20 @@ def load_widgets(self):
     self.global_panel_translation_content = QWidget()
     self.global_panel_translation_content.setLayout(QGridLayout())
 
-    self.global_subtitlesvideo_autosync_lang_combobox = QComboBox()
-    self.global_subtitlesvideo_autosync_lang_combobox.setProperty('class', 'button')
-    self.global_subtitlesvideo_autosync_lang_combobox.addItems(LANGUAGE_DESCRIPTIONS)
-    self.global_panel_translation_content.layout().addWidget(self.global_subtitlesvideo_autosync_lang_combobox, 0, 0, Qt.AlignTop)
+    self.global_subtitlesvideo_autosync_lang_from_combobox = QComboBox()
+    self.global_subtitlesvideo_autosync_lang_from_combobox.setProperty('class', 'button')
+    self.global_subtitlesvideo_autosync_lang_from_combobox.addItems(LANGUAGE_DESCRIPTIONS)
+    self.global_panel_translation_content.layout().addWidget(self.global_subtitlesvideo_autosync_lang_from_combobox, 0, 0, Qt.AlignTop)
+
+    self.global_subtitlesvideo_autosync_lang_to_combobox = QComboBox()
+    self.global_subtitlesvideo_autosync_lang_to_combobox.setProperty('class', 'button')
+    self.global_subtitlesvideo_autosync_lang_to_combobox.addItems(LANGUAGE_DESCRIPTIONS)
+    self.global_panel_translation_content.layout().addWidget(self.global_subtitlesvideo_autosync_lang_to_combobox, 0, 1, Qt.AlignTop)
 
     self.global_subtitlesvideo_translate_button = QPushButton(self.tr('Translate').upper())
     self.global_subtitlesvideo_translate_button.setProperty('class', 'button')
     self.global_subtitlesvideo_translate_button.clicked.connect(lambda: global_subtitlesvideo_translate_button_clicked(self))
-    self.global_panel_translation_content.layout().addWidget(self.global_subtitlesvideo_translate_button, 0, 1, Qt.AlignTop)
+    self.global_panel_translation_content.layout().addWidget(self.global_subtitlesvideo_translate_button, 0, 2, Qt.AlignTop)
 
     self.global_panel_content_stacked_widgets.addWidget(self.global_panel_translation_content)
 
@@ -92,10 +69,10 @@ def global_subtitlesvideo_translate_button_clicked(self):
         run_command = True
 
     if run_command:
+        language_from = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_from_combobox.currentText()].split('-')[0]
+        language_to = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_to_combobox.currentText()].split('-')[0]
+        translator = Translator(from_lang=language_from, to_lang=language_to)
 
-        language = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_combobox.currentText()].split('-')[0]
-        translator = google_translator()  # translator(service_urls=['translate.googleapis.com', 'translate.google.com','translate.google.co.kr'])
         for subtitle in self.subtitles_list:
-            subtitle[2] = translator.translate(subtitle[2].replace('\n', ' ').replace('  ', ' '), lang_tgt=language)
+            subtitle[2] = translator.translate(subtitle[2].replace('\n', ' ').replace('  ', ' '))
 
-        # update_widgets(self)
