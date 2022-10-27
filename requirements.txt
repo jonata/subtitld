@@ -10,7 +10,7 @@ pysubs2
 lxml
 clean-text[gpl]
 html5lib==1.0b8
-google-trans-new
+translate
 SpeechRecognition
 beautifulsoup4<4.10,>=4.8.1
 python-docx
