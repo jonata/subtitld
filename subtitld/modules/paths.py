@@ -39,7 +39,7 @@ elif sys.platform == 'win32' or os.name == 'nt':
     FFMPEG_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffmpeg.exe')
     FFPROBE_EXECUTABLE = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'ffprobe.exe')
     if getattr(sys, "frozen", False):
-        PATH_SUBTITLD = os.path.dirname(sys.executable)
+        PATH_SUBTITLD = os.path.dirname(PATH_SUBTITLD)
         PATH_SUBTITLD_GRAPHICS = os.path.join(PATH_SUBTITLD, 'graphics')
     #     PATH_SUBTITLD_GRAPHICS = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), 'graphics')
     STARTUPINFO = subprocess.STARTUPINFO()
