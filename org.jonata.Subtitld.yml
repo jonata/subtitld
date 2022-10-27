@@ -339,15 +339,33 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/3b/89/c32486cdca98f476252a9db2cc836b605de4807ac4602ca55b3e7b52b7a8/html5lib-1.0b8.tar.gz
         sha256: 18f4d63fa56836e3d62e96a44d06fcfe01a9be397a222368ee21403b64c176d2
-  - name: python3-google-trans-new
+  - name: python3-libretranslatepy
     buildsystem: simple
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "google-trans-new" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "libretranslatepy" --no-build-isolation
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/f9/7b/9f136106dc5824dc98185c97991d3cd9b53e70a197154dd49f7b899128f6/google_trans_new-1.1.9-py3-none-any.whl
-        sha256: 796c20c73ad5f473f126f3b8cbdcaf3fa96e7eabef18e73aac9e4ccc68bb72ed
+        url: https://files.pythonhosted.org/packages/24/54/044ecbf4eeba3f3feee70d496f34f397dc20714cdb80dfa8bc01e7409f88/libretranslatepy-2.1.1-py3-none-any.whl
+        sha256: bf9f8b0003c94f34e141553b7ec0a02876297c06955f5efea49afbc9f85303a9
+  - name: python3-click
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "click" --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/c2/f1/df59e28c642d583f7dacffb1e0965d0e00b218e0186d7858ac5233dce840/click-8.1.3-py3-none-any.whl
+        sha256: bb4d8133cb15a609f44e8213d9b391b0809795062913b383c62be0ee95b1db48
+  - name: python3-translate
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "translate" --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/e1/54/df0d3e62636f291d716caa44c5c9590af8e6f225c59d7874051da6428c06/translate-3.6.1-py2.py3-none-any.whl
+        sha256: cebfb004989d9a2ab0d24c0c5805783c7f4e07243ea4ed2a8f1809d072bf712b
   - name: python3-SpeechRecognition
     buildsystem: simple
     build-commands:
