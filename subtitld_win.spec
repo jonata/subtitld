@@ -62,7 +62,7 @@ exe_port = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='Subtitld_Portable.exe',
+    name='Subtitld Portable.exe',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
