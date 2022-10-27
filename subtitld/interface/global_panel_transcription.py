@@ -321,7 +321,6 @@ def load_widgets(self):
     self.global_panel_transcription_autosubtitles_thread = global_panel_transcription_autosubtitles_thread(self)
     self.global_panel_transcription_autosubtitles_thread.response.connect(global_panel_transcription_autosubtitles_thread_ended)
 
-
     self.global_panel_transcription_tabwidget.addTab(self.global_panel_transcription_autosubtitle_widget, 'Autosubtitle')
 
     self.global_panel_transcription_transcript_widget = QWidget()
