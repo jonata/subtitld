@@ -24,6 +24,7 @@ appimage:
   before_script:
     - DEBIAN_FRONTEND=noninteractive apt update
   script:
+    - export VERSION_NUMBER=`date +%y.%m.%d.%H%M`
     - apt-get update -qy
     - apt-get install -y sshpass
     - DEBIAN_FRONTEND=noninteractive apt-get install -y wget python3-pip gtk-update-icon-cache libgdk-pixbuf-2.0-0 squashfs-tools zsync libglib2.0-bin
@@ -33,6 +34,7 @@ appimage:
     - python3 --version
     - python3 -m pip install appimage-builder
     - appimage-builder --skip-test --recipe AppImageBuilder.yml
+    - mv "Subtitld*.AppImage" "Subtitld ${VERSION_NUMBER}.AppImage"
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no Subtitld*.AppImage jonata@jonata.org:/home/jonata/builds.subtitld.org/appimage/
   artifacts:
