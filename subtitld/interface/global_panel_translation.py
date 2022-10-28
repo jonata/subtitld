@@ -106,6 +106,8 @@ def global_subtitlesvideo_translate_button_clicked(self):
     else:
         run_command = True
 
+
+    print(run_command)
     if run_command:
         print('running command')
         self.global_panel_translation_thread.subtitles_list = self.subtitles_list

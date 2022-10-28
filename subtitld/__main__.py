@@ -305,7 +305,7 @@ def main():
             files_list.append(filepath.name)
             app.main.file_io.open_filepath(app.main, files_to_open=files_list)
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':
