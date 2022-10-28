@@ -432,7 +432,7 @@ def global_subtitlesvideo_autosync_button_clicked(self):
         are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
         ret = are_you_sure_message.exec_()
 
-        if ret == QMessageBox.AcceptRole:
+        if ret == 0:
             run_command = True
     else:
         run_command = True
@@ -465,7 +465,7 @@ def global_panel_transcription_autosubtitle_button_clicked(self):
         are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
         ret = are_you_sure_message.exec_()
 
-        if ret == QMessageBox.AcceptRole:
+        if ret == 0:
             run_command = True
     else:
         run_command = True
@@ -494,7 +494,7 @@ def global_panel_transcription_transcript_apply_transcript_button_clicked(self):
         are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
         ret = are_you_sure_message.exec_()
 
-        if ret == QMessageBox.AcceptRole:
+        if ret == 0:
             run_command = True
     else:
         run_command = True
