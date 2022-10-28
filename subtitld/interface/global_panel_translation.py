@@ -21,15 +21,19 @@ class global_panel_translation_thread(QThread):
     language_to = 'en'
 
     def run(self):
+        print('run started')
         if self.subtitles_list and self.language_from and self.language_to:
             translator = Translator(from_lang=self.language_from, to_lang=self.language_to)
+            print('translator generated')
 
             i = 0
             for subtitle in self.subtitles_list:
                 self.response.emit({i : translator.translate(self.subtitles_list[i][2].replace('\n', ' ').replace('  ', ' '))})
+                print(f'subtitle {i} translated')
                 i += 1
 
             self.response.emit({'status' : 'end'})
+            print('thread ended')
 
 
 def load_menu(self):
@@ -102,10 +106,12 @@ def global_subtitlesvideo_translate_button_clicked(self):
         run_command = True
 
     if run_command:
+        print('running command')
         self.global_panel_translation_thread.subtitles_list = self.subtitles_list
         self.global_panel_translation_thread.language_from = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_from_combobox.currentText()].split('-')[0]
         self.global_panel_translation_thread.language_to = LANGUAGE_DICT_LIST[self.global_subtitlesvideo_autosync_lang_to_combobox.currentText()].split('-')[0]
         self.global_panel_translation_thread.start()
+        print('start called')
 
         subtitles_panel.update_processing_status(self, show=True, value=33)
         self.global_subtitlesvideo_translate_button.setEnabled(False)
