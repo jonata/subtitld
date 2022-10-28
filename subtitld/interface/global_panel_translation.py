@@ -100,8 +100,8 @@ def global_subtitlesvideo_translate_button_clicked(self):
         are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
         are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
         ret = are_you_sure_message.exec()
-
-        if ret == QMessageBox.AcceptRole:
+        print(ret)
+        if ret == 0:
             run_command = True
     else:
         run_command = True
