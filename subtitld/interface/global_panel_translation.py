@@ -99,7 +99,7 @@ def global_subtitlesvideo_translate_button_clicked(self):
         are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New text will be applied. Are you sure you want to replace your actual subtitles?'))
         are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
         are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
-        ret = are_you_sure_message.exec_()
+        ret = are_you_sure_message.exec()
 
         if ret == QMessageBox.AcceptRole:
             run_command = True
