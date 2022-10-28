@@ -35,7 +35,7 @@ appimage:
     - python3 -m pip install appimage-builder
     - appimage-builder --skip-test --recipe AppImageBuilder.yml
     - ls
-    - mv "Subtitld*.AppImage" "Subtitld ${VERSION_NUMBER}.AppImage"
+    - mv Subtitld*.AppImage "Subtitld ${VERSION_NUMBER}.AppImage"
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no Subtitld*.AppImage jonata@jonata.org:/home/jonata/builds.subtitld.org/appimage/
   artifacts:
