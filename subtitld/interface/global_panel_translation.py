@@ -91,6 +91,7 @@ def load_widgets(self):
 def global_subtitlesvideo_translate_button_clicked(self):
     """Function to translate subtitles"""
     run_command = False
+    print('button pressed')
 
     if bool(self.subtitles_list):
         are_you_sure_message = QMessageBox(self)
