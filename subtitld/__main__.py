@@ -223,7 +223,7 @@ class Subtitld(QWidget):
         if event.key() == Qt.Key_Space:
             self.player_widget.pause()
             self.playercontrols_playpause_button.setChecked(not self.playercontrols_playpause_button.isChecked())
-            self.playercontrols.playercontrols_playpause_button_update(self)
+            # self.playercontrols.playercontrols_playpause_button_update(self)
 
         if event.key() == Qt.Key_F1:
             self.playercontrols.add_subtitle_button_clicked(self)

@@ -83,6 +83,7 @@ def load(self):
     self.playercontrols_properties_panel_animation.setEasingCurve(QEasingCurve.OutCirc)
 
     self.playercontrols_properties_panel_tabwidget = QTabWidget(parent=self.playercontrols_properties_panel)
+    self.playercontrols_properties_panel_tabwidget.setObjectName('playercontrols_properties_panel_tabwidget')
     self.playercontrols_properties_panel_tabwidget.setTabBar(QLeftTabBar(self.playercontrols_properties_panel_tabwidget))
     self.playercontrols_properties_panel_tabwidget.setTabPosition(QTabWidget.West)
     self.playercontrols_properties_panel_tabwidget.setStyleSheet('''
@@ -154,7 +155,7 @@ def load(self):
     self.playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_subtitles_selected_subtitle_arrow_normal_button_clicked(self))
 
     self.playercontrols_properties_panel_tabwidget.addTab(self.playercontrols_properties_panel_tabwidget_subtitles, '')
-    self.playercontrols_properties_panel_tabwidget.setTabIcon(0, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_subtitle_icon.' + ('png' if ACTUAL_OS == 'windows' else 'svg'))))
+    self.playercontrols_properties_panel_tabwidget.setTabIcon(0, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_subtitle_icon.svg')))
 
     self.playercontrols_properties_panel_tabwidget_waveform = QWidget()
 
@@ -175,9 +176,10 @@ def load(self):
     self.playercontrols_properties_panel_tabwidget_waveform_fill_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_waveform_fill_color_button_clicked(self))
 
     self.playercontrols_properties_panel_tabwidget.addTab(self.playercontrols_properties_panel_tabwidget_waveform, '')
-    self.playercontrols_properties_panel_tabwidget.setTabIcon(1, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_waveform_icon.' + ('png' if ACTUAL_OS == 'windows' else 'svg'))))
+    self.playercontrols_properties_panel_tabwidget.setTabIcon(1, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_waveform_icon.svg')))
 
     self.playercontrols_properties_panel_tabwidget_background = QWidget()
+    self.playercontrols_properties_panel_tabwidget_background.setObjectName('playercontrols_properties_panel_tabwidget_background')
 
     self.playercontrols_properties_panel_tabwidget_background_title_normal = QLabel('Background colors'.upper(), parent=self.playercontrols_properties_panel_tabwidget_background)
     self.playercontrols_properties_panel_tabwidget_background_title_normal.setObjectName('small_label')
@@ -202,7 +204,7 @@ def load(self):
     self.playercontrols_properties_panel_tabwidget_background_grid_color_button.clicked.connect(lambda: playercontrols_properties_panel_tabwidget_background_grid_color_button_clicked(self))
 
     self.playercontrols_properties_panel_tabwidget.addTab(self.playercontrols_properties_panel_tabwidget_background, '')
-    self.playercontrols_properties_panel_tabwidget.setTabIcon(2, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_background_icon.' + ('png' if ACTUAL_OS == 'windows' else 'svg'))))
+    self.playercontrols_properties_panel_tabwidget.setTabIcon(2, QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'playercontrols_properties_panel_background_icon.svg')))
 
     self.playercontrols_widget_frame = QFrame(parent=self.playercontrols_widget)
     self.playercontrols_widget_frame.setLayout(QVBoxLayout())
@@ -983,7 +985,7 @@ def playercontrols_stop_button_clicked(self):
     playercontrols_playpause_button_clicked(self)
     self.player_widget.stop()
     self.playercontrols_playpause_button.setChecked(False)
-    playercontrols_playpause_button_update(self)
+    # playercontrols_playpause_button_update(self)
     # self.timeline.update_scrollbar(self)
     self.timeline.update(self)
 
@@ -997,12 +999,14 @@ def playercontrols_playpause_button_clicked(self):
         self.playercontrols_playpause_button.setChecked(True)
     elif self.player_widget.mpv.pause and self.playercontrols_playpause_button.isChecked():
         self.playercontrols_playpause_button.setChecked(False)
-    playercontrols_playpause_button_update(self)
+    # playercontrols_playpause_button_update(self)
 
 
-def playercontrols_playpause_button_update(self):
-    """Function to update things when stop button is clicked"""
-    self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.' + ('png' if ACTUAL_OS == 'windows' else 'svg'))) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.' + ('png' if ACTUAL_OS == 'windows' else 'svg'))))
+# def playercontrols_playpause_button_update(self):
+#     """Function to update things when stop button is clicked"""
+#     None
+#     self.playercontrols_playpause_button.setStylesheet(self.playercontrols_playpause_button.stylesheet())
+#     self.playercontrols_playpause_button.setIcon(QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'pause_icon.svg')) if self.playercontrols_playpause_button.isChecked() else QIcon(os.path.join(PATH_SUBTITLD_GRAPHICS, 'play_icon.svg')))
 
 
 def show(self):
@@ -1210,7 +1214,7 @@ def playercontrols_play_from_last_start_button_clicked(self):
     # self.timeline.update(self)
     self.timeline_widget.setFocus(Qt.TabFocusReason)
     self.playercontrols_playpause_button.setChecked(True)
-    playercontrols_playpause_button_update(self)
+    # playercontrols_playpause_button_update(self)
 
 
 def playercontrols_play_from_next_start_button_clicked(self):
@@ -1225,7 +1229,7 @@ def playercontrols_play_from_next_start_button_clicked(self):
         self.timeline.update(self)
         self.timeline_widget.setFocus(Qt.TabFocusReason)
     self.playercontrols_playpause_button.setChecked(True)
-    playercontrols_playpause_button_update(self)
+    # playercontrols_playpause_button_update(self)
 
 
 def add_subtitle_button_clicked(self):

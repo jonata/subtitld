@@ -453,7 +453,7 @@ def update_safety_margins_subtitle_layer(self):
 def eof_reached(self):
     self.player_widget.mpv.pause = True
     self.playercontrols_playpause_button.setChecked(False)
-    playercontrols.playercontrols_playpause_button_update(self)
+    # playercontrols.playercontrols_playpause_button_update(self)
 
 
 def update_speed(self):

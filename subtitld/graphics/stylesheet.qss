@@ -1500,6 +1500,13 @@ QLabel[class=qlabel_for_buttons] {
     qproperty-icon: url(:/graphics/play_icon.svg);
 }
 
+#playercontrols_playpause_button:pressed,
+#playercontrols_playpause_button:hover:pressed,
+#playercontrols_playpause_button:checked,
+#playercontrols_playpause_button:hover:checked {
+    icon: url(:/graphics/pause_icon.svg);
+}
+
 #playercontrols_play_from_next_start_button {
     icon-size: 16px;
     padding: 5px;
@@ -1792,4 +1799,3 @@ QLabel[class=qlabel_for_buttons] {
     background-color: rgb(62, 83, 99);
     border-radius: 2px;
 }
-
