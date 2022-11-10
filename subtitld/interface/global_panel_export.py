@@ -3,7 +3,6 @@
 """
 import os
 import subprocess
-from this import d
 
 from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpinBox, QColorDialog, QWidget, QTableWidgetItem, QVBoxLayout, QTabWidget, QGroupBox, QHBoxLayout, QGridLayout, QLineEdit, QSizePolicy
 from PySide6.QtCore import QMargins, QSize, QThread, Signal, Qt
