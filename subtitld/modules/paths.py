@@ -87,15 +87,6 @@ if not os.path.isdir(PATH_SUBTITLD_DATA_THUMBNAILS):
 
 PATH_SUBTITLD_USER_CONFIG_FILE = os.path.join(PATH_SUBTITLD_USER_CONFIG, 'subtitld.config')
 
-
-def get_graphics_path(filename=''):
-    """Function to get graphics path. Windows have a problem with paths."""
-    final_path = os.path.join(PATH_SUBTITLD_GRAPHICS, filename)
-    # if sys.platform == 'win32' or os.name == 'nt':
-    #     final_path = final_path.replace('\\', '/')
-    return final_path
-
-
 VERSION_NUMBER = '20.07.0.0'
 if os.path.isfile(os.path.join(PATH_SUBTITLD, 'current_version')):
     VERSION_NUMBER = open(os.path.join(PATH_SUBTITLD, 'current_version')).read().strip()

@@ -74,7 +74,6 @@ def load(self):
     self.toppanel_subtitle_file_info_label.layout().setContentsMargins(0, 0, 0, 0)
     self.toppanel_subtitle_file_info_label.setObjectName('toppanel_subtitle_file_info_label')
 
-
     self.toppanel_open_button = QPushButton('Open different file'.upper())
     self.toppanel_open_button.setObjectName('toppanel_open_button')
     self.toppanel_open_button.setProperty('class', 'subbutton2_dark')
@@ -257,7 +256,7 @@ def resized(self):
     """Function to call when resizing subtitles list"""
     x = int(-((self.width() * self.subtitles_panel_width_proportion) - 15))
     if (self.subtitles_list or self.video_metadata) and not self.subtitles_panel_toggle_button.isChecked():
-            x = 0
+        x = 0
     self.subtitles_panel_widget.setGeometry(x, 0, int((self.width() * self.subtitles_panel_width_proportion) - 15), int(self.height()))
 
     # x = self.subtitles_panel_widget.x() + self.subtitles_panel_widget.width()
@@ -372,8 +371,7 @@ def toppanel_save_button_clicked(self):
     if self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list, subtitle_format, self.selected_language)
         if self.settings['default_values'].get('save_automatic_copy', False) and not subtitle_format == self.settings['default_values'].get('subtitle_format', 'USF'):
-            file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.usf', self.subtitles_list, self.settings['default_values'].get('subtitle_format', 'USF'), self.selected_language)
-        self.format_usf_present = True
+            file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.{}'.format(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.settings['default_values'].get('subtitle_format', 'USF')]['extensions'][0]), self.subtitles_list, self.settings['default_values'].get('subtitle_format', 'USF'), self.selected_language)
         update_subtitles_panel_format_label(self)
         update_toppanel_subtitle_file_info_label(self)
         self.unsaved = False

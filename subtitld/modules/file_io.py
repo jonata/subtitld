@@ -1,6 +1,5 @@
 import os
 import datetime
-import html
 import hashlib
 from docx import Document
 
@@ -29,33 +28,33 @@ for exttype in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
         list_of_supported_subtitle_extensions.append(ext)
 
 
-class ThreadExtractSceneTimePositions(QThread):
-    """Thread to extract time positions of scenes"""
-    command = Signal(list)
-    filepath = ''
+# class ThreadExtractSceneTimePositions(QThread):
+#     """Thread to extract time positions of scenes"""
+#     command = Signal(list)
+#     filepath = ''
 
-    def run(self):
-        """Run function of extract time positions thread"""
-        if self.filepath:
-            result = []
-            try:
-                video_manager = VideoManager([self.filepath])
-                stats_manager = StatsManager()
-                scene_manager = SceneManager(stats_manager)
-                scene_manager.add_detector(ContentDetector())
-                base_timecode = video_manager.get_base_timecode()
-                try:
-                    video_manager.set_downscale_factor()
-                    video_manager.start()
-                    scene_manager.detect_scenes(frame_source=video_manager, show_progress=False)
-                    scene_list = scene_manager.get_scene_list(base_timecode)
-                    for _, scene in enumerate(scene_list):
-                        result.append(scene[0].get_seconds())
-                finally:
-                    video_manager.release()
-            except Exception:
-                pass
-            self.command.emit(result)
+#     def run(self):
+#         """Run function of extract time positions thread"""
+#         if self.filepath:
+#             result = []
+#             try:
+#                 video_manager = VideoManager([self.filepath])
+#                 stats_manager = StatsManager()
+#                 scene_manager = SceneManager(stats_manager)
+#                 scene_manager.add_detector(ContentDetector())
+#                 base_timecode = video_manager.get_base_timecode()
+#                 try:
+#                     video_manager.set_downscale_factor()
+#                     video_manager.start()
+#                     scene_manager.detect_scenes(frame_source=video_manager, show_progress=False)
+#                     scene_list = scene_manager.get_scene_list(base_timecode)
+#                     for _, scene in enumerate(scene_list):
+#                         result.append(scene[0].get_seconds())
+#                 finally:
+#                     video_manager.release()
+#             except Exception:
+#                 pass
+#             self.command.emit(result)
 
 
 class ThreadExtractWaveform(QThread):
@@ -203,11 +202,6 @@ def open_filepath(self, files_to_open=False, update_interface=False):
             self.generate_effect(self.player_border_animation, 'geometry', 700, original_qrect, player_qrect)
             self.generate_effect(self.player_border_transparency_animation, 'opacity', 700, 0.5, 1.0)
 
-    if os.path.isfile(os.path.join(os.path.dirname(self.actual_subtitle_file), os.path.basename(self.actual_subtitle_file).rsplit('.', 1)[0] + '.usf')):
-        self.format_usf_present = True
-    else:
-        self.format_usf_present = False
-
     self.subtitles_panel.update_subtitles_panel_format_label(self)
 
 
@@ -321,9 +315,6 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                 captions = scc_reader.get_captions(language)
                 for caption in captions:
                     final_subtitles.append([caption.start / 1000000, (caption.end / 1000000) - caption.start / 1000000, caption.get_text()])
-
-
-
 
         elif subtitle_file.lower().endswith(('.usf')):
             subtitle_format = 'USF'
@@ -638,3 +629,4 @@ def save_file(final_file, subtitles_list, subtitle_format='SRT', language='en'):
 
         elif subtitle_format in ['USF']:
             open(final_file, mode='w', encoding='utf-8').write(usf.USFWriter().write(subtitles_list))
+

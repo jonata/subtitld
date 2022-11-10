@@ -68,7 +68,6 @@ class Subtitld(QWidget):
         self.repeat_activated = False
         self.unsaved = False
         self.format_to_save = 'SRT'
-        self.format_usf_present = False
         self.selected_language = 'en'
         self.subtitles_panel_width_proportion = .3
 
@@ -265,7 +264,7 @@ def autosave_timer_timeout(self):
     filename = os.path.basename(self.actual_subtitle_file).rsplit('.', 1)[0]
     if not filename:
         filename = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
-    self.file_io.save_file(os.path.join(PATH_SUBTITLD_DATA_BACKUP, filename + '_' + datetime.datetime.now().strftime("%Y%m%d%H%M%S") + '.srt'), self.subtitles_list, 'SRT')
+    self.file_io.save_file(os.path.join(PATH_SUBTITLD_DATA_BACKUP, filename + '_' + datetime.datetime.now().strftime("%Y%m%d%H%M%S") + '.{}'.format(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.settings['default_values'].get('subtitle_format', 'USF')]['extensions'][0])), self.subtitles_list, self.settings['default_values'].get('subtitle_format', 'USF'))
 
 
 def main():
@@ -294,8 +293,8 @@ def main():
     font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-R.ttf'))
     font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-RI.ttf'))
     font_database.addApplicationFont(os.path.join(PATH_SUBTITLD_GRAPHICS, 'Ubuntu-Th.ttf'))
-
     app.setFont(QFont('Ubuntu', 10))
+
     app.main = Subtitld()
     app.main.show()
 
