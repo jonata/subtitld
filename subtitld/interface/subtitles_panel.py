@@ -13,6 +13,7 @@ from subtitld.interface import subtitles_panel_widget_markdown, subtitles_panel_
 from subtitld.modules import file_io
 from subtitld.modules import subtitles
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
+from subtitld.modules.utils import get_subtitle_format
 
 
 def load(self):
@@ -305,7 +306,7 @@ def update_subtitles_panel_widget_vision_content(self):
 
 
 def update_subtitles_panel_format_label(self):
-    self.toppanel_format_label_text.setText(self.format_to_save)
+    self.toppanel_format_label_text.setText(get_subtitle_format(self.actual_subtitle_file) or self.settings['default_values'].get('subtitle_format', 'USF'))
 
 
 def show(self):
@@ -331,14 +332,11 @@ def hide(self):
 def toppanel_save_button_clicked(self):
     """Function to call when save button on subtitles list panel is clicked"""
     actual_subtitle_file = False
-    subtitle_format = self.settings['default_values'].get('subtitle_format', 'USF')
-    if self.actual_subtitle_file:
-        for formt in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
-            for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[formt]['extensions']:
-                if self.actual_subtitle_file.endswith(ext):
-                    actual_subtitle_file = self.actual_subtitle_file
-                    subtitle_format = formt
-                    break
+    subtitle_format = get_subtitle_format(self.actual_subtitle_file)
+    if subtitle_format:
+        actual_subtitle_file = self.actual_subtitle_file
+    else:
+        subtitle_format = self.settings['default_values'].get('subtitle_format', 'USF')
 
     if not actual_subtitle_file:
         suggested_path = os.path.dirname(self.video_metadata['filepath'])

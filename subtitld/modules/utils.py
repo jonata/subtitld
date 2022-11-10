@@ -6,6 +6,8 @@ from PySide6.QtCore import Signal, Qt, QSize, QRectF, QMargins, QRunnable, QObje
 from PySide6.QtGui import QIcon, QPainter, QFont, QColor
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
 
+from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
+
 
 def is_float(element: str) -> bool:
     try:
@@ -116,3 +118,12 @@ class GetProcAddressGetter:
         import glfw
         return glfw.get_proc_address(name.decode('utf8'))
 
+
+def get_subtitle_format(subtitle_filepath):
+    subtitle_format = False
+    if subtitle_filepath:
+        for formt in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+            for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[formt]['extensions']:
+                if subtitle_filepath.endswith(ext):
+                    return formt
+    return subtitle_format
