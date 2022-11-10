@@ -7,6 +7,7 @@ from PySide6.QtGui import QPainter, QPen, QColor, QFont, QBrush
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
 
 from subtitld.modules.utils import GetProcAddressGetter
+from subtitld.modules.paths import ACTUAL_OS
 from subtitld.interface import playercontrols, subtitles_panel
 
 
@@ -30,7 +31,7 @@ class MpvWidget(QOpenGLWidget):
             widget.swapped, Qt.ConnectionType.DirectConnection
         )
 
-        for key, value in {
+        options = {
             # "config": False,
             'osd_level': 0,
             'sub_auto': False,
@@ -64,10 +65,14 @@ class MpvWidget(QOpenGLWidget):
             "stop-playback-on-init-failure": False,
             "keep-open": True,
             # "track-auto-selection": False,
-            "gpu-hwdec-interop": "vaapi-egl",
             # "hwdec": "vaapi",
             # "gpu-context": "x11egl"
-        }.items():
+        }
+
+        if not ACTUAL_OS == 'windows':
+            options["gpu-hwdec-interop"] = "vaapi-egl"
+
+        for key, value in options.items():
             setattr(widget.mpv, key, value)
 
         widget.position = 0.0
