@@ -64,6 +64,9 @@ class MpvWidget(QOpenGLWidget):
             "stop-playback-on-init-failure": False,
             "keep-open": True,
             # "track-auto-selection": False,
+            "gpu-hwdec-interop": "vaapi-egl",
+            # "hwdec": "vaapi",
+            # "gpu-context": "x11egl"
         }.items():
             setattr(widget.mpv, key, value)
 
