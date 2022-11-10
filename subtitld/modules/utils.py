@@ -1,11 +1,6 @@
 import ctypes
 import platform
 
-from PySide6.QtWidgets import QListWidget, QPushButton, QWidget, QVBoxLayout, QFileDialog, QTabWidget, QHBoxLayout, QListView, QLabel, QListWidgetItem, QSizePolicy
-from PySide6.QtCore import Signal, Qt, QSize, QRectF, QMargins, QRunnable, QObject
-from PySide6.QtGui import QIcon, QPainter, QFont, QColor
-from PySide6.QtOpenGLWidgets import QOpenGLWidget
-
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
 
 
