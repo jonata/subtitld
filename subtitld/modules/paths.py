@@ -95,16 +95,16 @@ LIST_OF_SUPPORTED_VIDEO_EXTENSIONS = (('.mp4', '.mkv', '.mov', '.mpg', '.webm', 
 
 LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS = {
     'SRT': {'description': 'SubRip Subtitle format', 'extensions': ['srt']},
-    'DFXP': {'description': 'Subtitle format', 'extensions': ['dfxp', 'itt']},
-    'TTML': {'description': 'Subtitle format', 'extensions': ['ttml']},
-    'SAMI': {'description': 'Subtitle format', 'extensions': ['smi', 'sami']},
-    'SCC': {'description': 'Subtitle format', 'extensions': ['scc']},
-    'VTT': {'description': 'Subtitle format', 'extensions': ['webvtt', 'vtt']},
+    'DFXP': {'description': 'DFXP ITT Subtitle format', 'extensions': ['dfxp', 'itt']},
+    'TTML': {'description': 'TTML Subtitle format', 'extensions': ['ttml']},
+    'SAMI': {'description': 'SAMI Subtitle format', 'extensions': ['smi', 'sami']},
+    'SCC': {'description': 'SCC Subtitle format', 'extensions': ['scc']},
+    'VTT': {'description': 'VTT Subtitle format', 'extensions': ['webvtt', 'vtt']},
     'ASS': {'description': 'SubStation Alpha Subtitle format', 'extensions': ['ass', 'ssa']},
-    'SBV': {'description': 'Subtitle format', 'extensions': ['sbv']},
+    'SBV': {'description': 'SBV Subtitle format', 'extensions': ['sbv']},
     'SUB': {'description': 'MicroDVD Subtitle format', 'extensions': ['sub']},
-    'XML': {'description': 'Subtitle format', 'extensions': ['xml']},
-    'USF': {'description': 'Universal Subtitle format', 'extensions': ['usf']}
+    'XML': {'description': 'XML Subtitle format', 'extensions': ['xml']},
+    'USF': {'description': 'Universal Subtitle Format', 'extensions': ['usf']}
 }
 
 LIST_OF_SUPPORTED_IMPORT_EXTENSIONS = {
