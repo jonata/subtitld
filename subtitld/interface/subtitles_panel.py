@@ -14,7 +14,7 @@ from subtitld.interface import subtitles_panel_widget_markdown, subtitles_panel_
 from subtitld.modules import file_io
 from subtitld.modules import subtitles
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
-from subtitld.modules.utils import get_subtitle_format
+from subtitld.modules.utils import get_subtitle_format, get_format_from_extension
 
 
 def load(self):
@@ -378,13 +378,22 @@ def toppanel_save_button_clicked(self):
         filedialog = QFileDialog.getSaveFileName(parent=self, caption=filedialog_title, dir=os.path.dirname(self.actual_subtitle_file), filter=supported_subtitle_files)
 
         if filedialog[0] and filedialog[1]:
+            filepath = filedialog[0]
+            selected_extensions = filedialog[1].split('(', 1)[-1].split(')', 1)[0].replace('*.', '').split(' ')
+            if not filepath.rsplit('.', 1)[-1].lower() in selected_extensions:
+                selected_extension = selected_extensions[0]
+                filepath += f'.{selected_extension}'
+            else:
+                selected_extension = filepath.rsplit('.', 1)[-1].lower()
+            selected_format = get_format_from_extension(selected_extension)
+
             if Qt.ShiftModifier in self.toppanel_save_button.key_modifiers:
-                self.actual_subtitle_file = filedialog[0]
+                self.actual_subtitle_file = filepath
                 self.settings['recent_files'][self.actual_subtitle_file] = {
                     'last_opened': datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
                     'video_filepath': self.video_metadata['filepath']
                 }
-                file_io.save_file(self.actual_subtitle_file, self.subtitles_list, subtitle_format, self.selected_language)
+                file_io.save_file(self.actual_subtitle_file, self.subtitles_list, selected_format, self.selected_language)
                 if self.settings['default_values'].get('save_automatic_copy', False) and not subtitle_format == self.settings['default_values'].get('subtitle_format', 'USF'):
                     file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.{}'.format(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.settings['default_values'].get('subtitle_format', 'USF')]['extensions'][0]), self.subtitles_list, self.settings['default_values'].get('subtitle_format', 'USF'), self.selected_language)
                 update_subtitles_panel_format_label(self)
@@ -392,10 +401,10 @@ def toppanel_save_button_clicked(self):
                 self.unsaved = False
 
             if Qt.AltModifier in self.toppanel_save_button.key_modifiers:
-                file_io.save_file(filedialog[0], self.subtitles_list, subtitle_format, self.selected_language)
+                file_io.save_file(filepath, self.subtitles_list, selected_format, self.selected_language)
 
             if Qt.ControlModifier in self.toppanel_save_button.key_modifiers:
-                file_io.save_file(filedialog[0], self.subtitles_list, subtitle_format, self.selected_language)
+                file_io.save_file(filepath, self.subtitles_list, selected_format, self.selected_language)
 
     elif self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list, subtitle_format, self.selected_language)

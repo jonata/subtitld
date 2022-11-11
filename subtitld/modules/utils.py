@@ -122,3 +122,11 @@ def get_subtitle_format(subtitle_filepath):
                 if subtitle_filepath.endswith(ext):
                     return formt
     return subtitle_format
+
+
+def get_format_from_extension(extension):
+    for formt in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+        for ext in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[formt]['extensions']:
+            if extension == ext:
+                return formt
+    return 'USF'
