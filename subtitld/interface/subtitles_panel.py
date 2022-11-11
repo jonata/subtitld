@@ -4,8 +4,9 @@
 
 # from multiprocessing.spawn import old_main_modules
 import os
+import datetime
 
-from PySide6.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QMessageBox, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget, QLineEdit, QProgressBar
+from PySide6.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QMessageBox, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget, QLineEdit, QProgressBar, QFileDialog
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 from PySide6.QtGui import QTextCursor
 
@@ -50,7 +51,24 @@ def load(self):
     self.toppanel_format_label_text.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
     self.toppanel_format_label.layout().addWidget(self.toppanel_format_label_text, 0)
 
-    self.toppanel_save_button = QPushButton()
+    class toppanel_save_button(QPushButton):
+        def __init__(widget, parent=None):
+            super().__init__(parent)
+            widget.key_modifiers = []
+
+        def keyPressEvent(widget, event):
+            widget.key_modifiers = event.modifiers()
+            event.accept()
+
+        def keyReleaseEvent(widget, event):
+            widget.key_modifiers = []
+            event.accept()
+
+        # def mouseReleaseEvent(widget, event):
+        #     toppanel_save_button_clicked(self)
+        #     event.accept()
+
+    self.toppanel_save_button = toppanel_save_button()
     self.toppanel_save_button.setObjectName('toppanel_save_button')
     self.toppanel_save_button.clicked.connect(lambda: toppanel_save_button_clicked(self))
     self.toppanel_save_button.setProperty('class', 'subbutton2_dark')
@@ -331,6 +349,7 @@ def hide(self):
 
 def toppanel_save_button_clicked(self):
     """Function to call when save button on subtitles list panel is clicked"""
+
     actual_subtitle_file = False
     subtitle_format = get_subtitle_format(self.actual_subtitle_file)
     if subtitle_format:
@@ -342,31 +361,43 @@ def toppanel_save_button_clicked(self):
         suggested_path = os.path.dirname(self.video_metadata['filepath'])
         suggested_filename = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '.' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[subtitle_format]['extensions'][0]
 
-        # save_formats = self.format_to_save + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.format_to_save]['extensions']]))
-        # for extformat in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
-        #     if not extformat == self.format_to_save:
-        #         save_formats += ';;' + extformat + ' ' + LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[extformat]['extensions']]))
-        # suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0]
-
-        # tem que reportar o bug que não retorna o selectedFilter se o dialogo for nativo
-        # filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats)
-
-        # if filedialog[0] and filedialog[1]:
-        #     filename = filedialog[0]
-        #     exts = []
-        #     for ext in filedialog[1].split('(', 1)[1].split(')', 1)[0].split('*'):
-        #         if ext:
-        #             exts.append(ext.strip())
-        #     if not filename.endswith(tuple(exts)):
-        #         filename += exts[0]
-        #     if not self.format_to_save == filedialog[1].split(' ', 1)[0]:
-        #         self.format_to_save = filedialog[1].split(' ', 1)[0]
-
-        #     self.actual_subtitle_file = filename
-
         self.actual_subtitle_file = os.path.join(suggested_path, suggested_filename)
 
-    if self.actual_subtitle_file:
+    if self.toppanel_save_button.key_modifiers:
+        if Qt.ShiftModifier in self.toppanel_save_button.key_modifiers:
+            filedialog_title = 'Save subtitle as'
+        if Qt.AltModifier in self.toppanel_save_button.key_modifiers:
+            filedialog_title = 'Save a copy of the subtitle as'
+        if Qt.ControlModifier in self.toppanel_save_button.key_modifiers:
+            filedialog_title = 'Export as'
+
+        supported_subtitle_files = ''
+        for exttype in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
+            supported_subtitle_files += LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[exttype]['description'] + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[exttype]['extensions']])) + ';;'
+
+        filedialog = QFileDialog.getSaveFileName(parent=self, caption=filedialog_title, dir=os.path.dirname(self.actual_subtitle_file), filter=supported_subtitle_files)
+
+        if filedialog[0] and filedialog[1]:
+            if Qt.ShiftModifier in self.toppanel_save_button.key_modifiers:
+                self.actual_subtitle_file = filedialog[0]
+                self.settings['recent_files'][self.actual_subtitle_file] = {
+                    'last_opened': datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
+                    'video_filepath': self.video_metadata['filepath']
+                }
+                file_io.save_file(self.actual_subtitle_file, self.subtitles_list, subtitle_format, self.selected_language)
+                if self.settings['default_values'].get('save_automatic_copy', False) and not subtitle_format == self.settings['default_values'].get('subtitle_format', 'USF'):
+                    file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.{}'.format(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.settings['default_values'].get('subtitle_format', 'USF')]['extensions'][0]), self.subtitles_list, self.settings['default_values'].get('subtitle_format', 'USF'), self.selected_language)
+                update_subtitles_panel_format_label(self)
+                update_toppanel_subtitle_file_info_label(self)
+                self.unsaved = False
+
+            if Qt.AltModifier in self.toppanel_save_button.key_modifiers:
+                file_io.save_file(filedialog[0], self.subtitles_list, subtitle_format, self.selected_language)
+
+            if Qt.ControlModifier in self.toppanel_save_button.key_modifiers:
+                file_io.save_file(filedialog[0], self.subtitles_list, subtitle_format, self.selected_language)
+
+    elif self.actual_subtitle_file:
         file_io.save_file(self.actual_subtitle_file, self.subtitles_list, subtitle_format, self.selected_language)
         if self.settings['default_values'].get('save_automatic_copy', False) and not subtitle_format == self.settings['default_values'].get('subtitle_format', 'USF'):
             file_io.save_file(self.actual_subtitle_file.rsplit('.', 1)[0] + '.{}'.format(LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS[self.settings['default_values'].get('subtitle_format', 'USF')]['extensions'][0]), self.subtitles_list, self.settings['default_values'].get('subtitle_format', 'USF'), self.selected_language)
@@ -391,7 +422,7 @@ def toppanel_open_button_clicked(self, update_interface=True):
         ret = save_message_box.exec_()
 
         if ret == QMessageBox.AcceptRole:
-            self.subttileslist.toppanel_save_button_clicked(self)
+            toppanel_save_button_clicked(self)
 
     file_io.open_filepath(self)
     update_topbar_status(self)
