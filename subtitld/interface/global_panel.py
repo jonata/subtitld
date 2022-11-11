@@ -3,9 +3,8 @@
 """
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QFrame, QStackedWidget, QPushButton
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve
-from subtitld.interface import global_panel_general, global_panel_import, global_panel_interface, global_panel_keyboardshortcuts, global_panel_qualitycontrol, global_panel_translation, global_panel_transcription
 
-from subtitld.interface import global_panel_export
+from subtitld.interface import global_panel_general, global_panel_import, global_panel_interface, global_panel_keyboardshortcuts, global_panel_qualitycontrol, global_panel_translation, global_panel_transcription, global_panel_export
 
 # from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat
 # from azure.cognitiveservices.speech.audio import AudioOutputConfig
@@ -61,6 +60,7 @@ def load(self):
     self.global_panel_widget.layout().addWidget(self.global_panel_content)
 
     global_panel_menu_changed(self, self.global_panel_general_menu_button, self.global_panel_general_content)
+
 
 def resized(self):
     """Function on resizing widgets"""
