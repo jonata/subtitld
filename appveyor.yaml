@@ -1,3 +1,78 @@
+
+version: 6.0.5.1.{build}
+
+# pull_requests:
+#   do_not_increment_build_number: true
+
+branches:
+  only:
+  - master
+
+# skip_non_tags: false
+
+image: Visual Studio 2019
+
+# shallow_clone: true
+
+# clone_depth: 1
+
+clone_folder: C:\projects\subtitld
+
+environment:
+  # APPVEYOR_RDP_PASSWORD:
+  #   secure: fyQ/PdSH8g/HZI5F6xy5Cg==
+  PFX_PASSWORD:
+    secure: dU7R+yCfZACwkvslBf988A==
+  APPVEYOR_SKIP_FINALIZE_ON_EXIT: false
+  PYTHONUNBUFFERED: 1
+  PYTHONHOME: C:\Python39-x64
+
+# init:
+#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+install:
+  - $now = Get-Date -Format yy.MM.dd.HHmm
+  - DownloadFile https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
+  - Expand-Archive -Path ffmpeg-release-essentials.zip
+  - C:\Python39-x64\python.exe -m pip install -U pip
+  - C:\Python39-x64\python.exe -m pip install -r requirements.txt
+  - C:\Python39-x64\python.exe -m pip install -U pyinstaller glfw pywin32
+
+  - choco install rsvg-convert
+  - $svg_path ="[[UPDATE WITH YOUR PAT]]"
+  - $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
+  - ForEach ($svg_file in $svg_files)
+    {
+      $processingFile = $svg_file.FullName -replace [regex]::Escape($svg_path), ""
+      $targetPath = $svg_file.Directory -replace [regex]::Escape($svg_path), $rootTargetPath
+      $result = New-Item -ItemType Directory -Force -Path $targetPath
+      $targetFilePath = Join-Path $targetPath $svg_file
+      $targetFilePath = $targetFilePath -replace ".svg", ".png"
+
+      if(Test-Path $targetFilePath)
+      {
+          Write-Host "Skipping: $processingFile"
+      }
+      else
+      {
+          Write-Host "Processing: $processingFile"
+          $result = & rsvg-convert $svg_file.FullName -o $targetFilePath 2>&1
+      }
+    }
+  - (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
+  - (Get-Content subtitld\resources.qrc).replace('.svg','.png') | Set-Content subtitld\resources.qrc
+  - C:\Python39-x64\Scripts\pyside6-rcc.exe' subtitld\resources.qrc -o subtitld\resources_rc.py
+  - C:\Python39-x64\Scripts\PyInstaller.exe' subtitld_win.spec
+
+  - choco install nsis
+  - makensis.exe subtitld_win.nsi
+
+  - Move-Item -Path "dist/Subtitld Portable.exe" -Destination "dist/Subtitld $now Portable.exe"
+
+artifacts:
+  - path: .exe
+    name: builds
+
 deploy:
 - provider: Webhook
   url: https://app.signpath.io/API/v1/9b1ff5d7-28fa-4698-83a0-7995dcbb8c85/Integrations/AppVeyor?ProjectSlug=subtitld&SigningPolicySlug=test-signing
