@@ -40,7 +40,8 @@ build_script:
   - ps: C:\Python39-x64\python.exe -m pip install -U pyinstaller glfw pywin32
   - ps: $svg_path ="[[UPDATE WITH YOUR PAT]]"
   - ps: $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
-  - ps: ForEach ($svg_file in $svg_files)
+  - ps: -
+    ForEach ($svg_file in $svg_files)
     {
       $processingFile = $svg_file.FullName -replace [regex]::Escape($svg_path), ""
       $targetPath = $svg_file.Directory -replace [regex]::Escape($svg_path), $rootTargetPath
