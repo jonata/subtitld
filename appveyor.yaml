@@ -30,7 +30,7 @@ environment:
 # init:
 #   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-install:
+build-script:
   - $now = Get-Date -Format yy.MM.dd.HHmm
   - DownloadFile https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
   - Expand-Archive -Path ffmpeg-release-essentials.zip
