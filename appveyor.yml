@@ -32,7 +32,7 @@ install:
   - choco install nsis
 
 build_script:
-  - ps: $env:PATH=$PYTHONHOME;$PYTHONHOME\scripts;$PYTHONHOME%\tools\scripts;$PATH
+  - ps: $env:PATH=$env:PYTHONHOME;$env:PYTHONHOME\scripts;$env:PYTHONHOME\tools\scripts;$env:PATH
   - ps: $now = Get-Date -Format yy.MM.dd.HHmm
   - ps: Start-FileDownload 'https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip'
   - ps: Expand-Archive -Path ffmpeg-release-essentials.zip
