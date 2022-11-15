@@ -22,11 +22,16 @@ environment:
   PYTHONUNBUFFERED: 1
   PYTHONHOME: C:\Python39-x64
 
-build: off
+# build: off
 # init:
 #   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
+
 install:
+  - choco install rsvg-convert
+  - choco install nsis
+
+build_script:
   - $now = Get-Date -Format yy.MM.dd.HHmm
   - DownloadFile https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
   - Expand-Archive -Path ffmpeg-release-essentials.zip
@@ -34,7 +39,6 @@ install:
   - C:\Python39-x64\python.exe -m pip install -r requirements.txt
   - C:\Python39-x64\python.exe -m pip install -U pyinstaller glfw pywin32
 
-  - choco install rsvg-convert
   - $svg_path ="[[UPDATE WITH YOUR PAT]]"
   - $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
   - ForEach ($svg_file in $svg_files)
@@ -60,10 +64,11 @@ install:
   - C:\Python39-x64\Scripts\pyside6-rcc.exe' subtitld\resources.qrc -o subtitld\resources_rc.py
   - C:\Python39-x64\Scripts\PyInstaller.exe' subtitld_win.spec
 
-  - choco install nsis
   - makensis.exe subtitld_win.nsi
 
+after_build:
   - Move-Item -Path "dist/Subtitld Portable.exe" -Destination "dist/Subtitld $now Portable.exe"
+
 
 artifacts:
   - path: .exe
