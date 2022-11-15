@@ -49,15 +49,8 @@ build_script:
       $targetFilePath = Join-Path $targetPath $svg_file
       $targetFilePath = $targetFilePath -replace ".svg", ".png"
 
-      if(Test-Path $targetFilePath)
-      {
-          Write-Host "Skipping: $processingFile"
-      }
-      else
-      {
-          Write-Host "Processing: $processingFile"
-          $result = & rsvg-convert $svg_file.FullName -o $targetFilePath 2>&1
-      }
+      $result = & rsvg-convert $svg_file.FullName -o $targetFilePath 2>&1
+
     }
   - (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
   - (Get-Content subtitld\resources.qrc).replace('.svg','.png') | Set-Content subtitld\resources.qrc
