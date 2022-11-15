@@ -40,29 +40,29 @@ build_script:
   - ps: C:\Python39-x64\python.exe -m pip install -U pyinstaller glfw pywin32
   - ps: $svg_path ="[[UPDATE WITH YOUR PAT]]"
   - ps: $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
-- ps: >-
+  - ps: >-
 
-    ForEach ($svg_file in $svg_files)
+      ForEach ($svg_file in $svg_files)
 
-        {
+          {
 
-          $processingFile = $svg_file.FullName -replace [regex]::Escape($svg_path), ""
+            $processingFile = $svg_file.FullName -replace [regex]::Escape($svg_path), ""
 
-          $targetPath = $svg_file.Directory -replace [regex]::Escape($svg_path), $rootTargetPath
+            $targetPath = $svg_file.Directory -replace [regex]::Escape($svg_path), $rootTargetPath
 
-          $result = New-Item -ItemType Directory -Force -Path $targetPath
+            $result = New-Item -ItemType Directory -Force -Path $targetPath
 
-          $targetFilePath = Join-Path $targetPath $svg_file
+            $targetFilePath = Join-Path $targetPath $svg_file
 
-          $targetFilePath = $targetFilePath -replace ".svg", ".png"
-
-
-
-          $result = & rsvg-convert $svg_file.FullName -o $targetFilePath 2>&1
+            $targetFilePath = $targetFilePath -replace ".svg", ".png"
 
 
 
-        }
+            $result = & rsvg-convert $svg_file.FullName -o $targetFilePath 2>&1
+
+
+
+          }
   - ps: (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
   - ps: (Get-Content subtitld\resources.qrc).replace('.svg','.png') | Set-Content subtitld\resources.qrc
   - ps: C:\Python39-x64\Scripts\pyside6-rcc.exe' subtitld\resources.qrc -o subtitld\resources_rc.py
