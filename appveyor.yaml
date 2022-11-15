@@ -1,0 +1,6 @@
+deploy:
+- provider: Webhook
+  url: https://app.signpath.io/API/v1/9b1ff5d7-28fa-4698-83a0-7995dcbb8c85/Integrations/AppVeyor?ProjectSlug=subtitld&SigningPolicySlug=test-signing
+  authorization:
+     secure: FR+ZMCcQFzYUOtoPMDPzbQPKcnX6JtueF2oGstSvxQwoDV4nSNwFs4VHms8d75FEX8IK1ZJi2KTSZMGwBqC4lw==
+
