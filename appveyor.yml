@@ -32,24 +32,23 @@ install:
   - choco install nsis
 
 build_script:
-  - $now = Get-Date -Format yy.MM.dd.HHmm
+  - $env:VERSION_NUMBER = Get-Date -Format yy.MM.dd.HHmm
   - DownloadFile https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
   - Expand-Archive -Path ffmpeg-release-essentials.zip
   - C:\Python39-x64\python.exe -m pip install -U pip
   - C:\Python39-x64\python.exe -m pip install -r requirements.txt
   - C:\Python39-x64\python.exe -m pip install -U pyinstaller glfw pywin32
-
-  - $svg_path ="[[UPDATE WITH YOUR PAT]]"
-  - $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
+  - $env:svg_path ="[[UPDATE WITH YOUR PAT]]"
+  - $env:svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
   - ForEach ($svg_file in $svg_files)
     {
-      $processingFile = $svg_file.FullName -replace [regex]::Escape($svg_path), ""
-      $targetPath = $svg_file.Directory -replace [regex]::Escape($svg_path), $rootTargetPath
-      $result = New-Item -ItemType Directory -Force -Path $targetPath
-      $targetFilePath = Join-Path $targetPath $svg_file
-      $targetFilePath = $targetFilePath -replace ".svg", ".png"
+      $env:$processingFile = $svg_file.FullName -replace [regex]::Escape($svg_path), ""
+      $env:$targetPath = $svg_file.Directory -replace [regex]::Escape($svg_path), $rootTargetPath
+      $env:$result = New-Item -ItemType Directory -Force -Path $targetPath
+      $env:$targetFilePath = Join-Path $targetPath $svg_file
+      $env:$targetFilePath = $targetFilePath -replace ".svg", ".png"
 
-      $result = & rsvg-convert $svg_file.FullName -o $targetFilePath 2>&1
+      rsvg-convert $svg_file.FullName -o $targetFilePath
 
     }
   - (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
@@ -60,7 +59,7 @@ build_script:
   - makensis.exe subtitld_win.nsi
 
 after_build:
-  - Move-Item -Path "dist/Subtitld Portable.exe" -Destination "dist/Subtitld $now Portable.exe"
+  - Move-Item -Path "dist/Subtitld Portable.exe" -Destination "dist/Subtitld $VERSION_NUMBER Portable.exe"
 
 
 artifacts:
