@@ -32,34 +32,34 @@ install:
   - choco install nsis
 
 build_script:
-  - $env:VERSION_NUMBER = Get-Date -Format yy.MM.dd.HHmm
-  - DownloadFile https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
-  - Expand-Archive -Path ffmpeg-release-essentials.zip
-  - C:\Python39-x64\python.exe -m pip install -U pip
-  - C:\Python39-x64\python.exe -m pip install -r requirements.txt
-  - C:\Python39-x64\python.exe -m pip install -U pyinstaller glfw pywin32
-  - $env:svg_path ="[[UPDATE WITH YOUR PAT]]"
-  - $env:svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
-  - ForEach ($svg_file in $svg_files)
+  - ps: $now = Get-Date -Format yy.MM.dd.HHmm
+  - ps: DownloadFile https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
+  - ps: Expand-Archive -Path ffmpeg-release-essentials.zip
+  - ps: C:\Python39-x64\python.exe -m pip install -U pip
+  - ps: C:\Python39-x64\python.exe -m pip install -r requirements.txt
+  - ps: C:\Python39-x64\python.exe -m pip install -U pyinstaller glfw pywin32
+  - ps: $svg_path ="[[UPDATE WITH YOUR PAT]]"
+  - ps: $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
+  - ps: ForEach ($svg_file in $svg_files)
     {
-      $env:$processingFile = $svg_file.FullName -replace [regex]::Escape($svg_path), ""
-      $env:$targetPath = $svg_file.Directory -replace [regex]::Escape($svg_path), $rootTargetPath
-      $env:$result = New-Item -ItemType Directory -Force -Path $targetPath
-      $env:$targetFilePath = Join-Path $targetPath $svg_file
-      $env:$targetFilePath = $targetFilePath -replace ".svg", ".png"
+      $processingFile = $svg_file.FullName -replace [regex]::Escape($svg_path), ""
+      $targetPath = $svg_file.Directory -replace [regex]::Escape($svg_path), $rootTargetPath
+      $result = New-Item -ItemType Directory -Force -Path $targetPath
+      $targetFilePath = Join-Path $targetPath $svg_file
+      $targetFilePath = $targetFilePath -replace ".svg", ".png"
 
-      rsvg-convert $svg_file.FullName -o $targetFilePath
+      $result = & rsvg-convert $svg_file.FullName -o $targetFilePath 2>&1
 
     }
-  - (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
-  - (Get-Content subtitld\resources.qrc).replace('.svg','.png') | Set-Content subtitld\resources.qrc
-  - C:\Python39-x64\Scripts\pyside6-rcc.exe' subtitld\resources.qrc -o subtitld\resources_rc.py
-  - C:\Python39-x64\Scripts\PyInstaller.exe' subtitld_win.spec
+  - ps: (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
+  - ps: (Get-Content subtitld\resources.qrc).replace('.svg','.png') | Set-Content subtitld\resources.qrc
+  - ps: C:\Python39-x64\Scripts\pyside6-rcc.exe' subtitld\resources.qrc -o subtitld\resources_rc.py
+  - ps: C:\Python39-x64\Scripts\PyInstaller.exe' subtitld_win.spec
 
-  - makensis.exe subtitld_win.nsi
+  - ps: makensis.exe subtitld_win.nsi
 
 after_build:
-  - Move-Item -Path "dist/Subtitld Portable.exe" -Destination "dist/Subtitld $VERSION_NUMBER Portable.exe"
+  - Move-Item -Path "dist/Subtitld Portable.exe" -Destination "dist/Subtitld $now Portable.exe"
 
 
 artifacts:
