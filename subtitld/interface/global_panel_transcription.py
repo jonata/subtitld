@@ -426,10 +426,10 @@ def global_subtitlesvideo_autosync_button_clicked(self):
 
     if bool(self.subtitles_list):
         are_you_sure_message = QMessageBox(self)
-        are_you_sure_message.setWindowTitle(self.tr('Are you sure?'))
-        are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?'))
-        are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
-        are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
+        are_you_sure_message.setWindowTitle('Are you sure?')
+        are_you_sure_message.setText('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?')
+        are_you_sure_message.addButton('Yes', QMessageBox.AcceptRole)
+        are_you_sure_message.addButton('No', QMessageBox.RejectRole)
         ret = are_you_sure_message.exec_()
 
         if ret == 0:
@@ -459,10 +459,10 @@ def global_panel_transcription_autosubtitle_button_clicked(self):
 
     if bool(self.subtitles_list):
         are_you_sure_message = QMessageBox(self)
-        are_you_sure_message.setWindowTitle(self.tr('Are you sure?'))
-        are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?'))
-        are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
-        are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
+        are_you_sure_message.setWindowTitle('Are you sure?')
+        are_you_sure_message.setText('This will overwrite your actual subtitle set. New timings will be applied. Are you sure you want to replace your actual subtitles?')
+        are_you_sure_message.addButton('Yes', QMessageBox.AcceptRole)
+        are_you_sure_message.addButton('No', QMessageBox.RejectRole)
         ret = are_you_sure_message.exec_()
 
         if ret == 0:
@@ -488,10 +488,10 @@ def global_panel_transcription_transcript_apply_transcript_button_clicked(self):
 
     if bool(self.subtitles_list):
         are_you_sure_message = QMessageBox(self)
-        are_you_sure_message.setWindowTitle(self.tr('Are you sure?'))
-        are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New text will be applied. Are you sure you want to replace your actual subtitles?'))
-        are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
-        are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
+        are_you_sure_message.setWindowTitle('Are you sure?')
+        are_you_sure_message.setText('This will overwrite your actual subtitle set. New text will be applied. Are you sure you want to replace your actual subtitles?')
+        are_you_sure_message.addButton('Yes', QMessageBox.AcceptRole)
+        are_you_sure_message.addButton('No', QMessageBox.RejectRole)
         ret = are_you_sure_message.exec_()
 
         if ret == 0:

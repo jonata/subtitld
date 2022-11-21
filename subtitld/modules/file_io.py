@@ -100,7 +100,7 @@ def load(self):
         print('audio ffms2 ended')
         self.video_metadata['audio'] = command
         self.timeline.zoom_update_waveform(self)
-        self.videoinfo_label.setText(self.tr('Audio ffmpeg_extract_subtitleed'))
+        self.videoinfo_label.setText('Audio ffmpeg_extract_subtitleed')
 
     self.thread_extract_waveform = ThreadExtractWaveform(self)
     self.thread_extract_waveform.command.connect(thread_extract_waveform_ended)
@@ -132,11 +132,11 @@ def load(self):
 
 def open_filepath(self, files_to_open=False, update_interface=False):
     """Open subtitle or video and performs some checks"""
-    supported_subtitle_files = self.tr('Subtitle files') + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
-    supported_video_files = self.tr('Video files') + ' ({})'.format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
+    supported_subtitle_files = 'Subtitle files' + ' ({})'.format(" ".join(["*.{}".format(fo) for fo in list_of_supported_subtitle_extensions]))
+    supported_video_files = 'Video files' + ' ({})'.format(" ".join(["*{}".format(fo) for fo in LIST_OF_SUPPORTED_VIDEO_EXTENSIONS]))
 
     if not files_to_open:
-        files_to_open = [QFileDialog.getOpenFileName(parent=self, caption=self.tr('Select the video or subtitle file'), dir=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files)[0]]
+        files_to_open = [QFileDialog.getOpenFileName(parent=self, caption='Select the video or subtitle file', dir=REAL_PATH_HOME, filter=supported_subtitle_files + ';;' + supported_video_files)[0]]
 
     for filepath in files_to_open:
         if os.path.isfile(filepath):
@@ -161,7 +161,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
                         break
 
             if not self.video_metadata:
-                filepath = QFileDialog.getOpenFileName(parent=self.parent(), caption=self.tr('Select the video file'), dir=REAL_PATH_HOME, filter=supported_video_files)[0]
+                filepath = QFileDialog.getOpenFileName(parent=self.parent(), caption='Select the video file', dir=REAL_PATH_HOME, filter=supported_video_files)[0]
                 if filepath and os.path.isfile(filepath) and filepath.lower().endswith(LIST_OF_SUPPORTED_VIDEO_EXTENSIONS):
                     self.video_metadata = process_video_file(filepath)
 
@@ -170,7 +170,7 @@ def open_filepath(self, files_to_open=False, update_interface=False):
         if self.video_metadata['audio_is_present']:
             self.thread_extract_waveform.filepath = self.video_metadata['filepath']
             self.thread_extract_waveform.start()
-            self.videoinfo_label.setText(self.tr('Extracting audio...'))
+            self.videoinfo_label.setText('Extracting audio...')
 
         self.player_widget.loadfile(self.video_metadata['filepath'])
         if self.actual_subtitle_file:
@@ -248,7 +248,7 @@ def process_subtitles_file(subtitle_file=False, subtitle_format='SRT'):
                     pass
 
                     # error_message = QMessageBox()
-                    # error_message.setWindowTitle(self.tr('There is a problem with this file and can not be opened.'))
+                    # error_message.setWindowTitle('There is a problem with this file and can not be opened.')
 
         elif subtitle_file.lower().endswith(('.ttml', '.dfxp', '.xml', '.itt')):
             # if subtitle_file.lower().endswith(('.xml')) and '<transcript>' in open(subtitle_file).read():

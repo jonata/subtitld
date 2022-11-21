@@ -28,7 +28,6 @@ for t in LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS:
         list_of_supported_subtitle_extensions.append(ext)
 list_of_supported_subtitle_extensions = tuple(list_of_supported_subtitle_extensions)
 
-
 parser = argparse.ArgumentParser(description='Subtitld is a software to create, edit and transcribe subtitles')
 parser.add_argument('file', type=argparse.FileType('r'), help='The path for video or subtitle file', nargs='*', default=False)
 parser.add_argument('--version', help='Prints the actual version of Subtitld.', action='store_true')
@@ -194,12 +193,10 @@ class Subtitld(QWidget):
         if self.unsaved:
             save_message_box = QMessageBox(self)
 
-            save_message_box.setWindowTitle(self.tr('Unsaved changes'))
-            save_message_box.setText(
-                self.tr('Do you want to save the changes you made on the subtitles?')
-            )
-            save_message_box.addButton(self.tr('Save'), QMessageBox.AcceptRole)
-            save_message_box.addButton(self.tr("Don't save"), QMessageBox.RejectRole)
+            save_message_box.setWindowTitle('Unsaved changes')
+            save_message_box.setText('Do you want to save the changes you made on the subtitles?')
+            save_message_box.addButton('Save', QMessageBox.AcceptRole)
+            save_message_box.addButton("Don't save", QMessageBox.RejectRole)
             ret = save_message_box.exec_()
 
             if ret == QMessageBox.AcceptRole:

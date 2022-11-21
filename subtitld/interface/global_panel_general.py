@@ -34,7 +34,7 @@ def load_widgets(self):
     self.global_panel_general_save_as_line.setContentsMargins(0, 0, 0, 0)
     self.global_panel_general_save_as_line.setSpacing(5)
 
-    self.global_subtitlesvideo_save_as_label = QLabel(self.tr('Default format to save:').upper(), parent=self.global_panel_general_content)
+    self.global_subtitlesvideo_save_as_label = QLabel('Default format to save:'.upper(), parent=self.global_panel_general_content)
     self.global_subtitlesvideo_save_as_label.setProperty('class', 'widget_label')
     self.global_panel_general_save_as_line.addWidget(self.global_subtitlesvideo_save_as_label, 0, Qt.AlignLeft)
 

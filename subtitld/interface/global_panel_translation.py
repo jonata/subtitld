@@ -62,7 +62,7 @@ def load_widgets(self):
     self.global_subtitlesvideo_autosync_lang_to_combobox.addItems(LANGUAGE_DESCRIPTIONS)
     self.global_panel_translation_content.layout().addWidget(self.global_subtitlesvideo_autosync_lang_to_combobox, 0, 1, Qt.AlignTop)
 
-    self.global_subtitlesvideo_translate_button = QPushButton(self.tr('Translate').upper())
+    self.global_subtitlesvideo_translate_button = QPushButton('Translate'.upper())
     self.global_subtitlesvideo_translate_button.setProperty('class', 'button')
     self.global_subtitlesvideo_translate_button.clicked.connect(lambda: global_subtitlesvideo_translate_button_clicked(self))
     self.global_panel_translation_content.layout().addWidget(self.global_subtitlesvideo_translate_button, 0, 2, Qt.AlignTop)
@@ -90,10 +90,10 @@ def global_subtitlesvideo_translate_button_clicked(self):
 
     if bool(self.subtitles_list):
         are_you_sure_message = QMessageBox(self)
-        are_you_sure_message.setWindowTitle(self.tr('Are you sure?'))
-        are_you_sure_message.setText(self.tr('This will overwrite your actual subtitle set. New text will be applied. Are you sure you want to replace your actual subtitles?'))
-        are_you_sure_message.addButton(self.tr('Yes'), QMessageBox.AcceptRole)
-        are_you_sure_message.addButton(self.tr('No'), QMessageBox.RejectRole)
+        are_you_sure_message.setWindowTitle('Are you sure?')
+        are_you_sure_message.setText('This will overwrite your actual subtitle set. New text will be applied. Are you sure you want to replace your actual subtitles?')
+        are_you_sure_message.addButton('Yes', QMessageBox.AcceptRole)
+        are_you_sure_message.addButton('No', QMessageBox.RejectRole)
         ret = are_you_sure_message.exec()
 
         if ret == 0:

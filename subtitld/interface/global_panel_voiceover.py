@@ -54,7 +54,7 @@ def load_widgets(self):
 
     self.global_panel_voiceover_content = QWidget()
 
-    self.global_subtitlesvideo_voiceover_button = QPushButton(self.tr('Voiceover').upper(), parent=self.global_panel_voiceover_content)
+    self.global_subtitlesvideo_voiceover_button = QPushButton('Voiceover'.upper(), parent=self.global_panel_voiceover_content)
     self.global_subtitlesvideo_voiceover_button.setProperty('class', 'button')
     self.global_subtitlesvideo_voiceover_button.clicked.connect(lambda: global_subtitlesvideo_autovoiceover_button_clicked(self))
 

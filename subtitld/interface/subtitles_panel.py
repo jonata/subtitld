@@ -422,12 +422,11 @@ def toppanel_open_button_clicked(self, update_interface=True):
     if self.unsaved:
         save_message_box = QMessageBox(self)
 
-        save_message_box.setWindowTitle(self.tr('Unsaved changes'))
-        save_message_box.setText(
-            self.tr('Do you want to save the changes you made on the subtitles?')
-        )
-        save_message_box.addButton(self.tr('Save'), QMessageBox.AcceptRole)
-        save_message_box.addButton(self.tr("Don't save"), QMessageBox.RejectRole)
+        save_message_box.setWindowTitle('Unsaved changes')
+        save_message_box.setText('Do you want to save the changes you made on the subtitles?')
+
+        save_message_box.addButton('Save', QMessageBox.AcceptRole)
+        save_message_box.addButton("Don't save", QMessageBox.RejectRole)
         ret = save_message_box.exec_()
 
         if ret == QMessageBox.AcceptRole:
@@ -549,9 +548,9 @@ def subtitles_panel_findandreplace_update(self):
 
 def update_toppanel_subtitle_file_info_label(self):
     """Function to update top information on subtitles list panel"""
-    text = self.tr('Actual video does not have saved subtitle file.')
+    text = 'Actual video does not have saved subtitle file.'
     if self.actual_subtitle_file:
-        text = '<b><small>' + self.tr('Actual project:').upper() + '</small></b><br><big>' + os.path.basename(self.actual_subtitle_file) + '</big>'
+        text = '<b><small>' + 'Actual project:'.upper() + '</small></b><br><big>' + os.path.basename(self.actual_subtitle_file) + '</big>'
     self.toppanel_subtitle_file_info_label.setText(text)
 
 

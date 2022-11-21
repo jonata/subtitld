@@ -124,7 +124,7 @@ def load_widgets(self):
     self.global_panel_export_text_tabwidget_panel.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_export_text_tabwidget_panel.layout().setSpacing(20)
 
-    self.global_panel_export_content_txt_panel_export_button = QPushButton(self.tr('Export').upper())
+    self.global_panel_export_content_txt_panel_export_button = QPushButton('Export'.upper())
     self.global_panel_export_content_txt_panel_export_button.setProperty('class', 'button')
     self.global_panel_export_content_txt_panel_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
     self.global_panel_export_text_tabwidget_panel.layout().addWidget(self.global_panel_export_content_txt_panel_export_button, 0)
@@ -415,7 +415,7 @@ def load_widgets(self):
 
     self.global_panel_export_video_ffmpeg_final_line.addLayout(self.global_panel_export_video_ffmpeg_command_line)
 
-    self.global_panel_export_video_ffmpeg_export_button = QPushButton(self.tr('Export video').upper())
+    self.global_panel_export_video_ffmpeg_export_button = QPushButton('Export video'.upper())
     self.global_panel_export_video_ffmpeg_export_button.setProperty('class', 'button_dark')
     self.global_panel_export_video_ffmpeg_export_button.clicked.connect(lambda: global_panel_export_video_ffmpeg_export_button_clicked(self))
     self.global_panel_export_video_ffmpeg_export_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
@@ -449,7 +449,7 @@ def load_widgets(self):
 
     self.global_panel_export_video_tabwidget_panel.layout().addWidget(self.global_panel_export_video_tabwidget, 0)
 
-    self.global_subtitlesvideo_video_generate_transparent_video_button = QPushButton(self.tr('Generate transparent video').upper())
+    self.global_subtitlesvideo_video_generate_transparent_video_button = QPushButton('Generate transparent video'.upper())
     self.global_subtitlesvideo_video_generate_transparent_video_button.setProperty('class', 'button_dark')
     self.global_subtitlesvideo_video_generate_transparent_video_button.clicked.connect(lambda: global_subtitlesvideo_video_generate_transparent_video_button_clicked(self))
     self.global_subtitlesvideo_video_generate_transparent_video_button.setVisible(False)
@@ -496,10 +496,10 @@ def global_panel_export_video_ffmpeg_export_button_clicked(self):
     """Function to generate buned video"""
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
     extformat = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
-    save_formats = self.tr('Video file') + ' (.' + extformat + ')'
+    save_formats = 'Video file' + ' (.' + extformat + ')'
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
 
-    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
+    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption='Select the subtitle file', dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
 
     if generated_video_filepath:
         file_io.save_file(os.path.join(path_tmp, 'subtitle.srt'), self.subtitles_list, subtitle_format='SRT', language='en')
@@ -525,10 +525,10 @@ def global_subtitlesvideo_video_burn_pcolor_clicked(self):
 def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
     suggested_path = os.path.dirname(self.video_metadata['filepath'])
     extformat = 'mov'  # os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[1]
-    save_formats = self.tr('Video file') + ' (.' + extformat + ')'
+    save_formats = 'Video file' + ' (.' + extformat + ')'
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
 
-    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Select the subtitle file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
+    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption='Select the subtitle file', dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
 
     if generated_video_filepath:
         class layerWidget(QWidget):
@@ -616,7 +616,7 @@ def global_subtitlesvideo_export_button_clicked(self):
 
     supported_export_files = ';;'.join(['{description} ({extension})'.format(extension=' '.join(['.{ext}'.format(ext=ext) for ext in LIST_OF_SUPPORTED_EXPORT_EXTENSIONS[export_format]['extensions']]), description=LIST_OF_SUPPORTED_EXPORT_EXTENSIONS[export_format]['description']) for export_format in LIST_OF_SUPPORTED_EXPORT_EXTENSIONS])
 
-    filedialog = QFileDialog.getSaveFileName(parent=self, caption=self.tr('Export to file'), dir=os.path.join(suggested_path, suggested_name), filter=supported_export_files)
+    filedialog = QFileDialog.getSaveFileName(parent=self, caption='Export to file', dir=os.path.join(suggested_path, suggested_name), filter=supported_export_files)
 
     if filedialog[0] and filedialog[1]:
         filename = filedialog[0]
