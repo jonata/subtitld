@@ -8,11 +8,12 @@ from subtitld.modules import shortcuts
 
 from subtitld.modules.shortcuts import shortcuts_dict, default_shortcuts_dict
 from subtitld.interface import global_panel
+from subtitld.interface.translation import _
 
 
 class global_panel_keyboardshortcut_qlineedit(QLineEdit):
     """Class to reimplement QLineEdit in order to get shorkeys selection"""
-    def __init__(widget, *args, parent=None):
+    def __init__(widget, *args):
         super(global_panel_keyboardshortcut_qlineedit, widget).__init__(*args)
         widget.setLayout(QHBoxLayout())
         widget.setAlignment(Qt.AlignCenter)
@@ -34,7 +35,7 @@ class global_panel_keyboardshortcut_qlineedit(QLineEdit):
         widget.layout().addStretch()
 
         if not command_string:
-            qlabel = QLabel('Press the shorkey combination for this command' if widget.isEnabled() else 'No shorkey for this command.')
+            qlabel = QLabel(_('global_panel_keyboardshortcuts.press_shorkey_combination') if widget.isEnabled() else _('global_panel_keyboardshortcuts.no_shortkey'))
             qlabel.setProperty('class', 'units_label')
             qlabel.setAlignment(Qt.AlignCenter)
             widget.layout().addWidget(qlabel, 0, Qt.AlignCenter | Qt.AlignBottom)
@@ -79,7 +80,7 @@ class global_panel_keyboardshortcut_qlineedit(QLineEdit):
 
 def load_menu(self):
     """Function to load subtitles panel widgets"""
-    self.global_panel_keyboardshortcuts_menu_button = QPushButton('Keyboard shortcuts')
+    self.global_panel_keyboardshortcuts_menu_button = QPushButton()
     self.global_panel_keyboardshortcuts_menu_button.setCheckable(True)
     self.global_panel_keyboardshortcuts_menu_button.setProperty('class', 'global_panel_menu')
     self.global_panel_keyboardshortcuts_menu_button.clicked.connect(lambda: global_panel_menu_changed(self))
@@ -114,7 +115,7 @@ def load_widgets(self):
 
     self.global_panel_tabwidget_shortkeys_details = QVBoxLayout()
 
-    self.global_panel_tabwidget_shortkeys_details_warning = QLabel('Select a command')
+    self.global_panel_tabwidget_shortkeys_details_warning = QLabel()
     self.global_panel_tabwidget_shortkeys_details_warning.setProperty('class', 'units_label')
     self.global_panel_tabwidget_shortkeys_details.addWidget(self.global_panel_tabwidget_shortkeys_details_warning, 0, Qt.AlignCenter)
 
@@ -127,22 +128,22 @@ def load_widgets(self):
     self.global_panel_keyboardshortcut_buttons.layout().setContentsMargins(0, 10, 0, 0)
     self.global_panel_keyboardshortcut_buttons.layout().setSpacing(5)
 
-    self.global_panel_keyboardshortcut_change_button = QPushButton('Change')
+    self.global_panel_keyboardshortcut_change_button = QPushButton()
     self.global_panel_keyboardshortcut_change_button.setProperty('class', 'subbutton2_dark')
     self.global_panel_keyboardshortcut_change_button.clicked.connect(lambda: global_panel_keyboardshortcut_change_button_clicked(self))
     self.global_panel_keyboardshortcut_buttons.layout().addWidget(self.global_panel_keyboardshortcut_change_button)
 
-    self.global_panel_keyboardshortcut_confirm_button = QPushButton('Confirm')
+    self.global_panel_keyboardshortcut_confirm_button = QPushButton()
     self.global_panel_keyboardshortcut_confirm_button.setProperty('class', 'subbutton2_dark')
     self.global_panel_keyboardshortcut_confirm_button.clicked.connect(lambda: global_panel_keyboardshortcut_confirm_button_clicked(self))
     self.global_panel_keyboardshortcut_buttons.layout().addWidget(self.global_panel_keyboardshortcut_confirm_button)
 
-    self.global_panel_keyboardshortcut_cancel_button = QPushButton('Cancel')
+    self.global_panel_keyboardshortcut_cancel_button = QPushButton()
     self.global_panel_keyboardshortcut_cancel_button.setProperty('class', 'subbutton2_dark')
     self.global_panel_keyboardshortcut_cancel_button.clicked.connect(lambda: global_panel_keyboardshortcut_cancel_button_clicked(self))
     self.global_panel_keyboardshortcut_buttons.layout().addWidget(self.global_panel_keyboardshortcut_cancel_button)
 
-    self.global_panel_keyboardshortcut_clear_button = QPushButton('Clear')
+    self.global_panel_keyboardshortcut_clear_button = QPushButton()
     self.global_panel_keyboardshortcut_clear_button.setProperty('class', 'subbutton2_dark')
     self.global_panel_keyboardshortcut_clear_button.clicked.connect(lambda: global_panel_keyboardshortcut_clear_button_clicked(self))
     self.global_panel_keyboardshortcut_buttons.layout().addWidget(self.global_panel_keyboardshortcut_clear_button)
@@ -153,15 +154,13 @@ def load_widgets(self):
 
     self.global_panel_content_stacked_widgets.addWidget(self.global_panel_keyboardshortcuts_content)
 
-    global_panel_tabwidget_shortkeys_table_update(self)
-
 
 def global_panel_tabwidget_shortkeys_table_update(self):
     """Function to update subtitlesvideo panel shorkeys table"""
     self.global_panel_tabwidget_shortkeys_table.clear()
     self.global_panel_tabwidget_shortkeys_table.setRowCount(len(shortcuts_dict))
-    self.global_panel_tabwidget_shortkeys_table.setHorizontalHeaderLabels(['Command', 'internal_command', 'Shortkeys'])
-    # inverted_shortcuts_dict = {value: key for key, value in shortcuts_dict.items()}
+    self.global_panel_tabwidget_shortkeys_table.setHorizontalHeaderLabels([_('global_panel_keyboardshortcuts.command'), 'internal_command', _('global_panel_keyboardshortcuts.shortkeys')])
+
     i = 0
     for item in shortcuts_dict:
         item_name = QTableWidgetItem(shortcuts_dict[item])
@@ -236,3 +235,13 @@ def global_panel_keyboardshortcut_cancel_button_clicked(self):
     self.global_panel_keyboardshortcut_qlineedit.setEnabled(False)
 
     update_global_panel_tabwidget_shortkeys_details(self)
+
+
+def translate_widgets(self):
+    self.global_panel_keyboardshortcuts_menu_button.setText(_('global_panel_keyboardshortcuts.title'))
+    self.global_panel_keyboardshortcut_change_button.setText(_('global_panel_keyboardshortcuts.change'))
+    self.global_panel_keyboardshortcut_confirm_button.setText(_('global_panel_keyboardshortcuts.confirm'))
+    self.global_panel_keyboardshortcut_cancel_button.setText(_('global_panel_keyboardshortcuts.cancel'))
+    self.global_panel_keyboardshortcut_clear_button.setText(_('global_panel_keyboardshortcuts.clear'))
+    self.global_panel_tabwidget_shortkeys_details_warning.setText(_('global_panel_keyboardshortcuts.select_a_command'))
+    global_panel_tabwidget_shortkeys_table_update(self)

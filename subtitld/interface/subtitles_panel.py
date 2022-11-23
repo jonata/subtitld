@@ -11,6 +11,7 @@ from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
 from PySide6.QtGui import QTextCursor
 
 from subtitld.interface import subtitles_panel_widget_markdown, subtitles_panel_widget_qlistwidget, subtitles_panel_widget_timeline, timeline
+from subtitld.interface.translation import _
 from subtitld.modules import file_io
 from subtitld.modules import subtitles
 from subtitld.modules.paths import LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS
@@ -93,7 +94,7 @@ def load(self):
     self.toppanel_subtitle_file_info_label.layout().setContentsMargins(0, 0, 0, 0)
     self.toppanel_subtitle_file_info_label.setObjectName('toppanel_subtitle_file_info_label')
 
-    self.toppanel_open_button = QPushButton('Open different file'.upper())
+    self.toppanel_open_button = QPushButton()
     self.toppanel_open_button.setObjectName('toppanel_open_button')
     self.toppanel_open_button.setProperty('class', 'subbutton2_dark')
     self.toppanel_open_button.clicked.connect(lambda: toppanel_open_button_clicked(self))
@@ -184,7 +185,7 @@ def load(self):
     self.subtitles_panel_findandreplace_find_field.textChanged.connect(lambda: subtitles_panel_findandreplace_find_field_textchanged(self))
     self.subtitles_panel_findandreplace_find_line.layout().addWidget(self.subtitles_panel_findandreplace_find_field, 1)
 
-    self.subtitles_panel_findandreplace_findnext_button = QPushButton('FIND')
+    self.subtitles_panel_findandreplace_findnext_button = QPushButton()
     self.subtitles_panel_findandreplace_findnext_button.setObjectName('subtitles_panel_findandreplace_findnext_button')
     self.subtitles_panel_findandreplace_findnext_button.setProperty('class', 'button_dark')
     self.subtitles_panel_findandreplace_findnext_button.setProperty('borderless_left', True)
@@ -231,14 +232,14 @@ def load(self):
     self.subtitles_panel_findandreplace_replaceandfindnext_button.layout().setSizeConstraint(QLayout.SetMinimumSize)
     self.subtitles_panel_findandreplace_replaceandfindnext_button.clicked.connect(lambda: subtitles_panel_findandreplace_replaceandfindnext_button_clicked(self))
 
-    self.subtitles_panel_findandreplace_replace_button = QPushButton('REPLACE')
+    self.subtitles_panel_findandreplace_replace_button = QPushButton()
     self.subtitles_panel_findandreplace_replace_button.setProperty('class', 'button_dark')
     self.subtitles_panel_findandreplace_replace_button.setProperty('borderless_left', True)
     self.subtitles_panel_findandreplace_replace_button.setObjectName('subtitles_panel_findandreplace_replace_button')
     self.subtitles_panel_findandreplace_replace_button.clicked.connect(lambda: subtitles_panel_findandreplace_replace_button_clicked(self))
     self.subtitles_panel_findandreplace_replaceandfindnext_button.layout().addWidget(self.subtitles_panel_findandreplace_replace_button, 0)
 
-    self.subtitles_panel_findandreplace_replaceandfindnext_button_label = QLabel('AND FIND NEXT')
+    self.subtitles_panel_findandreplace_replaceandfindnext_button_label = QLabel()
     self.subtitles_panel_findandreplace_replaceandfindnext_button_label.setProperty('class', 'qlabel_for_buttons')
     self.subtitles_panel_findandreplace_replaceandfindnext_button.layout().addWidget(self.subtitles_panel_findandreplace_replaceandfindnext_button_label, 0)
 
@@ -246,7 +247,7 @@ def load(self):
 
     self.subtitles_panel_findandreplace_replace_line.layout().addSpacing(1)
 
-    self.subtitles_panel_findandreplace_replaceall_button = QPushButton('REPLACE ALL')
+    self.subtitles_panel_findandreplace_replaceall_button = QPushButton()
     self.subtitles_panel_findandreplace_replaceall_button.setProperty('class', 'button_dark')
     self.subtitles_panel_findandreplace_replaceall_button.setProperty('borderless_left', True)
     self.subtitles_panel_findandreplace_replaceall_button.clicked.connect(lambda: subtitles_panel_findandreplace_replaceall_button_clicked(self))
@@ -417,7 +418,7 @@ def toppanel_save_button_clicked(self):
     update_topbar_status(self)
 
 
-def toppanel_open_button_clicked(self, update_interface=True):
+def toppanel_open_button_clicked(self):
     """Function to call when open button on subtitles list panel is clicked"""
     if self.unsaved:
         save_message_box = QMessageBox(self)
@@ -501,7 +502,7 @@ def subtitles_panel_findandreplace_perform_search(self):
     for subtitle in self.subtitles_list:
         if text_to_search in (subtitle[2] if self.subtitles_panel_findandreplace_casesensitive.isChecked() else subtitle[2].lower()):
             s = 0
-            for i in range((subtitle[2] if self.subtitles_panel_findandreplace_casesensitive.isChecked() else subtitle[2].lower()).count(text_to_search)):
+            for _ in range((subtitle[2] if self.subtitles_panel_findandreplace_casesensitive.isChecked() else subtitle[2].lower()).count(text_to_search)):
                 self.subtitles_panel_findandreplace_list.append([self.subtitles_list.index(subtitle), subtitle[2].find(text_to_search, s), len(text_to_search)])
                 s += subtitle[2].find(text_to_search, s) + len(text_to_search)
 
@@ -580,7 +581,16 @@ def update_subtitles_panel_widget_vision(self, vision='list'):
     update_subtitles_panel_widget_vision_content(self)
 
 
-def update_processing_status(self, show=False, value=0):
-    self.toppanel_subtitle_file_progress_bar.setVisible(show)
+def update_processing_status(self, show_widgets=False, value=0):
+    self.toppanel_subtitle_file_progress_bar.setVisible(show_widgets)
     self.toppanel_subtitle_file_progress_bar.setValue(value)
-    self.toppanel_subtitle_file_info_label.setVisible(not show)
+    self.toppanel_subtitle_file_info_label.setVisible(not show_widgets)
+
+
+def translate_widgets(self):
+    self.subtitles_panel_findandreplace_replaceandfindnext_button_label.setText(_('subtitles_panel.and_find_next'))
+    self.toppanel_open_button.setText(_('subtitles_panel.open_different_file'))
+    self.subtitles_panel_findandreplace_findnext_button.setText(_('subtitles_panel.find'))
+    self.subtitles_panel_findandreplace_replace_button.setText(_('subtitles_panel.replace'))
+    self.subtitles_panel_findandreplace_replaceall_button.setText(_('subtitles_panel.replace_all'))
+    subtitles_panel_widget_qlistwidget.translate_widgets(self)

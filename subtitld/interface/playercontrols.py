@@ -8,9 +8,10 @@ from PySide6.QtWidgets import QPushButton, QLabel, QDoubleSpinBox, QSlider, QSpi
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QRect, QPoint, QThread, QSize
 from PySide6.QtGui import QIcon, QPainter, QLinearGradient, QBrush, QColor
 from subtitld.interface import subtitles_panel
+from subtitld.interface.translation import _
 
 from subtitld.modules import subtitles
-from subtitld.modules.paths import PATH_SUBTITLD_GRAPHICS, ACTUAL_OS
+from subtitld.modules.paths import PATH_SUBTITLD_GRAPHICS
 
 STEPS_LIST = ['Frames', 'Seconds']
 
@@ -42,7 +43,7 @@ class QLeftTabBar(QTabBar):
             painter.translate(-c)
             painter.drawControl(QStyle.CE_TabBarTabLabel, opt)
             painter.restore()
-
+        event.accept()
 
 def load(self):
     """Function to load player control widgets"""
@@ -281,7 +282,7 @@ def load(self):
     self.add_subtitle_button.layout().setContentsMargins(38, 0, 10, 5)
     self.add_subtitle_button.layout().setSpacing(0)
 
-    self.add_subtitle_button_label = QLabel('ADD')
+    self.add_subtitle_button_label = QLabel()
     self.add_subtitle_button_label.setObjectName('add_subtitle_button_label')
     # self.add_subtitle_button_label.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum))
     self.add_subtitle_button.layout().addWidget(self.add_subtitle_button_label)
@@ -322,7 +323,7 @@ def load(self):
 
     self.add_remove_subtitle_frame.layout().addWidget(self.add_subtitle_button)
 
-    self.remove_selected_subtitle_button = QPushButton('REMOVE')
+    self.remove_selected_subtitle_button = QPushButton()
     self.remove_selected_subtitle_button.setObjectName('remove_selected_subtitle_button')
     self.remove_selected_subtitle_button.setProperty('class', 'button_dark')
     self.remove_selected_subtitle_button.setProperty('borderless_left', 'true')
@@ -633,7 +634,7 @@ def load(self):
     self.snap_button.layout().setSpacing(4)
     self.playercontrols_widget_frame_bottom_left.layout().addWidget(self.snap_button)
 
-    self.snap_button_label = QLabel('SNAP')
+    self.snap_button_label = QLabel()
     self.snap_button_label.setObjectName('snap_button_label')
     self.snap_button.layout().addWidget(self.snap_button_label)
 
@@ -799,7 +800,7 @@ def load(self):
 
     self.playercontrols_widget_frame_bottom_right.layout().addSpacing(4)
 
-    self.grid_button = QPushButton('GRID')
+    self.grid_button = QPushButton()
     self.grid_button.setProperty('class', 'subbutton')
     self.grid_button.setProperty('borderless_bottom', 'true')
     self.grid_button.setProperty('borderless_right', 'true')
@@ -851,7 +852,7 @@ def load(self):
     self.step_button.layout().setContentsMargins(10, 4, 5, 4)
     self.step_button.layout().setSpacing(2)
 
-    self.step_button_label = QLabel('STEP')
+    self.step_button_label = QLabel()
     self.step_button_label.setObjectName('step_button_label')
     # self.step_button_label.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
     self.step_button.layout().addWidget(self.step_button_label)
@@ -1716,3 +1717,11 @@ def playercontrols_properties_panel_tabwidget_background_cursor_color_button_cli
         self.settings['timeline']['cursor_color'] = color.name(1)
     playercontrols_properties_panel_tabwidget_subtitles_update_widgets(self)
     self.timeline_widget.update()
+
+
+def translate_widgets(self):
+    self.add_subtitle_button_label.setText(_('playercontrols.add'))
+    self.snap_button_label.setText(_('playercontrols.snap'))
+    self.step_button_label.setText(_('playercontrols.step'))
+    self.remove_selected_subtitle_button.setText(_('playercontrols.remove'))
+    self.grid_button.setText(_('playercontrols.grid'))

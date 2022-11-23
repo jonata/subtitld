@@ -3,15 +3,16 @@ from PySide6.QtGui import QFontMetrics, QFont, QColor
 from PySide6.QtCore import Qt, QSize, QAbstractListModel, QRect, QMargins
 
 from subtitld.interface import subtitles_panel
+from subtitld.interface.translation import _
 from subtitld.modules import utils
 from subtitld.modules import quality_check
 from subtitld.modules import subtitles
 
 
 class subtitles_panel_qlistwidget_model(QAbstractListModel):
-    def __init__(self, *args, subtitles=None, **kwargs):
+    def __init__(self, *args, subs=None, **kwargs):
         super(subtitles_panel_qlistwidget_model, self).__init__(*args, **kwargs)
-        self.subtitles = subtitles or []
+        self.subtitles = subs or []
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
@@ -26,7 +27,7 @@ class subtitles_panel_qlistwidget_model(QAbstractListModel):
         index = self.subtitles.index(subtitle)
         return self.index(index)
 
-    def rowCount(self, index):
+    def rowCount(self, _):
         return len(self.subtitles)
 
 
@@ -204,7 +205,7 @@ def add_widgets(self):
     self.subtitles_panel_simplelist_properties_start_timing_frame.layout().setContentsMargins(2, 2, 2, 2)
     self.subtitles_panel_simplelist_properties_start_timing_frame.layout().setSpacing(0)
 
-    self.subtitles_panel_simplelist_properties_start_timing_label = QLabel('Start')
+    self.subtitles_panel_simplelist_properties_start_timing_label = QLabel()
     self.subtitles_panel_simplelist_properties_start_timing_label.setObjectName('subtitles_panel_simplelist_properties_start_timing_label')
     self.subtitles_panel_simplelist_properties_start_timing_label.setProperty('class', 'properties_timing_labels')
     self.subtitles_panel_simplelist_properties_start_timing_label.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum))
@@ -236,7 +237,7 @@ def add_widgets(self):
     self.subtitles_panel_simplelist_properties_duration_timing_frame.layout().setContentsMargins(2, 2, 2, 2)
     self.subtitles_panel_simplelist_properties_duration_timing_frame.layout().setSpacing(0)
 
-    self.subtitles_panel_simplelist_properties_duration_timing_label = QLabel('Duration')
+    self.subtitles_panel_simplelist_properties_duration_timing_label = QLabel()
     self.subtitles_panel_simplelist_properties_duration_timing_label.setObjectName('subtitles_panel_simplelist_properties_duration_timing_label')
     self.subtitles_panel_simplelist_properties_duration_timing_label.setProperty('class', 'properties_timing_labels')
     self.subtitles_panel_simplelist_properties_duration_timing_label.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum))
@@ -258,7 +259,7 @@ def add_widgets(self):
     self.subtitles_panel_simplelist_properties_ending_timing_frame.layout().setContentsMargins(2, 2, 2, 2)
     self.subtitles_panel_simplelist_properties_ending_timing_frame.layout().setSpacing(0)
 
-    self.subtitles_panel_simplelist_properties_ending_timing_label = QLabel('End')
+    self.subtitles_panel_simplelist_properties_ending_timing_label = QLabel()
     self.subtitles_panel_simplelist_properties_ending_timing_label.setObjectName('subtitles_panel_simplelist_properties_ending_timing_label')
     self.subtitles_panel_simplelist_properties_ending_timing_label.setProperty('class', 'properties_timing_labels')
     self.subtitles_panel_simplelist_properties_ending_timing_label.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum))
@@ -281,7 +282,7 @@ def add_widgets(self):
     self.subtitles_panel_simplelist_properties_buttons_line.setContentsMargins(0, 0, 0, 0)
     self.subtitles_panel_simplelist_properties_buttons_line.setSpacing(0)
 
-    self.send_text_to_last_subtitle_button = QPushButton('Send to last')
+    self.send_text_to_last_subtitle_button = QPushButton()
     self.send_text_to_last_subtitle_button.setObjectName('send_text_to_last_subtitle_button')
     self.send_text_to_last_subtitle_button.setLayout(QHBoxLayout(self.send_text_to_last_subtitle_button))
     self.send_text_to_last_subtitle_button.layout().setContentsMargins(3, 0, 3, 3)
@@ -296,7 +297,7 @@ def add_widgets(self):
     self.send_text_to_last_subtitle_and_slice_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
     self.send_text_to_last_subtitle_button.layout().addWidget(self.send_text_to_last_subtitle_and_slice_button, 0, Qt.AlignLeft)
 
-    self.send_text_to_next_subtitle_button = QPushButton('Send to next')
+    self.send_text_to_next_subtitle_button = QPushButton()
     self.send_text_to_next_subtitle_button.setObjectName('send_text_to_next_subtitle_button')
     self.send_text_to_next_subtitle_button.setLayout(QHBoxLayout(self.send_text_to_next_subtitle_button))
     self.send_text_to_next_subtitle_button.layout().setContentsMargins(3, 0, 3, 3)
@@ -578,3 +579,11 @@ def subtitles_panel_simplelist_properties_ending_timing_qlineedit_text_edited(se
         else:
             self.selected_subtitle[1] = utils.convert_ffmpeg_timecode_to_seconds(self.subtitles_panel_simplelist_properties_ending_timing_qlineedit.text()) - utils.convert_ffmpeg_timecode_to_seconds(self.subtitles_panel_simplelist_properties_starting_timing_qlineedit.text())
     self.timeline.update(self)
+
+
+def translate_widgets(self):
+    self.subtitles_panel_simplelist_properties_start_timing_label.setText(_('subtitles_panel_widget_qlistwidget.start'))
+    self.subtitles_panel_simplelist_properties_duration_timing_label.setText(_('subtitles_panel_widget_qlistwidget.duration'))
+    self.subtitles_panel_simplelist_properties_ending_timing_label.setText(_('subtitles_panel_widget_qlistwidget.end'))
+    self.send_text_to_last_subtitle_button.setText(_('subtitles_panel_widget_qlistwidget.send_to_last'))
+    self.send_text_to_next_subtitle_button.setText(_('subtitles_panel_widget_qlistwidget.send_to_next'))

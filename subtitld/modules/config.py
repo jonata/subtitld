@@ -44,6 +44,9 @@ def load(config_file_path=False):
     if not config.get('export', False):
         config['export'] = {}
 
+    if not config.get('interface', False):
+        config['interface'] = {}
+
     return config
 
 

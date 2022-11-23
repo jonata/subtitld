@@ -1,17 +1,14 @@
-"""Subtitles Video panel
-
-"""
-
 from PySide6.QtWidgets import QPushButton, QWidget, QVBoxLayout, QTabWidget, QLabel, QHBoxLayout, QSpinBox, QComboBox, QGroupBox, QColorDialog
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QColor
 
 from subtitld.interface import global_panel
+from subtitld.interface.translation import _
 
 
 def load_menu(self):
     """Function to load subtitles panel widgets"""
-    self.global_panel_interface_menu_button = QPushButton('Interface')
+    self.global_panel_interface_menu_button = QPushButton()
     self.global_panel_interface_menu_button.setCheckable(True)
     self.global_panel_interface_menu_button.setProperty('class', 'global_panel_menu')
     self.global_panel_interface_menu_button.clicked.connect(lambda: global_panel_menu_changed(self))
@@ -38,7 +35,7 @@ def load_widgets(self):
     self.global_panel_interface_tabwidget_videoplayer.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_interface_tabwidget_videoplayer.layout().setSpacing(20)
 
-    self.global_panel_interface_videoplayer_font_group = QGroupBox('Font')
+    self.global_panel_interface_videoplayer_font_group = QGroupBox()
     self.global_panel_interface_videoplayer_font_group.setLayout(QHBoxLayout())
     self.global_panel_interface_videoplayer_font_group.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_interface_videoplayer_font_group.layout().setSpacing(20)
@@ -47,7 +44,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_fontsize_line.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_fontsize_line.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_fontsize_label = QLabel('Size')
+    self.global_panel_interface_videoplayer_fontsize_label = QLabel()
     self.global_panel_interface_videoplayer_fontsize_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_fontsize_line.addWidget(self.global_panel_interface_videoplayer_fontsize_label, 0, Qt.AlignLeft)
 
@@ -61,7 +58,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_fontsize_spinbox.valueChanged.connect(lambda: global_panel_interface_videoplayer_fontsize_spinbox_changed(self))
     self.global_panel_interface_videoplayer_fontsize_line_2.addWidget(self.global_panel_interface_videoplayer_fontsize_spinbox, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_fontsize_seconds_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_fontsize_seconds_label = QLabel()
     self.global_panel_interface_videoplayer_fontsize_seconds_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_fontsize_line_2.addWidget(self.global_panel_interface_videoplayer_fontsize_seconds_label, 0, Qt.AlignLeft)
     # self.global_panel_interface_videoplayer_fontsize_line_2.addStretch()
@@ -74,7 +71,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_fontfamily_line.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_fontfamily_line.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_fontfamily_label = QLabel('Family')
+    self.global_panel_interface_videoplayer_fontfamily_label = QLabel()
     self.global_panel_interface_videoplayer_fontfamily_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_fontfamily_line.addWidget(self.global_panel_interface_videoplayer_fontfamily_label, 0, Qt.AlignLeft)
 
@@ -96,7 +93,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_color_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_color_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_color_label = QLabel('Color')
+    self.global_panel_interface_videoplayer_color_label = QLabel()
     self.global_panel_interface_videoplayer_color_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_color_vbox.addWidget(self.global_panel_interface_videoplayer_color_label, 0, Qt.AlignLeft)
 
@@ -113,7 +110,7 @@ def load_widgets(self):
 
     self.global_panel_interface_tabwidget_videoplayer.layout().addWidget(self.global_panel_interface_videoplayer_font_group)
 
-    self.global_panel_interface_videoplayer_shadow_group = QGroupBox('Shadow')
+    self.global_panel_interface_videoplayer_shadow_group = QGroupBox()
     self.global_panel_interface_videoplayer_shadow_group.setCheckable(True)
     self.global_panel_interface_videoplayer_shadow_group.setLayout(QHBoxLayout())
     self.global_panel_interface_videoplayer_shadow_group.toggled.connect(lambda: global_panel_interface_videoplayer_shadow_group_toggled(self))
@@ -124,7 +121,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_shadow_x_position_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_shadow_x_position_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_shadow_x_position_label = QLabel('X position')
+    self.global_panel_interface_videoplayer_shadow_x_position_label = QLabel()
     self.global_panel_interface_videoplayer_shadow_x_position_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_shadow_x_position_vbox.addWidget(self.global_panel_interface_videoplayer_shadow_x_position_label, 0, Qt.AlignLeft)
 
@@ -138,7 +135,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_shadow_x_position.valueChanged.connect(lambda: global_panel_interface_videoplayer_shadow_x_position_changed(self))
     self.global_panel_interface_videoplayer_shadow_x_position_line.addWidget(self.global_panel_interface_videoplayer_shadow_x_position, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_shadow_x_position_pixels_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_shadow_x_position_pixels_label = QLabel()
     self.global_panel_interface_videoplayer_shadow_x_position_pixels_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_shadow_x_position_line.addWidget(self.global_panel_interface_videoplayer_shadow_x_position_pixels_label, 0, Qt.AlignLeft)
 
@@ -150,7 +147,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_shadow_y_position_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_shadow_y_position_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_shadow_y_position_label = QLabel('Y position')
+    self.global_panel_interface_videoplayer_shadow_y_position_label = QLabel()
     self.global_panel_interface_videoplayer_shadow_y_position_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_shadow_y_position_vbox.addWidget(self.global_panel_interface_videoplayer_shadow_y_position_label, 0, Qt.AlignLeft)
 
@@ -164,7 +161,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_shadow_y_position.valueChanged.connect(lambda: global_panel_interface_videoplayer_shadow_y_position_changed(self))
     self.global_panel_interface_videoplayer_shadow_y_position_line.addWidget(self.global_panel_interface_videoplayer_shadow_y_position, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_shadow_y_position_pixels_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_shadow_y_position_pixels_label = QLabel()
     self.global_panel_interface_videoplayer_shadow_y_position_pixels_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_shadow_y_position_line.addWidget(self.global_panel_interface_videoplayer_shadow_y_position_pixels_label, 0, Qt.AlignLeft)
 
@@ -174,7 +171,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_shadow_color_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_shadow_color_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_shadow_color_label = QLabel('Color')
+    self.global_panel_interface_videoplayer_shadow_color_label = QLabel()
     self.global_panel_interface_videoplayer_shadow_color_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_shadow_color_vbox.addWidget(self.global_panel_interface_videoplayer_shadow_color_label, 0, Qt.AlignLeft)
 
@@ -191,7 +188,7 @@ def load_widgets(self):
 
     self.global_panel_interface_tabwidget_videoplayer.layout().addWidget(self.global_panel_interface_videoplayer_shadow_group)
 
-    self.global_panel_interface_videoplayer_backgroundbox_group = QGroupBox('Background box')
+    self.global_panel_interface_videoplayer_backgroundbox_group = QGroupBox()
     self.global_panel_interface_videoplayer_backgroundbox_group.setCheckable(True)
     self.global_panel_interface_videoplayer_backgroundbox_group.setLayout(QHBoxLayout())
     self.global_panel_interface_videoplayer_backgroundbox_group.toggled.connect(lambda: global_panel_interface_videoplayer_backgroundbox_group_toggled(self))
@@ -202,7 +199,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_backgroundbox_padding_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_backgroundbox_padding_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_backgroundbox_padding_label = QLabel('Padding')
+    self.global_panel_interface_videoplayer_backgroundbox_padding_label = QLabel()
     self.global_panel_interface_videoplayer_backgroundbox_padding_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_backgroundbox_padding_vbox.addWidget(self.global_panel_interface_videoplayer_backgroundbox_padding_label, 0, Qt.AlignLeft)
 
@@ -216,7 +213,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_backgroundbox_padding.valueChanged.connect(lambda: global_panel_interface_videoplayer_backgroundbox_padding_changed(self))
     self.global_panel_interface_videoplayer_backgroundbox_padding_line.addWidget(self.global_panel_interface_videoplayer_backgroundbox_padding, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_backgroundbox_padding_pixels_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_backgroundbox_padding_pixels_label = QLabel()
     self.global_panel_interface_videoplayer_backgroundbox_padding_pixels_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_backgroundbox_padding_line.addWidget(self.global_panel_interface_videoplayer_backgroundbox_padding_pixels_label, 0, Qt.AlignLeft)
 
@@ -228,7 +225,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_backgroundbox_border_radius_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_backgroundbox_border_radius_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_backgroundbox_border_radius_label = QLabel('Border radius')
+    self.global_panel_interface_videoplayer_backgroundbox_border_radius_label = QLabel()
     self.global_panel_interface_videoplayer_backgroundbox_border_radius_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_backgroundbox_border_radius_vbox.addWidget(self.global_panel_interface_videoplayer_backgroundbox_border_radius_label, 0, Qt.AlignLeft)
 
@@ -254,7 +251,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_backgroundbox_color_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_backgroundbox_color_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_backgroundbox_color_label = QLabel('Color')
+    self.global_panel_interface_videoplayer_backgroundbox_color_label = QLabel()
     self.global_panel_interface_videoplayer_backgroundbox_color_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_backgroundbox_color_vbox.addWidget(self.global_panel_interface_videoplayer_backgroundbox_color_label, 0, Qt.AlignLeft)
 
@@ -271,7 +268,7 @@ def load_widgets(self):
 
     self.global_panel_interface_tabwidget_videoplayer.layout().addWidget(self.global_panel_interface_videoplayer_backgroundbox_group)
 
-    self.global_panel_interface_videoplayer_safe_margin_action_group = QGroupBox('Action safe margin')
+    self.global_panel_interface_videoplayer_safe_margin_action_group = QGroupBox()
     self.global_panel_interface_videoplayer_safe_margin_action_group.setCheckable(True)
     self.global_panel_interface_videoplayer_safe_margin_action_group.setLayout(QHBoxLayout())
     self.global_panel_interface_videoplayer_safe_margin_action_group.toggled.connect(lambda: global_panel_interface_videoplayer_safe_margin_action_group_toggled(self))
@@ -282,7 +279,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_action_x_margin_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_safe_margin_action_x_margin_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_safe_margin_action_x_margin_label = QLabel('Horizontal margin')
+    self.global_panel_interface_videoplayer_safe_margin_action_x_margin_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_action_x_margin_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_safe_margin_action_x_margin_vbox.addWidget(self.global_panel_interface_videoplayer_safe_margin_action_x_margin_label, 0, Qt.AlignLeft)
 
@@ -308,7 +305,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_action_y_margin_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_safe_margin_action_y_margin_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_safe_margin_action_y_margin_label = QLabel('Vertical margin')
+    self.global_panel_interface_videoplayer_safe_margin_action_y_margin_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_action_y_margin_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_safe_margin_action_y_margin_vbox.addWidget(self.global_panel_interface_videoplayer_safe_margin_action_y_margin_label, 0, Qt.AlignLeft)
 
@@ -322,7 +319,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_action_y_margin.valueChanged.connect(lambda: global_panel_interface_videoplayer_safe_margin_action_y_margin_changed(self))
     self.global_panel_interface_videoplayer_safe_margin_action_y_margin_line.addWidget(self.global_panel_interface_videoplayer_safe_margin_action_y_margin, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_safe_margin_action_y_margin_pixels_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_safe_margin_action_y_margin_pixels_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_action_y_margin_pixels_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_safe_margin_action_y_margin_line.addWidget(self.global_panel_interface_videoplayer_safe_margin_action_y_margin_pixels_label, 0, Qt.AlignLeft)
 
@@ -334,7 +331,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_action_color_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_safe_margin_action_color_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_safe_margin_action_color_label = QLabel('Color')
+    self.global_panel_interface_videoplayer_safe_margin_action_color_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_action_color_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_safe_margin_action_color_vbox.addWidget(self.global_panel_interface_videoplayer_safe_margin_action_color_label, 0, Qt.AlignLeft)
 
@@ -351,7 +348,7 @@ def load_widgets(self):
 
     self.global_panel_interface_tabwidget_videoplayer.layout().addWidget(self.global_panel_interface_videoplayer_safe_margin_action_group)
 
-    self.global_panel_interface_videoplayer_safe_margin_title_group = QGroupBox('Title safe margin')
+    self.global_panel_interface_videoplayer_safe_margin_title_group = QGroupBox()
     self.global_panel_interface_videoplayer_safe_margin_title_group.setCheckable(True)
     self.global_panel_interface_videoplayer_safe_margin_title_group.setLayout(QHBoxLayout())
     self.global_panel_interface_videoplayer_safe_margin_title_group.toggled.connect(lambda: global_panel_interface_videoplayer_safe_margin_title_group_toggled(self))
@@ -362,7 +359,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_title_x_margin_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_safe_margin_title_x_margin_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_safe_margin_title_x_margin_label = QLabel('Horizontal margin')
+    self.global_panel_interface_videoplayer_safe_margin_title_x_margin_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_title_x_margin_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_safe_margin_title_x_margin_vbox.addWidget(self.global_panel_interface_videoplayer_safe_margin_title_x_margin_label, 0, Qt.AlignLeft)
 
@@ -376,7 +373,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_title_x_margin.valueChanged.connect(lambda: global_panel_interface_videoplayer_safe_margin_title_x_margin_changed(self))
     self.global_panel_interface_videoplayer_safe_margin_title_x_margin_line.addWidget(self.global_panel_interface_videoplayer_safe_margin_title_x_margin, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_safe_margin_title_x_margin_pixels_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_safe_margin_title_x_margin_pixels_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_title_x_margin_pixels_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_safe_margin_title_x_margin_line.addWidget(self.global_panel_interface_videoplayer_safe_margin_title_x_margin_pixels_label, 0, Qt.AlignLeft)
 
@@ -388,7 +385,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_safe_margin_title_y_margin_label = QLabel('Vertical margin')
+    self.global_panel_interface_videoplayer_safe_margin_title_y_margin_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin_vbox.addWidget(self.global_panel_interface_videoplayer_safe_margin_title_y_margin_label, 0, Qt.AlignLeft)
 
@@ -402,7 +399,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin.valueChanged.connect(lambda: global_panel_interface_videoplayer_safe_margin_title_y_margin_changed(self))
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin_line.addWidget(self.global_panel_interface_videoplayer_safe_margin_title_y_margin, 0, Qt.AlignLeft)
 
-    self.global_panel_interface_videoplayer_safe_margin_title_y_margin_pixels_label = QLabel('Pixels')
+    self.global_panel_interface_videoplayer_safe_margin_title_y_margin_pixels_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin_pixels_label.setProperty('class', 'units_label')
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin_line.addWidget(self.global_panel_interface_videoplayer_safe_margin_title_y_margin_pixels_label, 0, Qt.AlignLeft)
 
@@ -414,7 +411,7 @@ def load_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_title_color_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_interface_videoplayer_safe_margin_title_color_vbox.setSpacing(2)
 
-    self.global_panel_interface_videoplayer_safe_margin_title_color_label = QLabel('Color')
+    self.global_panel_interface_videoplayer_safe_margin_title_color_label = QLabel()
     self.global_panel_interface_videoplayer_safe_margin_title_color_label.setProperty('class', 'widget_label')
     self.global_panel_interface_videoplayer_safe_margin_title_color_vbox.addWidget(self.global_panel_interface_videoplayer_safe_margin_title_color_label, 0, Qt.AlignLeft)
 
@@ -433,7 +430,7 @@ def load_widgets(self):
 
     self.global_panel_interface_tabwidget_videoplayer.layout().addStretch()
 
-    self.global_panel_interface_tabwidget.addTab(self.global_panel_interface_tabwidget_videoplayer, 'Video Player')
+    self.global_panel_interface_tabwidget.addTab(self.global_panel_interface_tabwidget_videoplayer, '')
 
     self.global_panel_interface_content.layout().addWidget(self.global_panel_interface_tabwidget)
 
@@ -573,3 +570,34 @@ def update_widgets(self):
     self.global_panel_interface_videoplayer_safe_margin_title_y_margin.setValue(self.settings['videoplayer'].get('safe_margin_title_y', 10))
     self.global_panel_interface_videoplayer_safe_margin_title_color_button.setStyleSheet('QPushButton { background-color: ' + self.settings['videoplayer'].get('safe_margin_title_color', '#ddff0000') + ' }')
 
+
+def translate_widgets(self):
+    self.global_panel_interface_menu_button.setText(_('global_panel_interface.title'))
+    self.global_panel_interface_videoplayer_font_group.setTitle(_('units.font'))
+    self.global_panel_interface_videoplayer_fontsize_label.setText(_('units.size'))
+    self.global_panel_interface_videoplayer_fontsize_seconds_label.setText(_('units.pixels'))
+    self.global_panel_interface_videoplayer_fontfamily_label.setText(_('units.font_family'))
+    self.global_panel_interface_videoplayer_color_label.setText(_('units.color'))
+    self.global_panel_interface_videoplayer_shadow_group.setTitle(_('global_panel_interface.shadow'))
+    self.global_panel_interface_videoplayer_shadow_x_position_label.setText(_('global_panel_interface.x_position'))
+    self.global_panel_interface_videoplayer_shadow_y_position_label.setText(_('global_panel_interface.y_position'))
+    self.global_panel_interface_videoplayer_shadow_y_position_pixels_label.setText(_('units.pixels'))
+    self.global_panel_interface_videoplayer_shadow_color_label.setText(_('units.color'))
+    self.global_panel_interface_videoplayer_backgroundbox_group.setTitle(_('global_panel_interface.background_box'))
+    self.global_panel_interface_videoplayer_backgroundbox_padding_label.setText(_('units.padding'))
+    self.global_panel_interface_videoplayer_backgroundbox_padding_pixels_label.setText(_('units.pixels'))
+    self.global_panel_interface_videoplayer_backgroundbox_border_radius_label.setText(_('global_panel_interface.border_radius'))
+    self.global_panel_interface_videoplayer_backgroundbox_color_label.setText(_('units.color'))
+    self.global_panel_interface_videoplayer_safe_margin_action_group.setTitle(_('global_panel_interface.action_safe_margin'))
+    self.global_panel_interface_videoplayer_safe_margin_action_x_margin_label.setText(_('global_panel_interface.horizontal_margin'))
+    self.global_panel_interface_videoplayer_safe_margin_action_y_margin_label.setText(_('global_panel_interface.vertical_margin'))
+    self.global_panel_interface_videoplayer_safe_margin_action_y_margin_pixels_label.setText(_('units.pixels'))
+    self.global_panel_interface_videoplayer_safe_margin_action_color_label.setText(_('units.color'))
+    self.global_panel_interface_videoplayer_safe_margin_title_group.setTitle(_('global_panel_interface.title_safe_margin'))
+    self.global_panel_interface_videoplayer_safe_margin_title_x_margin_label.setText(_('global_panel_interface.horizontal_margin'))
+    self.global_panel_interface_videoplayer_safe_margin_title_y_margin_label.setText(_('global_panel_interface.vertical_margin'))
+    self.global_panel_interface_videoplayer_safe_margin_title_y_margin_pixels_label.setText(_('units.pixels'))
+    self.global_panel_interface_videoplayer_safe_margin_title_color_label.setText(_('units.color'))
+    self.global_panel_interface_tabwidget.setTabText(0, _('global_panel_interface.video_player'))
+    self.global_panel_interface_videoplayer_shadow_x_position_pixels_label.setText(_('units.pixels'))
+    self.global_panel_interface_videoplayer_safe_margin_title_x_margin_pixels_label.setText(_('units.pixels'))

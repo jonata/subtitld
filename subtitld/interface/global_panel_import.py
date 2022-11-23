@@ -1,13 +1,10 @@
-"""Subtitles Video panel
-
-"""
-
 import os
 
 from PySide6.QtWidgets import QPushButton, QFileDialog, QWidget
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_IMPORT_EXTENSIONS
 from subtitld.interface import global_panel
+from subtitld.interface.translation import _
 from subtitld.modules import file_io
 
 
@@ -19,7 +16,7 @@ for exttype in LIST_OF_SUPPORTED_IMPORT_EXTENSIONS:
 
 def load_menu(self):
     """Function to load subtitles panel widgets"""
-    self.global_panel_import_menu_button = QPushButton('Import')
+    self.global_panel_import_menu_button = QPushButton()
     self.global_panel_import_menu_button.setCheckable(True)
     self.global_panel_import_menu_button.setProperty('class', 'global_panel_menu')
     self.global_panel_import_menu_button.clicked.connect(lambda: global_panel_menu_changed(self))
@@ -36,7 +33,7 @@ def load_widgets(self):
 
     self.global_panel_import_content = QWidget()
 
-    self.global_subtitlesvideo_import_button = QPushButton(u'IMPORT', parent=self.global_panel_import_content)
+    self.global_subtitlesvideo_import_button = QPushButton(parent=self.global_panel_import_content)
     self.global_subtitlesvideo_import_button.setProperty('class', 'button')
     # self.global_subtitlesvideo_import_button.setCheckable(True)
     self.global_subtitlesvideo_import_button.clicked.connect(lambda: global_subtitlesvideo_import_button_clicked(self))
@@ -62,3 +59,8 @@ def global_subtitlesvideo_import_button_clicked(self):
         self.subtitles_list += file_io.import_file(filename=file_to_open)[0]
         self.subtitles_list.sort()
         # update_widgets(self)
+
+
+def translate_widgets(self):
+    self.global_panel_import_menu_button.setText(_('global_panel_import.title'))
+    self.global_subtitlesvideo_import_button.setText(_('global_panel_import.import'))

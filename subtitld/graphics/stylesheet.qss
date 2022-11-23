@@ -967,16 +967,14 @@ QLabel[class=qlabel_for_buttons] {
     color:rgb(106, 116, 131);
     qproperty-alignment: "AlignVCenter | AlignRight";
     qproperty-wordWrap: true;
+    text-transform: uppercase;
 }
 
-#start_screen_recent_label {
-    font-size: 10px;
-    color:rgb(106, 116, 131);
-}
-
+#start_screen_recent_label,
 #start_screen_adver_label {
     font-size: 10px;
     color:rgb(106, 116, 131);
+    text-transform: uppercase;
 }
 
 #start_screen_adver_panel_label {
@@ -1250,6 +1248,7 @@ QLabel[class=qlabel_for_buttons] {
     font-size: 11px;
     margin-top: 10px;
     margin-bottom: 5px;
+    text-transform: uppercase;
 }
 
 #remove_selected_subtitle_button {
@@ -1274,6 +1273,7 @@ QLabel[class=qlabel_for_buttons] {
     font-size: 10px;
     color:rgba(48,66,81,255);
     font-weight: bold;
+    text-transform: uppercase;
 }
 
 #timelinescrolling_none_button {

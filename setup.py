@@ -147,7 +147,8 @@ install_requires = [
     'chardet',
     'google-api-python-client',
     'pysrt',
-    'certifi'
+    'certifi',
+    'python-i18n'
 ]
 
 # --------------------------------------------------------------------------- #

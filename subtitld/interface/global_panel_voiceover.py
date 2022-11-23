@@ -9,6 +9,7 @@ from PySide6.QtCore import QThread, Signal
 from subtitld.modules.paths import STARTUPINFO
 from subtitld.modules import utils
 from subtitld.interface import global_panel
+from subtitld.interface.translation import _
 
 
 class ThreadGeneratedBurnedVideo(QThread):
@@ -37,7 +38,7 @@ class ThreadGeneratedBurnedVideo(QThread):
 
 def load_menu(self):
     """Function to load subtitles panel widgets"""
-    self.global_panel_voiceover_menu_button = QPushButton('Voice over')
+    self.global_panel_voiceover_menu_button = QPushButton()
     self.global_panel_voiceover_menu_button.setCheckable(True)
     self.global_panel_voiceover_menu_button.setProperty('class', 'global_panel_menu')
     self.global_panel_voiceover_menu_button.clicked.connect(lambda: global_panel_menu_changed(self))
@@ -54,7 +55,7 @@ def load_widgets(self):
 
     self.global_panel_voiceover_content = QWidget()
 
-    self.global_subtitlesvideo_voiceover_button = QPushButton('Voiceover'.upper(), parent=self.global_panel_voiceover_content)
+    self.global_subtitlesvideo_voiceover_button = QPushButton(parent=self.global_panel_voiceover_content)
     self.global_subtitlesvideo_voiceover_button.setProperty('class', 'button')
     self.global_subtitlesvideo_voiceover_button.clicked.connect(lambda: global_subtitlesvideo_autovoiceover_button_clicked(self))
 
@@ -126,3 +127,8 @@ def global_subtitlesvideo_autovoiceover_button_clicked(self):
     # #         subtitle[2] = translator.translate(subtitle[2], dest=language).text
 
     # #     update_widgets(self)
+
+
+def translate_widgets(self):
+    self.global_panel_voiceover_menu_button.setText(_('global_panel_voiceover.title'))
+    self.global_subtitlesvideo_voiceover_button.setText(_('global_panel_voiceover.voiceover'))

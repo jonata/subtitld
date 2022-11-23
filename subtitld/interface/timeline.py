@@ -584,7 +584,7 @@ def load(self):
 
     def thread_get_waveform_ended(command):
         self.video_metadata['waveform'][command[0]] = {'points': command[1], 'qimages': []}
-        self.videoinfo_label.setText('Waveform updated')
+        # self.videoinfo_label.setText('Waveform updated')
         self.timeline_widget.update()
         self.thread_get_qimages.values_list = command[1]
         self.thread_get_qimages.zoom = command[0]
@@ -601,12 +601,12 @@ def load(self):
         self.video_metadata['waveform'][command[0]]['qimages'].append(command[1])
         self.timeline_widget.update()
 
-    def thread_qimages_endcommand(command):
-        self.videoinfo_label.setText('Waveform optimized')
+    # def thread_qimages_endcommand(command):
+    #     self.videoinfo_label.setText('Waveform optimized')
 
     self.thread_get_qimages = ThreadGetQImages(self)
     self.thread_get_qimages.command.connect(thread_get_qimages_ended)
-    self.thread_get_qimages.endcommand.connect(thread_qimages_endcommand)
+    # self.thread_get_qimages.endcommand.connect(thread_qimages_endcommand)
 
 
 def resized(self):
@@ -669,7 +669,7 @@ def update(self):
 def zoom_update_waveform(self):
     """Function to update timeline zoom"""
     if not isinstance(self.video_metadata['audio'], bool) and self.mediaplayer_zoom not in self.video_metadata['waveform'].keys():
-        self.videoinfo_label.setText('Generating waveform...')
+        # self.videoinfo_label.setText('Generating waveform...')
         # self.thread_get_waveform.audio = self.video_metadata['audio']
         self.thread_get_waveform.filepath = self.video_metadata['filepath']
         self.thread_get_waveform.zoom = self.mediaplayer_zoom

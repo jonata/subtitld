@@ -1,11 +1,7 @@
-"""Module for subtitle list panel
-
-"""
-
 from bisect import bisect
 # from multiprocessing.spawn import old_main_modules
 from PySide6.QtWidgets import QWidget, QPushButton, QScrollArea, QLineEdit, QTextEdit
-from PySide6.QtGui import QColor, QPen, QPainter, QPolygonF, QTransform, QPainterPath, QFont, QFontMetrics, QPalette
+from PySide6.QtGui import QColor, QPen, QPainter, QPolygonF, QTransform, QPainterPath, QFont, QFontMetrics
 from PySide6.QtCore import QMarginsF, QRectF, Qt, QPointF, Signal
 
 from subtitld.modules import quality_check
@@ -498,6 +494,7 @@ class subtitles_panel_timeline_widget_timeline(QWidget):
         widget.x_waveform = widget.width() - widget.w_waveform
         widget.subtitle_width = widget.width()
         widget.height_proportion = widget.height() / widget.main_self.video_metadata.get('duration', 0.01)
+        event.accept()
 
     def leaveEvent(widget, event):
         widget.qlineedit_editing_finished()

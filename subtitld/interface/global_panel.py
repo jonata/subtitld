@@ -1,6 +1,3 @@
-"""Subtitles Video panel
-
-"""
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QFrame, QStackedWidget, QPushButton
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve
 
@@ -93,3 +90,14 @@ def global_panel_menu_changed(self, button, widget):
             w.setChecked(False)
             w.setEnabled(True)
     self.global_panel_content_stacked_widgets.setCurrentWidget(widget)
+
+
+def translate_widgets(self):
+    global_panel_general.translate_widgets(self)
+    global_panel_interface.translate_widgets(self)
+    global_panel_keyboardshortcuts.translate_widgets(self)
+    global_panel_qualitycontrol.translate_widgets(self)
+    global_panel_translation.translate_widgets(self)
+    global_panel_transcription.translate_widgets(self)
+    global_panel_import.translate_widgets(self)
+    global_panel_export.translate_widgets(self)

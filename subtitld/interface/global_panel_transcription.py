@@ -12,6 +12,7 @@ from PySide6.QtWidgets import QComboBox, QPushButton, QWidget, QMessageBox, QVBo
 from PySide6.QtCore import QThread, Signal, Qt, QSize, QRect, QMargins
 from PySide6.QtGui import QPainter, QPen, QColor, QFont
 from subtitld.interface import global_panel, subtitles_panel, player
+from subtitld.interface.translation import _
 
 from subtitld.modules.paths import LANGUAGE_DICT_LIST, STARTUPINFO, path_tmp, FFMPEG_EXECUTABLE
 from subtitld.modules import file_io
@@ -229,34 +230,33 @@ class ThreadGeneratedBurnedVideo(QThread):
 
 
 def read_json_transcribed_subtitles(filename='', transcribed=False):
-            final_subtitles = []
-            if filename:
-                with open(filename, encoding='utf-8') as json_file:
-                    data = json.loads(json_file.read())
-                    if transcribed:
-                        for fragment in data:
-                            subtitle = []
-                            subtitle.append(float(fragment['start']))
-                            subtitle.append(float(fragment['end']) - subtitle[0])
-                            subtitle.append(str(fragment['content']))
-                            final_subtitles.append(subtitle)
-                    else:
-                        for fragment in data['fragments']:
-                            subtitle = []
-                            subtitle.append(float(fragment['begin']))
-                            subtitle.append(float(fragment['end']) - float(fragment['begin']))
-                            # subtitle.append(codecs.decode(fragment['lines'][0], 'unicode-escape'))
-                            # print(fragment['lines'][0])
-                            subtitle.append(str(fragment['lines'][0]))
-                            final_subtitles.append(subtitle)
-
-            return final_subtitles
+    final_subtitles = []
+    if filename:
+        with open(filename, encoding='utf-8') as json_file:
+            data = json.loads(json_file.read())
+            if transcribed:
+                for fragment in data:
+                    subtitle = []
+                    subtitle.append(float(fragment['start']))
+                    subtitle.append(float(fragment['end']) - subtitle[0])
+                    subtitle.append(str(fragment['content']))
+                    final_subtitles.append(subtitle)
+            else:
+                for fragment in data['fragments']:
+                    subtitle = []
+                    subtitle.append(float(fragment['begin']))
+                    subtitle.append(float(fragment['end']) - float(fragment['begin']))
+                    # subtitle.append(codecs.decode(fragment['lines'][0], 'unicode-escape'))
+                    # print(fragment['lines'][0])
+                    subtitle.append(str(fragment['lines'][0]))
+                    final_subtitles.append(subtitle)
+    return final_subtitles
 
 
 
 def load_menu(self):
     """Function to load subtitles panel widgets"""
-    self.global_panel_transcription_menu_button = QPushButton('Transcription')
+    self.global_panel_transcription_menu_button = QPushButton()
     self.global_panel_transcription_menu_button.setCheckable(True)
     self.global_panel_transcription_menu_button.setProperty('class', 'global_panel_menu')
     self.global_panel_transcription_menu_button.clicked.connect(lambda: global_panel_menu_changed(self))
@@ -288,17 +288,17 @@ def load_widgets(self):
     self.global_panel_transcription_autosubtitle_widget.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_transcription_autosubtitle_widget.layout().setSpacing(20)
 
-    self.global_panel_transcription_autosubtitle_groupbox = QGroupBox('Google Web Speech Public API')
+    self.global_panel_transcription_autosubtitle_groupbox = QGroupBox()
     self.global_panel_transcription_autosubtitle_groupbox.setLayout(QHBoxLayout())
     self.global_panel_transcription_autosubtitle_groupbox.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_transcription_autosubtitle_groupbox.layout().setSpacing(5)
 
-    self.global_panel_transcription_autosubtitle_button = QPushButton('Auto Subtitle')
+    self.global_panel_transcription_autosubtitle_button = QPushButton()
     self.global_panel_transcription_autosubtitle_button.setProperty('class', 'button')
     self.global_panel_transcription_autosubtitle_button.clicked.connect(lambda: global_panel_transcription_autosubtitle_button_clicked(self))
     self.global_panel_transcription_autosubtitle_groupbox.layout().addWidget(self.global_panel_transcription_autosubtitle_button)
 
-    self.global_panel_transcription_autosubtitle_label = QLabel('This will overwrite all of the subtitles on the project.')
+    self.global_panel_transcription_autosubtitle_label = QLabel()
     self.global_panel_transcription_autosubtitle_label.setProperty('class', 'units_label')
     self.global_panel_transcription_autosubtitle_groupbox.layout().addWidget(self.global_panel_transcription_autosubtitle_label)
 
@@ -314,7 +314,7 @@ def load_widgets(self):
                 final_subtitles = read_json_transcribed_subtitles(filename=os.path.join(path_tmp, 'subtitle.json'), transcribed=True)
                 if final_subtitles:
                     self.subtitles_list = final_subtitles
-            subtitles_panel.update_processing_status(self, show=False, value=0)
+            subtitles_panel.update_processing_status(self, show_widgets=False, value=0)
             self.global_panel_transcription_autosubtitle_button.setEnabled(True)
             player.update_timelines(self)
 
@@ -331,7 +331,7 @@ def load_widgets(self):
     self.global_panel_transcription_transcript_column = QVBoxLayout()
     self.global_panel_transcription_transcript_column.setContentsMargins(0, 0, 0, 0)
 
-    self.global_panel_transcription_transcript_groupbox = QGroupBox('Google Web Speech Public API')
+    self.global_panel_transcription_transcript_groupbox = QGroupBox()
     self.global_panel_transcription_transcript_groupbox.setLayout(QHBoxLayout())
     self.global_panel_transcription_transcript_groupbox.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_transcription_transcript_groupbox.layout().setSpacing(5)
@@ -353,7 +353,7 @@ def load_widgets(self):
     self.global_panel_transcription_transcript_thread.result.connect(lambda: global_panel_transcription_transcript_thread_result_emmited())
     self.global_panel_transcription_transcript_thread.text.connect(lambda: global_panel_transcription_transcript_thread_text_emmited())
 
-    self.global_panel_transcription_transcript_button = QPushButton('Transcribe')
+    self.global_panel_transcription_transcript_button = QPushButton()
     self.global_panel_transcription_transcript_button.setProperty('class', 'button')
     self.global_panel_transcription_transcript_button.clicked.connect(lambda: global_panel_transcription_transcript_button_clicked(self))
     self.global_panel_transcription_transcript_groupbox.layout().addWidget(self.global_panel_transcription_transcript_button)
@@ -361,15 +361,6 @@ def load_widgets(self):
     self.global_panel_transcription_transcript_progress = QProgressBar()
     self.global_panel_transcription_transcript_progress.setVisible(False)
     self.global_panel_transcription_transcript_groupbox.layout().addWidget(self.global_panel_transcription_transcript_progress)
-
-    # self.global_panel_transcription_transcript_button = QPushButton('Auto Subtitle')
-    # self.global_panel_transcription_transcript_button.setProperty('class', 'button')
-    # self.global_panel_transcription_transcript_button.clicked.connect(lambda: global_panel_transcription_transcript_button_clicked(self))
-    # self.global_panel_transcription_transcript_groupbox.layout().addWidget(self.global_panel_transcription_transcript_button)
-
-    # self.global_panel_transcription_transcript_label = QLabel('This will overwrite all of the subtitles on the project.')
-    # self.global_panel_transcription_transcript_label.setProperty('class', 'units_label')
-    # self.global_panel_transcription_transcript_groupbox.layout().addWidget(self.global_panel_transcription_transcript_label)
 
     self.global_panel_transcription_transcript_groupbox.layout().addStretch()
 
@@ -390,20 +381,19 @@ def load_widgets(self):
 
     self.global_panel_transcription_transcript_preview_column.addSpacing(10)
 
-    self.global_panel_transcription_transcript_slice_label = QLabel('Slicing and timing')
+    self.global_panel_transcription_transcript_slice_label = QLabel()
     self.global_panel_transcription_transcript_slice_label.setProperty('class', 'widget_label')
     self.global_panel_transcription_transcript_preview_column.addWidget(self.global_panel_transcription_transcript_slice_label)
 
     self.global_panel_transcription_transcript_preview_column.addSpacing(2)
 
     self.global_panel_transcription_transcript_slice_combobox = QComboBox()
-    self.global_panel_transcription_transcript_slice_combobox.addItems(['Equal size', 'Phrase size', 'Words'])
     self.global_panel_transcription_transcript_slice_combobox.activated.connect(lambda: global_panel_transcription_transcript_slice_combobox_activated(self))
     self.global_panel_transcription_transcript_preview_column.addWidget(self.global_panel_transcription_transcript_slice_combobox)
 
     self.global_panel_transcription_transcript_preview_column.addSpacing(10)
 
-    self.global_panel_transcription_transcript_apply_transcript_button = QPushButton('Slice to subtitles')
+    self.global_panel_transcription_transcript_apply_transcript_button = QPushButton()
     self.global_panel_transcription_transcript_apply_transcript_button.setProperty('class', 'button')
     self.global_panel_transcription_transcript_apply_transcript_button.setVisible(False)
     self.global_panel_transcription_transcript_apply_transcript_button.clicked.connect(lambda: global_panel_transcription_transcript_apply_transcript_button_clicked(self))
@@ -478,7 +468,7 @@ def global_panel_transcription_autosubtitle_button_clicked(self):
         self.global_panel_transcription_autosubtitles_thread.language = language
         self.global_panel_transcription_autosubtitles_thread.start()
 
-        subtitles_panel.update_processing_status(self, show=True, value=33)
+        subtitles_panel.update_processing_status(self, show_widgets=True, value=33)
         self.global_panel_transcription_autosubtitle_button.setEnabled(False)
 
 
@@ -488,8 +478,8 @@ def global_panel_transcription_transcript_apply_transcript_button_clicked(self):
 
     if bool(self.subtitles_list):
         are_you_sure_message = QMessageBox(self)
-        are_you_sure_message.setWindowTitle('Are you sure?')
-        are_you_sure_message.setText('This will overwrite your actual subtitle set. New text will be applied. Are you sure you want to replace your actual subtitles?')
+        are_you_sure_message.setWindowTitle(_('alert.are_you_sure'))
+        are_you_sure_message.setText(_('alert.overwrite_warning'))
         are_you_sure_message.addButton('Yes', QMessageBox.AcceptRole)
         are_you_sure_message.addButton('No', QMessageBox.RejectRole)
         ret = are_you_sure_message.exec_()
@@ -500,7 +490,7 @@ def global_panel_transcription_transcript_apply_transcript_button_clicked(self):
         run_command = True
 
     if run_command and self.global_panel_transcription_transcript_preview.text:
-        if self.global_panel_transcription_transcript_slice_combobox.currentText() == 'Equal size':
+        if self.global_panel_transcription_transcript_slice_combobox.currentIndex() == 0:
             self.subtitles_list = []
             ns = len(self.global_panel_transcription_transcript_preview.text.split('. '))
             ts = self.video_metadata['duration'] / ns
@@ -508,7 +498,7 @@ def global_panel_transcription_transcript_apply_transcript_button_clicked(self):
             for sub in self.global_panel_transcription_transcript_preview.text.split('. '):
                 self.subtitles_list.append([c, ts, sub + '.'])
                 c += ts
-        elif self.global_panel_transcription_transcript_slice_combobox.currentText() == 'Phrase size':
+        elif self.global_panel_transcription_transcript_slice_combobox.currentIndex() == 1:
             self.subtitles_list = []
             ns = len(self.global_panel_transcription_transcript_preview.text)
             c = 0.0
@@ -516,7 +506,7 @@ def global_panel_transcription_transcript_apply_transcript_button_clicked(self):
                 ts = (len(sub + '.') / ns) * self.video_metadata['duration']
                 self.subtitles_list.append([c, ts, sub + '.'])
                 c += ts
-        elif self.global_panel_transcription_transcript_slice_combobox.currentText() == 'Words':
+        elif self.global_panel_transcription_transcript_slice_combobox.currentIndex() == 2:
             self.subtitles_list = []
             ns = len(self.global_panel_transcription_transcript_preview.text)
             c = 0.0
@@ -539,3 +529,20 @@ def global_panel_transcription_transcript_slice_combobox_activated(self):
         self.global_panel_transcription_transcript_preview.update_type('phrases')
     elif self.global_panel_transcription_transcript_slice_combobox.currentText() == 'Words':
         self.global_panel_transcription_transcript_preview.update_type('words')
+
+
+def translate_widgets(self):
+    self.global_panel_transcription_menu_button.setText(_('global_panel_transcription.title'))
+    self.global_panel_transcription_autosubtitle_groupbox.setTitle(_('global_panel_transcription.google_web_speech_public_api'))
+    self.global_panel_transcription_autosubtitle_button.setText(_('global_panel_transcription.auto_subtitle'))
+    self.global_panel_transcription_autosubtitle_label.setText(_('global_panel_transcription.warning_overwrite'))
+    self.global_panel_transcription_transcript_groupbox.setTitle(_('global_panel_transcription.google_web_speech_public_api'))
+    self.global_panel_transcription_transcript_button.setText(_('global_panel_transcription.transcribe'))
+    self.global_panel_transcription_transcript_slice_label.setText(_('global_panel_transcription.slicing_and_timing'))
+    self.global_panel_transcription_transcript_slice_combobox.clear()
+    self.global_panel_transcription_transcript_slice_combobox.addItems([
+        _('global_panel_transcription.slice_combobox.equal_size'),
+        _('global_panel_transcription.slice_combobox.phrase_size'),
+        _('global_panel_transcription.slice_combobox.words')
+    ])
+    self.global_panel_transcription_transcript_apply_transcript_button.setText(_('global_panel_transcription.slice_to_subtitles'))

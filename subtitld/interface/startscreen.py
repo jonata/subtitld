@@ -1,7 +1,3 @@
-"""starting screen module
-
-"""
-
 import os
 import sys
 from datetime import datetime
@@ -11,6 +7,7 @@ from PySide6.QtCore import QPropertyAnimation, Qt, QSize
 
 from subtitld.modules import file_io
 from subtitld.modules.paths import PATH_SUBTITLD_DATA_THUMBNAILS, VERSION_NUMBER
+from subtitld.interface.translation import _
 
 
 def load(self):
@@ -29,15 +26,15 @@ def load(self):
     self.start_screen_top_shadow = QLabel(parent=self.start_screen)
     self.start_screen_top_shadow.setObjectName('start_screen_top_shadow')
 
-    self.start_screen_open_label = QLabel('Open a subtitle or a video'.upper(), parent=self.start_screen)
+    self.start_screen_open_label = QLabel(parent=self.start_screen)
     self.start_screen_open_label.setAlignment(Qt.AlignRight)
     self.start_screen_open_label.setObjectName('start_screen_open_label')
 
-    self.start_screen_open_button = QPushButton('Open'.upper(), parent=self.start_screen)
+    self.start_screen_open_button = QPushButton(parent=self.start_screen)
     self.start_screen_open_button.clicked.connect(lambda: start_screen_open_button_clicked(self))
     self.start_screen_open_button.setProperty('class', 'button_dark')
 
-    self.start_screen_recent_label = QLabel('Recent subtitles'.upper(), parent=self.start_screen)
+    self.start_screen_recent_label = QLabel(parent=self.start_screen)
     self.start_screen_recent_label.setAlignment(Qt.AlignCenter)
     self.start_screen_recent_label.setObjectName('start_screen_recent_label')
 
@@ -48,17 +45,15 @@ def load(self):
     self.start_screen_recent_listwidget.currentItemChanged.connect(lambda item: start_screen_recent_listwidget_item_changed(self, item))
     self.start_screen_recent_listwidget.itemDoubleClicked.connect(lambda: start_screen_recent_listwidget_item_clicked(self))
 
-    self.start_screen_recent_alert = QLabel('There is no recent file history.', parent=self.start_screen)
+    self.start_screen_recent_alert = QLabel(parent=self.start_screen)
     self.start_screen_recent_alert.setWordWrap(True)
     self.start_screen_recent_alert.setObjectName('start_screen_recent_alert')
 
     self.start_screen_adver_label = QLabel(parent=self.start_screen)
     self.start_screen_adver_label.setObjectName('start_screen_adver_label')
-    self.start_screen_adver_label.setText(('Version {}'.format(VERSION_NUMBER)).upper())
 
     self.start_screen_adver_label_details = QLabel(parent=self.start_screen)
     self.start_screen_adver_label_details.setObjectName('start_screen_adver_label_details')
-    self.start_screen_adver_label_details.setText('Visit <b>subtitld.org</b> for<br>more information.')
 
     self.start_screen_temp_recent_files_list = []
 
@@ -150,3 +145,12 @@ def start_screen_recent_listwidget_item_changed(self, item):
         self.start_screen_thumbnail_background.clear()
 
     # print(self.settings['recent_files'][file_to_open])
+
+
+def translate_widgets(self):
+    self.start_screen_open_label.setText(_('startscreen.open_subtitle_or_video'))
+    self.start_screen_open_button.setText(_('startscreen.open'))
+    self.start_screen_recent_label.setText(_('startscreen.recent_subitles'))
+    self.start_screen_recent_alert.setText(_('startscreen.no_recent_file_history'))
+    self.start_screen_adver_label.setText((_('startscreen.version_number').format(VERSION_NUMBER)))
+    self.start_screen_adver_label_details.setText(_('startscreen.visit_website'))

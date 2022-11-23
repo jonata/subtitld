@@ -8,6 +8,7 @@ from PySide6.QtWidgets import QLabel, QComboBox, QPushButton, QFileDialog, QSpin
 from PySide6.QtCore import QMargins, QSize, QThread, Signal, Qt
 from PySide6.QtGui import QBrush, QColor, QFont, QFontDatabase, QPainter, QPen, QPixmap
 from subtitld.interface import global_panel, subtitles_panel
+from subtitld.interface.translation import _
 
 from subtitld.modules.paths import LIST_OF_SUPPORTED_EXPORT_EXTENSIONS, STARTUPINFO, FFMPEG_EXECUTABLE, path_tmp
 from subtitld.modules.shortcuts import shortcuts_dict
@@ -98,7 +99,7 @@ class ThreadGenerateVideo(QThread):
 
 def load_menu(self):
     """Function to load subtitles panel widgets"""
-    self.global_panel_export_menu_button = QPushButton('Export')
+    self.global_panel_export_menu_button = QPushButton()
     self.global_panel_export_menu_button.setCheckable(True)
     self.global_panel_export_menu_button.setProperty('class', 'global_panel_menu')
     self.global_panel_export_menu_button.clicked.connect(lambda: global_panel_menu_changed(self))
@@ -124,7 +125,7 @@ def load_widgets(self):
     self.global_panel_export_text_tabwidget_panel.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_export_text_tabwidget_panel.layout().setSpacing(20)
 
-    self.global_panel_export_content_txt_panel_export_button = QPushButton('Export'.upper())
+    self.global_panel_export_content_txt_panel_export_button = QPushButton()
     self.global_panel_export_content_txt_panel_export_button.setProperty('class', 'button')
     self.global_panel_export_content_txt_panel_export_button.clicked.connect(lambda: global_subtitlesvideo_export_button_clicked(self))
     self.global_panel_export_text_tabwidget_panel.layout().addWidget(self.global_panel_export_content_txt_panel_export_button, 0)
@@ -166,7 +167,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_fontsize_line.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_fontsize_line.setSpacing(2)
 
-    self.global_panel_export_video_ffmpeg_fontsize_label = QLabel('Size')
+    self.global_panel_export_video_ffmpeg_fontsize_label = QLabel()
     self.global_panel_export_video_ffmpeg_fontsize_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_fontsize_line.addWidget(self.global_panel_export_video_ffmpeg_fontsize_label, 0, Qt.AlignLeft)
 
@@ -180,7 +181,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_fontsize_spinbox.valueChanged.connect(lambda: global_panel_export_video_ffmpeg_fontsize_spinbox_changed(self))
     self.global_panel_export_video_ffmpeg_fontsize_line_2.addWidget(self.global_panel_export_video_ffmpeg_fontsize_spinbox, 0, Qt.AlignLeft)
 
-    self.global_panel_export_video_ffmpeg_fontsize_seconds_label = QLabel('Pixels')
+    self.global_panel_export_video_ffmpeg_fontsize_seconds_label = QLabel()
     self.global_panel_export_video_ffmpeg_fontsize_seconds_label.setProperty('class', 'units_label')
     self.global_panel_export_video_ffmpeg_fontsize_line_2.addWidget(self.global_panel_export_video_ffmpeg_fontsize_seconds_label, 0, Qt.AlignLeft)
     # self.global_panel_export_video_ffmpeg_fontsize_line_2.addStretch()
@@ -193,7 +194,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_fontfamily_line.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_fontfamily_line.setSpacing(2)
 
-    self.global_panel_export_video_ffmpeg_fontfamily_label = QLabel('Family')
+    self.global_panel_export_video_ffmpeg_fontfamily_label = QLabel()
     self.global_panel_export_video_ffmpeg_fontfamily_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_fontfamily_line.addWidget(self.global_panel_export_video_ffmpeg_fontfamily_label, 0, Qt.AlignLeft)
 
@@ -215,7 +216,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_color_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_color_vbox.setSpacing(2)
 
-    self.global_panel_export_video_ffmpeg_color_label = QLabel('Color')
+    self.global_panel_export_video_ffmpeg_color_label = QLabel()
     self.global_panel_export_video_ffmpeg_color_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_color_vbox.addWidget(self.global_panel_export_video_ffmpeg_color_label, 0, Qt.AlignLeft)
 
@@ -232,7 +233,7 @@ def load_widgets(self):
 
     self.global_panel_export_video_ffmpeg_left_panel.layout().addWidget(self.global_panel_export_video_ffmpeg_font_group)
 
-    self.global_panel_export_video_ffmpeg_outline_group = QGroupBox('Outline')
+    self.global_panel_export_video_ffmpeg_outline_group = QGroupBox()
     self.global_panel_export_video_ffmpeg_outline_group.setCheckable(True)
     self.global_panel_export_video_ffmpeg_outline_group.setLayout(QHBoxLayout())
     self.global_panel_export_video_ffmpeg_outline_group.toggled.connect(lambda: global_panel_export_video_ffmpeg_outline_group_toggled(self))
@@ -243,7 +244,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_outline_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_outline_vbox.setSpacing(2)
 
-    self.global_panel_export_video_ffmpeg_outline_label = QLabel('Outline')
+    self.global_panel_export_video_ffmpeg_outline_label = QLabel()
     self.global_panel_export_video_ffmpeg_outline_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_outline_vbox.addWidget(self.global_panel_export_video_ffmpeg_outline_label, 0, Qt.AlignLeft)
 
@@ -257,7 +258,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_outline_value.valueChanged.connect(lambda: global_panel_export_video_ffmpeg_outline_value_changed(self))
     self.global_panel_export_video_ffmpeg_outline_line.addWidget(self.global_panel_export_video_ffmpeg_outline_value, 0, Qt.AlignLeft)
 
-    self.global_panel_export_video_ffmpeg_outline_value_pixels_label = QLabel('Pixels')
+    self.global_panel_export_video_ffmpeg_outline_value_pixels_label = QLabel()
     self.global_panel_export_video_ffmpeg_outline_value_pixels_label.setProperty('class', 'units_label')
     self.global_panel_export_video_ffmpeg_outline_line.addWidget(self.global_panel_export_video_ffmpeg_outline_value_pixels_label, 0, Qt.AlignLeft)
 
@@ -269,7 +270,7 @@ def load_widgets(self):
 
     self.global_panel_export_video_ffmpeg_left_panel.layout().addWidget(self.global_panel_export_video_ffmpeg_outline_group)
 
-    self.global_panel_export_video_ffmpeg_shadow_group = QGroupBox('Shadow')
+    self.global_panel_export_video_ffmpeg_shadow_group = QGroupBox()
     self.global_panel_export_video_ffmpeg_shadow_group.setCheckable(True)
     self.global_panel_export_video_ffmpeg_shadow_group.setLayout(QHBoxLayout())
     self.global_panel_export_video_ffmpeg_shadow_group.toggled.connect(lambda: global_panel_export_video_ffmpeg_shadow_group_toggled(self))
@@ -280,7 +281,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_shadow_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_shadow_vbox.setSpacing(2)
 
-    self.global_panel_export_video_ffmpeg_shadow_label = QLabel('Distance')
+    self.global_panel_export_video_ffmpeg_shadow_label = QLabel()
     self.global_panel_export_video_ffmpeg_shadow_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_shadow_vbox.addWidget(self.global_panel_export_video_ffmpeg_shadow_label, 0, Qt.AlignLeft)
 
@@ -294,7 +295,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_shadow_distance.valueChanged.connect(lambda: global_panel_export_video_ffmpeg_shadow_distance_changed(self))
     self.global_panel_export_video_ffmpeg_shadow_line.addWidget(self.global_panel_export_video_ffmpeg_shadow_distance, 0, Qt.AlignLeft)
 
-    self.global_panel_export_video_ffmpeg_shadow_distance_pixels_label = QLabel('Pixels')
+    self.global_panel_export_video_ffmpeg_shadow_distance_pixels_label = QLabel()
     self.global_panel_export_video_ffmpeg_shadow_distance_pixels_label.setProperty('class', 'units_label')
     self.global_panel_export_video_ffmpeg_shadow_line.addWidget(self.global_panel_export_video_ffmpeg_shadow_distance_pixels_label, 0, Qt.AlignLeft)
 
@@ -306,7 +307,7 @@ def load_widgets(self):
 
     self.global_panel_export_video_ffmpeg_left_panel.layout().addWidget(self.global_panel_export_video_ffmpeg_shadow_group)
 
-    self.global_panel_export_video_ffmpeg_margins_group = QGroupBox('Margins')
+    self.global_panel_export_video_ffmpeg_margins_group = QGroupBox()
     self.global_panel_export_video_ffmpeg_margins_group.setLayout(QGridLayout())
     self.global_panel_export_video_ffmpeg_margins_group.layout().setContentsMargins(10, 10, 10, 10)
     self.global_panel_export_video_ffmpeg_margins_group.layout().setSpacing(20)
@@ -315,7 +316,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_margins_left_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_margins_left_vbox.setSpacing(2)
 
-    self.global_panel_export_video_ffmpeg_margins_left_label = QLabel('Left')
+    self.global_panel_export_video_ffmpeg_margins_left_label = QLabel()
     self.global_panel_export_video_ffmpeg_margins_left_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_margins_left_vbox.addWidget(self.global_panel_export_video_ffmpeg_margins_left_label, 0, Qt.AlignLeft)
 
@@ -329,7 +330,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_margins_left_distance.valueChanged.connect(lambda: global_panel_export_video_ffmpeg_margins_left_distance_changed(self))
     self.global_panel_export_video_ffmpeg_margins_left_line.addWidget(self.global_panel_export_video_ffmpeg_margins_left_distance, 0, Qt.AlignLeft)
 
-    self.global_panel_export_video_ffmpeg_margins_left_distance_pixels_label = QLabel('Pixels')
+    self.global_panel_export_video_ffmpeg_margins_left_distance_pixels_label = QLabel()
     self.global_panel_export_video_ffmpeg_margins_left_distance_pixels_label.setProperty('class', 'units_label')
     self.global_panel_export_video_ffmpeg_margins_left_line.addWidget(self.global_panel_export_video_ffmpeg_margins_left_distance_pixels_label, 0, Qt.AlignLeft)
 
@@ -343,7 +344,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_margins_bottom_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_margins_bottom_vbox.setSpacing(2)
 
-    self.global_panel_export_video_ffmpeg_margins_bottom_label = QLabel('Bottom')
+    self.global_panel_export_video_ffmpeg_margins_bottom_label = QLabel()
     self.global_panel_export_video_ffmpeg_margins_bottom_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_margins_bottom_vbox.addWidget(self.global_panel_export_video_ffmpeg_margins_bottom_label, 0, Qt.AlignLeft)
 
@@ -357,7 +358,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_margins_bottom_distance.valueChanged.connect(lambda: global_panel_export_video_ffmpeg_margins_bottom_distance_changed(self))
     self.global_panel_export_video_ffmpeg_margins_bottom_line.addWidget(self.global_panel_export_video_ffmpeg_margins_bottom_distance, 0, Qt.AlignLeft)
 
-    self.global_panel_export_video_ffmpeg_margins_bottom_distance_pixels_label = QLabel('Pixels')
+    self.global_panel_export_video_ffmpeg_margins_bottom_distance_pixels_label = QLabel()
     self.global_panel_export_video_ffmpeg_margins_bottom_distance_pixels_label.setProperty('class', 'units_label')
     self.global_panel_export_video_ffmpeg_margins_bottom_line.addWidget(self.global_panel_export_video_ffmpeg_margins_bottom_distance_pixels_label, 0, Qt.AlignLeft)
 
@@ -371,7 +372,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_margins_right_vbox.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_margins_right_vbox.setSpacing(2)
 
-    self.global_panel_export_video_ffmpeg_margins_right_label = QLabel('Right')
+    self.global_panel_export_video_ffmpeg_margins_right_label = QLabel()
     self.global_panel_export_video_ffmpeg_margins_right_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_margins_right_vbox.addWidget(self.global_panel_export_video_ffmpeg_margins_right_label, 0, Qt.AlignLeft)
 
@@ -385,7 +386,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_margins_right_distance.valueChanged.connect(lambda: global_panel_export_video_ffmpeg_margins_right_distance_changed(self))
     self.global_panel_export_video_ffmpeg_margins_right_line.addWidget(self.global_panel_export_video_ffmpeg_margins_right_distance, 0, Qt.AlignLeft)
 
-    self.global_panel_export_video_ffmpeg_margins_right_distance_pixels_label = QLabel('Pixels')
+    self.global_panel_export_video_ffmpeg_margins_right_distance_pixels_label = QLabel()
     self.global_panel_export_video_ffmpeg_margins_right_distance_pixels_label.setProperty('class', 'units_label')
     self.global_panel_export_video_ffmpeg_margins_right_line.addWidget(self.global_panel_export_video_ffmpeg_margins_right_distance_pixels_label, 0, Qt.AlignLeft)
 
@@ -405,7 +406,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_command_line.setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_command_line.setSpacing(5)
 
-    self.global_panel_export_video_ffmpeg_margins_right_label = QLabel('Custom ffmpeg commands')
+    self.global_panel_export_video_ffmpeg_margins_right_label = QLabel()
     self.global_panel_export_video_ffmpeg_margins_right_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_command_line.addWidget(self.global_panel_export_video_ffmpeg_margins_right_label, 0, Qt.AlignLeft)
 
@@ -415,7 +416,7 @@ def load_widgets(self):
 
     self.global_panel_export_video_ffmpeg_final_line.addLayout(self.global_panel_export_video_ffmpeg_command_line)
 
-    self.global_panel_export_video_ffmpeg_export_button = QPushButton('Export video'.upper())
+    self.global_panel_export_video_ffmpeg_export_button = QPushButton()
     self.global_panel_export_video_ffmpeg_export_button.setProperty('class', 'button_dark')
     self.global_panel_export_video_ffmpeg_export_button.clicked.connect(lambda: global_panel_export_video_ffmpeg_export_button_clicked(self))
     self.global_panel_export_video_ffmpeg_export_button.setSizePolicy(QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum))
@@ -432,7 +433,7 @@ def load_widgets(self):
     self.global_panel_export_video_ffmpeg_preview_panel.layout().setContentsMargins(0, 0, 0, 0)
     self.global_panel_export_video_ffmpeg_preview_panel.layout().setSpacing(20)
 
-    self.global_panel_export_video_ffmpeg_preview_label = QLabel('Preview')
+    self.global_panel_export_video_ffmpeg_preview_label = QLabel()
     self.global_panel_export_video_ffmpeg_preview_label.setProperty('class', 'widget_label')
     self.global_panel_export_video_ffmpeg_preview_panel.layout().addWidget(self.global_panel_export_video_ffmpeg_preview_label, 0)
 
@@ -449,7 +450,7 @@ def load_widgets(self):
 
     self.global_panel_export_video_tabwidget_panel.layout().addWidget(self.global_panel_export_video_tabwidget, 0)
 
-    self.global_subtitlesvideo_video_generate_transparent_video_button = QPushButton('Generate transparent video'.upper())
+    self.global_subtitlesvideo_video_generate_transparent_video_button = QPushButton()
     self.global_subtitlesvideo_video_generate_transparent_video_button.setProperty('class', 'button_dark')
     self.global_subtitlesvideo_video_generate_transparent_video_button.clicked.connect(lambda: global_subtitlesvideo_video_generate_transparent_video_button_clicked(self))
     self.global_subtitlesvideo_video_generate_transparent_video_button.setVisible(False)
@@ -458,9 +459,9 @@ def load_widgets(self):
 
     def thread_generated_burned_video_ended(response):
         if '|' in response:
-            subtitles_panel.update_processing_status(self, show=True, value=int((float(response.split('|')[0]) / float(response.split('|')[1])) * 100))
+            subtitles_panel.update_processing_status(self, show_widgets=True, value=int((float(response.split('|')[0]) / float(response.split('|')[1])) * 100))
         elif 'end' in response:
-            subtitles_panel.update_processing_status(self, show=False, value=0)
+            subtitles_panel.update_processing_status(self, show_widgets=False, value=0)
             self.global_panel_export_video_ffmpeg_export_button.setEnabled(True)
 
     def thread_generated_burned_video_preview_response(response):
@@ -499,7 +500,7 @@ def global_panel_export_video_ffmpeg_export_button_clicked(self):
     save_formats = 'Video file' + ' (.' + extformat + ')'
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
 
-    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption='Select the subtitle file', dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
+    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=_('global_panel_export.select_subtitle_file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
 
     if generated_video_filepath:
         file_io.save_file(os.path.join(path_tmp, 'subtitle.srt'), self.subtitles_list, subtitle_format='SRT', language='en')
@@ -528,7 +529,7 @@ def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
     save_formats = 'Video file' + ' (.' + extformat + ')'
     suggested_name = os.path.basename(self.video_metadata['filepath']).rsplit('.', 1)[0] + '_subtitled.' + extformat
 
-    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption='Select the subtitle file', dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
+    generated_video_filepath = QFileDialog.getSaveFileName(parent=self, caption=_('global_panel_export.select_video_file'), dir=os.path.join(suggested_path, suggested_name), filter=save_formats)[0]
 
     if generated_video_filepath:
         class layerWidget(QWidget):
@@ -536,7 +537,7 @@ def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
             font = 'Ubuntu'
             fontsize = 18
 
-            def paintEvent(canvas, paintEvent):
+            def paintEvent(canvas, event):
                 painter = QPainter(canvas)
                 painter.setRenderHint(QPainter.Antialiasing)
 
@@ -555,6 +556,7 @@ def global_subtitlesvideo_video_generate_transparent_video_button_clicked(self):
                     painter.drawText(text_rect.adjusted(0, 2, 0, 2), Qt.AlignCenter | Qt.TextWordWrap, canvas.subtitle_text)
 
                 painter.end()
+                event.accept()
 
         layer = layerWidget(self)
         layer.setVisible(False)
@@ -710,3 +712,29 @@ def update_preview(self):
         self.thread_generated_burned_video.is_burned = True
         self.thread_generated_burned_video.burnedin_options = self.settings['export']
         self.thread_generated_burned_video.start()
+
+
+def translate_widgets(self):
+    self.global_panel_export_menu_button.setText(_('global_panel_export.title'))
+    self.global_panel_export_content_txt_panel_export_button.setText(_('global_panel_export.export'))
+    self.global_panel_export_video_ffmpeg_fontsize_label.setText(_('units.size'))
+    self.global_panel_export_video_ffmpeg_fontsize_seconds_label.setText(_('units.pixels'))
+    self.global_panel_export_video_ffmpeg_fontfamily_label.setText(_('units.font_family'))
+    self.global_panel_export_video_ffmpeg_color_label.setText(_('units.color'))
+    self.global_panel_export_video_ffmpeg_outline_group.setTitle(_('global_panel_export.outline'))
+    self.global_panel_export_video_ffmpeg_outline_label.setText(_('global_panel_export.outline'))
+    self.global_panel_export_video_ffmpeg_outline_value_pixels_label.setText(_('units.pixels'))
+    self.global_panel_export_video_ffmpeg_shadow_group.setTitle(_('global_panel_export.shadow'))
+    self.global_panel_export_video_ffmpeg_shadow_label.setText(_('global_panel_export.distance'))
+    self.global_panel_export_video_ffmpeg_shadow_distance_pixels_label.setText(_('units.pixels'))
+    self.global_panel_export_video_ffmpeg_margins_group.setTitle(_('units.margins'))
+    self.global_panel_export_video_ffmpeg_margins_left_label.setText(_('units.left'))
+    self.global_panel_export_video_ffmpeg_margins_left_distance_pixels_label.setText(_('units.pixels'))
+    self.global_panel_export_video_ffmpeg_margins_bottom_label.setText(_('units.bottom'))
+    self.global_panel_export_video_ffmpeg_margins_bottom_distance_pixels_label.setText(_('units.pixels'))
+    self.global_panel_export_video_ffmpeg_margins_right_label.setText(_('units.right'))
+    self.global_panel_export_video_ffmpeg_margins_right_distance_pixels_label.setText(_('units.pixels'))
+    self.global_panel_export_video_ffmpeg_margins_right_label.setText(_('global_panel_export.custom_ffmpeg_commands'))
+    self.global_panel_export_video_ffmpeg_export_button.setText(_('global_panel_export.export_video'))
+    self.global_panel_export_video_ffmpeg_preview_label.setText(_('global_panel_export.preview'))
+    self.global_subtitlesvideo_video_generate_transparent_video_button.setText(_('global_panel_export.generate_transparent_video'))

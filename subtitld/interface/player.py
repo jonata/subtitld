@@ -328,12 +328,12 @@ def load(self):
     # self.layer_player_vbox = QVBoxLayout()
     # self.layer_player_vbox.setContentsMargins(0, 0, 0, 0)
 
-    self.videoinfo_label = QLabel()  # parent=self.layer_player
-    # self.videoinfo_label.setObjectName('videoinfo_label')
-    # self.videoinfo_label.setFixedHeight(20)
-    # sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-    # self.videoinfo_label.setSizePolicy(sizePolicy)
-    # layer_player.layout().addWidget(self.videoinfo_label)
+    # self.videoinfo_label = QLabel()  # parent=self.layer_player
+    # # self.videoinfo_label.setObjectName('videoinfo_label')
+    # # self.videoinfo_label.setFixedHeight(20)
+    # # sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+    # # self.videoinfo_label.setSizePolicy(sizePolicy)
+    # # layer_player.layout().addWidget(self.videoinfo_label)
 
     self.player_widget = MpvWidget()
     # sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)

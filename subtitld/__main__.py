@@ -1,21 +1,17 @@
-"""
-
-Subtitld - open source subtitle editor
-
-"""
-
 import os
 import sys
 import datetime
 import argparse
+import locale
 
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QGraphicsOpacityEffect, QMessageBox
 from PySide6.QtGui import QIcon, QFont, QFontDatabase
 from PySide6.QtCore import Qt, QRect, QPropertyAnimation, QTimer
 
-from subtitld.modules import config
+from subtitld.modules import config, file_io
 from subtitld.modules.history import history_redo, history_undo
 from subtitld.modules.paths import PATH_SUBTITLD_DATA_THUMBNAILS, PATH_SUBTITLD_GRAPHICS, PATH_SUBTITLD_USER_CONFIG_FILE, ACTUAL_OS, LIST_OF_SUPPORTED_SUBTITLE_EXTENSIONS, LIST_OF_SUPPORTED_VIDEO_EXTENSIONS, PATH_SUBTITLD_DATA_BACKUP
+from subtitld.interface import translation, startscreen
 
 from subtitld import resources_rc
 
@@ -38,7 +34,6 @@ class Subtitld(QWidget):
     """The main window (QWidget) class"""
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Subtitld')
         self.setWindowIcon(QIcon(":/graphics/subtitld.png"))
         self.setAcceptDrops(True)
 
@@ -53,6 +48,9 @@ class Subtitld(QWidget):
         self.actual_video_file = ''
 
         self.settings = config.load(PATH_SUBTITLD_USER_CONFIG_FILE)
+
+        translation.load_translation_files()
+        translation.set_language(self.settings.get('interface', {}).get('language', locale.getdefaultlocale()[0]))
 
         self.selected_subtitle = False
         self.mediaplayer_zoom = 100.0
@@ -99,7 +97,6 @@ class Subtitld(QWidget):
         self.setStyleSheet(open(os.path.join(PATH_SUBTITLD_GRAPHICS, 'stylesheet.qss')).read())
 
         # The file io system
-        from subtitld.modules import file_io
         self.file_io = file_io
         self.file_io.load(self)
 
@@ -110,12 +107,11 @@ class Subtitld(QWidget):
         #     self.update.load(self)
 
         # The start screen
-        from subtitld.interface import startscreen
         self.startscreen = startscreen
         self.startscreen.load(self)
         self.startscreen.show(self)
 
-        # The mpv video player{
+        # The mpv video player
         from subtitld.interface import player
         self.player = player
         self.player.load(self)
@@ -144,6 +140,8 @@ class Subtitld(QWidget):
         self.autosave_timer = QTimer(self)
         self.autosave_timer.setInterval(int(self.settings['autosave'].get('interval', 300000)))
         self.autosave_timer.timeout.connect(lambda: autosave_timer_timeout(self))
+
+        self.translate_widgets()
 
         # Maybe implement saving window position...? Useful?
         # self.setGeometry(0, 0, QDesktopWidget().screenGeometry().width(), QDesktopWidget().screenGeometry().height())
@@ -242,6 +240,13 @@ class Subtitld(QWidget):
 
         if event.key() == Qt.Key_Right:
             self.player_widget.frameStep()
+
+    def translate_widgets(self):
+        self.setWindowTitle(translation._('window.title'))
+        startscreen.translate_widgets(self)
+        self.global_panel.translate_widgets(self)
+        self.playercontrols.translate_widgets(self)
+        self.subtitles_panel.translate_widgets(self)
 
     def generate_effect(self, widget, effect_type, duration, startValue, endValue):
         widget.setDuration(duration)
