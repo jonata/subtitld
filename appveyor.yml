@@ -55,7 +55,7 @@ build_script:
 
             $targetFilePath = Join-Path $targetPath $svg_file
 
-            $targetFilePath = $targetFilePath -replace ".svg", ".png"
+            $targetFilePath = $targetFilePath -replace '.svg', '.png'
 
 
 
