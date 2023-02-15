@@ -53,7 +53,7 @@ windows:
     - wget https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip --no-check-certificate
     - unzip ffmpeg-release-essentials.zip
     - wine pip3 install -r requirements.txt
-    - wine pip3 install -U pyinstaller glfw pywin32
+    - wine pip3 install -U pyinstaller glfw pywin32==225
     - for f in subtitld/graphics/*.svg; do rsvg-convert "$f" -o "${f%.*}.png"; done
     - sed -i 's/.svg/.png/g' subtitld/graphics/stylesheet.qss
     - sed -i 's/.svg/.png/g' subtitld/resources.qrc

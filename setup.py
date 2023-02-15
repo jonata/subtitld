@@ -148,7 +148,8 @@ install_requires = [
     'google-api-python-client',
     'pysrt',
     'certifi',
-    'python-i18n'
+    'python-i18n',
+    'google-cloud-core'
 ]
 
 # --------------------------------------------------------------------------- #
