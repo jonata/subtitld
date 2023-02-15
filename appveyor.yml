@@ -39,7 +39,7 @@ build_script:
   - ps: Move-Item -Path ffmpeg-release-essentials/ffmpeg* -Destination .
   - ps: C:\Python38-x64\python.exe -m pip install -U pip
   - ps: C:\Python38-x64\python.exe -m pip install --use-pep517 -r requirements.txt
-  - ps: C:\Python38-x64\python.exe -m pip install -U pyinstaller glfw pywin32
+  - ps: C:\Python38-x64\python.exe -m pip install -U pyinstaller glfw pywin32 ffms2
   - ps: $svg_path = "subtitld/graphics/"
   - ps: $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
   - ps: >-
