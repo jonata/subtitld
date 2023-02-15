@@ -55,7 +55,7 @@ build_script:
 
             $targetFilePath = Join-Path $targetPath $svg_file
 
-            $targetFilePath = $targetFilePath -replace '.svg', '.png'
+            $targetFilePath = $targetFilePath -replace ".svg", ".png"
 
 
 
@@ -66,8 +66,8 @@ build_script:
           }
   - ps: (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
   - ps: (Get-Content subtitld\resources.qrc).replace('.svg','.png') | Set-Content subtitld\resources.qrc
-  - ps: C:\Python38-x64\Scripts\pyside6-rcc.exe' subtitld\resources.qrc -o subtitld\resources_rc.py
-  - ps: C:\Python38-x64\Scripts\PyInstaller.exe' subtitld_win.spec
+  - ps: C:\Python38-x64\Scripts\pyside6-rcc.exe subtitld\resources.qrc -o subtitld\resources_rc.py
+  - ps: C:\Python38-x64\Scripts\PyInstaller.exe subtitld_win.spec
 
   - ps: makensis.exe subtitld_win.nsi
 
