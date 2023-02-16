@@ -42,8 +42,9 @@ build_script:
   - ps: C:\Python38-x64\python.exe -m pip install -U pyinstaller glfw pywin32 ffms2
   - ps: Copy-Item -Path C:\Python38-x64\Scripts\ffms2.dll -Destination c:\python39\Scripts\ffms2.dll
   - ps: Copy-Item -Path C:\Python38-x64\Scripts\ffms2.lib -Destination c:\python39\Scripts\ffms2.lib
-  - ps: Copy-Item -Path C:\Python38-x64\lib\site-packages\glfw\glfw3.dll -Destination c:\python39\lib\site-packages\glfw\glfw3.dll
-  - ps: Copy-Item -Path C:\Python38-x64\lib\site-packages\glfw\glfw3.dll -Destination c:\python39\lib\site-packages\glfw\msvcr110.dll
+  - ps: C:\python39\python.exe -m pip install -U glfw
+  # - ps: Copy-Item -Path C:\Python38-x64\lib\site-packages\glfw\glfw3.dll -Destination c:\python39\lib\site-packages\glfw\glfw3.dll
+  # - ps: Copy-Item -Path C:\Python38-x64\lib\site-packages\glfw\glfw3.dll -Destination c:\python39\lib\site-packages\glfw\msvcr110.dll
   - ps: $svg_path = "subtitld/graphics/"
   - ps: $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
   - ps: >-
