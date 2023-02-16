@@ -43,6 +43,7 @@ build_script:
   - ps: Copy-Item -Path C:\Python38-x64\Scripts\ffms2.dll -Destination c:\python39\Scripts\ffms2.dll
   - ps: Copy-Item -Path C:\Python38-x64\Scripts\ffms2.lib -Destination c:\python39\Scripts\ffms2.lib
   # - ps: C:\python39\python.exe -m pip install -U glfw
+  - ps: New-Item c:\python39\lib\site-packages\glfw\ -ItemType Directory
   - ps: Copy-Item -Path C:\Python38-x64\lib\site-packages\glfw\glfw3.dll -Destination c:\python39\lib\site-packages\glfw\glfw3.dll
   - ps: Copy-Item -Path C:\Python38-x64\lib\site-packages\glfw\msvcr110.dll -Destination c:\python39\lib\site-packages\glfw\msvcr110.dll
   - ps: $svg_path = "subtitld/graphics/"
