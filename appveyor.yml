@@ -74,8 +74,7 @@ build_script:
   - ps: (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
   - ps: (Get-Content subtitld\resources.qrc).replace('.svg','.png') | Set-Content subtitld\resources.qrc
   - ps: C:\Python38-x64\Scripts\pyside6-rcc.exe subtitld\resources.qrc -o subtitld\resources_rc.py
-  - ps: C:\Python38-x64\python.exe -m PyInstaller subtitld_win.spec 2> $null
-
+  - ps: C:\Python38-x64\python.exe -m PyInstaller subtitld_win.spec
   - ps: makensis.exe subtitld_win.nsi
 
 after_build:
