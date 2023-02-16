@@ -40,7 +40,6 @@ build_script:
   - ps: C:\Python38-x64\python.exe -m pip install -U pip
   - ps: C:\Python38-x64\python.exe -m pip install --use-pep517 -r requirements.txt
   - ps: C:\Python38-x64\python.exe -m pip install -U pyinstaller glfw pywin32 ffms2
-  - ps: New-Item c:\python39\Scripts\ -ItemType Directory
   - ps: Copy-Item -Path C:\Python38-x64\Scripts\ffms2.dll -Destination c:\python39\Scripts\ffms2.dll
   - ps: Copy-Item -Path C:\Python38-x64\Scripts\ffms2.lib -Destination c:\python39\Scripts\ffms2.lib
   - ps: $svg_path = "subtitld/graphics/"
