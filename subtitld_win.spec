@@ -13,6 +13,7 @@ a = Analysis(['subtitld/__main__.py'],
     datas=[
         ( 'subtitld/graphics/*.ttf', 'graphics' ),
         ( 'subtitld/graphics/*.qss', 'graphics' ),
+        ( 'subtitld/locale/*.json', 'locale' ),
         ( 'ffmpeg-*/bin/ffmpeg.exe', '.'),
         ( 'ffmpeg-*/bin/ffprobe.exe', '.'),
         ( 'subtitld/ftfy/char_classes.dat', 'ftfy' ),
