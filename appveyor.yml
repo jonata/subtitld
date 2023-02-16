@@ -20,7 +20,7 @@ clone_folder: C:\projects\subtitld
 
 environment:
   PYTHONUNBUFFERED: 1
-  PYTHONHOME: C:\Python39-x64
+  PYTHONHOME: C:\Python311-x64
 
 # build: off
 # init:
@@ -37,15 +37,15 @@ build_script:
   - ps: Start-FileDownload 'https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip'
   - ps: Expand-Archive -Path ffmpeg-release-essentials.zip
   - ps: Move-Item -Path ffmpeg-release-essentials/ffmpeg* -Destination .
-  - ps: C:\Python39-x64\python.exe -m pip install -U pip
-  - ps: C:\Python39-x64\python.exe -m pip install --use-pep517 -r requirements.txt
-  - ps: C:\Python39-x64\python.exe -m pip install -U pyinstaller glfw pywin32 ffms2
-  - ps: Copy-Item -Path C:\Python39-x64\Scripts\ffms2.dll -Destination c:\python39\Scripts\ffms2.dll
-  - ps: Copy-Item -Path C:\Python39-x64\Scripts\ffms2.lib -Destination c:\python39\Scripts\ffms2.lib
+  - ps: C:\Python311-x64\python.exe -m pip install -U pip
+  - ps: C:\Python311-x64\python.exe -m pip install --use-pep517 -r requirements.txt
+  - ps: C:\Python311-x64\python.exe -m pip install -U pyinstaller glfw pywin32 ffms2
+  - ps: Copy-Item -Path C:\Python311-x64\Scripts\ffms2.dll -Destination c:\python39\Scripts\ffms2.dll
+  - ps: Copy-Item -Path C:\Python311-x64\Scripts\ffms2.lib -Destination c:\python39\Scripts\ffms2.lib
   # - ps: C:\python39\python.exe -m pip install -U glfw
   - ps: New-Item c:\python39\lib\site-packages\glfw\ -ItemType Directory
-  - ps: Copy-Item -Path C:\Python39-x64\lib\site-packages\glfw\glfw3.dll -Destination c:\python39\lib\site-packages\glfw\glfw3.dll
-  - ps: Copy-Item -Path C:\Python39-x64\lib\site-packages\glfw\msvcr110.dll -Destination c:\python39\lib\site-packages\glfw\msvcr110.dll
+  - ps: Copy-Item -Path C:\Python311-x64\lib\site-packages\glfw\glfw3.dll -Destination c:\python39\lib\site-packages\glfw\glfw3.dll
+  - ps: Copy-Item -Path C:\Python311-x64\lib\site-packages\glfw\msvcr110.dll -Destination c:\python39\lib\site-packages\glfw\msvcr110.dll
   - ps: $svg_path = "subtitld/graphics/"
   - ps: $svg_files = Get-ChildItem -Path $svg_path -File -Recurse -Filter *.svg
   - ps: >-
@@ -73,8 +73,8 @@ build_script:
           }
   - ps: (Get-Content subtitld\graphics\stylesheet.qss).replace('.svg','.png') | Set-Content subtitld\graphics\stylesheet.qss
   - ps: (Get-Content subtitld\resources.qrc).replace('.svg','.png') | Set-Content subtitld\resources.qrc
-  - ps: C:\Python39-x64\Scripts\pyside6-rcc.exe subtitld\resources.qrc -o subtitld\resources_rc.py
-  - ps: C:\Python39-x64\python.exe -m PyInstaller subtitld_win.spec
+  - ps: C:\Python311-x64\Scripts\pyside6-rcc.exe subtitld\resources.qrc -o subtitld\resources_rc.py
+  - ps: C:\Python311-x64\python.exe -m PyInstaller subtitld_win.spec
   - ps: makensis.exe subtitld_win.nsi
 
 after_build:
