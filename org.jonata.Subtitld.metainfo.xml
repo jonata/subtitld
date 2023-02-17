@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>org.jonata.subtitld</id>
+  <id>org.jonata.Subtitld</id>
 
   <name>Subtitld</name>
   <summary>Subtitld is a software to create and edit subtitles</summary>
