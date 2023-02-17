@@ -8,7 +8,7 @@ __version__ = '23.02.0.0'
 
 __appname__ = 'Subtitld'
 __domain__ = 'subtitld.org'
-__desktopid__ = 'org.jonata.Subtitld'
+__desktopid__ = 'org.subtitld.Subtitld'
 # __appid__ = ''
 
 __author__ = 'Jonatã Bolzan Loss'
