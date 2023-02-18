@@ -16,7 +16,7 @@ Subtitld uses 2 main tools to work. The `ffmpeg` is used for internal processes 
 sudo apt install ffmpeg libmpv1
 ```
 
-Also, Subtitld is written using Python version 3. The majority of modern Linux distributions already have this version installed or at lease available. Make sure you have Python 3 on your system. Windows users will need to install it.
+Also, Subtitld is written using Python version 3. The majority of modern Linux distributions already have this version installed or at least available. Make sure you have Python 3 on your system. Windows users will need to install it.
 
 ### Running from source
 
