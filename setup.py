@@ -129,7 +129,7 @@ install_requires = [
     'pyopengl',
     'python-mpv==0.5.2',
     'ffms2',
-    'numpy==1.20.0',
+    'numpy==1.24.0',
     'cffi',
     'requests',
     'pycaption',
