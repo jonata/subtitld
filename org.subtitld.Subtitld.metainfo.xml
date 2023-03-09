@@ -15,9 +15,32 @@
   </description>
 
   <launchable type="desktop-id">subtitld.desktop</launchable>
+
   <screenshots>
     <screenshot type="default">
-      <image>https://subtitld.org/user/pages/01.home/subtitld_screenshot_.webp</image>
+      <image>https://subtitld.org/user/pages/01.home/subtitld_screenshot_.png</image>
     </screenshot>
   </screenshots>
+
+  <content_rating type="oars-1.0" />
+
+  <release version="23.02" type="stable" date="2023-02-15" urgency="medium">
+    <description>
+      <p>Icons (SVG) are now stored on a qrc file (0b46f4e7)</p>
+      <p>Removed old references for website</p>
+      <p>Use of PNG files in Windows version due to a bug with MSIX packaging</p>
+      <p>Workaround on global panel glitches</p>
+      <p>Fixes an issue updating the list of subtitles when there is no subtitles</p>
+      <p>Enhanced burned subtitle export panel</p>
+      <p>Enhanced translation feature</p>
+      <p>Added Windows portable version on [builds.subtitld.org]</p>
+      <p>Fixes on saving in default format</p>
+    </description>
+  </release>
+
+  <url type="homepage">https://gitlab.com/jonata/subtitld</url>
+  <url type="bugtracker">https://gitlab.com/jonata/subtitld/-/issues</url>
+  <url type="donation">https://subtitld.org/en/support</url>
+
+
 </component>
