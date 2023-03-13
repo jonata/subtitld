@@ -125,7 +125,7 @@ def pip_notes():
 
 setup_requires = ['setuptools']
 install_requires = [
-    'PySide6==6.3.0',
+    'PySide6==6.3.2',
     'pyopengl',
     'python-mpv==0.5.2',
     'ffms2',
