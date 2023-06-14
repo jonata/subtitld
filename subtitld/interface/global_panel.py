@@ -1,5 +1,5 @@
-from PySide6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QFrame, QStackedWidget, QPushButton
-from PySide6.QtCore import QPropertyAnimation, QEasingCurve
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QFrame, QStackedWidget, QPushButton, QWidget
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve, QSize
 
 from subtitld.interface import global_panel_general, global_panel_import, global_panel_interface, global_panel_keyboardshortcuts, global_panel_qualitycontrol, global_panel_translation, global_panel_transcription, global_panel_export
 
@@ -16,6 +16,7 @@ def load(self):
     self.global_panel_widget.layout().setSpacing(0)
     self.global_panel_widget_animation = QPropertyAnimation(self.global_panel_widget, b'geometry')
     self.global_panel_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
+    self.global_panel_widget.setProperty('shown', False)
 
     self.global_panel_menu = QFrame()
     self.global_panel_menu.setObjectName('global_panel_menu')
@@ -38,8 +39,8 @@ def load(self):
 
     self.global_panel_content = QFrame()
     self.global_panel_content.setObjectName('global_panel_content')
-    self.global_panel_content.setLayout(QVBoxLayout())
-    self.global_panel_content.layout().setContentsMargins(20, 20, 30, 20)
+    self.global_panel_content.setLayout(QHBoxLayout())
+    self.global_panel_content.layout().setContentsMargins(20, 0, 0, 20)
     self.global_panel_content.layout().setSpacing(0)
 
     self.global_panel_content_stacked_widgets = QStackedWidget()
@@ -55,6 +56,23 @@ def load(self):
     global_panel_export.load_widgets(self)
 
     self.global_panel_widget.layout().addWidget(self.global_panel_content)
+
+    self.global_panel_right_frame = QWidget()
+    self.global_panel_right_frame.setObjectName('global_panel_right_frame')
+    self.global_panel_right_frame.setLayout(QVBoxLayout())
+    self.global_panel_right_frame.layout().setContentsMargins(0, 0, 0, 0)
+    self.global_panel_right_frame.layout().setSpacing(0)
+
+    self.subtitles_panel_toggle_button = QPushButton()
+    self.subtitles_panel_toggle_button.setFixedSize(QSize(22, 70))
+    self.subtitles_panel_toggle_button.clicked.connect(lambda: subtitles_panel_toggle_button_clicked(self))
+    self.subtitles_panel_toggle_button.setObjectName('subtitles_panel_toggle_button')
+
+    self.global_panel_right_frame.layout().addWidget(self.subtitles_panel_toggle_button)
+
+    self.global_panel_right_frame.layout().addStretch()
+
+    self.global_panel_content.layout().addWidget(self.global_panel_right_frame, 0)
 
     global_panel_menu_changed(self, self.global_panel_general_menu_button, self.global_panel_general_content)
 
@@ -101,3 +119,20 @@ def translate_widgets(self):
     global_panel_transcription.translate_widgets(self)
     global_panel_import.translate_widgets(self)
     global_panel_export.translate_widgets(self)
+
+def subtitles_panel_toggle_button_clicked(self):
+    self.global_panel_widget.setProperty('shown', False)
+    self.subtitles_panel.subtitles_panel_widget_buttons_global_panel_placeholder_update(self)
+    subtitles_panel_toggled(self)
+
+def subtitles_panel_toggled(self):
+    """Function to call when clicking toggle button"""
+    if self.global_panel_widget.property('shown'):
+        # subtitles_panel_toggle_button_to_end(self)
+        show_global_panel(self)
+        self.playercontrols.hide_playercontrols(self)
+        self.subtitles_panel.hide(self)
+    else:
+        hide_global_panel(self)
+        self.playercontrols.show_playercontrols(self)
+        self.subtitles_panel.show(self)

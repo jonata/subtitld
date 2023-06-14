@@ -1530,27 +1530,30 @@ QLabel[class=qlabel_for_buttons] {
     border-image: url(:/graphics/player_controls_button_hover.svg) 0 24 0 24 stretch stretch;
 }
 
-
-
-
-#subtitles_panel_toggle_button,
-#subtitles_panel_toggle_button:disabled {
+#subtitles_panel_widget_buttons_global_panel_placeholder {
     border: 0 0 0 0;
+    margin-left: 4px;
     border-image: url(:/graphics/subtitles_panel_toggle_button_normal.svg) 0 0 0 0 stretch stretch;
 }
 
-#subtitles_panel_toggle_button:hover:pressed,
-#subtitles_panel_toggle_button:hover:checked {
+#subtitles_panel_toggle_button:disabled,
+#subtitles_panel_widget_buttons_global_panel_placeholder:disabled {
+    border: 0 0 0 0;
+    border-image: unset;
+}
+
+#subtitles_panel_toggle_button:hover:pressed {
     border: 0 0 0 0;
     border-image: url(:/graphics/subtitles_panel_toggle_button_hover_pressed.svg) 0 0 0 0 stretch stretch;
 }
 
-#subtitles_panel_toggle_button:checked {
+#subtitles_panel_toggle_button {
     border: 0 0 0 0;
+    margin-left: 4px;
     border-image: url(:/graphics/subtitles_panel_toggle_button_pressed.svg) 0 0 0 0 stretch stretch;
 }
 
-#subtitles_panel_toggle_button:hover {
+#subtitles_panel_widget_buttons_global_panel_placeholder:hover {
     border: 0 0 0 0;
     border-image: url(:/graphics/subtitles_panel_toggle_button_hover.svg) 0 0 0 0 stretch stretch;
 }

@@ -6,9 +6,9 @@
 import os
 import datetime
 
-from PySide6.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QMessageBox, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget, QLineEdit, QProgressBar, QFileDialog
+from PySide6.QtWidgets import QHBoxLayout, QLayout, QPushButton, QLabel, QMessageBox, QSizePolicy, QStackedWidget, QVBoxLayout, QWidget, QLineEdit, QProgressBar, QFileDialog, QApplication
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QSize
-from PySide6.QtGui import QTextCursor
+from PySide6.QtGui import QTextCursor, QMouseEvent
 
 from subtitld.interface import subtitles_panel_widget_markdown, subtitles_panel_widget_qlistwidget, subtitles_panel_widget_timeline, timeline
 from subtitld.interface.translation import _
@@ -26,11 +26,11 @@ def load(self):
     self.subtitles_panel_widget_animation.setEasingCurve(QEasingCurve.OutCirc)
     self.subtitles_panel_widget.setAttribute(Qt.WA_LayoutOnEntireRect)
     self.subtitles_panel_widget.setLayout(QHBoxLayout())
-    self.subtitles_panel_widget.layout().setContentsMargins(0, 20, 2, 210)
+    self.subtitles_panel_widget.layout().setContentsMargins(0, 0, 2, 210)
     self.subtitles_panel_widget.layout().setSpacing(0)
 
     self.subtitles_panel_widget_vbox = QVBoxLayout()
-    self.subtitles_panel_widget_vbox.setContentsMargins(0, 0, 0, 0)
+    self.subtitles_panel_widget_vbox.setContentsMargins(0, 20, 0, 0)
     self.subtitles_panel_widget_vbox.setSpacing(20)
 
     self.subtitles_panel_widget_top_bar = QHBoxLayout()
@@ -127,8 +127,14 @@ def load(self):
     self.subtitles_panel_widget.layout().addLayout(self.subtitles_panel_widget_vbox)
 
     self.subtitles_panel_widget_buttons_vbox = QVBoxLayout()
-    self.subtitles_panel_widget_buttons_vbox.setContentsMargins(10, 51, 0, 0)
+    self.subtitles_panel_widget_buttons_vbox.setContentsMargins(10, 0, 0, 0)
     self.subtitles_panel_widget_buttons_vbox.setSpacing(0)
+
+    self.subtitles_panel_widget_buttons_global_panel_placeholder = QPushButton()
+    self.subtitles_panel_widget_buttons_global_panel_placeholder.setObjectName('subtitles_panel_widget_buttons_global_panel_placeholder')
+    self.subtitles_panel_widget_buttons_global_panel_placeholder.setFixedSize(QSize(22, 70))
+    self.subtitles_panel_widget_buttons_global_panel_placeholder.clicked.connect(lambda: subtitles_panel_widget_buttons_global_panel_placeholder_clicked(self))
+    self.subtitles_panel_widget_buttons_vbox.addWidget(self.subtitles_panel_widget_buttons_global_panel_placeholder)
 
     subtitles_panel_widget_qlistwidget.add_button(self)
 
@@ -259,17 +265,11 @@ def load(self):
 
     self.subtitles_panel_findandreplace_panel.setFixedHeight(self.subtitles_panel_findandreplace_panel.minimumSizeHint().height())
 
-    self.subtitles_panel_toggle_button = QPushButton(parent=self)
-    self.subtitles_panel_toggle_button.setFixedSize(QSize(22, 70))
-    self.subtitles_panel_toggle_button.clicked.connect(lambda: subtitles_panel_toggle_button_clicked(self))
-    self.subtitles_panel_toggle_button.setCheckable(True)
-    self.subtitles_panel_toggle_button.setObjectName('subtitles_panel_toggle_button')
-    self.subtitles_panel_toggle_button_animation = QPropertyAnimation(self.subtitles_panel_toggle_button, b'geometry')
-    self.subtitles_panel_toggle_button_animation.setEasingCurve(QEasingCurve.OutCirc)
-
     self.subtitles_panel_widget.layout().addLayout(self.subtitles_panel_widget_buttons_vbox)
 
     update_subtitles_panel_widget_vision(self)
+
+    subtitles_panel_widget_buttons_global_panel_placeholder_update(self)
 
 
 def resized(self):
@@ -284,33 +284,14 @@ def resized(self):
     #     x = self.global_panel_widget.x() + self.global_panel_widget.width() - self.subtitles_panel_toggle_button.width()
     # x -= self.subtitles_panel_toggle_button.width()
 
-    self.subtitles_panel_toggle_button.move(self.global_panel_widget.x() + self.global_panel_widget.width() - self.subtitles_panel_toggle_button.width(), self.subtitles_panel_widget.y())
+    # self.subtitles_panel_toggle_button.move(self.global_panel_widget.x() + self.global_panel_widget.width() - self.subtitles_panel_toggle_button.width(), self.subtitles_panel_widget.y())
     subtitles_panel_widget_timeline.timeline_resized(self)
-
-
-def subtitles_panel_toggle_button_clicked(self):
-    """Function to call when clicking toggle button"""
-    if self.subtitles_panel_toggle_button.isChecked():
-        subtitles_panel_toggle_button_to_end(self)
-        self.global_panel.show_global_panel(self)
-        self.playercontrols.hide_playercontrols(self)
-        hide(self)
-    else:
-        self.global_panel.hide_global_panel(self)
-        self.playercontrols.show_playercontrols(self)
-        show(self)
 
 
 def update_topbar_status(self):
     # self.toppanel_format_label.setObjectName('toppanel_format_label')
     self.toppanel_format_label.setProperty('class', 'unsaved' if self.unsaved else 'saved')
     self.toppanel_format_label.setStyleSheet(self.toppanel_format_label.styleSheet())
-
-
-def subtitles_panel_toggle_button_to_end(self):
-    """Function to show subtitles list panel"""
-    self.generate_effect(self.subtitles_panel_toggle_button_animation, 'geometry', 700, [self.subtitles_panel_toggle_button.x(), self.subtitles_panel_toggle_button.y(), self.subtitles_panel_toggle_button.width(), self.subtitles_panel_toggle_button.height()], [self.global_panel_widget.width() - 22, self.global_panel_widget.y(), self.subtitles_panel_toggle_button.width(), self.subtitles_panel_toggle_button.height()])
-
 
 def update_subtitles_panel_widget_vision_content(self):
     if self.subtitles_panel_stackedwidgets.currentWidget() == self.subtitles_panel_simplelist_widget:
@@ -337,7 +318,6 @@ def show(self):
         [int(self.subtitles_panel_widget.x()), int(self.subtitles_panel_widget.y()), int(self.subtitles_panel_widget.width()), int(self.subtitles_panel_widget.height())],
         [0, int(self.subtitles_panel_widget.y()), int(self.subtitles_panel_widget.width()), int(self.subtitles_panel_widget.height())]
     )
-    self.generate_effect(self.subtitles_panel_toggle_button_animation, 'geometry', 700, [self.subtitles_panel_toggle_button.x(), self.subtitles_panel_toggle_button.y(), self.subtitles_panel_toggle_button.width(), self.subtitles_panel_toggle_button.height()], [self.subtitles_panel_widget.width() - 22, self.subtitles_panel_widget.y(), self.subtitles_panel_toggle_button.width(), self.subtitles_panel_toggle_button.height()])
     self.global_panel.hide_global_panel(self)
     update_toppanel_subtitle_file_info_label(self)
     update_subtitles_panel_widget_vision_content(self)
@@ -594,3 +574,14 @@ def translate_widgets(self):
     self.subtitles_panel_findandreplace_replace_button.setText(_('subtitles_panel.replace'))
     self.subtitles_panel_findandreplace_replaceall_button.setText(_('subtitles_panel.replace_all'))
     subtitles_panel_widget_qlistwidget.translate_widgets(self)
+
+
+def subtitles_panel_widget_buttons_global_panel_placeholder_clicked(self):
+    self.global_panel_widget.setProperty('shown', True)
+    subtitles_panel_widget_buttons_global_panel_placeholder_update(self)
+    self.global_panel.subtitles_panel_toggled(self)
+
+
+def subtitles_panel_widget_buttons_global_panel_placeholder_update(self):
+    self.subtitles_panel_toggle_button.setEnabled(self.global_panel_widget.property('shown'))
+    self.subtitles_panel_widget_buttons_global_panel_placeholder.setEnabled(not self.global_panel_widget.property('shown'))
